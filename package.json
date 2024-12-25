@@ -2,10 +2,17 @@
   "name": "plum-three-editor",
   "module": "index.ts",
   "type": "module",
-  "devDependencies": {
-    "@types/bun": "latest"
+  "engines": {
+    "node": ">=22.12.0",
+    "pnpm": ">=9.15.0"
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  }
+  "scripts": {
+    "remove": "bun run remove.ts"
+  },
+  "workspaces": [
+    "packages/*",
+    "packages/core/*",
+    "packages/dev/*",
+    "packages/doc/*"
+  ]
 }

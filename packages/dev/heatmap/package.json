@@ -1,0 +1,13 @@
+{
+  "name": "heatmap",
+  "version": "0.0.1",
+  "main": "heatmap.js",
+  "typings": "index.d.ts",
+  "dependencies": {
+    "lodash-es": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "typescript": "^5.7.2"
+  }
+}

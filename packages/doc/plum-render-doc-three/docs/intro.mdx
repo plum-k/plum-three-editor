@@ -1,0 +1,58 @@
+import React, {useEffect} from "react";
+import {Line, LineDefaultsOptions, LineType, Viewer} from @plum-render/three-sdk";
+import * as THREE from "three";
+import {Pane} from 'tweakpane';
+import * as GeometryUtils from "three/examples/jsm/utils/GeometryUtils";
+
+export const Highlight = () => {
+    const points = GeometryUtils.hilbert3D(new THREE.Vector3(0), 5).map((p) => [p.x, p.y, p.z])
+
+    const PARAMS = {
+        ...LineDefaultsOptions
+    };
+
+    const pane = new Pane();
+    pane.addBinding(PARAMS, 'lineType', {
+        options: LineType,
+    });
+
+    const canvasContainer = React.createRef();
+    useEffect(() => {
+        if (canvasContainer.current) {
+            let _threeViewer = new Viewer(canvasContainer.current, {});
+            //addBox(_threeViewer, 1)
+            _threeViewer.threeCameraControls.cameraControls.setPosition(-5, 5, 5);
+            _threeViewer.threeCameraControls.cameraControls.setTarget(0, 0, 0);
+
+            const line = new Line({
+                points: points,
+                materialParams: {
+                    color: "red",
+                    linewidth: 3
+                }
+            })
+            console.log(line)
+            _threeViewer.scene.add(line)
+        }
+    }, []);
+    const addBox = (_threeViewer, num) => {
+        let cube;
+        for (let i = 0; i < num; i++) {
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshStandardMaterial({color: "#230505"});
+            material.name = `测试材质${i}`
+            cube = new THREE.Mesh(geometry, material);
+            cube.name = `测试模型${i}`
+            _threeViewer.scene.add(cube)
+        }
+        return cube;
+    }
+    return (
+        <>
+            <div className={"container"} ref={canvasContainer}>
+            </div>
+        </>
+    )
+}
+
+<Highlight/>

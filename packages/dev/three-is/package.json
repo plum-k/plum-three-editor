@@ -1,0 +1,14 @@
+{
+  "name": "three-is",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "dependencies": {
+    "lodash-es": "^4.17.21",
+    "three": "^0.171.0"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "@types/three": "^0.171.0",
+    "typescript": "^5.7.2"
+  }
+}

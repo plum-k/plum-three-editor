@@ -1,0 +1,10 @@
+export {default as isCanvasTexture} from './isCanvasTexture';
+export {default as isCompressedTexture} from './isCompressedTexture';
+export {default as isCubeTexture} from './isCubeTexture';
+export {default as isDataTexture} from './isDataTexture';
+export {default as isDataTexture2DArray} from './isDataTexture2DArray';
+export {default as isDataTexture3D} from './isDataTexture3D';
+export {default as isDepthTexture} from './isDepthTexture';
+export {default as isFramebufferTexture} from './isFramebufferTexture';
+export {default as isTexture} from './isTexture';
+export {default as isVideoTexture} from './isVideoTexture';

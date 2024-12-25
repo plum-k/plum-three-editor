@@ -1,0 +1,79 @@
+import {isArray, isNil} from "lodash-es";
+
+
+import BasePlum, {IBasePlumOptions} from "../core/BasePlum";
+import * as  THREE from "three";
+
+export interface ISelectorOptions extends IBasePlumOptions {
+}
+
+// 对象选择相关封装
+export default class Selector extends BasePlum {
+    selectObject: THREE.Object3D | undefined = undefined
+    selectionBox: THREE.BoxHelper = new THREE.BoxHelper(new THREE.Object3D())
+
+    constructor(options: ISelectorOptions) {
+        super(options);
+        this.initSelectionBox();
+        this.initEvent();
+    }
+
+    initSelectionBox() {
+        if (isArray(this.selectionBox.material)) {
+        } else {
+            this.selectionBox.material.depthTest = false;
+            this.selectionBox.material.transparent = true;
+        }
+
+        this.selectionBox.visible = false;
+        this.sceneHelpers.add(this.selectionBox);
+    }
+
+
+    initEvent() {
+        // 监听点击事件, 选择物体
+        this.eventManager.leftClickPickSubject.subscribe((value) => {
+            const {intersects,} = value;
+            if (intersects.length > 0) {
+                const object = intersects[0].object;
+                this.select(object);
+            } else {
+                this.select(undefined);
+            }
+        })
+        // 选择对象变化时, 更新控件附加目标
+        this.editor.editorEventManager.objectSelected.subscribe((object) => {
+            this.selectionBox.visible = false;
+            this.editor.transformControlsWarp.transformControls.detach();
+            if (isNil(object)) {
+                this.editor.transformControlsWarp.transformControls.detach();
+            } else {
+                this.selectionBox.setFromObject(object);
+                this.selectionBox.visible = true;
+                this.editor.transformControlsWarp.transformControls.attach(object);
+            }
+        })
+
+        // 选择对象属性改变时, 更新包围盒 和 辅助对象
+        this.editor.editorEventManager.objectChanged.subscribe((object) => {
+            this.selectionBox.setFromObject(object);
+            this.editor.helperUpdate(object)
+        })
+    }
+
+
+    select(object: THREE.Object3D | undefined) {
+        if (!isNil(object) && this.selectObject != object) {
+            this.selectObject = object;
+            this.editor.editorEventManager.objectSelected.next(object);
+        }
+        if (isNil(object)) {
+            this.selectObject = object;
+            this.editor.editorEventManager.objectSelected.next(object);
+        }
+    }
+
+    deselect() {
+        this.select(undefined);
+    }
+}

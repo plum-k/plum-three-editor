@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Vite App</title>
+    <style>
+        html, body, #app {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .base {
+            position: relative;
+        }
+
+        .divButton {
+            position: relative;
+            width: 100%!important;
+            height: 100%;
+            background-color: #4CAF50; /* 背景色 */
+            color: white; /* 文字颜色 */
+            display: flex; /* 使用 flexbox */
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            text-align: center; /* 文字居中 */
+            border: none;
+            text-decoration: none; /* 无下划线 */
+            font-size: 16rem; /* 字体大小 */
+            cursor: pointer; /* 鼠标指针 */
+            border-radius: 8rem; /* 圆角 */
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

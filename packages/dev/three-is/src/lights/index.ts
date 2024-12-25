@@ -1,0 +1,14 @@
+export {default as isAmbientLight} from './isAmbientLight';
+export {default as isAmbientLightProbe} from './isAmbientLightProbe';
+export {default as isDirectionalLight} from './isDirectionalLight';
+export {default as isDirectionalLightShadow} from './isDirectionalLightShadow';
+export {default as isHemisphereLight} from './isHemisphereLight';
+export {default as isHemisphereLightProbe} from './isHemisphereLightProbe';
+export {default as isLight} from './isLight';
+export {default as isLightProbe} from './isLightProbe';
+export {default as isLightShadow} from './isLightShadow';
+export {default as isPointLight} from './isPointLight';
+export {default as isPointLightShadow} from './isPointLightShadow';
+export {default as isRectAreaLight} from './isRectAreaLight';
+export {default as isSpotLight} from './isSpotLight';
+export {default as isSpotLightShadow} from './isSpotLightShadow';
