@@ -1,0 +1,14 @@
+database:
+  name:
+  host:
+  user:
+  port:
+  password:
+
+http:
+  port: 5010
+
+oss:
+  roleArn:
+  accessKeyId:
+  accessKeySecret:

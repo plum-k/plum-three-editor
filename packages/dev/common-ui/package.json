@@ -10,28 +10,28 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.5.2",
-    "@microlink/react-json-view": "^1.23.4",
+    "@ant-design/icons": "^5.6.1",
+    "@microlink/react-json-view": "^1.26.1",
     "ahooks": "^3.8.4",
-    "antd": "^5.22.5",
+    "antd": "^5.24.1",
     "common": "workspace:*",
     "lodash-es": "^4.17.21",
     "rc-field-form": "^2.7.0",
-    "rc-tabs": "^15.4.0",
-    "react": "^18.3.1",
+    "rc-tabs": "^15.5.1",
+    "react": "^19.0.0",
     "react-contexify": "^6.0.0",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.0.0",
     "react-hotkeys-hook": "^4.6.1",
     "react-resizable-panels": "^2.1.7",
-    "react-router-dom": "^7.0.2",
-    "react-toastify": "^10.0.6",
-    "rxjs": "^7.8.1",
-    "zustand": "5.0.2"
+    "react-router-dom": "^7.2.0",
+    "react-toastify": "^11.0.3",
+    "rxjs": "^7.8.2",
+    "zustand": "5.0.3"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
-    "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.2",
-    "typescript": "^5.7.2"
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "typescript": "^5.7.3"
   }
 }

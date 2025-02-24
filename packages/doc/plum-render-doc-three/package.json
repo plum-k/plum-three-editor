@@ -35,7 +35,7 @@
     "@docusaurus/tsconfig": "3.6.3",
     "@docusaurus/types": "3.6.3",
     "@types/three": "^0.171.0",
-    "typescript": "~5.7.2"
+    "typescript": "^5.7.2"
   },
   "browserslist": {
     "production": [

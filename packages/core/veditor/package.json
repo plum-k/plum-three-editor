@@ -1,0 +1,31 @@
+{
+  "name": "veditor",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0",
+    "pinia": "^3.0.1",
+    "element-plus": "^2.9.5",
+    "@vueuse/core": "^12.7.0",
+    "axios": "^1.7.9",
+    "three-is": "workspace:*",
+    "dayjs": "^1.11.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@types/ali-oss":"^6.16.11",
+    "@vue/tsconfig": "^0.7.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.1",
+    "vue-tsc": "^2.2.4",
+    "tailwindcss": "^4.0.8",
+    "@tailwindcss/vite": "^4.0.8"
+  }
+}
