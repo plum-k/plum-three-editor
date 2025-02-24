@@ -1,4 +1,4 @@
-import Command from "./Command";
+import {Command} from "./Command";
 import * as THREE from 'three';
 import {isNumber} from "lodash-es";
 
@@ -9,7 +9,7 @@ import {isNumber} from "lodash-es";
  * @param newBefore THREE.Object3D
  * @constructor
  */
-export default class MoveObjectCommand extends Command {
+export class MoveObjectCommand extends Command {
     type: string = 'MoveObjectCommand';
     oldParent: THREE.Object3D | null;
     oldIndex: number | null;

@@ -1,12 +1,12 @@
-import BasePlum, {IBasePlumOptions} from "../../core/BasePlum";
-import {IPick} from "../../manager/EventManager";
+import {BasePlum, IBasePlumOptions} from "../../core/BasePlum";
+import {IPick} from "../../manager";
 
 export interface IMeasureOptions extends IBasePlumOptions {
 
 }
 
 
-export default class Measure<T extends IMeasureOptions = IMeasureOptions> extends BasePlum<T> {
+export class Measure<T extends IMeasureOptions = IMeasureOptions> extends BasePlum<T> {
     constructor(options: T) {
         super(options);
     }

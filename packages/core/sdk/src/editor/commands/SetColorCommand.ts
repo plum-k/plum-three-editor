@@ -1,6 +1,6 @@
-import Command from "./Command";
+import {Command} from "./Command";
 import * as THREE from 'three';
-import {reflectGet} from "@plum-render/tool";
+import {reflectGet} from "../../tool";
 
 /**
  * @param editor Editor
@@ -9,7 +9,7 @@ import {reflectGet} from "@plum-render/tool";
  * @param newValue integer representing a hex color value
  * @constructor
  */
-export default class SetColorCommand extends Command<THREE.Color> {
+export class SetColorCommand extends Command<THREE.Color> {
     type: string = 'SetColorCommand';
     attributeName: string;
 

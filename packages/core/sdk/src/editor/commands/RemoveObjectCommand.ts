@@ -1,4 +1,4 @@
-import Command from "./Command";
+import {Command} from "./Command";
 import * as THREE from 'three';
 import {Object3D, ObjectLoader} from 'three';
 import {Object3D} from "three/src/core/Object3D";
@@ -6,7 +6,7 @@ import undefined from "../../interface/Undefined";
 import {isNil} from "lodash-es";
 
 
-export default class RemoveObjectCommand extends Command {
+export class RemoveObjectCommand extends Command {
     parent: Object3D | undefined;
     index: number = -1;
 

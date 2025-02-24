@@ -1,10 +1,7 @@
-export {default as BasePlum} from "./BasePlum";
-export {default as CssRenderer} from "./CssRenderer";
-export {default as Pick} from "./Pick";
-export {default as Viewer} from "./Viewer";
 export * from "./BasePlum";
 export * from "./CssRenderer";
 export * from "./Pick";
+export * from "./SerializeScene";
 export * from "./Viewer";
 export * from "./asset";
 export * from "./environment";

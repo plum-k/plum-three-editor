@@ -1,9 +1,9 @@
-import Command from "./Command";
+import {Command} from "./Command";
 import * as THREE from 'three';
 import {Texture} from 'three';
 import {get, set} from "lodash-es";
 
-export default class SetMaterialMapCommand extends Command<THREE.Texture | null> {
+export class SetMaterialMapCommand extends Command<THREE.Texture | null> {
 
     materialSlot: number;
     mapName: string;

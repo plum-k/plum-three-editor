@@ -9,7 +9,7 @@ export interface ISpriteOptions {
 
 }
 
-export default class Sprite extends THREE.Sprite {
+export class Sprite extends THREE.Sprite {
     options: Required<ISpriteOptions>;
 
     constructor(_options: ISpriteOptions) {

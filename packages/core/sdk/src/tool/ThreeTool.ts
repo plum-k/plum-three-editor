@@ -1,14 +1,13 @@
 import * as THREE from "three";
 import {isDataTexture, isVector3} from "three-is";
 import {Object3D} from "three/src/core/Object3D";
-import {ESearchMode, ICondition, normalize, Search} from "@plum-render/tool";
+import {ESearchMode, ICondition, normalize, Search} from "./core";
 
 export type Vector3Array = Array<THREE.Vector3>
 export type Num3Array = Array<[number, number, number]>
 export type V3Array = Num3Array | Vector3Array
 
-export default class ThreeTool {
-
+export class ThreeTool {
     static getObjectMaterial(object: THREE.Mesh, slot?: number): THREE.Material {
         let material = object.material;
         if (Array.isArray(material) && slot !== undefined) {

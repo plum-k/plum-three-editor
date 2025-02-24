@@ -1,13 +1,13 @@
 import {CubicBezierCurve3} from "three";
 
-import LineTool, {IGetCubicBezierCurve3PointsOptions} from "../../../tool/LineTool";
-import Line2, {ILine2Options} from "./Line2";
+import {IGetCubicBezierCurve3PointsOptions, LineTool} from "../../../tool/LineTool";
+import {ILine2Options, Line2} from "./Line2";
 
 export interface ICubicBezierLine2Options extends ILine2Options, Omit<IGetCubicBezierCurve3PointsOptions, "cubicBezierCurve3"> {
 
 }
 
-export default class CubicBezierLineLine extends Line2 {
+export class CubicBezierLineLine extends Line2 {
     cubicBezierCurve3: CubicBezierCurve3 = new CubicBezierCurve3()
     declare options: Required<ICubicBezierLine2Options>;
 

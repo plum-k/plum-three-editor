@@ -1,9 +1,8 @@
 import * as THREE from "three";
 import {isNil} from "lodash-es";
 import {LineDashedMaterialParameters} from "three/src/materials/LineDashedMaterial";
-import deepMergeRetain from "../../../../../../libs/tool/src/core/deepMergeRetain";
 import {isColor} from "three-is";
-import {ThreeTool} from "../../../tool";
+import {deepMergeRetain, ThreeTool} from "../../../tool";
 
 export enum LineType {
     Line = "Line",
@@ -40,7 +39,7 @@ export const LineDefaultsOptions: ILineOptions = {
     isDelayInit: false
 }
 
-export default class Line extends THREE.Object3D {
+export class Line extends THREE.Object3D {
     line!: THREE.Line | THREE.LineLoop | THREE.LineSegments;
     material!: THREE.LineDashedMaterial | THREE.LineBasicMaterial;
     options: Required<ILineOptions> = LineDefaultsOptions as Required<ILineOptions>;

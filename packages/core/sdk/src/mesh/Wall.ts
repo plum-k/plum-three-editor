@@ -15,7 +15,7 @@ export interface IWallOption {
     extrudeGeometryOptions?: ExtrudeGeometryOptions
 }
 
-export default class Wall extends Object3D {
+export class Wall extends Object3D {
     points: Array<Vector3>;
     geometry: ExtrudeGeometry;
     material: MeshStandardMaterial;

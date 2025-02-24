@@ -1,9 +1,8 @@
 import pako from "pako";
 import {decode} from 'js-base64';
 
-
 // 解压
-const unZipObject = (base64Data: string, needDecode = true) => {
+export const unZipObject = (base64Data: string, needDecode = true) => {
     // 1. 使用 atob() 方法将 Base64 编码的字符串解码为普通字符串
     let strData = atob(base64Data);
 
@@ -46,4 +45,3 @@ const unZipObject = (base64Data: string, needDecode = true) => {
 }
 
 
-export default unZipObject;

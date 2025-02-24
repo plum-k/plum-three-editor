@@ -1,4 +1,4 @@
-import BasePlum, {IBasePlumOptions} from "../core/BasePlum";
+import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
 import * as THREE from "three";
 import {isNil} from "lodash-es";
 import {IPick} from "../manager/EventManager";
@@ -12,7 +12,7 @@ export enum DrawType {
     Point
 }
 
-export default class DrawLine<T extends abstract new (...args: any) => any> extends BasePlum {
+export class DrawLine<T extends abstract new (...args: any) => any> extends BasePlum {
 
     pointGroup = new THREE.Group();
     points: Array<THREE.Vector3> = [];

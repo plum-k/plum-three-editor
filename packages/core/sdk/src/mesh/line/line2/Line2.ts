@@ -5,9 +5,8 @@ import {LineSegments2} from "three/examples/jsm/lines/LineSegments2";
 import {Wireframe} from "three-stdlib";
 import {isNil} from "lodash-es";
 import {isColor} from "three-is";
-import {ThreeTool} from "../../../tool";
+import {deepMergeRetain, ThreeTool} from "../../../tool";
 import {Object3D} from "three/src/core/Object3D";
-import deepMergeRetain from "../../../../../../libs/tool/src/core/deepMergeRetain";
 import {LineGeometry} from "three/examples/jsm/lines/LineGeometry";
 import {LineSegmentsGeometry} from "three/examples/jsm/lines/LineSegmentsGeometry";
 
@@ -51,7 +50,7 @@ export const GeometryMap = {
     "LineSegmentsGeometry": LineSegmentsGeometry
 }
 
-export default class Line2 extends Object3D {
+export class Line2 extends Object3D {
     line!: THREELine2 | LineSegments2 | Wireframe
     material!: LineMaterial;
     options: Required<ILine2Options> = Line2DefaultsOptions as Required<ILine2Options>;

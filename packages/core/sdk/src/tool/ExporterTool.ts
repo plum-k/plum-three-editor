@@ -3,11 +3,11 @@ import {AnimationClip, Mesh, Object3D, Points, Scene} from "three";
 import {STLExporter, STLExporterOptions} from "three/examples/jsm/exporters/STLExporter";
 import {PLYExporter, PLYExporterOptions} from "three/examples/jsm/exporters/PLYExporter";
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter";
-import DownloadTool from "./DownloadTool";
 import {GLTFExporterOptions} from "three-stdlib/exporters/GLTFExporter";
 import {isString} from "lodash-es";
+import {DownloadTool} from "./DownloadTool";
 
-export default class ExporterTool {
+export class ExporterTool {
     static instance: ExporterTool;
     dRACOExporter: DRACOExporter;
     gLTFExporter: GLTFExporter;

@@ -1,13 +1,3 @@
-import React, {Fragment, useEffect} from "react";
-import {useSetPercent, useSetSpinning, useSetViewer, useViewer} from "../store/useStore.ts";
-import { Viewer} from @plum-render/three-sdk";
-import * as THREE from "three";
-import {useHotkeys} from "react-hotkeys-hook";
-import IFolder from "common/src/interfaces/IFolder.ts";
-import useAppId from "../hooks/useAppId.ts";
-import {COSApi} from "common";
-import useLightTest from "../testCore/useLight/useLightTest.ts";
-import {GltfModelAsset} from @plum-render/three-sdk";
 import Control from "./SidePane/Control.tsx";
 import SidePane from "./SidePane/SidePane.tsx";
 import Statistical from "./SidePane/Statistical.tsx";

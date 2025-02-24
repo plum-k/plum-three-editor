@@ -13,7 +13,7 @@
     "@ant-design/icons": "^5.6.1",
     "@microlink/react-json-view": "^1.26.1",
     "ahooks": "^3.8.4",
-    "antd": "^5.24.1",
+    "antd": "^5.24.2",
     "common": "workspace:*",
     "lodash-es": "^4.17.21",
     "rc-field-form": "^2.7.0",

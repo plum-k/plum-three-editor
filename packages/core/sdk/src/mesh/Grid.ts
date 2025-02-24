@@ -112,7 +112,7 @@ const GridMaterial = shaderMaterial(
   `
 )
 
-export default class Grid extends THREE.Mesh {
+export class Grid extends THREE.Mesh {
     plane = new THREE.Plane()
     upVector = new THREE.Vector3(0, 1, 0)
     zeroVector = new THREE.Vector3(0, 0, 0)
@@ -146,7 +146,7 @@ export default class Grid extends THREE.Mesh {
 
         Object.assign(material, uniforms1);
         Object.assign(material, uniforms2);
-        
+
 
         super(geometry, material as unknown as THREE.Material);
         this.frustumCulled = false;
@@ -155,7 +155,7 @@ export default class Grid extends THREE.Mesh {
     // 更新
     tick(camera: Camera) {
         // console.log("更新")
-        
+
         this.plane.setFromNormalAndCoplanarPoint(this.upVector, this.zeroVector).applyMatrix4(this.matrixWorld)
         // console.log(this.material)
         const gridMaterial = this.material as THREE.ShaderMaterial

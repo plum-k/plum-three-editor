@@ -1,18 +1,22 @@
 import {isString} from "lodash-es"; // 从 lodash-es 导入工具函数
-import ThreeCameraControls from "../control/ThreeCameraControls"; // 导入相机控制类
 import * as THREE from 'three'; // 导入 Three.js 库
-import {AssetManager, DebugManager, EventManager, HelperManager, RenderManager} from "../manager"; // 导入渲染管理类
-import Editor from "../editor/Editor"; // 导入编辑器类
-import Pick from "./Pick"; // 导入拾取类
-import Environment from "./environment/Environment"; // 导入环境类
-import Loop from "../manager/Loop"; // 导入循环管理类
-import DrawLine from "../control/DrawLine"; // 导入绘制直线类
-import CssRenderer from "./CssRenderer"; // 导入 CSS 渲染器类
-import PostProcessingManager from "../manager/PostProcessingManager/PostProcessingManager"; // 导入后处理管理类
-import MeasureTool from "../control/measure/MeasureControl"; // 导入测量工具类
-import SerializeScene from "./SerializeScene";
-import {deepMergeRetain, ESearchMode, ICondition, Search} from "@plum-render/tool";
+import {
+    AssetManager,
+    DebugManager,
+    EventManager,
+    HelperManager,
+    Loop,
+    PostProcessingManager,
+    RenderManager
+} from "../manager"; // 导入渲染管理类
+import {Editor} from "../editor/Editor"; // 导入编辑器类
+import {Pick} from "./Pick"; // 导入拾取类
+import {Environment} from "./environment/Environment"; // 导入环境类
 import {Object3D} from "three/src/core/Object3D"; // 导入深度合并工具
+import {deepMergeRetain} from "../tool";
+import {SerializeScene} from "./SerializeScene";
+import {DrawLine, MeasureTool, ThreeCameraControls} from "../control";
+import {CssRenderer} from "./CssRenderer";
 
 // 定义 Viewer 选项接口
 export interface IViewerOptions {
@@ -20,7 +24,7 @@ export interface IViewerOptions {
 }
 
 // 定义 Viewer 类
-export default class Viewer {
+export class Viewer {
     options: IViewerOptions; // 存储选项
     container!: HTMLElement; // 容器元素
     clock: THREE.Clock; // 定时器

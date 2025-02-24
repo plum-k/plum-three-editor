@@ -1,4 +1,4 @@
-import Command from "./Command";
+import {Command} from "./Command";
 import * as THREE from 'three';
 import {get, isArray, isNil, PropertyPath, set} from "lodash-es";
 import {isEuler, isVector3} from "three-is";
@@ -7,7 +7,7 @@ import {isEuler, isVector3} from "three-is";
  * SetValueCommand类用于在三维场景中更改对象的属性值
  * 它继承自Command类，并实现了一些用于执行、撤销和序列化命令的方法
  */
-export default class SetValueCommand extends Command<any> {
+export class SetValueCommand extends Command<any> {
     type = 'SetValueCommand';
 
     /**

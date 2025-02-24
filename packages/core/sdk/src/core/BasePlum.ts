@@ -1,11 +1,11 @@
-import Viewer from "./Viewer";
-import deepMergeRetain from "../../../../libs/tool/src/core/deepMergeRetain";
+import {Viewer} from "./Viewer";
+import {deepMergeRetain} from "../tool";
 
 export interface IBasePlumOptions {
     viewer: Viewer;
 }
 
-export default class BasePlum<T extends IBasePlumOptions = IBasePlumOptions> {
+export class BasePlum<T extends IBasePlumOptions = IBasePlumOptions> {
     options: T;
     viewer: Viewer;
 

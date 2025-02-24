@@ -1,7 +1,7 @@
 import Stats from "stats.js";
 
-import BasePlum, {IBasePlumOptions} from "../core/BasePlum";
-import {deepMergeRetain} from "@plum-render/tool";
+import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
+import {deepMergeRetain} from "../tool";
 
 export interface IDebugOptions extends IBasePlumOptions {
     showMs?: boolean;
@@ -16,7 +16,7 @@ export enum DebugPosition {
     BottomRight,
 }
 
-export default class DebugManager extends BasePlum<IDebugOptions> {
+export class DebugManager extends BasePlum<IDebugOptions> {
     stats: Stats;
 
     constructor(options: IDebugOptions) {

@@ -1,11 +1,11 @@
 import * as  THREE from "three";
-import BasePlum, {IBasePlumOptions} from "../core/BasePlum";
+import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
 
 export interface IHelperManagerOptions extends IBasePlumOptions {
 
 }
 
-export default class HelperManager extends BasePlum {
+export class HelperManager extends BasePlum {
     constructor(options: IHelperManagerOptions) {
         super(options);
     }

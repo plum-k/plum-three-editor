@@ -21,7 +21,7 @@ export interface IPathOptions {
     meshBasicMaterialParams?: MeshBasicMaterialParameters
 }
 
-export default class PathMesh extends Mesh<PathGeometry> {
+export class PathMesh extends Mesh<PathGeometry> {
 
     pathPointList: PathPointList = new PathPointList();
 

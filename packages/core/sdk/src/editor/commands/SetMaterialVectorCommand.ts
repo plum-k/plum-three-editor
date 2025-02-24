@@ -1,8 +1,8 @@
-import Command from "./Command";
+import {Command} from "./Command";
 import * as THREE from "three";
 import {ThreeTool} from "../../tool";
 
-export default class SetMaterialVectorCommand extends Command<THREE.Vector3> {
+export class SetMaterialVectorCommand extends Command<THREE.Vector3> {
     type: string = 'SetMaterialVectorCommand';
     object: any;
     materialSlot: number;

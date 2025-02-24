@@ -1,5 +1,5 @@
 import {CatmullRomCurve3} from "three";
-import Line2, {ILine2Options} from "./Line2";
+import {ILine2Options, Line2} from "./Line2";
 import {CurveType} from "../line";
 
 export interface ICatmullRomLine2Options extends ILine2Options {
@@ -15,7 +15,8 @@ export const CatmullRomLine2DefaultsOptions: ICatmullRomLine2Options = {
     tension: 0.5,
     segments: 20
 }
-export default class CatmullRomLine2 extends Line2 {
+
+export class CatmullRomLine2 extends Line2 {
     catmullRomCurve3: CatmullRomCurve3 = new CatmullRomCurve3();
     declare options: Required<ICatmullRomLine2Options>;
 

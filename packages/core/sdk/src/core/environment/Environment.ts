@@ -1,10 +1,10 @@
 import * as THREE from "three"
 import {presetsObj, PresetsType} from "./environmentAssets";
 import {isArray, isNil} from "lodash-es";
-import BasePlum, {IBasePlumOptions} from "../BasePlum";
+import {BasePlum, IBasePlumOptions} from "../BasePlum";
 import {TextureEncoding} from "three-stdlib/types/shared";
-import Asset from "../asset/Asset";
-import deepMergeRetain from "../../../../../libs/tool/src/core/deepMergeRetain";
+import {Asset} from "../asset/Asset";
+import {deepMergeRetain} from "../../tool";
 
 export interface IEnvironment extends IBasePlumOptions {
     frames?: number
@@ -54,7 +54,7 @@ export interface ISetEnvironmentOptions extends ISetEnvOption {
     encoding?: TextureEncoding;
 }
 
-export default class Environment extends BasePlum {
+export class Environment extends BasePlum {
 
     constructor(options: IEnvironment) {
         super(options);
@@ -123,7 +123,7 @@ export default class Environment extends BasePlum {
             })
             return;
         }
-        
+
         if (preset) {
             if (!(preset in presetsObj)) throw new Error('Preset must be one of: ' + Object.keys(presetsObj).join(', '))
             files = presetsObj[preset]

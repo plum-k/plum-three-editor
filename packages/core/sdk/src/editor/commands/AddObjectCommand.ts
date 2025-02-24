@@ -1,7 +1,7 @@
 import {Object3D, ObjectLoader} from 'three';
-import Command from "./Command";
+import {Command} from "./Command";
 
-export default class AddObjectCommand extends Command {
+export class AddObjectCommand extends Command {
     type: string = 'AddObjectCommand';
 
     constructor(object: Object3D) {

@@ -1,5 +1,5 @@
 import {OutputPass} from "three/examples/jsm/postprocessing/OutputPass";
-import BasePlum, {IBasePlumOptions} from "../../core/BasePlum";
+import {IBasePlumOptions} from "../../core/BasePlum";
 import {
     BlendFunction,
     BloomEffect,
@@ -19,14 +19,14 @@ import {
     SMAAPreset,
     SSAOEffect,
 } from "postprocessing";
-import deepMergeRetain from "../../../../../libs/tool/src/core/deepMergeRetain";
 import {HalfFloatType} from "three";
 import {Object3D} from "three/src/core/Object3D";
+import {BasePlum} from "../../core";
 
 export interface IPostProcessingOptions extends IBasePlumOptions {
 }
 
-export default class PostProcessingManager extends BasePlum {
+export class PostProcessingManager extends BasePlum {
     // @ts-ignore
     pixelationEffect: PixelationEffect;
 

@@ -12,7 +12,7 @@ import {
 import {GLTF, GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader";
 import Asset from "../core/asset/Asset";
-import BasePlum, {IBasePlumOptions} from "../core/BasePlum";
+import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
 import {
     LDrawLoader,
     LUT3dlLoader,
@@ -28,9 +28,9 @@ import {EXRLoader} from "three/examples/jsm/loaders/EXRLoader";
 import {GainMapLoader, HDRJPGLoader} from "@monogrid/gainmap-js";
 import {buildGraph} from "../tool/buildGraph";
 import {Subject} from "rxjs";
-import GltfModelAsset from "../core/asset/GltfModelAsset";
-import TextureAsset from "../core/asset/TextureAsset";
-import {loadFiles, loadItemList} from "@plum-render/tool";
+import {GltfModelAsset} from "../core/asset/GltfModelAsset";
+import {TextureAsset} from "../core/asset/TextureAsset";
+import {loadFiles, loadItemList} from "../tool";
 
 export interface IResourceManagers extends IBasePlumOptions {
     sdkUrl?: string;
@@ -79,7 +79,8 @@ const DefaultLoadFun = {
     tail: () => {
     },
 }
-export default class AssetManager extends BasePlum {
+
+export class AssetManager extends BasePlum {
     loadingManager: LoadingManager;
     dracoLoader!: DRACOLoader;
     sdkUrl: string = "";

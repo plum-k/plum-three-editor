@@ -1,7 +1,7 @@
 import JSZip from "jszip"; // 导入 JSZip 用于处理 zip 文件
 import {isArray, isString} from "lodash-es"; // 导入 lodash 的工具函数
-import unZipObject from "./unZipObject"; // 导入解压对象的函数
-import zipObject from "./zipObject"; // 导入压缩对象的函数
+import {unZipObject} from "./unZipObject"; // 导入解压对象的函数
+import {zipObject} from "./zipObject"; // 导入压缩对象的函数
 import {SerializeInterface,} from "./SerializeInterface"; // 导入类型和接口
 import {Subject} from "rxjs"; // 导入 RxJS 的 Subject 用于响应式编程
 
@@ -49,7 +49,7 @@ export const BASE64_TYPES = {
 }
 
 // 主序列化类，用于处理数据的序列化和反序列化
-export default class Serialize {
+export class Serialize {
     packSubject = new Subject<Blob>(); // 创建主题，用于发布打包后的 Blob 数据
     private jszip: JSZip; // JSZip 实例，用于创建和操作 zip 文件
     private imgFolder: JSZip; // 图像文件夹

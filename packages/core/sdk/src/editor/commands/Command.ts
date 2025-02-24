@@ -10,7 +10,7 @@ export interface CommandJson {
     [key: string]: any;
 }
 
-export default abstract class Command<T = any> {
+export abstract class Command<T = any> {
     id: number = 0;
     inMemory: boolean = false;
     updatable: boolean = false;

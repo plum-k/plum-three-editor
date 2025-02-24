@@ -1,8 +1,7 @@
 import * as THREE from "three";
 import Heatmap from "heatmap";
 import HeatmapInstance, {DataPoint, HeatmapConfig} from "heatmap";
-import {ThreeTool} from "../../tool";
-import deepMergeRetain from "../../../../../libs/tool/src/core/deepMergeRetain";
+import {deepMergeRetain, ThreeTool} from "../../tool";
 import {Object3D} from "three/src/core/Object3D";
 
 export interface IHeatMap3dMeshSetDataOptions {
@@ -25,7 +24,7 @@ const DefaultHeatmap3dMeshOptions: Partial<IHeatMap3dMeshOptions> = {
     heightSegments: 100,
 }
 
-export default class HeatMap3dMesh extends Object3D {
+export class HeatMap3dMesh extends Object3D {
 
     heatmap!: HeatmapInstance;
 
@@ -60,7 +59,7 @@ export default class HeatMap3dMesh extends Object3D {
         let offsetPoints: Array<DataPoint> = []
         // x -> x
         // z -> y
-        
+
         for (let i = 0; i < data.length; i++) {
             let d = data[i];
             let minx = box3.min.x;

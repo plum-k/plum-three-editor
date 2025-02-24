@@ -1,6 +1,6 @@
 import {BlendFunction, BlurPass, KernelSize, Resizer} from "postprocessing";
 
-export default interface SelectiveBloomEffectOptions {
+export interface SelectiveBloomEffectOptions {
     selection: any[];                 // 选择的对象
     lights: any[];                    // 所有影响效果的灯光
     blendFunction: BlendFunction;     // 混合函数

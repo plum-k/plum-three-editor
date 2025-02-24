@@ -4,8 +4,7 @@
  */
 import {Subject} from "rxjs";
 import {isArray, isNil, split} from "lodash-es";
-import {isUrl} from "@plum-render/tool";
-import {extractFileNameAndExtension} from "../../tool";
+import {extractFileNameAndExtension, isUrl} from "../../tool";
 
 /**
  * 资产接口，定义了资产的属性。
@@ -21,7 +20,7 @@ export interface IAsset {
 /**
  * 资产类，用于管理单个资产的加载和存储。
  */
-export default class Asset<T = unknown> {
+export class Asset<T = unknown> {
     options: IAsset; // 资产选项，包含了初始化时的所有可能属性
     url: string | undefined; // 资源的URL
     result: ArrayBuffer | undefined; // 加载完成的资源数据

@@ -1,14 +1,14 @@
-import BasePlum, {IBasePlumOptions} from "../core/BasePlum";
+import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
 import * as THREE from "three";
 import {Texture} from "three";
 import {PropertyPath} from "lodash-es";
-import History from "./History"
+import {History} from "./History"
 import {Command, SetValueCommand} from "./commands";
-import SetMaterialCommand from "./commands/SetMaterialCommand";
-import SetMaterialColorCommand from "./commands/SetMaterialColorCommand";
-import SetMaterialValueCommand from "./commands/SetMaterialValueCommand";
-import SetMaterialMapCommand from "./commands/SetMaterialMapCommand";
-import AddObjectCommand from "./commands/AddObjectCommand";
+import {SetMaterialCommand} from "./commands/SetMaterialCommand";
+import {SetMaterialColorCommand} from "./commands/SetMaterialColorCommand";
+import {SetMaterialValueCommand} from "./commands/SetMaterialValueCommand";
+import {SetMaterialMapCommand} from "./commands/SetMaterialMapCommand";
+import {AddObjectCommand} from "./commands/AddObjectCommand";
 import {
     isCamera,
     isDirectionalLight,
@@ -18,19 +18,19 @@ import {
     isSkinnedMesh,
     isSpotLight
 } from "three-is";
-import MoveObjectCommand from "./commands/MoveObjectCommand";
-import RemoveObjectCommand from "./commands/RemoveObjectCommand";
+import {MoveObjectCommand} from "./commands/MoveObjectCommand";
+import {RemoveObjectCommand} from "./commands/RemoveObjectCommand";
 import {Grid} from "../mesh";
 import {VertexNormalsHelper} from "three-stdlib";
 import {ThreeTool} from "../tool";
-import EditorEventManager from "./EditorEventManager";
-import Selector from "./Selector";
-import TransformControlsWarp from "./TransformControlsWarp";
+import {EditorEventManager} from "./EditorEventManager";
+import {Selector} from "./Selector";
+import {TransformControlsWarp} from "./TransformControlsWarp";
 
 export interface IEditorOptions extends IBasePlumOptions {
 }
 
-export default class Editor extends BasePlum {
+export class Editor extends BasePlum {
     editorEventManager!: EditorEventManager;
     history!: History;
     selector!: Selector;

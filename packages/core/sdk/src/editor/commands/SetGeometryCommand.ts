@@ -1,4 +1,4 @@
-import Command from "./Command";
+import {Command} from "./Command";
 import * as THREE from 'three';
 import {Geometry, ObjectLoader} from 'three';
 
@@ -8,7 +8,7 @@ import {Geometry, ObjectLoader} from 'three';
  * @param newValue THREE.Geometry
  * @constructor
  */
-export default class SetGeometryCommand extends Command {
+export class SetGeometryCommand extends Command {
     type: string = 'SetGeometryCommand';
     updatable: boolean = true;
 

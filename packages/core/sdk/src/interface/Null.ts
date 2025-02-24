@@ -1,3 +1,2 @@
-type  Null<T> = T | undefined;
+export type  Null<T> = T | undefined;
 
-export default Null;

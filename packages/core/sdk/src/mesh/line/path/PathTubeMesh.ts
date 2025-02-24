@@ -13,7 +13,7 @@ export interface IPathTubeOptions {
     meshBasicMaterialParams?: MeshBasicMaterialParameters
 }
 
-export default class PathTubeMesh extends Mesh<PathTubeGeometry> {
+export class PathTubeMesh extends Mesh<PathTubeGeometry> {
 
     pathPointList: PathPointList = new PathPointList();
 

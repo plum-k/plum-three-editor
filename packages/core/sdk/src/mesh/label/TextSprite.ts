@@ -7,7 +7,7 @@ interface Color {
     a: number;
 }
 
-export default class TextSprite extends THREE.Object3D {
+export class TextSprite extends THREE.Object3D {
     texture: THREE.Texture;
     material: THREE.SpriteMaterial;
     sprite: THREE.Sprite;

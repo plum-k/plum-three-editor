@@ -1,14 +1,14 @@
 import * as  THREE from "three";
-import BasePlum, {IBasePlumOptions} from "./BasePlum";
+import {BasePlum, IBasePlumOptions} from "./BasePlum";
 import {Object3D} from "three/src/core/Object3D";
 import {isPerspectiveCamera} from "three-is";
 import {isNil} from "lodash-es";
-import ThreeTool from "../tool/ThreeTool";
+import {ThreeTool} from "../tool/ThreeTool";
 
 export interface IPickOptions extends IBasePlumOptions {
 }
 
-export default class Pick extends BasePlum {
+export class Pick extends BasePlum {
     raycaster: THREE.Raycaster;
     pointer: THREE.Vector2 = new THREE.Vector2();
 

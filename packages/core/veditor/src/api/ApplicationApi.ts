@@ -1,5 +1,5 @@
-import {IApplication} from "../interface";
 import {req} from "./request";
+import type {IApplication} from "../interface";
 
 export class ApplicationApi {
     static getById = (id: string) => {

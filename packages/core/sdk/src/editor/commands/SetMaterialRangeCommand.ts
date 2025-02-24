@@ -1,8 +1,8 @@
-import Command from "./Command";
+import {Command} from "./Command";
 import * as THREE from 'three';
 
 
-export default class SetMaterialRangeCommand extends Command<Array<number>> {
+export class SetMaterialRangeCommand extends Command<Array<number>> {
     type: string = 'SetMaterialRangeCommand';
     materialSlot: number;
     attributeName: string;

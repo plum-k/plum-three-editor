@@ -15,10 +15,20 @@
     "element-plus": "^2.9.5",
     "@vueuse/core": "^12.7.0",
     "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
+    "@element-plus/icons-vue": "^2.3.1",
+    "lodash-es": "^4.17.21",
+    "splitpanes": "^3.1.8",
+    "@plum-render/three-sdk": "workspace:*",
+    "rxjs": "^7.8.2",
+    "three": "^0.173.0",
     "three-is": "workspace:*",
-    "dayjs": "^1.11.13"
+    "three-stdlib": "^2.35.14"
   },
   "devDependencies": {
+    "@types/splitpanes": "^2.2.6",
+    "@types/lodash-es": "^4.17.12",
+    "unplugin-element-plus": "^0.9.1",
     "@vitejs/plugin-vue": "^5.2.1",
     "@types/ali-oss":"^6.16.11",
     "@vue/tsconfig": "^0.7.0",
@@ -26,6 +36,7 @@
     "vite": "^6.1.1",
     "vue-tsc": "^2.2.4",
     "tailwindcss": "^4.0.8",
+    "@types/three": "^0.173.0",
     "@tailwindcss/vite": "^4.0.8"
   }
 }

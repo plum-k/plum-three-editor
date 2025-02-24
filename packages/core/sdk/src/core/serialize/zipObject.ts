@@ -3,7 +3,7 @@ import {encode} from 'js-base64';
 import {isNil, isString} from "lodash-es";
 
 // 压缩
-const zipObject = (data: object, needEncode = true) => {
+export const zipObject = (data: object, needEncode = true) => {
     // 如果 data 为空,直接返回
     if (isNil(data)) {
         return data
@@ -26,4 +26,3 @@ const zipObject = (data: object, needEncode = true) => {
     return btoa(s)
 }
 
-export default zipObject;

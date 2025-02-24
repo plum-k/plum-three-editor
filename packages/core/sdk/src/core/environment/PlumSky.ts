@@ -24,7 +24,7 @@ export function calcPosFromAngles(inclination: number, azimuth: number, vector: 
     return vector
 }
 
-export default class PlumSky extends Sky {
+export class PlumSky extends Sky {
     updateConfig({
                      inclination = 0.6,
                      azimuth = 0.1,

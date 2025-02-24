@@ -1,13 +1,13 @@
 import {QuadraticBezierCurve3} from "three";
 
-import LineTool, {IGetQuadraticBezierCurve3PointsOptions} from "../../../tool/LineTool";
-import Line2, {ILine2Options} from "./Line2";
+import {IGetQuadraticBezierCurve3PointsOptions, LineTool} from "../../../tool/LineTool";
+import {ILine2Options, Line2} from "./Line2";
 
 export interface IQuadraticBezierLine2Options extends ILine2Options, Omit<IGetQuadraticBezierCurve3PointsOptions, "quadraticBezierCurve3"> {
 }
 
 
-export default class QuadraticBezierLine2 extends Line2 {
+export class QuadraticBezierLine2 extends Line2 {
     quadraticBezierCurve3: QuadraticBezierCurve3;
     declare options: Required<IQuadraticBezierLine2Options>;
 

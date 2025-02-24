@@ -1,5 +1,11 @@
-export {default as History} from './History';
-export {default as Editor} from './Editor';
-export * from './commands';
+export {default as Editor} from "./Editor";
+export {default as EditorEventManager} from "./EditorEventManager";
+export {default as History} from "./History";
+export {default as Selector} from "./Selector";
 export {default as TransformControlsWarp} from "./TransformControlsWarp";
+export * from "./Editor";
+export * from "./EditorEventManager";
+export * from "./History";
+export * from "./Selector";
 export * from "./TransformControlsWarp";
+export * from "./commands";

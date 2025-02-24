@@ -1,8 +1,6 @@
 import {Subscription} from "rxjs";
-import BasePlum, {IBasePlumOptions} from "../../core/BasePlum";
-import Measure from "./Measure";
-import {DistanceMeasure, EDistanceMeasureTextModel, IBaseDistanceMeasureOptions} from "./index";
-import deepMergeRetain from "../../../../../libs/tool/src/core/deepMergeRetain";
+import {DistanceMeasure, EDistanceMeasureTextModel, IBaseDistanceMeasureOptions, Measure} from "./index";
+import {BasePlum, IBasePlumOptions} from "../../core";
 
 export enum MeasureMode {
     Distance,    // 距离测量
@@ -14,7 +12,7 @@ export interface IMeasureToolOptions extends IBasePlumOptions {
 
 }
 
-export default class MeasureTool extends BasePlum {
+export class MeasureTool extends BasePlum {
 
     currentMeasure: Measure | undefined;
     leftClickSubscription: Subscription | null = null

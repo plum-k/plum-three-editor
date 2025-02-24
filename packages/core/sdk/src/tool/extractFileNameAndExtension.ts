@@ -1,4 +1,4 @@
-export default function extractFileNameAndExtension(file: File) {
+export function extractFileNameAndExtension(file: File) {
     const filename = file.name;
     const splitArray = filename.split('.');
 

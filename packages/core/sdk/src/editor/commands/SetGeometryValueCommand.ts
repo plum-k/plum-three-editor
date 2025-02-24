@@ -1,4 +1,4 @@
-import Command from "./Command";
+import {Command} from "./Command";
 import * as THREE from 'three';
 
 /**
@@ -8,7 +8,7 @@ import * as THREE from 'three';
  * @param newValue number, string, boolean or object
  * @constructor
  */
-export default class SetGeometryValueCommand extends Command {
+export class SetGeometryValueCommand extends Command {
     type: string = 'SetGeometryValueCommand';
     attributeName: string;
 

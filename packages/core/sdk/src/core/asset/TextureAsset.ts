@@ -1,4 +1,4 @@
-import Asset, {IAsset} from "./Asset";
+import {Asset, IAsset} from "./Asset";
 import {Texture} from "three";
 import {isNil} from "lodash-es";
 import {extractFileNameAndExtension} from "../../tool";
@@ -29,7 +29,7 @@ export interface ITextureAsset extends IAsset {
  * })
  * ```
  */
-export default class TextureAsset extends Asset<Texture> {
+export class TextureAsset extends Asset<Texture> {
     constructor(options: ITextureAsset) {
         super(options)
     }

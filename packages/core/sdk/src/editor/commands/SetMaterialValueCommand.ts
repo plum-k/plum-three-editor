@@ -1,10 +1,10 @@
-import Command from "./Command";
+import {Command} from "./Command";
 import * as THREE from 'three';
 import {set} from "lodash-es";
 import {ThreeTool} from "../../tool";
 
 
-export default class SetMaterialValueCommand extends Command {
+export class SetMaterialValueCommand extends Command {
     type: string = 'SetMaterialValueCommand';
     materialSlot: number;
     attributeName: string;

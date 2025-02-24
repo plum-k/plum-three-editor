@@ -1,5 +1,12 @@
-export {default as extractFileNameAndExtension} from "./extractFileNameAndExtension";
-export {default as ThreeTool} from "./ThreeTool";
+export * from "./buildGraph";
+export * from "./constants";
+export * from "./DownloadTool";
+export * from "./ExporterTool";
+export * from "./extractFileNameAndExtension";
+export * from "./getStatistics";
+export * from "./LineTool";
+export * from "./shaderMaterial";
 export * from "./ThreeTool";
-export {default as getStatistics} from "./getStatistics";
-export {default as ExporterTool} from "./ExporterTool";
+export * from "./core";
+export * from "./drop";
+export * from "./throw";

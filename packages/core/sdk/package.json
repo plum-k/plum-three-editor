@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@monogrid/gainmap-js": "^3.1.0",
-    "@plum-render/tool": "workspace:*",
     "@zip.js/zip.js": "^2.7.57",
     "camera-controls": "^2.10.0",
     "dexie": "^4.0.11",

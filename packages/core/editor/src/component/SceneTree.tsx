@@ -2,7 +2,7 @@ import React, {Key, useEffect, useMemo, useRef, useState} from 'react';
 import {Input, Tree, TreeDataNode, type TreeProps} from 'antd';
 import {useSelectObject3D, useSetSelectKey, useSetSelectObject3D, useViewer} from "../store/useStore.ts";
 import * as THREE from "three";
-import {Viewer} from @plum-render/three-sdk";
+
 import {EventDataNode} from 'antd/es/tree/index';
 import {Item, ItemParams, Menu as RightMenu, useContextMenu} from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.css';

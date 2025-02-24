@@ -1,7 +1,7 @@
 import {PathPointList, PathTubeGeometry, PathTubeGeometryOptions} from "three.path";
 import * as THREE from "three";
 import {LineDashedMaterialParameters} from "three/src/materials/LineDashedMaterial";
-import deepMergeRetain from "../../../../libs/tool/src/core/deepMergeRetain";
+import {deepMergeRetain} from "../tool";
 
 
 export interface PathPointListOptions {
@@ -18,7 +18,7 @@ export interface IPathTubeOptions {
     pathTubeGeometryOptions?: PathTubeGeometryOptions
 }
 
-export default class PathTube extends THREE.Mesh {
+export class PathTube extends THREE.Mesh {
     declare geometry: PathTubeGeometry;
     declare material: THREE.MeshBasicMaterial;
     options: Required<IPathTubeOptions>;

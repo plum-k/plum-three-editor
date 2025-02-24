@@ -20,7 +20,8 @@ export interface IGetCubicBezierCurve3PointsOptions {
 }
 
 const v = new THREE.Vector3()
-export default class LineTool {
+
+export class LineTool {
     static getQuadraticBezierCurve3Points(options: IGetQuadraticBezierCurve3PointsOptions) {
         const {start, end, mid, quadraticBezierCurve3} = options;
         if (isVector3(start)) {

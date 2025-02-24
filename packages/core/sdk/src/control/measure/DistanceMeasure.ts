@@ -1,10 +1,10 @@
-import Measure, {IMeasureOptions} from "./Measure";
+import {IMeasureOptions, Measure} from "./Measure";
 import * as THREE from "three";
 import {Vector3} from "three";
 import {IPick} from "../../manager/EventManager";
-import Line2 from "../../mesh/line/line2/Line2";
+import {Line2} from "../../mesh/line/line2/Line2";
 import {isNil, round} from "lodash-es";
-import TextSprite from "../../mesh/label/TextSprite";
+import {TextSprite} from "../../mesh/label/TextSprite";
 import {ThreeTool} from "../../tool";
 
 export enum EDistanceMeasureTextModel {
@@ -24,7 +24,7 @@ export interface IDistanceMeasureOptions extends IMeasureOptions {
     textModel: EDistanceMeasureTextModel;
 }
 
-export default class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
+export class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
     pointGroup = new THREE.Group();
     lineGroup = new THREE.Group();
     textSprite = new THREE.Group();

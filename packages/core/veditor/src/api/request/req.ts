@@ -1,5 +1,5 @@
 import {Request} from "./Request";
-import {ApiRes, IRequestError} from "./interface";
+import type {ApiRes, IRequestError} from "./interface";
 
 const req = new Request({
     baseURL: import.meta.env.VITE_SERVER as string

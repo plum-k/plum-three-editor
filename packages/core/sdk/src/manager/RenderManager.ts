@@ -1,11 +1,11 @@
 import {SRGBColorSpace, WebGLRenderer} from "three";
-import BasePlum, {IBasePlumOptions} from "../core/BasePlum";
+import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
 import {IResourceManagers} from "./AssetManager";
 
 export interface IRenderManagerOptions extends IBasePlumOptions {
 }
 
-export default class RenderManager extends BasePlum {
+export class RenderManager extends BasePlum {
     defaultWebGLRenderer: WebGLRenderer;
 
     constructor(options: IResourceManagers) {
@@ -23,6 +23,7 @@ export default class RenderManager extends BasePlum {
 // @param {string} options.powerPreference - 指定GPU的性能偏好，'high-performance' 表示优先考虑性能
 // @param {boolean} options.antialias - 是否启用抗锯齿，用于提高图形边缘的平滑度
 // @param {boolean} options.alpha - 是否启用alpha通道，用于支持透明度
+
         const webGLRenderer = new WebGLRenderer({
             // powerPreference: 'high-performance',
             // antialias: true,
@@ -67,6 +68,8 @@ export default class RenderManager extends BasePlum {
         // console.log(cameraControls.camera.position)
 
         this.defaultWebGLRenderer.render(this.scene, this.camera);
+
+        // console.log("111111111")
 
         // if (this.editor.view3DHelper.animating) {
         // cameraControls.enabled = false;

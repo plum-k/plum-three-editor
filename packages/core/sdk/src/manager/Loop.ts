@@ -1,4 +1,4 @@
-import BasePlum, {IBasePlumOptions} from "../core/BasePlum";
+import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
 import {Subject} from "rxjs";
 
 export type GlobalRenderCallback = (timeStamp: number) => void
@@ -9,7 +9,7 @@ export interface ILoop extends IBasePlumOptions {
 
 }
 
-export default class Loop extends BasePlum {
+export class Loop extends BasePlum {
 
     globalEffects: Set<Function> = new Set()
     globalAfterEffects: Set<Function> = new Set()
@@ -55,6 +55,11 @@ export default class Loop extends BasePlum {
         this.globalTailEffects.add(callback);
     }
 
+    /**
+     *  执行全局回调
+     * @param effects
+     * @param timestamp
+     */
     run(effects: Set<Function>, timestamp: number) {
         if (!effects.size) return
         for (const callback of effects.values()) {
@@ -64,6 +69,10 @@ export default class Loop extends BasePlum {
         }
     }
 
+    /**
+     * 循环函数
+     * @param timestamp 时间戳
+     */
     frameLoop = (timestamp: number) => {
         try {
             this.frame = requestAnimationFrame(this.frameLoop);
@@ -92,11 +101,18 @@ export default class Loop extends BasePlum {
 
     }
 
+
+    /**
+     * 开始循环
+     */
     startLoop = () => {
         this.running = true
         this.frame = requestAnimationFrame(this.frameLoop);
     }
 
+    /**
+     * 停止循环
+     */
     stopLoop = () => {
         this.running = false
         return cancelAnimationFrame(this.frame)

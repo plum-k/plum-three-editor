@@ -1,5 +1,5 @@
 import {CatmullRomCurve3} from "three";
-import Line, {ILineOptions} from "./Line";
+import {ILineOptions, Line} from "./Line";
 
 export enum CurveType {
     Centripetal = 'centripetal',
@@ -21,7 +21,7 @@ export const CatmullRomLineDefaultsOptions: ICatmullRomLineOptions = {
     segments: 20
 }
 
-export default class CatmullRomLine extends Line {
+export class CatmullRomLine extends Line {
     catmullRomCurve3: CatmullRomCurve3 = new CatmullRomCurve3();
     declare options: Required<ICatmullRomLineOptions>;
 

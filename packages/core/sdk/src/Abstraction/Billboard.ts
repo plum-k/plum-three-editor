@@ -31,4 +31,5 @@ const Billboard = (config: BillboardOptions) => {
     if (lockZ) group.rotation.z = prevRotation.z;
 }
 
-export default Billboard;
+export
+Billboard;

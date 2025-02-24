@@ -1,14 +1,14 @@
-import BasePlum, {IBasePlumOptions} from "./BasePlum";
+import {BasePlum, IBasePlumOptions} from "./BasePlum";
 import {SerializeInterface} from "./serialize";
-import Asset from "./asset/Asset";
+import {Asset} from "./asset/Asset";
 import * as THREE from "three";
 import {isString} from "lodash-es";
-import Serialize from "./serialize/Serialize";
+import {Serialize} from "./serialize/Serialize";
 
 export interface ISerializeSceneOptions extends IBasePlumOptions {
 }
 
-export default class SerializeScene extends BasePlum {
+export class SerializeScene extends BasePlum {
     serialize: Serialize
 
     constructor(options: ISerializeSceneOptions) {

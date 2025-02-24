@@ -1,7 +1,6 @@
 import * as  THREE from "three";
-import {version} from "../../tool/constants";
-import {shaderMaterial} from "../../tool/shaderMaterial";
 import {toCreasedNormals} from "three/examples/jsm/utils/BufferGeometryUtils";
+import {shaderMaterial, version} from "../tool";
 
 const material = /* @__PURE__ */ shaderMaterial(
     {
@@ -73,7 +72,8 @@ type OutlinesProps = {
     renderOrder?: number,
     size: THREE.Vector2
 }
-export default class Outlines extends THREE.Group {
+
+export class Outlines extends THREE.Group {
     oldAngle = 0;
     oldGeometry: THREE.BufferGeometry | undefined = undefined
 

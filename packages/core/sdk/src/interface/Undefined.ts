@@ -1,3 +1,2 @@
-type  Undefined<T> = T | undefined;
+export type  Undefined<T> = T | undefined;
 
-export default Undefined;

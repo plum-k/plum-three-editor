@@ -1,9 +1,9 @@
-import Command from "./Command";
+import {Command} from "./Command";
 import * as THREE from 'three';
 import {ThreeTool} from "../../tool";
 
 
-export default class SetMaterialColorCommand extends Command<number> {
+export class SetMaterialColorCommand extends Command<number> {
     type: string = 'SetMaterialColorCommand';
     materialSlot: number;
 

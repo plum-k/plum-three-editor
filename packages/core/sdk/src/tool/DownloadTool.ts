@@ -1,6 +1,6 @@
 let link = document.createElement('a');
 
-export default class DownloadTool {
+export class DownloadTool {
 
     static save(blob: Blob, filename: string) {
         if (link.href) {

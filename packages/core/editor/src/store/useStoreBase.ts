@@ -1,5 +1,5 @@
 import {create} from 'zustand'
-import {Viewer} from @plum-render/three-sdk";
+
 import * as THREE from "three";
 import {Key} from "react";
 

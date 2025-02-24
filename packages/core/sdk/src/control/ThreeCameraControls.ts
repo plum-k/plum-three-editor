@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import {PerspectiveCamera} from 'three';
 
 import CameraControls from "camera-controls";
-import Viewer from "../core/Viewer";
+import {Viewer} from "../core/Viewer";
 import {OrthographicCamera} from "three/src/cameras/OrthographicCamera";
-import deepMergeRetain from "../../../../libs/tool/src/core/deepMergeRetain";
+import {deepMergeRetain} from "../tool";
 
 // 安装camera-controls扩展，使其支持THREE库
 CameraControls.install({THREE: THREE});
@@ -20,7 +20,7 @@ export interface IThreeCameraControls {
  * ThreeCameraControls类负责初始化和管理Three.js的摄像机控制。
  * 它通过与viewer实例配合，提供交互式摄像机控制功能。
  */
-export default class ThreeCameraControls {
+export class ThreeCameraControls {
     options: any;
     viewer: Viewer
     perspectiveCamera: PerspectiveCamera | OrthographicCamera;
@@ -69,6 +69,5 @@ export default class ThreeCameraControls {
         this.perspectiveCamera.aspect = aspect;
         this.perspectiveCamera.updateProjectionMatrix();
     }
-
 
 }

@@ -1,7 +1,7 @@
 import Command from "./commands/Command";
 import Editor from "./Editor";
 
-export default class History {
+export class History {
     editor: Editor;
     undos: Array<Command> = [];
     redos: Array<Command> = [];

@@ -1,4 +1,4 @@
-import Asset, {IAsset} from "./Asset";
+import {Asset, IAsset} from "./Asset";
 import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 export interface IGltfModelAsset extends IAsset {
@@ -27,7 +27,7 @@ export interface IGltfModelAsset extends IAsset {
  * })
  * ```
  */
-export default class GltfModelAsset extends Asset<GLTF> {
+export class GltfModelAsset extends Asset<GLTF> {
     constructor(options: IGltfModelAsset) {
         super(options)
     }

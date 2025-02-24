@@ -1,6 +1,6 @@
-import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
-import {ApiRes} from "./interface";
-
+import axios from "axios";
+import type {ApiRes} from "./interface";
+import type {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
 export class Request {
     axiosInstance: AxiosInstance;
 
