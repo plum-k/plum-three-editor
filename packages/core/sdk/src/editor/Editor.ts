@@ -3,12 +3,17 @@ import * as THREE from "three";
 import {Texture} from "three";
 import {PropertyPath} from "lodash-es";
 import {History} from "./History"
-import {Command, SetValueCommand} from "./commands";
-import {SetMaterialCommand} from "./commands/SetMaterialCommand";
-import {SetMaterialColorCommand} from "./commands/SetMaterialColorCommand";
-import {SetMaterialValueCommand} from "./commands/SetMaterialValueCommand";
-import {SetMaterialMapCommand} from "./commands/SetMaterialMapCommand";
-import {AddObjectCommand} from "./commands/AddObjectCommand";
+import {
+    Command,
+    SetValueCommand,
+    SetMaterialCommand,
+    SetMaterialColorCommand,
+    SetMaterialValueCommand,
+    SetMaterialMapCommand,
+    AddObjectCommand,
+    MoveObjectCommand,
+    RemoveObjectCommand
+} from "./commands";
 import {
     isCamera,
     isDirectionalLight,
@@ -18,8 +23,7 @@ import {
     isSkinnedMesh,
     isSpotLight
 } from "three-is";
-import {MoveObjectCommand} from "./commands/MoveObjectCommand";
-import {RemoveObjectCommand} from "./commands/RemoveObjectCommand";
+
 import {Grid} from "../mesh";
 import {VertexNormalsHelper} from "three-stdlib";
 import {ThreeTool} from "../tool";

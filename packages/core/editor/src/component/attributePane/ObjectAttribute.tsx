@@ -27,7 +27,6 @@ const ObjectAttribute: React.FC = () => {
                 update(object);
             })
         }
-
     }, [viewer])
 
     const update = (object: THREE.Object3D, isInit: boolean = false) => {

@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import {ElFormItem, ElInputNumber} from "element-plus";
+import {ElFormItem, ElInputNumber, formContextKey} from "element-plus";
+import {computed, inject} from "vue";
+import type {InputNumberProps} from "element-plus/es/components/input-number/src/input-number";
+import {isNil} from "lodash-es";
 
-interface Props {
-  prop: string | string[];
+interface Props extends  Partial<InputNumberProps> {
+  name: string;
   label: string;
 }
 
-const {prop, label} = defineProps<Props>();
+const {name, label, ...rest} = defineProps<Props>();
+const formContext = inject(formContextKey, undefined)
+
+
+const isRender = computed(() => {
+  return  !isNil(formContext.model[name])
+})
 
 </script>
 
 <template>
-  <el-form-item :label="label" :prop="prop">
-    <el-input-number/>
+  <el-form-item v-if="isRender" :label="label" size="small">
+    <el-input-number v-model="formContext.model[name]" :bind="rest"/>
   </el-form-item>
 </template>
 

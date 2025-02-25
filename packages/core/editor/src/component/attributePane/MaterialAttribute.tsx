@@ -129,7 +129,7 @@ const MaterialAttribute: React.FC = () => {
                 key: '混合',
                 label: '混合',
                 children: <Fragment>
-                    <InputNumberItem label="透明性" name="transparent"/>
+                    <BoolItem label="透明性" name="transparent"/>
                     <NumberSliderItem label="透明度" name="opacity" range={{min: 0, max: 1, step: 0.01}}/>
                     <BoolItem label="深度测试" name="depthtest"/>
                     <BoolItem label="深度缓冲" name="depthwrite"/>

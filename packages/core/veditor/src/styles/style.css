@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 html, body, #app {
   padding: 0;
   margin: 0;
@@ -8,17 +7,14 @@ html, body, #app {
   height: 100%;
 }
 
-
 .container {
   position: relative;
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
-  /*background: #00bb00;*/
 
   canvas {
     position: relative !important;
-    /*z-index: -99;*/
   }
 }

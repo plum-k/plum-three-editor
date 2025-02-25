@@ -18,6 +18,9 @@ export class Selector extends BasePlum {
         this.initEvent();
     }
 
+    /**
+     * 初始化包围盒
+     */
     initSelectionBox() {
         if (isArray(this.selectionBox.material)) {
         } else {
@@ -30,6 +33,9 @@ export class Selector extends BasePlum {
     }
 
 
+    /**
+     * 初始化事件
+     */
     initEvent() {
         // 监听点击事件, 选择物体
         this.eventManager.leftClickPickSubject.subscribe((value) => {
@@ -62,6 +68,10 @@ export class Selector extends BasePlum {
     }
 
 
+    /**
+     * 选择对象
+     * @param object
+     */
     select(object: THREE.Object3D | undefined) {
         if (!isNil(object) && this.selectObject != object) {
             this.selectObject = object;
@@ -73,6 +83,9 @@ export class Selector extends BasePlum {
         }
     }
 
+    /**
+     * 取消选择对象
+     */
     deselect() {
         this.select(undefined);
     }

@@ -58,7 +58,7 @@ export class EditorEventManager extends BasePlum {
 
     // 对象天加事件
     objectAdded = new Subject<any>();
-    // 对象改变事件
+    // 对象属性改变事件
     objectChanged = new Subject<any>();
     // 对象移除事件
     objectRemoved = new Subject<any>();

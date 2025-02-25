@@ -5,8 +5,8 @@ import Layout from "../layout/Layout.vue";
 </script>
 
 <template>
-  <EHeader/>
-  <Layout/>
+  <e-header/>
+  <layout/>
 </template>
 
 <style scoped>

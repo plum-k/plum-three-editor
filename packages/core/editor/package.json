@@ -21,7 +21,7 @@
     "axios": "^1.7.9",
     "common": "workspace:*",
     "cos-js-sdk-v5": "^1.8.7",
-    "file-type": "^20.1.0",
+    "file-type": "^20.3.0",
     "highlight.js": "^11.11.1",
     "lodash-es": "^4.17.21",
     "markdown-it": "^14.1.0",
@@ -32,7 +32,7 @@
     "react-hotkeys-hook": "^4.6.1",
     "react-resizable-panels": "^2.1.7",
     "react-router-dom": "^7.2.0",
-    "react-toastify": "^11.0.3",
+    "react-toastify": "^11.0.5",
     "rxjs": "^7.8.2",
     "three": "^0.173.0",
     "three-is": "workspace:*",
@@ -49,6 +49,6 @@
     "@vitejs/plugin-react": "^4.3.4",
     "rc-field-form": "^2.7.0",
     "typescript": "^5.7.3",
-    "vite": "^6.1.1"
+    "vite": "^6.2.0"
   }
 }

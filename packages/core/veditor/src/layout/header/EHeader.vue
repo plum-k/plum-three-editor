@@ -11,10 +11,10 @@ import HeaderTool from "./HeaderTool.vue";
       Plum
     </div>
     <div class="h-full flex items-center justify-center ml-3 text-2xl">
-      <FileMenu/>
-      <EditMenu/>
+      <file-menu/>
+      <edit-menu/>
     </div>
-    <HeaderTool/>
+    <header-tool/>
   </header>
 </template>
 

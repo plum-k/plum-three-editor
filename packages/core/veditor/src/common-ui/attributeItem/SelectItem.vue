@@ -2,16 +2,16 @@
 import {ElFormItem, ElSelect} from "element-plus";
 
 interface Props {
-  prop: string | string[];
+  name: string | string[];
   label: string;
 }
 
-const {prop, label} = defineProps<Props>();
+const {name, label} = defineProps<Props>();
 
 </script>
 
 <template>
-  <el-form-item :label="label" :prop="prop">
+  <el-form-item :label="label"  size="small">
     <el-select/>
   </el-form-item>
 </template>

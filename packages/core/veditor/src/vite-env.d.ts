@@ -11,13 +11,12 @@ interface ImportMeta {
     readonly env: ImportMetaEnv;
 }
 
-import type {Bus} from "./hooks/Bus";
+import type {Bus} from "./hooks";
 
 declare module 'vue' {
     interface ComponentCustomProperties {
         bus: Bus;
     }
 }
-
 
 export {}

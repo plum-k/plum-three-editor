@@ -5,23 +5,23 @@ import {computed, inject} from "vue";
 import {get} from "lodash-es";
 
 interface Props {
-  prop: string | string[];
+  name: string;
   label: string;
 }
 
-const {prop, label} = defineProps<Props>();
+const {name, label} = defineProps<Props>();
 const formContext = inject(formContextKey, undefined)
 const value = computed(() => {
   // console.log(formContext)
   // console.log(get(formContext?.model, prop))
-  return get(formContext?.model, prop)
+  return get(formContext?.model, name)
 })
 
 
 </script>
 
 <template>
-  <el-form-item :label="label">
+  <el-form-item :label="label" size="small">
     {{ value }}
   </el-form-item>
 </template>

@@ -11,7 +11,7 @@ const {prop, label} = defineProps<Props>();
 </script>
 
 <template>
-  <el-form-item :label="label" :prop="prop">
+  <el-form-item :label="label" size="small">
     <el-input/>
   </el-form-item>
 </template>

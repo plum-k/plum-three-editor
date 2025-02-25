@@ -55,7 +55,7 @@ onMounted(() => {
   _viewer.threeCameraControls.cameraControls.setPosition(5, 5, 5);
   _viewer.threeCameraControls.cameraControls.setTarget(0, 0, 0);
 
-  addBox(_viewer,4);
+  addBox(_viewer,1);
 
 
   setTimeout(() => {
