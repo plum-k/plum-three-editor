@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {reactive} from "vue";
-import {ElCheckbox, ElCheckboxGroup, ElForm, ElFormItem} from "element-plus";
+import {reactive, ref} from "vue";
+import {ElCheckbox, ElCheckboxGroup, ElForm, ElFormItem,ElEmpty} from "element-plus";
 import {useBus} from "../../hooks";
 import * as THREE from "three";
 import {BoolItem, InputNumberItem, TextItem, Vector3Item} from "../../common-ui";
@@ -21,6 +21,8 @@ const form = reactive({
   visible: false
 })
 
+const isVisible = ref(false);
+
 bus.viewerInitSubject.subscribe(() => {
   const viewer = bus.viewer;
   if (viewer) {
@@ -29,7 +31,10 @@ bus.viewerInitSubject.subscribe(() => {
     viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
       console.log("更新对象", object);
       if (object) {
+        isVisible.value = true;
         threeSyncUi(object);
+      }else {
+        isVisible.value = false;
       }
     })
 
@@ -120,7 +125,7 @@ const onFieldsChange = (changedFields, allFields) => {
 </script>
 
 <template>
-  <el-form :model="form" label-width="auto" size="small" class="h-full">
+  <el-form v-if="isVisible" :model="form" label-width="auto" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <text-item label="名称" name="name"/>
@@ -155,6 +160,9 @@ const onFieldsChange = (changedFields, allFields) => {
     <!--    <BoolItem label="产生阴影" name="castShadow"/>-->
     <!--    <JsonItem label="自定义数据" name="userData"/>-->
   </el-form>
+  <div v-else class="h-full flex justify-center items-center">
+    <el-empty  description="未选择对象"/>
+  </div>
 </template>
 
 <style scoped>
