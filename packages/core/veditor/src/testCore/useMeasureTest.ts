@@ -1,4 +1,8 @@
-import {EDistanceMeasureTextModel, Viewer} from @plum-render/three-sdk";
+import {EDistanceMeasureTextModel, Viewer} from
+
+@plum
+-render / three - sdk
+";
 
 const useMeasureTest = (viewer: Viewer) => {
     // viewer.measureTool.startDistanceMeasure({

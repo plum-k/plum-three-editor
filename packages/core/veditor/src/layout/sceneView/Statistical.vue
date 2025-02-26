@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {useBus} from "../../hooks";
 import {onMounted, reactive} from "vue";
 import {getStatistics} from "@plum-render/three-sdk";

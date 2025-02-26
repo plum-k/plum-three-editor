@@ -1,10 +1,10 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ElFormItem, ElInputNumber, formContextKey} from "element-plus";
 import {computed, inject} from "vue";
 import type {InputNumberProps} from "element-plus/es/components/input-number/src/input-number";
-import {isNil} from "lodash-es";
+import {get, isNil} from "lodash-es";
 
-interface Props extends  Partial<InputNumberProps> {
+interface Props extends Partial<InputNumberProps> {
   name: string;
   label: string;
 }
@@ -14,7 +14,7 @@ const formContext = inject(formContextKey, undefined)
 
 
 const isRender = computed(() => {
-  return  !isNil(formContext.model[name])
+  return !isNil(get(formContext.model, name))
 })
 
 </script>

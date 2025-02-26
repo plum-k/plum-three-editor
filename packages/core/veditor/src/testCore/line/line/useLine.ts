@@ -1,4 +1,8 @@
-import {Line, LineMaterialType, LineType, Viewer} from @plum-render/three-sdk";
+import {Line, LineMaterialType, LineType, Viewer} from
+
+@plum
+-render / three - sdk
+";
 import * as THREE from "three";
 import {GeometryUtils} from "three-stdlib";
 import {Pane} from 'tweakpane';

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {computed, onMounted, ref} from "vue";
 import Card from "../components/home/Card.vue";
 import type {IApplication} from "../interface";
@@ -45,22 +45,22 @@ const items = computed(() => {
   return list
 });
 
-const editPath = (info?:IApplication)=>{
-    if (info) {
-      appInfo.value = info;
-      getFolders(info)
-      const index = findIndex(dirList.value, {id: info.id});
-      dirList.value = dirList.value.slice(0, index + 1);
-      appInfo.value = info;
-      appInfo.value = info;
+const editPath = (info?: IApplication) => {
+  if (info) {
+    appInfo.value = info;
+    getFolders(info)
+    const index = findIndex(dirList.value, {id: info.id});
+    dirList.value = dirList.value.slice(0, index + 1);
+    appInfo.value = info;
+    appInfo.value = info;
 
-    }else {
-      appInfo.value = null;
-      dirList.value = []
-      getFolders(null)
-    }
+  } else {
+    appInfo.value = null;
+    dirList.value = []
+    getFolders(null)
+  }
 }
-const handleDir = (value:IApplication)=>{
+const handleDir = (value: IApplication) => {
   appInfo.value = value;
   getFolders(value);
   dirList.value = [...dirList.value, value];
@@ -80,7 +80,10 @@ const handleDir = (value:IApplication)=>{
                 <HomeFilled/>
               </el-icon>
             </el-breadcrumb-item>
-            <el-breadcrumb-item v-for="(item,index) in items" :key="index" @click="editPath(item)">{{ item.name }}</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="(item,index) in items" :key="index" @click="editPath(item)">{{
+                item.name
+              }}
+            </el-breadcrumb-item>
           </el-breadcrumb>
           <div class="grow"></div>
           <el-button @click="example">示例</el-button>

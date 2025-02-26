@@ -1,10 +1,11 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import * as THREE from "three";
 import {Viewer} from "@plum-render/three-sdk";
-import {ElTreeV2, type TreeNode, type TreeNodeData} from "element-plus";
+import {ElTreeV2, type TreeNode, type TreeNodeData,ElButton,ElIcon} from "element-plus";
 import {ref} from "vue";
 import {useBus} from "../../hooks";
 import ContextMenu from '@imengyu/vue3-context-menu'
+import Icon from "../../components/Icon.vue";
 
 const bus = useBus();
 
@@ -15,6 +16,7 @@ const getTree = (objects: Array<THREE.Object3D>) => {
     const object = objects[i];
     const {name, uuid, children, type, visible} = object;
     const _name = name === "" ? type : name; // 如果名称为空则使用类型
+    console.log(visible)
     let node: any = {
       visible,
       label: _name,
@@ -37,11 +39,16 @@ const getSceneTree = (viewer: Viewer) => {
 bus.viewerInitSubject.subscribe(() => {
   const viewer = bus.viewer;
   data.value = getSceneTree(viewer!);
+
+  viewer?.editor.editorEventManager.sceneGraphChanged.subscribe(() => {
+    console.log("便阿虎11111111111")
+    data.value = getSceneTree(viewer!);
+  })
 })
 
 const data = ref<Array<any>>([]);
 
-const handleNodeClick:ElTreeV2["node-click"] = (data: TreeNodeData, node: TreeNode, e: MouseEvent) => {
+const handleNodeClick = (data: TreeNodeData, node: TreeNode, e: MouseEvent) => {
   const viewer = bus.viewer;
   if (viewer) {
     const id = data.id;
@@ -51,7 +58,7 @@ const handleNodeClick:ElTreeV2["node-click"] = (data: TreeNodeData, node: TreeNo
     }
   }
 }
-const handleNodeContextmenu:ElTreeV2["node-contextmenu"] = (evt: Event, data: TreeNodeData, node: TreeNode) => {
+const handleNodeContextmenu = (evt: Event, data: TreeNodeData, node: TreeNode) => {
   const viewer = bus.viewer;
   if (viewer?.scene) {
     const id = data.id;
@@ -81,15 +88,22 @@ const handleNodeContextmenu:ElTreeV2["node-contextmenu"] = (evt: Event, data: Tr
 
   }
 }
+
 </script>
 
 <template>
   <el-tree-v2
-      class="h-full"
       :data="data"
+      class="h-full"
       @node-click="handleNodeClick"
       @node-contextmenu="handleNodeContextmenu"
-  />
+  >
+    <template #default="{ node }">
+      <icon v-if="node.data.visible" icon-name="icon-show" />
+      <icon v-else icon-name="icon-hide" />
+      <span>{{ node.label }}</span>
+    </template>
+  </el-tree-v2>
 </template>
 
 <style scoped>

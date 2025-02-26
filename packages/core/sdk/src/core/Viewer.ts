@@ -67,9 +67,6 @@ export class Viewer {
         this.options = deepMergeRetain(options, {}); // 合并选项
         this.initContainer(container); // 初始化容器
 
-        if (this.options.ossApiOptions) {
-            this.ossApi = await OssApi.create(this.options.ossApiOptions);
-        }
 
         this.clock = new THREE.Clock(); // 创建时钟实例
 
@@ -116,6 +113,14 @@ export class Viewer {
         if (this.options.appUrl != null) {
             this.serializeScene.loadSceneByUrl(this.options.appUrl);
         } // 根据 URL 加载场景
+        // todo
+        this.initComponent().then();
+    }
+
+    async initComponent() {
+        if (this.options.ossApiOptions) {
+            this.ossApi = await OssApi.create(this.options.ossApiOptions);
+        }
     }
 
     // 将画布添加到容器

@@ -1,4 +1,8 @@
-import {Viewer} from @plum-render/three-sdk";
+import {Viewer} from
+
+@plum
+-render / three - sdk
+";
 import {BoxGeometry, ConeGeometry, Group, Mesh, MeshPhongMaterial, OctahedronGeometry, SphereGeometry} from "three";
 
 export function create(amount = 30, range = 10.0) {

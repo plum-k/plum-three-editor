@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {computed} from "vue";
 import {EAppType, type IApplication} from "../../interface";
 import dayjs from "dayjs";
@@ -44,11 +44,11 @@ const formatTime = (time: Date) => {
           <Folder/>
         </el-icon>
       </div>
-      <img v-else-if="item.thumbnailBase64" @click="skip" class="w-full h-full object-cover cursor-pointer"
-           :src="item.thumbnailBase64"
-           alt="图片"/>
-      <div  v-else class="flex justify-center items-center h-full">
-        <el-icon >
+      <img v-else-if="item.thumbnailBase64" :src="item.thumbnailBase64" alt="图片"
+           class="w-full h-full object-cover cursor-pointer"
+           @click="skip"/>
+      <div v-else class="flex justify-center items-center h-full">
+        <el-icon>
           <Document/>
         </el-icon>
       </div>
@@ -59,7 +59,7 @@ const formatTime = (time: Date) => {
       </div>
       <div class="flex justify-between items-center mb-4">
         <div class="text-xs">
-          {{formatTime(createTime)}}
+          {{ formatTime(createTime) }}
         </div>
       </div>
     </div>

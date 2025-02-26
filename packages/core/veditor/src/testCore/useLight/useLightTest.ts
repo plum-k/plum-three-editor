@@ -1,5 +1,9 @@
 import * as THREE from "three";
-import {Viewer} from @plum-render/three-sdk";
+import {Viewer} from
+
+@plum
+-render / three - sdk
+";
 
 const useLightTest = (viewer: Viewer) => {
 

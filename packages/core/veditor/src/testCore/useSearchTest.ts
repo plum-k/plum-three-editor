@@ -1,4 +1,8 @@
-import {SearchTool, Viewer} from @plum-render/three-sdk";
+import {SearchTool, Viewer} from
+
+@plum
+-render / three - sdk
+";
 import {SearchOperator} from "libs/tool/src/Search.ts";
 
 const useSearchTest = (viewer: Viewer) => {

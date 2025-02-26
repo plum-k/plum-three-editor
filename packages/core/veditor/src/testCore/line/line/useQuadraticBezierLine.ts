@@ -1,9 +1,17 @@
-import {LineMaterialType, LineType, Viewer} from @plum-render/three-sdk";
+import {LineMaterialType, LineType, Viewer} from
+
+@plum
+-render / three - sdk
+";
 import * as THREE from "three";
 import {GeometryUtils} from "three-stdlib";
 import {Pane} from 'tweakpane';
 import {clone} from "lodash-es";
-import {QuadraticBezierLine} from @plum-render/three-sdk";
+import {QuadraticBezierLine} from
+
+@plum
+-render / three - sdk
+";
 
 export default function useQuadraticBezierLine(_viewer: Viewer) {
 

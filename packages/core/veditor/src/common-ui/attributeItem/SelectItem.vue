@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ElFormItem, ElSelect} from "element-plus";
 
 interface Props {
@@ -11,7 +11,7 @@ const {name, label} = defineProps<Props>();
 </script>
 
 <template>
-  <el-form-item :label="label"  size="small">
+  <el-form-item :label="label" size="small">
     <el-select/>
   </el-form-item>
 </template>

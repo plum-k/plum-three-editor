@@ -1,7 +1,6 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import EHeader from "../layout/header/EHeader.vue";
 import Layout from "../layout/Layout.vue";
-
 </script>
 
 <template>

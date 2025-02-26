@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 import {ElFormItem, formContextKey} from "element-plus";
 import {computed, inject} from "vue";

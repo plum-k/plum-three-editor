@@ -9,16 +9,14 @@ export interface IObjectAttributeChange {
 
 export class Bus {
 
-    constructor() {
-    }
-
     // 视图
     viewer: Viewer | null = null;
-
     viewerInitSubject = new Subject<boolean>();
-
     // ui 表单变化
     objectAttributeChangeSubject = new Subject<IObjectAttributeChange>();
+
+    constructor() {
+    }
 
     // 选中的对象
     get selectObject() {

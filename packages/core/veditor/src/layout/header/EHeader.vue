@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 import FileMenu from "./FileMenu.vue";
 import EditMenu from "./EditMenu.vue";

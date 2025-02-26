@@ -1,5 +1,9 @@
 import {isString,} from "lodash-es";
-import {Viewer} from @plum-render/three-sdk";
+import {Viewer} from
+
+@plum
+-render / three - sdk
+";
 
 export function getObjectSize(obj) {
 

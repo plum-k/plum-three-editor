@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ElFormItem, ElInputNumber, formContextKey} from "element-plus";
 import {inject} from "vue";
 import {useBus} from "../../hooks";
@@ -26,24 +26,24 @@ const change = (value: number, key: string) => {
     <el-form-item label="x" size="small">
       <el-input-number
           v-model="formContext.model[name]['x']"
-          size="small"
           controls-position="right"
+          size="small"
           @change="(value)=>change(value,'x')"
       />
     </el-form-item>
     <el-form-item label="y" size="small">
       <el-input-number
           v-model="formContext.model[name]['y']"
-          size="small"
           controls-position="right"
+          size="small"
           @change="(value)=>change(value,'y')"
       />
     </el-form-item>
     <el-form-item label="z" size="small">
       <el-input-number
           v-model="formContext.model[name]['z']"
-          size="small"
           controls-position="right"
+          size="small"
           @change="(value)=>change(value,'z')"
       />
     </el-form-item>

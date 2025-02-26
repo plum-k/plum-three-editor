@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {reactive} from "vue";
 import {ElButton, ElForm, ElPopover} from "element-plus";
 import {useBus} from "../../hooks";
@@ -53,7 +53,7 @@ bus.objectAttributeChangeSubject.subscribe((editValue) => {
   const isCamera = ["fov", "near", "far"].includes(name as string)
   if (isCamera) {
     set(camera, name, value);
-  }else {
+  } else {
     const isCameraControls = ["minDistance", "maxDistance", "minAzimuthAngle", "maxAzimuthAngle", "minPolarAngle", "maxPolarAngle"].includes(name as string)
     if (isCameraControls) {
       set(cameraControls, name, value);
@@ -68,16 +68,16 @@ const show = () => {
 
 <template>
   <el-popover
+      :width="200"
       placement="bottom"
       title="Title"
-      :width="200"
       trigger="hover"
       @show="show"
   >
     <template #reference>
       <el-button class="absolute top-[20px] right-[20px]">相机设置</el-button>
     </template>
-    <el-form :model="form" label-width="auto" size="small" class="h-full">
+    <el-form :model="form" class="h-full" label-width="auto" size="small">
       <input-number-item label="视野" name="fov"/>
       <input-number-item label="近裁剪平面" name="near"/>
       <input-number-item label="远裁剪平面" name="far"/>

@@ -1,12 +1,13 @@
-<script setup lang="ts">
-import {ElCol, ElRow} from "element-plus";
+<script lang="ts" setup>
 import type {IDragInfo} from "../../../interface/IDragInfo.ts";
+import Icon from "../../../components/Icon.vue";
 
 interface Props extends IDragInfo {
 }
 
 const props = defineProps<Props>();
-const {label} = props;
+const {label, icon} = props;
+console.log(props)
 const onDragStart = (event: any) => {
   event.dataTransfer.setData('data', JSON.stringify(props))
 }
@@ -14,11 +15,14 @@ const onDragStart = (event: any) => {
 </script>
 
 <template>
-  <el-row>
-    <el-col :span="12" @dragstart="onDragStart">
-      <div class="mt-2 ml-auto mr-auto">{{ label }}</div>
-    </el-col>
-  </el-row>
+  <div
+      class="flex justify-center items-center flex-col cursor-pointer  w-15 bg-gray-100 rounded-lg hover:translate-y-1 hover:shadow-1xl"
+      draggable="true"
+      @dragstart="onDragStart"
+  >
+    <Icon :icon-name="icon" class="mt-3 ml-auto mr-auto"/>
+    <div class="mt-2 ml-auto mr-auto w-full text-center truncate">{{ label }}</div>
+  </div>
 </template>
 
 <style scoped>

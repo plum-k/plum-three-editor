@@ -1,7 +1,3 @@
-export  { default as BaseResourcePanel } from "./BaseResourcePanel";
-export  { default as DragCard } from "./DragCard";
-export  { default as index } from "./index";
-export * from "./BaseResourcePanel";
-export * from "./DragCard";
-export * from "./index";
+export {default as BaseResourcePanel} from "./BaseResourcePanel.vue";
+export {default as DragCard} from "./DragCard.vue";
 export * from "./assetLibrary";

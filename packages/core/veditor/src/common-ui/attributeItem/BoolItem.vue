@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ElFormItem, ElSwitch, formContextKey, type SwitchProps} from "element-plus";
 import {computed, inject} from "vue";
 import {useBus} from "../../hooks";
@@ -20,12 +20,12 @@ const change = (value: boolean) => {
   });
 }
 const isRender = computed(() => {
-  return  !isNil(formContext.model[name])
+  return !isNil(formContext.model[name])
 })
 </script>
 
 <template>
-  <el-form-item v-if="isRender" :label="label" size="small">
+  <el-form-item :label="label" size="small">
     <el-switch v-model="formContext.model[name]" @change="change"/>
   </el-form-item>
 </template>

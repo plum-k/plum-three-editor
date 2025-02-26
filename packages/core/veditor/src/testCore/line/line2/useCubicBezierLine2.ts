@@ -1,9 +1,17 @@
-import {Line2Type, LineMaterialType, LineType, Viewer} from @plum-render/three-sdk";
+import {Line2Type, LineMaterialType, LineType, Viewer} from
+
+@plum
+-render / three - sdk
+";
 import * as THREE from "three";
 import {GeometryUtils} from "three-stdlib";
 import {Pane} from 'tweakpane';
 import {clone} from "lodash-es";
-import {CubicBezierLine} from @plum-render/three-sdk";
+import {CubicBezierLine} from
+
+@plum
+-render / three - sdk
+";
 
 export default function useCubicBezierLine2(_viewer: Viewer) {
 

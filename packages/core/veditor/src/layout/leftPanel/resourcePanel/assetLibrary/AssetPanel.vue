@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 import {EFolder, type IFileInfo} from "../../../../interface";
 import {ref} from "vue";
@@ -9,6 +9,7 @@ interface Props {
   baseName: string;
   activeKey: string;
 }
+
 const props = defineProps<Props>();
 const {baseName, activeKey} = props;
 
@@ -42,7 +43,7 @@ const folders = ref<IFileInfo[]>([]);
 const fileInfo = ref<IFileInfo>({
   rawName: baseName
 } as IFileInfo);
-const dragstart = (e,item)=>{
+const dragstart = (e, item) => {
   e.dataTransfer!.setData("data", JSON.stringify({...item, type: "model"}))
 }
 const handleDir = (item: IFileInfo) => {
@@ -70,7 +71,7 @@ const getFolder = (info: IFileInfo = fileInfo.value) => {
 <template>
   <div class="w-full h-full p-[10px]">
     <div class="flex gap-2 flex-wrap">
-      <div v-for="(item,index) in folders" class="w-[80px] h-[80px] text-center" :key="index">
+      <div v-for="(item,index) in folders" :key="index" class="w-[80px] h-[80px] text-center">
         <div v-if="item.type===EFolder.FOLDER" class="folder-icon text-[2em] mt-[10px]" @click="handleDir(item)">
           <!--          <div class="folder-icon text-[2em] mt-[10px]">-->
           <!--            <FolderFilled/>-->
@@ -79,7 +80,8 @@ const getFolder = (info: IFileInfo = fileInfo.value) => {
         </div>
 
         <template v-else>
-          <div class="w-[80px] h-[80px] text-center cursor-pointer" draggable="true" @dragstart="(e)=>dragstart(e,item)">
+          <div class="w-[80px] h-[80px] text-center cursor-pointer" draggable="true"
+               @dragstart="(e)=>dragstart(e,item)">
             <div class="folder-icon text-[2em] mt-[10px]">
               <!--              <FileFilled/>-->
             </div>

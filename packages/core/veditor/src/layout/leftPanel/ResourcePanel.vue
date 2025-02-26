@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ElTabPane, ElTabs} from 'element-plus'
 import {ref} from 'vue'
 import {AssetLibrary, BaseResourcePanel} from "./resourcePanel";

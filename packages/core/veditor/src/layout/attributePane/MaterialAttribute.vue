@@ -1,20 +1,27 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {useBus} from "../../hooks";
 import {ElEmpty, ElForm} from "element-plus";
 import {BoolItem, InputNumberItem, TextItem} from "../../common-ui";
-import {reactive, ref} from "vue";
+import {inject, reactive, ref} from "vue";
 import {isArray, set} from "lodash-es";
 import * as THREE from "three";
 import {
-  isMeshBasicMaterial, isMeshNormalMaterial,
+  isMeshBasicMaterial,
+  isMeshNormalMaterial,
   isMeshPhongMaterial,
   isMeshPhysicalMaterial,
   isMeshStandardMaterial,
   isMeshToonMaterial,
   isPointsMaterial
 } from "three-is";
+import {type AttributePaneNameProps, useAttributePane} from "./useAttributePane.ts";
 
 const bus = useBus();
+
+const props = defineProps<AttributePaneNameProps>();
+
+const {isActive} = useAttributePane(props)
+
 const isVisible = ref(false);
 bus.viewerInitSubject.subscribe(() => {
   const viewer = bus.viewer;
@@ -23,10 +30,10 @@ bus.viewerInitSubject.subscribe(() => {
     // 监听对象选中
     viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
       console.log("更新材质对象", object);
-      if (object) {
+      if (object && isActive.value) {
         isVisible.value = true;
         threeSyncUi(object);
-      }else {
+      } else {
         isVisible.value = false;
       }
     })
@@ -38,7 +45,7 @@ bus.objectAttributeChangeSubject.subscribe((editValue) => {
   const {name, value} = editValue;
   const object = bus.selectObject;
   if (!object) return;
-
+  if (!isActive.value) return;
   set(object, name, value);
 })
 const form = reactive({
@@ -172,7 +179,7 @@ const threeSyncUi = (object: THREE.Mesh) => {
 </script>
 
 <template>
-  <el-form  v-if="isVisible"  :model="form" label-position="left" label-width="auto" size="small">
+  <el-form v-if="isVisible" :model="form" label-position="left" label-width="auto" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <text-item label="名称" name="name"/>
@@ -236,7 +243,7 @@ const threeSyncUi = (object: THREE.Mesh) => {
     <input-number-item label="折射比" name="refractionRatio"/>
   </el-form>
   <div v-else class="h-full flex justify-center items-center">
-    <el-empty  description="未选择对象"/>
+    <el-empty description="未选择对象"/>
   </div>
 </template>
 

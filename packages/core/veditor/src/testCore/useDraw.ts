@@ -1,4 +1,8 @@
-import {DrawLine, DrawType, Line, Viewer} from @plum-render/three-sdk";
+import {DrawLine, DrawType, Line, Viewer} from
+
+@plum
+-render / three - sdk
+";
 
 const useDraw = (viewer: Viewer) => {
     let aa = new DrawLine<typeof Line>({
