@@ -18,7 +18,7 @@
     "ahooks": "^3.8.4",
     "antd": "^5.24.2",
     "auto-zustand-selectors-hook": "^3.0.1",
-    "axios": "^1.7.9",
+    "axios": "^1.8.1",
     "common": "workspace:*",
     "cos-js-sdk-v5": "^1.8.7",
     "file-type": "^20.3.0",

@@ -1,0 +1,14 @@
+{
+  "name": "@plum-render/oss-api",
+  "version": "0.0.1",
+  "main": "src/index.ts",
+  "dependencies": {
+    "ali-oss": "^6.22.0",
+    "@types/ali-oss":"^6.16.11"
+  }
+}
+
+
+
+
+

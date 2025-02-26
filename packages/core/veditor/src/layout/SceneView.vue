@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {GltfModelAsset, Viewer} from "@plum-render/three-sdk";
+import {Viewer} from "@plum-render/three-sdk";
 import {useRoute} from "vue-router";
 import {useAmbientLight} from "../testCore/useAmbientLight.ts";
-import useEnvironment from "../testCore/useEnvironment.ts";
 import {BoxGeometry, Mesh, MeshStandardMaterial} from "three";
-import {useBus, useSetViewer, useViewer,} from "../hooks/useViewer.ts";
+import {useBus, useSetViewer,} from "../hooks";
+import {Control, SidePane, Statistical} from "./sceneView";
+import type {IDragInfo} from "../interface/IDragInfo.ts";
 
 
 const canvasContainer = ref<HTMLDivElement>();
@@ -55,7 +56,7 @@ onMounted(() => {
   _viewer.threeCameraControls.cameraControls.setPosition(5, 5, 5);
   _viewer.threeCameraControls.cameraControls.setTarget(0, 0, 0);
 
-  addBox(_viewer,1);
+  addBox(_viewer, 1);
 
 
   setTimeout(() => {
@@ -89,11 +90,27 @@ onMounted(() => {
 const bus = useBus();
 
 const setViewer = useSetViewer();
+
+
+const onDrop = (event: DragEvent) => {
+  console.log("onDrop", event)
+  console.log("拖动", event)
+  if (!event.dataTransfer) return
+  const data = event.dataTransfer.getData('data');
+  const info = JSON.parse(data) as IDragInfo;
+
+
+
+}
+
+
 </script>
 
 <template>
-  <div class="container" ref="canvasContainer">
-
+  <div class="container" ref="canvasContainer" @drop="onDrop">
+    <control/>
+    <side-pane/>
+    <statistical/>
   </div>
 </template>
 

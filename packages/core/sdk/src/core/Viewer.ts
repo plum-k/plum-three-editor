@@ -9,18 +9,23 @@ import {
     PostProcessingManager,
     RenderManager
 } from "../manager"; // 导入渲染管理类
-import {Editor} from "../editor/Editor"; // 导入编辑器类
+import {Editor} from "../editor"; // 导入编辑器类
 import {Pick} from "./Pick"; // 导入拾取类
-import {Environment} from "./environment/Environment"; // 导入环境类
+import {Environment} from "./environment"; // 导入环境类
 import {Object3D} from "three/src/core/Object3D"; // 导入深度合并工具
-import {deepMergeRetain} from "../tool";
+import {deepMergeRetain, ESearchMode, ICondition, Search} from "../tool";
 import {SerializeScene} from "./SerializeScene";
 import {DrawLine, MeasureTool, ThreeCameraControls} from "../control";
 import {CssRenderer} from "./CssRenderer";
+import {IOssApiOptions, OssApi} from "@plum-render/oss-api";
 
 // 定义 Viewer 选项接口
 export interface IViewerOptions {
     appUrl?: string; // 应用程序的 URL（可选）
+    /**
+     * cos 配置
+     */
+    ossApiOptions?: IOssApiOptions;
 }
 
 // 定义 Viewer 类
@@ -54,10 +59,17 @@ export class Viewer {
 
     editor: Editor; // 编辑器
 
+    // 阿里对象存储
+    ossApi: OssApi | null = null;
+
     // 构造函数
     constructor(container: string | HTMLDivElement, options: IViewerOptions = {}) {
         this.options = deepMergeRetain(options, {}); // 合并选项
         this.initContainer(container); // 初始化容器
+
+        if (this.options.ossApiOptions) {
+            this.ossApi = await OssApi.create(this.options.ossApiOptions);
+        }
 
         this.clock = new THREE.Clock(); // 创建时钟实例
 
