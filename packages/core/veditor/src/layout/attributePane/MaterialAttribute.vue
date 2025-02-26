@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {useBus} from "../../hooks";
-import {ElForm} from "element-plus";
+import {ElEmpty, ElForm} from "element-plus";
 import {BoolItem, InputNumberItem, TextItem} from "../../common-ui";
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
 import {isArray, set} from "lodash-es";
 import * as THREE from "three";
 import {
-  isMeshBasicMaterial,
+  isMeshBasicMaterial, isMeshNormalMaterial,
   isMeshPhongMaterial,
   isMeshPhysicalMaterial,
   isMeshStandardMaterial,
@@ -15,7 +15,7 @@ import {
 } from "three-is";
 
 const bus = useBus();
-
+const isVisible = ref(false);
 bus.viewerInitSubject.subscribe(() => {
   const viewer = bus.viewer;
   if (viewer) {
@@ -24,7 +24,10 @@ bus.viewerInitSubject.subscribe(() => {
     viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
       console.log("更新材质对象", object);
       if (object) {
+        isVisible.value = true;
         threeSyncUi(object);
+      }else {
+        isVisible.value = false;
       }
     })
   }
@@ -169,7 +172,7 @@ const threeSyncUi = (object: THREE.Mesh) => {
 </script>
 
 <template>
-  <el-form :model="form" label-position="left" label-width="auto" size="small" class="h-full w-full">
+  <el-form  v-if="isVisible"  :model="form" label-position="left" label-width="auto" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <text-item label="名称" name="name"/>
@@ -232,6 +235,9 @@ const threeSyncUi = (object: THREE.Mesh) => {
     <input-number-item label="反射率" name="reflectivity"/>
     <input-number-item label="折射比" name="refractionRatio"/>
   </el-form>
+  <div v-else class="h-full flex justify-center items-center">
+    <el-empty  description="未选择对象"/>
+  </div>
 </template>
 
 <style scoped>
