@@ -21,7 +21,7 @@
     "axios": "^1.8.1",
     "common": "workspace:*",
     "cos-js-sdk-v5": "^1.8.7",
-    "file-type": "^20.3.0",
+    "file-type": "^20.4.0",
     "highlight.js": "^11.11.1",
     "lodash-es": "^4.17.21",
     "markdown-it": "^14.1.0",

@@ -1,3 +1,3 @@
-export {default as isFog} from './isFog';
-export {default as isFogExp2} from './isFogExp2';
-export {default as isScene} from './isScene';
+export * from "./isFog";
+export * from "./isFogExp2";
+export * from "./isScene";

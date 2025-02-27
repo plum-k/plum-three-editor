@@ -1,15 +1,3 @@
-export  { default as isBone } from "./isBone";
-export  { default as isGroup } from "./isGroup";
-export  { default as isInstancedMesh } from "./isInstancedMesh";
-export  { default as isLine } from "./isLine";
-export  { default as isLineLoop } from "./isLineLoop";
-export  { default as isLineSegments } from "./isLineSegments";
-export  { default as isLOD } from "./isLOD";
-export  { default as isMesh } from "./isMesh";
-export  { default as isPoints } from "./isPoints";
-export  { default as isSkeleton } from "./isSkeleton";
-export  { default as isSkinnedMesh } from "./isSkinnedMesh";
-export  { default as isSprite } from "./isSprite";
 export * from "./isBone";
 export * from "./isGroup";
 export * from "./isInstancedMesh";
