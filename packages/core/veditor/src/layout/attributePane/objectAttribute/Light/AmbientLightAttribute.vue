@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {onMounted, reactive} from "vue";
-import isDirectionalLight from "three-is/src/lights/isDirectionalLight.ts";
+
 import {isAmbientLight, isHemisphereLight, isPointLight, isSpotLight} from "three-is";
 import * as THREE from "three";
-import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
+import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
 import {ElCheckbox, ElCheckboxGroup, ElEmpty, ElForm, ElFormItem} from "element-plus";
-import {useBus} from "../../../hooks";
+import {useBus} from "../../../../hooks";
 import {set} from "lodash-es";
 const bus = useBus();
 

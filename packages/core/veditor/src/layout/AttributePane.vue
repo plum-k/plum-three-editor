@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import {ElScrollbar, ElTabPane, ElTabs} from 'element-plus'
 import {ref} from 'vue'
-import ObjectAttribute from "./attributePane/ObjectAttribute.vue";
+import ObjectAttribute from "./attributePane/objectAttribute/ObjectAttribute.vue";
 import GeometryAttribute from "./attributePane/GeometryAttribute.vue";
 import MaterialAttribute from "./attributePane/MaterialAttribute.vue";
 import SceneAttribute from "./attributePane/SceneAttribute.vue";
 import {provide} from "@vue/runtime-core";
 
-const activeName = ref('属性');
+const activeName = ref('材质');
 provide("tabActiveName", activeName)
 </script>
 

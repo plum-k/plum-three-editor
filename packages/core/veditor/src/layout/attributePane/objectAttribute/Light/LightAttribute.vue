@@ -5,9 +5,9 @@ import SpotLightAttribute from "./SpotLightAttribute.vue";
 import AmbientLightAttribute from "./AmbientLightAttribute.vue";
 import PointLightAttribute from "./PointLightAttribute.vue";
 import {onMounted, reactive} from "vue";
-import isDirectionalLight from "three-is/src/lights/isDirectionalLight.ts";
-import {useBus} from "../../../hooks";
-import {isAmbientLight, isHemisphereLight, isPointLight, isSpotLight} from "three-is";
+
+import {useBus} from "../../../../hooks";
+import {isAmbientLight, isDirectionalLight, isHemisphereLight, isPointLight, isSpotLight} from "three-is";
 
 const bus = useBus();
 const show = reactive({
@@ -27,7 +27,8 @@ const sync = () => {
 }
 onMounted(() => {
   const viewer = bus.viewer;
-  if (!viewer) return
+  if (!viewer) return;
+  sync();
   viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
     sync();
   })

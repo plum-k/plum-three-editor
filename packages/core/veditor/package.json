@@ -20,7 +20,7 @@
     "splitpanes": "^3.1.8",
     "@plum-render/three-sdk": "workspace:*",
     "rxjs": "^7.8.2",
-    "three": "^0.173.0",
+    "three": "^0.174.0",
     "three-is": "workspace:*",
     "three-stdlib": "^2.35.14",
     "@imengyu/vue3-context-menu": "^1.4.4"

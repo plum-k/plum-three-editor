@@ -25,7 +25,7 @@ const skip = () => {
   if (isDir.value) {
     emit("handleDir", item)
   } else {
-    debugger
+
     const url = `${window.location.origin}/#/editor/${item.id}`
     window.open(url, '_blank');
   }

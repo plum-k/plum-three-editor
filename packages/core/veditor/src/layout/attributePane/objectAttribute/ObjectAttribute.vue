@@ -1,19 +1,15 @@
 <script lang="ts" setup>
-import {computed, reactive, ref} from "vue";
-import {ElCheckbox, ElCheckboxGroup, ElEmpty, ElForm, ElFormItem} from "element-plus";
-import {useBus} from "../../hooks";
+import {reactive, ref} from "vue";
+import {ElEmpty} from "element-plus";
+import {useBus} from "../../../hooks";
 import * as THREE from "three";
 
 import {set} from "lodash-es";
-import {isLight} from "three-is";
-import {type AttributePaneNameProps, useAttributePane} from "./useAttributePane.ts";
-import AmbientLightAttribute from "./Light/AmbientLightAttribute.vue";
-import DirectionalLightAttribute from "./Light/DirectionalLightAttribute.vue";
-import HemisphereLightAttribute from "./Light/HemisphereLightAttribute.vue";
-import PointLightAttribute from "./Light/PointLightAttribute.vue";
-import SpotLightAttribute from "./Light/SpotLightAttribute.vue";
+import {isGroup, isLight, isMesh} from "three-is";
+import {type AttributePaneNameProps, useAttributePane} from "../useAttributePane.ts";
 import LightAttribute from "./Light/LightAttribute.vue";
-import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../common-ui";
+import MeshAttribute from "./MeshAttribute.vue";
+import GroupAttribute from "./GroupAttribute.vue";
 
 const bus = useBus();
 const props = defineProps<AttributePaneNameProps>();
@@ -73,7 +69,9 @@ const form = reactive<ObjectAttributeForm>({
 const isVisible = ref(false);
 
 const show = reactive({
-  light: false
+  light: false,
+  mesh: false,
+  group: false,
 })
 
 bus.viewerInitSubject.subscribe(() => {
@@ -86,7 +84,11 @@ bus.viewerInitSubject.subscribe(() => {
       console.log("更新对象", object);
       if (object && isActive.value) {
         isVisible.value = true;
+
         show.light = isLight(object);
+        show.mesh = isMesh(object);
+        show.group = isGroup(object);
+        console.log("show",show)
         threeSyncUi(object);
       } else {
         isVisible.value = false;
@@ -197,45 +199,12 @@ const update = (object: THREE.Object3D, isInit: boolean = false) => {
 
 <template>
   <LightAttribute v-if="show.light"/>
+  <group-attribute v-else-if="show.group"/>
+  <mesh-attribute v-else-if="show.mesh"/>
   <div v-else class="h-full flex justify-center items-center">
     <el-empty description="未选择对象"/>
   </div>
 
-<!--  <el-form :model="form" label-width="auto" size="small">-->
-<!--    <text-item label="类型" name="type"/>-->
-<!--    <text-item label="uuid" name="uuid"/>-->
-<!--    <input-item label="名称" name="name"/>-->
-<!--    <vector3-item label="位置" name="position"/>-->
-<!--    <vector3-item label="旋转" name="rotation"/>-->
-<!--    <vector3-item label="缩放" name="scale"/>-->
-<!--    <el-form-item label="阴影">-->
-<!--      <el-checkbox-group v-model="form.shadowArray">-->
-<!--        <el-checkbox name="type" value="castShadow">-->
-<!--          产生-->
-<!--        </el-checkbox>-->
-<!--        <el-checkbox name="type" value="receiveShadow">-->
-<!--          接收-->
-<!--        </el-checkbox>-->
-<!--      </el-checkbox-group>-->
-<!--    </el-form-item>-->
-<!--    <bool-item label="可见性" name="visible"/>-->
-<!--    <bool-item label="视锥体裁剪" name="frustumCulled"/>-->
-<!--    <input-number-item label="渲染次序" name="renderOrder"/>-->
-<!--    <input-number-item label="强度" name="intensity"/>-->
-<!--    <color-item label="颜色" name="color"/>-->
-<!--    <input-number-item label="阴影强度" name="shadow.intensity"/>-->
-<!--    <input-number-item label="阴影偏移" name="shadow.bias"/>-->
-<!--    <input-number-item label="阴影法线偏移" name="shadow.normalBias"/>-->
-<!--    <input-number-item label="阴影半径" name="shadow.radius"/>-->
-<!--    <color-item label="基色" name="groundcolor"/>-->
-<!--    <input-number-item label="距离" name="distance"/>-->
-<!--    <input-number-item label="角度" name="angle"/>-->
-<!--    <input-number-item label="边缘" name="penumbra"/>-->
-<!--    <input-number-item label="衰减" name="decay"/>-->
-<!--    <BoolItem label="接收阴影" name="receiveShadow"/>-->
-<!--    <BoolItem label="产生阴影" name="castShadow"/>-->
-<!--    &lt;!&ndash;        <JsonItem label="自定义数据" name="userData"/>&ndash;&gt;-->
-<!--  </el-form>-->
 
 </template>
 

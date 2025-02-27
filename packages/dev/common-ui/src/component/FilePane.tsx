@@ -106,7 +106,7 @@ const FilePane: React.FC = () => {
     const leftClick = () => {
         const length = history.length;
         const _currentNum = currentNum - 1;
-        // debugger
+        //
         if (length > 0 && isLeftClick) {
             setPath(history[_currentNum]);
             setCurrentNum(_currentNum);

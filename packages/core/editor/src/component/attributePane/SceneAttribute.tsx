@@ -110,7 +110,7 @@ const SceneAttribute: React.FC = () => {
         const value = changedField.value;
         const name = names[0]
         console.log(name, value)
-        // debugger
+        //
         // console.log(name)
         if (name === "overrideMaterial") {
             switch (value) {

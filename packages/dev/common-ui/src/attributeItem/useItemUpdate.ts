@@ -24,7 +24,7 @@ const useItemUpdate = (props: BaseItemProps, config: IItemUpdateConfig = default
 
     const setValue = (object: any) => {
         if (name[0] === "checkCollisions 1") {
-            debugger
+
         }
         console.log("更新值", name)
         let value = get(object, name); // 获取对象中对应 name 的值

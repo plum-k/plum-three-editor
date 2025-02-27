@@ -4,7 +4,7 @@
   "main": "src/index.ts",
   "dependencies": {
     "lodash-es": "^4.17.21",
-    "three": "^0.173.0"
+    "three": "^0.174.0"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",

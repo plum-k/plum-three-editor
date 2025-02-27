@@ -164,7 +164,7 @@ const TextureAttributeItem: React.FC<TextureAttributeItemProps> = (props: Textur
     const {isValue} = useItemUpdate(props, {
         convertDataConfig: (value) => {
             console.log(value)
-            debugger
+
             if (!isNil(value)) {
                 // const base64FromTexture = Tool.getBase64FromTexture(value)
                 // return base64FromTexture
