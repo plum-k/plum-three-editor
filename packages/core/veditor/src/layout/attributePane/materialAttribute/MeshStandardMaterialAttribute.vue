@@ -16,26 +16,18 @@ const isActive = computed(() => {
   return tabActiveName.value === "材质"
 })
 const isVisible = ref(false);
-bus.viewerInitSubject.subscribe(() => {
+
+onMounted(() => {
   const viewer = bus.viewer;
-  if (viewer) {
-    console.log("监听材质对象")
-    // 监听对象选中
-    viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
-      console.log("更新材质对象", object);
-      if (object && isActive.value) {
-        isVisible.value = true;
-        threeSyncUi(object);
-      } else {
-        isVisible.value = false;
-      }
-    })
-  }
+  if (!viewer) return;
+  sync();
+  debugger
+  viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
+    sync();
+  })
 })
 
 const sync = () => {
-
-  const viewer = bus.viewer;
   const object = bus.selectObject;
   console.log("更新材质对象", object);
   if (object && isMesh(object) && isActive.value) {
@@ -45,16 +37,6 @@ const sync = () => {
     isVisible.value = false;
   }
 }
-
-
-onMounted(() => {
-  const viewer = bus.viewer;
-  if (!viewer) return;
-  sync();
-  viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
-    sync();
-  })
-})
 
 // ui -> three
 bus.objectAttributeChangeSubject.subscribe((editValue) => {
@@ -176,7 +158,7 @@ const threeSyncUi = (object: THREE.Mesh) => {
 </script>
 
 <template>
-  <el-form v-if="isVisible" :model="form" label-position="left" label-width="auto" size="small">
+  <el-form :model="form" label-position="left" label-width="auto" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <text-item label="名称" name="name"/>
@@ -226,9 +208,9 @@ const threeSyncUi = (object: THREE.Mesh) => {
 
     <bool-item label="线宽" name="wireframe"/>
   </el-form>
-  <div v-else class="h-full flex justify-center items-center">
-    <el-empty description="未选择对象"/>
-  </div>
+<!--  <div v-else class="h-full flex justify-center items-center">-->
+<!--    <el-empty description="未选择对象"/>-->
+<!--  </div>-->
 </template>
 
 <style scoped>

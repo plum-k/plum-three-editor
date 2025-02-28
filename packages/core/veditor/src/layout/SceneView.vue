@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import {Viewer} from "@plum-render/three-sdk";
+import {GltfModelAsset, Viewer} from "@plum-render/three-sdk";
 import {useRoute} from "vue-router";
 import {useAmbientLight} from "../testCore/useAmbientLight.ts";
 import * as THREE from "three";
@@ -76,16 +76,15 @@ onMounted(() => {
   }, 1000)
   window.viewer = _viewer;
 
-  // const asset = new GltfModelAsset({
-  //   // loadUrl: "/Rampaging T-Rex.glb",
-  //   loadUrl: "/testModel/大场景_WEBGL.glb",
-  //   // url: "/aaa.glb",
-  // })
-  // _viewer.assetManager.loadGltf(asset).then((model) => {
-  //   console.log(model)
-  //   _viewer.editor.addObjectExecute(model);
-  // })
-
+  const asset = new GltfModelAsset({
+    // loadUrl: "/Rampaging T-Rex.glb",
+    loadUrl: "/A319.glb",
+    // url: "/aaa.glb",
+  })
+  _viewer.assetManager.loadGltf(asset).then((model) => {
+    console.log("model",model)
+    _viewer.editor.addObjectExecute(model);
+  })
 })
 const bus = useBus();
 
@@ -94,11 +93,27 @@ const setViewer = useSetViewer();
 
 const onDrop = (event: DragEvent) => {
   console.log("onDrop", event)
-  console.log("拖动", event)
   if (!event.dataTransfer) return
-  const data = event.dataTransfer.getData('data');
-  const info = JSON.parse(data) as IDragInfo;
+  const files = event.dataTransfer.files;
+  if (files.length > 0) {
+    debugger
+    const viewer = bus.viewer;
+    console.log(viewer?.assetManager)
+    console.log(viewer?.assetManager.dragHandler)
+    viewer?.assetManager.dragHandler(event)
+  }else {
+    const data = event!.dataTransfer!.getData('data');
+    const info = JSON.parse(data) as IDragInfo;
+    if (info){
+      panelDrop(info)
+    }
+  }
+}
 
+/**
+ * 从面板拖动到容器
+ */
+const panelDrop = (info: IDragInfo)=>{
   const viewer = bus.viewer;
   const scene = viewer?.scene!;
 
@@ -106,9 +121,7 @@ const onDrop = (event: DragEvent) => {
   if (mesh) {
     // todo 历史记录
     scene.add(mesh);
-
     viewer?.editor.editorEventManager.sceneGraphChanged.next(null);
-
   } else {
     const light = createLight(info);
     if (light) {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, reactive} from "vue";
 
-import {isHemisphereLightt, isHemisphereLight, isPointLight, isSpotLight} from "three-is";
+import {isHemisphereLightt, isHemisphereLight, isPointLight, isSpotLight, isDirectionalLight} from "three-is";
 import * as THREE from "three";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
 import {ElCheckbox, ElCheckboxGroup, ElEmpty, ElForm, ElFormItem} from "element-plus";
@@ -11,8 +11,11 @@ const bus = useBus();
 
 onMounted(() => {
   const viewer = bus.viewer;
-  const object = bus.selectObject;
-  threeToUi(object as THREE.HemisphereLight)
+  if (!viewer) return;
+  viewer.editor.editorEventManager.objectSelected.subscribe(() => {
+    threeToUi()
+  })
+  threeToUi()
 })
 const form = reactive({
   type: "",
@@ -27,7 +30,11 @@ const form = reactive({
   renderOrder: 0,
 })
 
-const threeToUi = (object: THREE.HemisphereLight) => {
+const threeToUi = () => {
+
+  const object = bus.selectObject;
+  if (!isHemisphereLight(object)) return
+
   form.type = "半球光"
   form.uuid = object.uuid
   form.name = object.name

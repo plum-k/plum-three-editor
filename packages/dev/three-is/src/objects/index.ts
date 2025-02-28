@@ -10,3 +10,5 @@ export * from "./isPoints";
 export * from "./isSkeleton";
 export * from "./isSkinnedMesh";
 export * from "./isSprite";
+export * from "./isObject3D";
+

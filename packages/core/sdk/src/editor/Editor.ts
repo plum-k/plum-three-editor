@@ -68,7 +68,6 @@ export class Editor extends BasePlum {
             viewer: this.viewer
         });
         // this.addGrid();
-        // this.addDrop();
     }
 
     addGrid() {
@@ -192,17 +191,12 @@ export class Editor extends BasePlum {
         let count = materialsRefCounter.get(material);
 
         if (count === undefined) {
-
             materialsRefCounter.set(material, 1);
             this.materials[material.uuid] = material;
-
         } else {
-
             count++;
             materialsRefCounter.set(material, count);
-
         }
-
     }
 
     addCamera(camera: THREE.Object3D) {

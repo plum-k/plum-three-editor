@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {onMounted, reactive} from "vue";
-
-import {isAmbientLight, isHemisphereLight, isPointLight, isSpotLight} from "three-is";
+import {isAmbientLight, isHemisphereLight, isObject3D, isPointLight, isSpotLight} from "three-is";
 import * as THREE from "three";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
 import {ElCheckbox, ElCheckboxGroup, ElEmpty, ElForm, ElFormItem} from "element-plus";
@@ -11,8 +10,11 @@ const bus = useBus();
 
 onMounted(() => {
   const viewer = bus.viewer;
-  const object = bus.selectObject;
-  threeToUi(object as THREE.AmbientLight)
+  if (!viewer) return;
+  viewer.editor.editorEventManager.objectSelected.subscribe(() => {
+    threeToUi()
+  })
+  threeToUi()
 })
 const form = reactive({
   type: "",
@@ -26,7 +28,10 @@ const form = reactive({
   renderOrder: 0,
 })
 
-const threeToUi = (object: THREE.AmbientLight) => {
+const threeToUi = () => {
+  const object = bus.selectObject;
+  if (!isAmbientLight(object)) return
+
   form.type = "环境光"
   form.uuid = object.uuid
   form.name = object.name
@@ -41,6 +46,7 @@ const threeToUi = (object: THREE.AmbientLight) => {
   form.frustumCulled = object.frustumCulled
   form.renderOrder = object.renderOrder
 }
+
 bus.objectAttributeChangeSubject.subscribe((editValue) => {
   console.log(editValue)
   const {name, value} = editValue;

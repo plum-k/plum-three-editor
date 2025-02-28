@@ -5,13 +5,17 @@ import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} 
 import {ElForm} from "element-plus";
 import {useBus} from "../../../../hooks";
 import {set} from "lodash-es";
+import {isHemisphereLight, isPointLight} from "three-is";
 
 const bus = useBus();
 
 onMounted(() => {
   const viewer = bus.viewer;
-  const object = bus.selectObject;
-  threeToUi(object as THREE.PointLight)
+  if (!viewer) return;
+  viewer.editor.editorEventManager.objectSelected.subscribe(() => {
+    threeToUi()
+  })
+  threeToUi()
 })
 const form = reactive({
   type: "",
@@ -32,7 +36,11 @@ const form = reactive({
   renderOrder: 0,
 })
 
-const threeToUi = (object: THREE.PointLight) => {
+const threeToUi = () => {
+
+  const object = bus.selectObject;
+  if (!isPointLight(object)) return
+
   form.type = "点光源"
   form.uuid = object.uuid
   form.name = object.name

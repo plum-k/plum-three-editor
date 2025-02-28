@@ -1,6 +1,4 @@
 import {isArray, isNil} from "lodash-es";
-
-
 import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
 import * as  THREE from "three";
 

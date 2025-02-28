@@ -8,5 +8,4 @@ export * from "./LineTool";
 export * from "./shaderMaterial";
 export * from "./ThreeTool";
 export * from "./core";
-export * from "./drop";
 export * from "./throw";

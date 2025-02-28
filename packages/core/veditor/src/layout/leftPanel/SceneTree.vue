@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import * as THREE from "three";
 import {Viewer} from "@plum-render/three-sdk";
-import {ElTreeV2, type TreeNode, type TreeNodeData,ElButton,ElIcon} from "element-plus";
+import {ElTreeV2, type TreeNode, type TreeNodeData} from "element-plus";
 import {ref} from "vue";
 import {useBus} from "../../hooks";
 import ContextMenu from '@imengyu/vue3-context-menu'
 import Icon from "../../components/Icon.vue";
+import {isNil} from "lodash-es";
 
 const bus = useBus();
 
@@ -36,13 +37,25 @@ const getSceneTree = (viewer: Viewer) => {
   return getTree(scene.children);
 }
 
+let htmlRef:  HTMLElement | null = null
+const height = ref(200);
+const treeRef = ref()
+const setHeight = () => {
+  if (isNil(htmlRef)) {
+    htmlRef = document.getElementById("sceneTree")!
+  }
+   height.value = htmlRef.clientHeight;
+  console.log("htmlRef.clientHeight",htmlRef.clientHeight)
+}
+
+
 bus.viewerInitSubject.subscribe(() => {
   const viewer = bus.viewer;
   data.value = getSceneTree(viewer!);
-
+  setHeight();
   viewer?.editor.editorEventManager.sceneGraphChanged.subscribe(() => {
-    console.log("便阿虎11111111111")
     data.value = getSceneTree(viewer!);
+    setHeight();
   })
 })
 
@@ -85,23 +98,26 @@ const handleNodeContextmenu = (evt: Event, data: TreeNodeData, node: TreeNode) =
         ]
       });
     }
-
   }
 }
+
 
 </script>
 
 <template>
   <el-tree-v2
+      ref="treeRef"
+      id="sceneTree"
+      :height="height"
       :data="data"
       class="h-full"
       @node-click="handleNodeClick"
       @node-contextmenu="handleNodeContextmenu"
   >
     <template #default="{ node }">
-      <icon v-if="node.data.visible" icon-name="icon-show" />
-      <icon v-else icon-name="icon-hide" />
-      <span>{{ node.label }}</span>
+      <icon v-if="node.data.visible" icon-name="icon-show"/>
+      <icon v-else icon-name="icon-hide"/>
+      <span>  {{ node.label }}</span>
     </template>
   </el-tree-v2>
 </template>

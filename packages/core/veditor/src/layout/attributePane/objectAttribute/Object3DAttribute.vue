@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import {ElCheckbox, ElCheckboxGroup, ElEmpty, ElForm, ElFormItem} from "element-plus";
+import {ElCheckbox, ElCheckboxGroup, ElForm, ElFormItem} from "element-plus";
 import {onMounted, reactive} from "vue";
 import * as THREE from "three";
-import {set} from "lodash-es";
 import {useBus} from "../../../hooks";
-import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
+import {BoolItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
+import {isGroup, isLight, isMesh, isObject3D} from "three-is";
+
 const form = reactive({
   type: "",
   uuid: "",
@@ -16,19 +17,31 @@ const form = reactive({
   frustumCulled: false,
   renderOrder: 0,
   visible: false,
-
-  color: undefined,
-  intensity: undefined
 })
+
 const bus = useBus();
 onMounted(() => {
   const viewer = bus.viewer;
   if (!viewer) return;
-  const object = bus.selectObject as THREE.Group;
-  threeToUi(object)
+  viewer.editor.editorEventManager.objectSelected.subscribe(() => {
+    threeToUi()
+  })
+  threeToUi()
+})
+bus.viewerInitSubject.subscribe(() => {
+  const viewer = bus.viewer;
+  if (viewer) {
+    viewer.editor.editorEventManager.objectSelected.subscribe(() => {
+      threeToUi()
+    })
+    threeToUi()
+  }
 })
 
-const threeToUi = (object: THREE.Group) => {
+const threeToUi = () => {
+  const object = bus.selectObject;
+  if (!isObject3D(object)) return
+
   form.type = "组"
   form.uuid = object.uuid
   form.name = object.name
@@ -53,18 +66,11 @@ const threeToUi = (object: THREE.Group) => {
   form.frustumCulled = object.frustumCulled
   form.renderOrder = object.renderOrder
 }
-bus.objectAttributeChangeSubject.subscribe((editValue) => {
-  console.log(editValue)
-  const {name, value} = editValue;
-  const object = bus.selectObject as THREE.Group;
-  if (!object) return;
-
-  set(object, name, value);
-})
 
 </script>
 
 <template>
+
   <el-form :model="form" label-width="auto" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
@@ -87,6 +93,7 @@ bus.objectAttributeChangeSubject.subscribe((editValue) => {
     <input-number-item label="渲染次序" name="renderOrder"/>
     <!--        <JsonItem label="自定义数据" name="userData"/>-->
   </el-form>
+
 </template>
 
 <style scoped>

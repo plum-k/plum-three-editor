@@ -26,6 +26,7 @@
     "@imengyu/vue3-context-menu": "^1.4.4"
   },
   "devDependencies": {
+    "vite-plugin-static-copy": "^2.2.0",
     "@types/splitpanes": "^2.2.6",
     "@types/lodash-es": "^4.17.12",
     "unplugin-element-plus": "^0.9.1",
@@ -36,7 +37,7 @@
     "vite": "^6.2.0",
     "vue-tsc": "^2.2.4",
     "tailwindcss": "^4.0.9",
-    "@types/three": "^0.173.0",
+    "@types/three": "^0.174.0",
     "@tailwindcss/vite": "^4.0.9"
   }
 }

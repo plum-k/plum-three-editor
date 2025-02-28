@@ -72,7 +72,7 @@ const materialShow = reactive({
 // 同步材质状态的函数
 const sync = () => {
   const object = bus.selectObject
-
+    debugger
   if (isMesh(object)) {
     const _material = object.material;
     const material = isArray(_material) ? _material[0] : _material;
@@ -95,25 +95,23 @@ const sync = () => {
     console.log("materialShow", materialShow)
   }
 };
-
 bus.viewerInitSubject.subscribe(() => {
   const viewer = bus.viewer;
   if (viewer) {
-    console.log("监听对象")
-    sync();
-    viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
+    viewer.editor.editorEventManager.objectSelected.subscribe(() => {
       sync();
+      console.log("监听22222222222222")
     })
+    sync();
   }
 })
-
-
 onMounted(() => {
   const viewer = bus.viewer;
   if (!viewer) return;
   sync();
-  viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
+  viewer.editor.editorEventManager.objectSelected.subscribe(() => {
     sync();
+    console.log("监听1111111111111111")
   })
 })
 </script>
