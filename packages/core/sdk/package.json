@@ -50,6 +50,6 @@
     "@types/three": "^0.174.0",
     "rollup": "^4.34.8",
     "tslib": "^2.8.1",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.2"
   }
 }

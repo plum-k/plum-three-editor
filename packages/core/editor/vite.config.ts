@@ -1,11 +1,33 @@
 import {defineConfig} from 'vite'
-import react from '@vitejs/plugin-react'
+import vue from '@vitejs/plugin-vue'
+import tailwindcss from "@tailwindcss/vite";
+import ElementPlus from 'unplugin-element-plus/vite'
+import {viteStaticCopy} from "vite-plugin-static-copy";
+export default defineConfig((env) => {
+    const isBuild = env.command === 'build';
+    let buildTargets = [
+        {
+            src: '../sdk/public/basis',
+            dest: './'
+        },
+        {
+            src: '../sdk/public/draco',
+            dest: './'
+        }
+    ]
 
-export default defineConfig({
-    server: {
-        host: '0.0.0.0',
-        port: 6010
-    },
-    publicDir:"../../public",
-    plugins: [react()],
+    let serveTargets = [     {
+        src: '../sdk/public/**',
+        dest: '/'
+    }]
+    return {
+        server:{
+            port: 4333
+        },
+        plugins: [tailwindcss(), ElementPlus({}), vue(), viteStaticCopy({
+            targets: isBuild ? buildTargets : serveTargets,
+        })],
+    }
+
 })
+
