@@ -71,7 +71,7 @@ export class Serialize {
         // 将所有贴图取出并单独存储
         if (sceneJson.images) {
             const images = sceneJson.images.map((item) => {
-                
+
                 if (isString(item.url)) {
                     // 处理普通图片
                     const name = item.uuid + `.${Reflect.get(BASE64_TYPES, item.url.split(",")[0])}`; // 获取文件名
@@ -92,7 +92,7 @@ export class Serialize {
 
         // 将所有几何数据取出并单独存储
         if (sceneJson.geometries) {
-            
+
             // 为避免数据量过大超过 V8 引擎对于字符串的限制，分为多个切片（10 个几何数据为一组）
             const transferNum = Math.ceil(sceneJson.geometries.length / 10); // 计算切片数量
             for (let i = 0; i < transferNum; i++) {

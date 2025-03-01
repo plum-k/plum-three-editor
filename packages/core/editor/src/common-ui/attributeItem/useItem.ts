@@ -23,7 +23,7 @@ export const useItem = (props: IItemProps) => {
         sync()
         const viewer = bus.viewer!;
         viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
-            
+
             sync();
         })
     })
@@ -31,8 +31,8 @@ export const useItem = (props: IItemProps) => {
     const getObject = () => {
         if (tabActiveName.value === "属性") {
             return bus.selectObject;
-        }else if (tabActiveName.value === "几何"){
-            return (bus.selectObject );
+        } else if (tabActiveName.value === "几何") {
+            return (bus.selectObject);
         }
         const object = bus.selectObject;
     }

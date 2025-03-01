@@ -1,9 +1,9 @@
 import {fromEvent, Subject} from 'rxjs';
-import {Module, IModuleOptions } from "../core/Module";
+import {IModuleOptions, Module} from "../core/Module";
 import * as THREE from 'three';
 import {Tool} from "../tool/Tool";
 
-export interface IEventManagerOptions extends IModuleOptions  {
+export interface IEventManagerOptions extends IModuleOptions {
 }
 
 export interface IPick {

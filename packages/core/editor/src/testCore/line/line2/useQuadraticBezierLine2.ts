@@ -38,7 +38,7 @@ export default function useQuadraticBezierLine2(_viewer: Viewer) {
             }
         }
     )
-    
+
     line.name = "adad";
 
 
@@ -62,8 +62,8 @@ export default function useQuadraticBezierLine2(_viewer: Viewer) {
     // pane.addBinding(PARAMS.materialParams, 'gapSize');
     pane.on('change', (ev) => {
         // 
-        
-        
+
+
         // 
         line.update(PARAMS)
     });

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import {ElFormItem, formContextKey} from "element-plus";
-import {inject, onMounted, ref} from "vue";
+import {ElFormItem} from "element-plus";
+import {onMounted, ref} from "vue";
 import {useBus} from "../../hooks";
 import * as THREE from "three";
 import {WebGLRenderer} from "three";
@@ -29,6 +29,7 @@ const canvasRef = ref<HTMLCanvasElement>()
 
 let renderer: WebGLRenderer
 let fsQuad: FullScreenQuad<THREE.MeshBasicMaterial>;
+
 function renderToCanvas(texture: THREE.Texture) {
   if (renderer === undefined) {
     renderer = new THREE.WebGLRenderer();

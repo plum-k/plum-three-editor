@@ -1,10 +1,10 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ElCheckbox, ElCheckboxGroup, ElForm, ElFormItem} from "element-plus";
 import {onMounted, reactive} from "vue";
 import * as THREE from "three";
 import {useBus} from "../../../hooks";
 import {BoolItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
-import {isGroup, isLight, isMesh, isObject3D} from "three-is";
+import {isObject3D} from "three-is";
 
 const form = reactive({
   type: "",

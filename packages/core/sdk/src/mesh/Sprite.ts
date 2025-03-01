@@ -20,7 +20,7 @@ export class Sprite extends THREE.Sprite {
         // const map = new THREE.TextureLoader().load("sprite.png");
         // const material = new THREE.SpriteMaterial({map: map});
         html2canvas(this.options.element).then(canvas => {
-            
+
         })
     }
 }

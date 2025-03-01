@@ -94,7 +94,7 @@ const sync = () => {
     materialShow.isShadowMaterial = isShadowMaterial(material);
     materialShow.isSpriteMaterial = isSpriteMaterial(material);
     materialShow.isPointsMaterial = isPointsMaterial(material);
-  }else {
+  } else {
     show.value = true;
     text.value = "对象没有材质";
   }

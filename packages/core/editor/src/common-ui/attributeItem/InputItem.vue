@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ElFormItem, ElInput, ElSwitch, formContextKey} from "element-plus";
+import {ElFormItem, ElInput, formContextKey} from "element-plus";
 import {computed, inject} from "vue";
 import {isNil} from "lodash-es";
 import {useBus} from "../../hooks";
@@ -9,6 +9,7 @@ interface Props {
   name: string;
   label: string;
 }
+
 const formContext = inject(formContextKey, undefined)
 const bus = useBus();
 const props = defineProps<Props>();

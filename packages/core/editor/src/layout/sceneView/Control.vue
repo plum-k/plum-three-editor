@@ -3,6 +3,7 @@ import {ElSegmented} from 'element-plus'
 import {ref} from 'vue'
 import {useBus} from "../../hooks";
 import Icon from "../../components/Icon.vue";
+
 const value = ref('translate')
 const options = [
   {

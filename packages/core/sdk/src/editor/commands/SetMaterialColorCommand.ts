@@ -18,7 +18,7 @@ export class SetMaterialColorCommand extends Command<number> {
         const material = (object !== null) ? Tool.getObjectMaterial(object, materialSlot) : null;
         // @ts-ignore
         this.oldValue = (material !== null) ? material[attributeName].getStyle() : null;
-        
+
         this.newValue = newValue;
         this.attributeName = attributeName;
     }

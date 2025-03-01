@@ -5,6 +5,7 @@ export interface IObjectAttributeChange {
     name: string | string[];
     value: any;
 }
+
 export const useAttributeProvide = () => {
     const objectAttributeChangeSubject = new Subject<IObjectAttributeChange>();
 

@@ -62,7 +62,7 @@ export default function useCubicBezierLine2(_viewer: Viewer) {
     pane.addBinding(PARAMS, 'lineType', {
         options: Line2Type
     });
-    
+
 
     pane.addFolder({title: 'LineBasicMaterial'})
 
@@ -78,7 +78,7 @@ export default function useCubicBezierLine2(_viewer: Viewer) {
 
     pane.on('change', (ev) => {
         // 
-        
+
         // 
         line.update(PARAMS)
     });

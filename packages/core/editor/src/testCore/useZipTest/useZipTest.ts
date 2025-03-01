@@ -9,7 +9,7 @@ export function getObjectSize(obj) {
 
     const sizeInBytes = new Blob([isString(obj) ? obj : JSON.stringify(obj)]).size; // 计算字节大小
     const sizeInMB = sizeInBytes / (1024 * 1024); // 转换为 MB
-    
+
 }
 
 export default function useZipTest(viewer: Viewer) {

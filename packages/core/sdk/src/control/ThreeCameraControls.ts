@@ -15,6 +15,7 @@ CameraControls.install({THREE: THREE});
 export interface IThreeCameraControls {
     viewer: Viewer;
 }
+
 export enum CameraViewType {
     Top = "top",        // 顶视图
     Bottom = "bottom",  // 底视图
@@ -25,6 +26,7 @@ export enum CameraViewType {
     Ortho = "ortho",    // 正交视图
     Perspective = "perspective" // 透视视图
 }
+
 /**
  * ThreeCameraControls类负责初始化和管理Three.js的摄像机控制。
  * 它通过与viewer实例配合，提供交互式摄像机控制功能。
@@ -116,9 +118,9 @@ export class ThreeCameraControls {
     toTopView() {
         // this._initRange();
         // this.setOrthographic(true);
-        this.cameraControls.rotatePolarTo(0).then( );
+        this.cameraControls.rotatePolarTo(0).then();
 
-        this.cameraControls.minAzimuthAngle = - Infinity;
+        this.cameraControls.minAzimuthAngle = -Infinity;
         this.cameraControls.maxAzimuthAngle = Infinity;
         this.cameraControls.minPolarAngle = 0;
         this.cameraControls.maxPolarAngle = 0;
@@ -128,7 +130,7 @@ export class ThreeCameraControls {
         // this._initRange();
         // this.setOrthographic(true);
         this.cameraControls.rotatePolarTo(Math.PI);
-        this.cameraControls.minAzimuthAngle = - Infinity;
+        this.cameraControls.minAzimuthAngle = -Infinity;
         this.cameraControls.maxAzimuthAngle = Infinity;
         this.cameraControls.minPolarAngle = Math.PI;
         this.cameraControls.maxPolarAngle = Math.PI;
@@ -189,6 +191,7 @@ export class ThreeCameraControls {
         // this.saveState();
         // this.resetState();
     }
+
     // setOrthographic(isOrthographic) {
     //     if (!this.isOrthographic) {
     //         // this.saveInteract();

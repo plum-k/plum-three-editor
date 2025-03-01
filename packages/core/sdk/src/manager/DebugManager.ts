@@ -20,6 +20,7 @@ export enum DebugPosition {
 export class DebugManager extends Module<IDebugOptions> {
     stats: Stats | undefined
     subscription: Subscription | undefined
+    #enable = false
 
     constructor(options: IDebugOptions) {
         super(options);
@@ -31,7 +32,9 @@ export class DebugManager extends Module<IDebugOptions> {
         },);
     }
 
-    #enable = false
+    get enable() {
+        return this.#enable
+    }
 
     set enable(value: boolean) {
         if (value) {
@@ -57,10 +60,6 @@ export class DebugManager extends Module<IDebugOptions> {
             }
         }
         this.#enable = value;
-    }
-
-    get enable() {
-        return this.#enable
     }
 
     setStats() {

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import DirectionalLightAttribute from "./DirectionalLightAttribute.vue";
 import HemisphereLightAttribute from "./HemisphereLightAttribute.vue";
 import SpotLightAttribute from "./SpotLightAttribute.vue";

@@ -1,5 +1,5 @@
 import {OutputPass} from "three/examples/jsm/postprocessing/OutputPass";
-import {IModuleOptions } from "../../core/Module";
+import {IModuleOptions} from "../../core/Module";
 import {
     BlendFunction,
     BloomEffect,
@@ -23,7 +23,7 @@ import {HalfFloatType} from "three";
 import {Object3D} from "three/src/core/Object3D";
 import {Module} from "../../core";
 
-export interface IPostProcessingOptions extends IModuleOptions  {
+export interface IPostProcessingOptions extends IModuleOptions {
 }
 
 export class PostProcessingManager extends Module {
@@ -203,7 +203,7 @@ export class PostProcessingManager extends Module {
 
     //----------------- effectPass -----------------
     initEffectPass() {
-        
+
         this.effectPass = new EffectPass(this.viewer.threeCameraControls.camera, ...this.effects);
     }
 

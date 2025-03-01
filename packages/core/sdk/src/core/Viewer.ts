@@ -63,6 +63,12 @@ export class Viewer {
 
     // 阿里对象存储
     ossApi: OssApi | null = null;
+    //------------------------- 添加网格 开始 -------------------
+    grid: Grid | undefined = undefined;
+    axesHelper: AxesHelper | undefined = undefined;
+    #enableGrid = false;
+    //---------------------- 坐标轴--------------------
+    #enableAxes = false;
 
     // 构造函数
     constructor(container: string | HTMLDivElement, options: IViewerOptions = {}) {
@@ -119,6 +125,44 @@ export class Viewer {
         this.initComponent().then();
     }
 
+    get enableGrid() {
+        return this.#enableGrid;
+    }
+
+    set enableGrid(enable: boolean) {
+        if (enable) {
+            this.grid = new Grid({});
+            this.grid.name = "grid";
+            this.sceneHelpers.add(this.grid);
+            this.loop.addEffect(() => {
+                this.grid!.tick(this.threeCameraControls.camera)
+            })
+        } else {
+            if (!this.grid) return;
+            this.grid.geometry.dispose();
+            (this.grid.material as THREE.Material).dispose();
+            this.sceneHelpers.remove(this.grid);
+        }
+        this.#enableGrid = enable;
+    }
+
+    get enableAxes() {
+        return this.#enableAxes;
+    }
+
+    set enableAxes(enable: boolean) {
+        if (enable) {
+            this.axesHelper = new THREE.AxesHelper(100);
+            this.sceneHelpers.add(this.axesHelper);
+        } else {
+            if (!this.axesHelper) return;
+            this.axesHelper.geometry.dispose();
+            (this.axesHelper.material as THREE.Material).dispose();
+            this.sceneHelpers.remove(this.axesHelper);
+        }
+        this.#enableAxes = enable;
+    }
+
     async initComponent() {
         if (this.options.ossApiOptions) {
             this.ossApi = await OssApi.create(this.options.ossApiOptions);
@@ -167,52 +211,6 @@ export class Viewer {
         this.threeCameraControls.setSize(width, height); // 设置相机控制器大小
         this.cssRenderer.setSize(width, height); // 设置 CSS 渲染器大小
         this.postProcessingManager.setSize(width, height); // 设置后处理管理器大小
-    }
-
-    //------------------------- 添加网格 开始 -------------------
-    grid: Grid | undefined = undefined;
-
-    #enableGrid = false;
-    set enableGrid(enable: boolean) {
-        if (enable) {
-            this.grid = new Grid({});
-            this.grid.name = "grid";
-            this.sceneHelpers.add(this.grid);
-            this.loop.addEffect(() => {
-                this.grid!.tick(this.threeCameraControls.camera)
-            })
-        } else {
-            if (!this.grid) return;
-            this.grid.geometry.dispose();
-            (this.grid.material as THREE.Material).dispose();
-            this.sceneHelpers.remove(this.grid);
-        }
-        this.#enableGrid = enable;
-    }
-
-    get enableGrid() {
-        return this.#enableGrid;
-    }
-
-    //---------------------- 坐标轴--------------------
-    #enableAxes = false;
-    axesHelper: AxesHelper | undefined = undefined;
-
-   set enableAxes(enable: boolean) {
-        if (enable) {
-            this.axesHelper = new THREE.AxesHelper(100);
-            this.sceneHelpers.add(this.axesHelper);
-        } else {
-            if (!this.axesHelper) return;
-            this.axesHelper.geometry.dispose();
-            (this.axesHelper.material as THREE.Material).dispose();
-            this.sceneHelpers.remove(this.axesHelper);
-        }
-        this.#enableAxes = enable;
-    }
-
-    get enableAxes() {
-        return this.#enableAxes;
     }
 
     //---------------- 查找节点---------------------

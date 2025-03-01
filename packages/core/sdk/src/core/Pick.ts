@@ -1,11 +1,11 @@
 import * as  THREE from "three";
-import {Module, IModuleOptions } from "./Module";
+import {IModuleOptions, Module} from "./Module";
 import {Object3D} from "three/src/core/Object3D";
 import {isPerspectiveCamera} from "three-is";
 import {isNil} from "lodash-es";
 import {Tool} from "../tool/Tool";
 
-export interface IPickOptions extends IModuleOptions  {
+export interface IPickOptions extends IModuleOptions {
 }
 
 export class Pick extends Module {

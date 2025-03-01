@@ -26,7 +26,7 @@ export default function useLine2(_viewer: Viewer) {
         // [0, 0, 0],
         // [0, 0, 0],
     ]
-    
+
     const line = new Line2(
         {
             points: cc,
@@ -69,7 +69,7 @@ export default function useLine2(_viewer: Viewer) {
     pane.addBinding(PARAMS, 'lineType', {
         options: Line2Type
     });
-    
+
 
     // pane.addBinding(PARAMS.materialParams, 'color');
     // pane.addBinding(PARAMS.materialParams, 'alphaToCoverage');
@@ -77,7 +77,7 @@ export default function useLine2(_viewer: Viewer) {
     // pane.addBinding(PARAMS.materialParams, 'gapSize');
     pane.on('change', (ev) => {
         // 
-        
+
         // 
         line.update(PARAMS)
     });

@@ -315,9 +315,9 @@ const threeSyncUi = (object: THREE.Mesh) => {
     <input-number-item label="透明度" name="opacity"/>
     <bool-item label="透明性" name="transparent"/>
 
-    <bool-item name="forceSinglePass" label="强制单通道"/>
+    <bool-item label="强制单通道" name="forceSinglePass"/>
 
-    <bool-item name="alphaTest" label="α测试"/>
+    <bool-item label="α测试" name="alphaTest"/>
     <bool-item label="深度测试" name="depthTest"/>
     <bool-item label="深度缓写" name="depthWrite"/>
 

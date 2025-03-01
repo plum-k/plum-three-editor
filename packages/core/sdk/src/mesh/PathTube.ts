@@ -5,7 +5,6 @@ import {deepMergeRetain} from "../tool";
 import {PathPointListOptions} from "./Path";
 
 
-
 export interface IPathTubeOptions {
     points?: Array<THREE.Vector3>;
     materialParams?: LineDashedMaterialParameters

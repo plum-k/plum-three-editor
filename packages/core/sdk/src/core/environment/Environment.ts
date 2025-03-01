@@ -1,12 +1,12 @@
 import * as THREE from "three"
 import {presetsObj, PresetsType} from "./environmentAssets";
 import {isArray, isNil} from "lodash-es";
-import {Module, IModuleOptions } from "../Module";
+import {IModuleOptions, Module} from "../Module";
 import {TextureEncoding} from "three-stdlib/types/shared";
 import {Asset} from "../asset/Asset";
 import {deepMergeRetain} from "../../tool";
 
-export interface IEnvironment extends IModuleOptions  {
+export interface IEnvironment extends IModuleOptions {
     frames?: number
     near?: number
     far?: number
@@ -77,7 +77,7 @@ export class Environment extends Module {
             environmentRotation: this.scene.environmentRotation?.clone?.() ?? [0, 0, 0],
         }
         for (const [key, value] of Object.entries(sceneEnvAttribute)) {
-            
+
             this.scene[key] = value
         }
 
@@ -93,7 +93,7 @@ export class Environment extends Module {
                 this.scene.background = texture
                 break
         }
-        
+
     }
 
 
@@ -154,7 +154,7 @@ export class Environment extends Module {
             extension: extension
         })
         this.assetManager.loadAsset(asset).then((result) => {
-            
+
             this.setEnv({
                 texture: result as THREE.Texture,
                 ..._options

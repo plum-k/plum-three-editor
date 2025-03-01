@@ -1,11 +1,11 @@
-import {Module, IModuleOptions } from "../core/Module";
+import {IModuleOptions, Module} from "../core/Module";
 import {Subject} from "rxjs";
 
 export type GlobalRenderCallback = (timeStamp: number) => void
 type SubItem = { callback: GlobalRenderCallback }
 export type GlobalEffectType = 'before' | 'after' | 'tail'
 
-export interface ILoop extends IModuleOptions  {
+export interface ILoop extends IModuleOptions {
 
 }
 
@@ -96,7 +96,7 @@ export class Loop extends Module {
 
             this.sceneRendered.next(this.renderTime)
         } catch (e) {
-            
+
         }
 
     }

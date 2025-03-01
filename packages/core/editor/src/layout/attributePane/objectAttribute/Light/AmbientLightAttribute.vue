@@ -1,11 +1,12 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {onMounted, reactive} from "vue";
-import {isAmbientLight, isHemisphereLight, isObject3D, isPointLight, isSpotLight} from "three-is";
+import {isAmbientLight} from "three-is";
 import * as THREE from "three";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
-import {ElCheckbox, ElCheckboxGroup, ElEmpty, ElForm, ElFormItem} from "element-plus";
+import {ElForm} from "element-plus";
 import {useAttributeProvide, useBus} from "../../../../hooks";
 import {set} from "lodash-es";
+
 const bus = useBus();
 
 onMounted(() => {
@@ -65,17 +66,17 @@ objectAttributeChangeSubject.subscribe((editValue) => {
 </script>
 
 <template>
-    <el-form :model="form" label-width="auto" size="small">
-      <text-item label="类型" name="type"/>
-      <text-item label="uuid" name="uuid"/>
-      <input-item label="名称" name="name"/>
-      <vector3-item label="位置" name="position"/>
-      <input-number-item label="强度" name="intensity"/>
-      <color-item label="颜色" name="color"/>
-      <bool-item label="可见性" name="visible"/>
-      <bool-item label="视锥体裁剪" name="frustumCulled"/>
-      <input-number-item label="渲染次序" name="renderOrder"/>
-    </el-form>
+  <el-form :model="form" label-width="auto" size="small">
+    <text-item label="类型" name="type"/>
+    <text-item label="uuid" name="uuid"/>
+    <input-item label="名称" name="name"/>
+    <vector3-item label="位置" name="position"/>
+    <input-number-item label="强度" name="intensity"/>
+    <color-item label="颜色" name="color"/>
+    <bool-item label="可见性" name="visible"/>
+    <bool-item label="视锥体裁剪" name="frustumCulled"/>
+    <input-number-item label="渲染次序" name="renderOrder"/>
+  </el-form>
 </template>
 
 <style scoped>

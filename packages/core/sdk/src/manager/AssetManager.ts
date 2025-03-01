@@ -13,7 +13,7 @@ import {
 import {GLTF, GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader";
 import Asset from "../core/asset/Asset";
-import {Module, IModuleOptions } from "../core/Module";
+import {IModuleOptions, Module} from "../core/Module";
 import {
     LDrawLoader,
     LUT3dlLoader,
@@ -33,7 +33,7 @@ import {GltfModelAsset} from "../core/asset/GltfModelAsset";
 import {TextureAsset} from "../core/asset/TextureAsset";
 import {KTX2Loader} from "three/examples/jsm/loaders/KTX2Loader";
 
-export interface IResourceManagers extends IModuleOptions  {
+export interface IResourceManagers extends IModuleOptions {
     sdkUrl?: string;
 }
 
@@ -397,7 +397,7 @@ export class AssetManager extends Module {
 
     // 拖动事件
     dragHandler(event: DragEvent) {
-        
+
         const items = event.dataTransfer!.items
         const files = event.dataTransfer!.files;
         if (items) {
@@ -514,7 +514,7 @@ export class AssetManager extends Module {
             // 如果传入了filesMap参数，则使用传入的文件映射；否则调用getMap函数创建一个新的文件映射
             const map = filesMap ?? getMap();
             // 打印当前的文件映射，这里可能是用于调试目的，查看文件映射的内容
-            
+
             // 遍历文件映射中的每个键值对
             for (const [value, mapElement] of map) {
                 // 调用this对象的loadFile函数来加载当前遍历到的文件对象

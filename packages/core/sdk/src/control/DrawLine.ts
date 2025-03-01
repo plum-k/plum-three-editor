@@ -1,10 +1,10 @@
-import {Module, IModuleOptions } from "../core/Module";
+import {IModuleOptions, Module} from "../core/Module";
 import * as THREE from "three";
 import {isNil} from "lodash-es";
 import {IPick} from "../manager/EventManager";
 import {Subscription} from "rxjs";
 
-export interface IDrawLine extends IModuleOptions  {
+export interface IDrawLine extends IModuleOptions {
 }
 
 export enum DrawType {

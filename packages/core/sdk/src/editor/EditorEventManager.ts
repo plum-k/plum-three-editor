@@ -1,8 +1,8 @@
 import {BehaviorSubject, merge, Subject} from 'rxjs';
-import {Module, IModuleOptions } from "../core/Module";
+import {IModuleOptions, Module} from "../core/Module";
 import * as THREE from 'three';
 
-export interface IEditorEventManagerOptions extends IModuleOptions  {
+export interface IEditorEventManagerOptions extends IModuleOptions {
 }
 
 export interface IPick {

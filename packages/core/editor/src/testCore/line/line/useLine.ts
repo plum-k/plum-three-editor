@@ -55,7 +55,7 @@ export default function useLine(_viewer: Viewer) {
     pane.addBinding(PARAMS, 'materialType', {
         options: LineMaterialType
     });
-    
+
 
     pane.addBinding(PARAMS.materialParams, 'color');
     pane.addBinding(PARAMS.materialParams, 'scale');
@@ -63,7 +63,7 @@ export default function useLine(_viewer: Viewer) {
     pane.addBinding(PARAMS.materialParams, 'gapSize');
     pane.on('change', (ev) => {
         // 
-        
+
         // 
         line.update(PARAMS)
     });

@@ -37,14 +37,14 @@ const getSceneTree = (viewer: Viewer) => {
   return getTree(scene.children);
 }
 
-let htmlRef:  HTMLElement | null = null
+let htmlRef: HTMLElement | null = null
 const height = ref(200);
 const treeRef = ref()
 const setHeight = () => {
   if (isNil(htmlRef)) {
     htmlRef = document.getElementById("sceneTree")!
   }
-   height.value = htmlRef.clientHeight;
+  height.value = htmlRef.clientHeight;
 
 }
 
@@ -106,10 +106,10 @@ const handleNodeContextmenu = (evt: Event, data: TreeNodeData, node: TreeNode) =
 
 <template>
   <el-tree-v2
-      ref="treeRef"
       id="sceneTree"
-      :height="height"
+      ref="treeRef"
       :data="data"
+      :height="height"
       class="h-full"
       @node-click="handleNodeClick"
       @node-contextmenu="handleNodeContextmenu"

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {onMounted, reactive, ref, watch} from "vue";
+import {reactive, ref, watch} from "vue";
 import {ElEmpty} from "element-plus";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import * as THREE from "three";

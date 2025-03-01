@@ -1,8 +1,8 @@
 import {isArray, isNil} from "lodash-es";
-import {Module, IModuleOptions } from "../core/Module";
+import {IModuleOptions, Module} from "../core/Module";
 import * as  THREE from "three";
 
-export interface ISelectorOptions extends IModuleOptions  {
+export interface ISelectorOptions extends IModuleOptions {
 }
 
 // 对象选择相关封装

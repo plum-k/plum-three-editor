@@ -1,6 +1,6 @@
 import {computed, inject, ref} from "vue";
 
-export interface  AttributePaneNameProps{
+export interface AttributePaneNameProps {
     tabName: string
 }
 
@@ -8,7 +8,7 @@ export interface  AttributePaneNameProps{
 export const useAttributePane = (props: AttributePaneNameProps) => {
     const tabActiveName = inject("tabActiveName", ref("属性"))
 
-    const isActive =  computed(()=>{
+    const isActive = computed(() => {
         return tabActiveName.value === props.tabName
     })
 

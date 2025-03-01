@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {useBus} from "../../hooks";
 import * as THREE from "three";
 import {reactive} from "vue";
@@ -18,8 +18,8 @@ bus.viewerInitSubject.subscribe((value) => {
     cameraControl.getPosition(position);
     cameraControl.getTarget(target);
 
-    info.position = `相机位置: X-${round(position.x,2)} Y:${round(position.y,2)} Z:${round(position.z,2)}`;
-    info.target = `目标点: X:${round(target.x,2)} Y:${round(target.y,2)} Z:${round(target.z,2)}`;
+    info.position = `相机位置: X-${round(position.x, 2)} Y:${round(position.y, 2)} Z:${round(position.z, 2)}`;
+    info.target = `目标点: X:${round(target.x, 2)} Y:${round(target.y, 2)} Z:${round(target.z, 2)}`;
   })
 })
 

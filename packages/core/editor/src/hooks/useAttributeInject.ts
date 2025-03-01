@@ -13,7 +13,7 @@ export const useAttributeInject = (props: IAttributeProps) => {
     const {name, label} = props;
     const bus = useBus();
     const change = (value: any) => {
-        
+
         objectAttributeChangeSubject!.next({
             name: name,
             value: value

@@ -44,8 +44,8 @@ export class CatmullRomLine extends Line {
         this.catmullRomCurve3.closed = closed;
         this.catmullRomCurve3.curveType = curveType;
         this.catmullRomCurve3.tension = tension;
-        
-        
+
+
         return this.catmullRomCurve3.getPoints(this.options.segments)
     }
 }

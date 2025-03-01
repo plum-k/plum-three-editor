@@ -73,7 +73,7 @@ export class History {
             // this.editor.signals.historyChanged.dispatch(cmd);
         }
 
-        
+
         return cmd;
     }
 

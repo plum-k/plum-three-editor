@@ -112,7 +112,7 @@ const threeSyncUi = (object: THREE.Mesh) => {
   // form.map = material.map;
   // form.emissiveMap = material.emissiveMap;
   // form.alphaMap = material.alphaMap;
-  
+
   // form.bumpMap = material.bumpMap;
   form.bumpScale = material.bumpScale;
 
@@ -122,14 +122,14 @@ const threeSyncUi = (object: THREE.Mesh) => {
 
   // form.displacementMap = material.displacementMap;
   form.displacementScale = material.displacementScale;
-  
+
   // form.lightMap= material.lightMap;
   // form.aoMap= material.aoMap;
   form.aoMapIntensity = material.aoMapIntensity;
 
   // form.gradientMap= material.gradientMap;
-  
-  
+
+
   form.side = material.side;
   form.flatShading = material.flatShading;
   form.blending = material.blending;
@@ -183,8 +183,8 @@ const threeSyncUi = (object: THREE.Mesh) => {
     <input-number-item label="透明度" name="opacity"/>
     <bool-item label="透明性" name="transparent"/>
 
-    <bool-item name="forceSinglePass" label="强制单通道"/>
-    <bool-item name="alphaTest" label="α测试"/>
+    <bool-item label="强制单通道" name="forceSinglePass"/>
+    <bool-item label="α测试" name="alphaTest"/>
     <bool-item label="深度测试" name="depthTest"/>
     <bool-item label="深度缓写" name="depthWrite"/>
     <bool-item label="线宽" name="wireframe"/>

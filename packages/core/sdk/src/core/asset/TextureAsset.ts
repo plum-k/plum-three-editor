@@ -12,19 +12,19 @@ export interface ITextureAsset extends IAsset {
  * ```ts
  * asset.loadSubject.subscribe({
  *     next: (gltf) => {
- *         
+ *
  *     },
  *     error: (error) => {
- *         
+ *
  *     }
  * })
  *
  * asset.progressSubject.subscribe({
  *     next: (progress) => {
- *         
+ *
  *     },
  *     error: (error) => {
- *         
+ *
  *     }
  * })
  * ```

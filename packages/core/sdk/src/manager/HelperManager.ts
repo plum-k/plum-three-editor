@@ -1,7 +1,7 @@
 import * as  THREE from "three";
-import {Module, IModuleOptions } from "../core/Module";
+import {IModuleOptions, Module} from "../core/Module";
 
-export interface IHelperManagerOptions extends IModuleOptions  {
+export interface IHelperManagerOptions extends IModuleOptions {
 
 }
 

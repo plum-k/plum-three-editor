@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ElEmpty, ElForm} from "element-plus";
+import {ElForm} from "element-plus";
 import {computed, inject, onMounted, reactive, ref} from "vue";
 import {isArray, set} from "lodash-es";
 import * as THREE from "three";
@@ -60,7 +60,7 @@ const form = reactive({
   roughness: 0,
   metalness: 0,
 
-  vertexColors:false,
+  vertexColors: false,
 
   // map: null,
   // emissiveMap: null,
@@ -68,7 +68,6 @@ const form = reactive({
 
   // bumpMap: null,
   bumpScale: 0,
-
 
 
   // displacementMap: null,
@@ -129,8 +128,8 @@ const threeSyncUi = (object: THREE.Mesh) => {
   form.bumpScale = material.bumpScale;
 
   // form.normalMap= material.normalMap;
-  form.normalScale.x= material.normalScale.x;
-  form.normalScale.y= material.normalScale.y;
+  form.normalScale.x = material.normalScale.x;
+  form.normalScale.y = material.normalScale.y;
 
   // form.displacementMap= material.displacementMap;
   form.displacementScale = material.displacementScale;
@@ -141,12 +140,12 @@ const threeSyncUi = (object: THREE.Mesh) => {
   // form.envMap= material.envMap;
   // form.lightMap= material.lightMap;
   // form.aoMap= material.aoMap;
-  form.aoMapIntensity= material.aoMapIntensity;
+  form.aoMapIntensity = material.aoMapIntensity;
 
-  form.side= material.side;
-  form.flatShading= material.flatShading;
-  form.blending= material.blending;
-  form.opacity= material.opacity;
+  form.side = material.side;
+  form.flatShading = material.flatShading;
+  form.blending = material.blending;
+  form.opacity = material.opacity;
   form.transparent = material.transparent;
 
   form.forceSinglePass = material.forceSinglePass;
@@ -204,9 +203,9 @@ const threeSyncUi = (object: THREE.Mesh) => {
     <input-number-item label="透明度" name="opacity"/>
     <bool-item label="透明性" name="transparent"/>
 
-    <bool-item name="forceSinglePass" label="强制单通道"/>
+    <bool-item label="强制单通道" name="forceSinglePass"/>
 
-    <bool-item name="alphaTest" label="α测试"/>
+    <bool-item label="α测试" name="alphaTest"/>
     <bool-item label="深度测试" name="depthTest"/>
     <bool-item label="深度缓写" name="depthWrite"/>
 

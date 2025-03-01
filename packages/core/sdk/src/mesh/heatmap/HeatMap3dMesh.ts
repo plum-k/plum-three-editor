@@ -112,15 +112,15 @@ export class HeatMap3dMesh extends Object3D {
         const material = new THREE.MeshBasicMaterial();
         const heatmap = this.heatmap;
         // @ts-ignore
-        
+
         // @ts-ignore
         const texture = new THREE.CanvasTexture(heatmap._renderer.canvas)
-        
+
         material.map = texture;
         material.side = THREE.DoubleSide;
         material.transparent = true;
         material.onBeforeCompile = (shader) => {
-            
+
             shader.uniforms["height"] = {value: this.options.zoom};
             shader.vertexShader = shader.vertexShader.replace("#include <common>", `
 						#include <common>

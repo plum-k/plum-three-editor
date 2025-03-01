@@ -6,7 +6,7 @@ import {useAmbientLight} from "../testCore/useAmbientLight.ts";
 import * as THREE from "three";
 import {BoxGeometry, Mesh, MeshStandardMaterial} from "three";
 import {useBus, useSetViewer,} from "../hooks";
-import {Control, CameraSettingPane, Statistical} from "./sceneView";
+import {CameraSettingPane, Control} from "./sceneView";
 import type {IDragInfo} from "../interface/IDragInfo.ts";
 import CameraView from "./sceneView/CameraView.vue";
 import CameraInfo from "./sceneView/CameraInfo.vue";
@@ -237,7 +237,7 @@ function createLight(info: IDragInfo) {
 
 <template>
   <div class="h-full w-full relative flex flex-col">
-    <div ref="canvasContainer" class="container w-full  relative flex-1"  @drop="onDrop">
+    <div ref="canvasContainer" class="container w-full  relative flex-1" @drop="onDrop">
       <tool/>
       <control/>
       <camera-view/>

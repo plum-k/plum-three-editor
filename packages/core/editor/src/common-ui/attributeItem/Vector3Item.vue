@@ -14,7 +14,7 @@ const props = defineProps<Props>();
 const {name, label} = props
 
 const bus = useBus();
-const {objectAttributeChangeSubject, } = useAttributeInject(props)
+const {objectAttributeChangeSubject,} = useAttributeInject(props)
 const change = (value: number, key: string) => {
 
   objectAttributeChangeSubject.next({

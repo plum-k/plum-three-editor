@@ -1,7 +1,6 @@
 import * as  THREE from "three";
 import {Camera} from "three";
-import {shaderMaterial} from "../tool";
-import {version} from "../tool";
+import {shaderMaterial, version} from "../tool";
 
 export type GridMaterialType = {
     /** Cell size, default: 0.5 */

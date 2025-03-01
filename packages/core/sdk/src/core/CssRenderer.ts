@@ -1,8 +1,8 @@
-import {Module, IModuleOptions } from "./Module";
+import {IModuleOptions, Module} from "./Module";
 import {CSS3DRenderer} from "three/examples/jsm/renderers/CSS3DRenderer";
 import {CSS2DRenderer} from "three-stdlib";
 
-export interface ICssRendererOptions extends IModuleOptions  {
+export interface ICssRendererOptions extends IModuleOptions {
 }
 
 export class CssRenderer extends Module {

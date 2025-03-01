@@ -52,7 +52,7 @@ export class MoveObjectCommand extends Command {
         const children = this.newParent!.children;
         children.splice(this.newIndex!, 0, this.object!);
         this.object!.parent = this.newParent;
-        
+
         // this.editor.signals.sceneGraphChanged.dispatch();
         this.editor.eventManager.sceneGraphChanged.next(null);
     }

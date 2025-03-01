@@ -57,7 +57,7 @@ export default function useCatmullRomLine(_viewer: Viewer) {
     pane.addBinding(PARAMS, 'materialType', {
         options: LineMaterialType
     });
-    
+
 
     const f2 = pane.addFolder({
         title: 'LineBasicMaterial',
@@ -77,7 +77,7 @@ export default function useCatmullRomLine(_viewer: Viewer) {
 
     pane.on('change', (ev) => {
         // 
-        
+
         // 
         line.update(PARAMS)
     });

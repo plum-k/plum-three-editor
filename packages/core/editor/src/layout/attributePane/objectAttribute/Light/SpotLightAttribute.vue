@@ -1,11 +1,11 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {onMounted, reactive} from "vue";
 import * as THREE from "three";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
 import {ElForm} from "element-plus";
 import {useAttributeProvide, useBus} from "../../../../hooks";
 import {set} from "lodash-es";
-import {isPointLight, isSpotLight} from "three-is";
+import {isSpotLight} from "three-is";
 
 const bus = useBus();
 
@@ -58,7 +58,7 @@ const threeToUi = () => {
 
   form.angle = object.angle
   form.penumbra = object.penumbra
-  
+
   form.decay = object.decay
 
   form.castShadow = object.castShadow
@@ -97,8 +97,8 @@ objectAttributeChangeSubject.subscribe((editValue) => {
     <input-number-item label="强度" name="intensity"/>
     <color-item label="颜色" name="color"/>
     <input-number-item label="距离" name="distance"/>
-        <input-number-item label="角度" name="angle"/>
-        <input-number-item label="边缘" name="penumbra"/>
+    <input-number-item label="角度" name="angle"/>
+    <input-number-item label="边缘" name="penumbra"/>
     <input-number-item label="衰减" name="decay"/>
     <bool-item label="产生阴影" name="castShadow"/>
     <input-number-item label="阴影偏移" name="shadowIntensity"/>

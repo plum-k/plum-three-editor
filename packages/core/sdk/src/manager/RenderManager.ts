@@ -1,8 +1,8 @@
 import {SRGBColorSpace, WebGLRenderer} from "three";
-import {Module, IModuleOptions } from "../core/Module";
+import {IModuleOptions, Module} from "../core/Module";
 import {IResourceManagers} from "./AssetManager";
 
-export interface IRenderManagerOptions extends IModuleOptions  {
+export interface IRenderManagerOptions extends IModuleOptions {
 }
 
 export class RenderManager extends Module {

@@ -1,8 +1,8 @@
-import {Module, IModuleOptions } from "../core/Module";
+import {IModuleOptions, Module} from "../core/Module";
 import {TransformControls} from "three/examples/jsm/controls/TransformControls";
 import * as  THREE from "three";
 
-export interface IControlsManagerOptions extends IModuleOptions  {
+export interface IControlsManagerOptions extends IModuleOptions {
 }
 
 

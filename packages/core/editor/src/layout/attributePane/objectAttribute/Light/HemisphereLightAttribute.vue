@@ -1,12 +1,13 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {onMounted, reactive} from "vue";
 
-import {isHemisphereLightt, isHemisphereLight, isPointLight, isSpotLight, isDirectionalLight} from "three-is";
+import {isHemisphereLight} from "three-is";
 import * as THREE from "three";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
-import {ElCheckbox, ElCheckboxGroup, ElEmpty, ElForm, ElFormItem} from "element-plus";
+import {ElForm} from "element-plus";
 import {useAttributeProvide, useBus} from "../../../../hooks";
 import {set} from "lodash-es";
+
 const bus = useBus();
 
 onMounted(() => {
@@ -24,7 +25,7 @@ const form = reactive({
   position: {x: 11, y: 0, z: 0},
   intensity: 0,
   color: "",
-  groundColor:"",
+  groundColor: "",
   visible: false,
   frustumCulled: false,
   renderOrder: 0,

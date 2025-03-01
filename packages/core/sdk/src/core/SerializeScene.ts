@@ -1,11 +1,11 @@
-import {Module, IModuleOptions } from "./Module";
+import {IModuleOptions, Module} from "./Module";
 import {SerializeInterface} from "./serialize";
 import {Asset} from "./asset/Asset";
 import * as THREE from "three";
 import {isString} from "lodash-es";
 import {Serialize} from "./serialize/Serialize";
 
-export interface ISerializeSceneOptions extends IModuleOptions  {
+export interface ISerializeSceneOptions extends IModuleOptions {
 }
 
 export class SerializeScene extends Module {
@@ -62,7 +62,7 @@ export class SerializeScene extends Module {
         function getObjectSize(obj) {
             const sizeInBytes = new Blob([isString(obj) ? obj : JSON.stringify(obj)]).size; // 计算字节大小
             const sizeInMB = sizeInBytes / (1024 * 1024); // 转换为 MB
-            
+
         }
 
         let json = this.toJson();

@@ -1,18 +1,18 @@
-import {Module, IModuleOptions } from "../core/Module";
+import {IModuleOptions, Module} from "../core/Module";
 import * as THREE from "three";
 import {Texture} from "three";
 import {PropertyPath} from "lodash-es";
 import {History} from "./History"
 import {
-    Command,
-    SetValueCommand,
-    SetMaterialCommand,
-    SetMaterialColorCommand,
-    SetMaterialValueCommand,
-    SetMaterialMapCommand,
     AddObjectCommand,
+    Command,
     MoveObjectCommand,
-    RemoveObjectCommand
+    RemoveObjectCommand,
+    SetMaterialColorCommand,
+    SetMaterialCommand,
+    SetMaterialMapCommand,
+    SetMaterialValueCommand,
+    SetValueCommand
 } from "./commands";
 import {
     isCamera,
@@ -23,15 +23,13 @@ import {
     isSkinnedMesh,
     isSpotLight
 } from "three-is";
-
-import {Grid} from "../mesh";
 import {VertexNormalsHelper} from "three-stdlib";
 import {Tool} from "../tool";
 import {EditorEventManager} from "./EditorEventManager";
 import {Selector} from "./Selector";
 import {TransformControlsWarp} from "./TransformControlsWarp";
 
-export interface IEditorOptions extends IModuleOptions  {
+export interface IEditorOptions extends IModuleOptions {
 }
 
 export class Editor extends Module {

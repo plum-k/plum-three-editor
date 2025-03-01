@@ -21,7 +21,7 @@ const {objectAttributeChangeSubject, change} = useAttributeInject(props)
 </script>
 
 <template>
-  <el-form-item  :label="label" size="small">
+  <el-form-item :label="label" size="small">
     <el-color-picker v-model="formContext.model[name]" @change="change" @active-change="change"/>
   </el-form-item>
 </template>

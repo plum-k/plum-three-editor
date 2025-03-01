@@ -33,7 +33,7 @@ export class QuadraticBezierLine2 extends Line2 {
             ...this.options,
             quadraticBezierCurve3: this.quadraticBezierCurve3,
         })
-        
+
         return quadraticBezierCurve3.getPoints(this.options.segments)
     }
 }

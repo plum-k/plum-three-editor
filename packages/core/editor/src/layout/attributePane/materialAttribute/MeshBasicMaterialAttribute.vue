@@ -5,7 +5,7 @@ import {isArray, set} from "lodash-es";
 import * as THREE from "three";
 import {isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
-import {BoolItem, ColorItem, InputNumberItem, SelectItem, TextItem, Vector2Item} from "../../../common-ui";
+import {BoolItem, ColorItem, InputNumberItem, SelectItem, TextItem} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
 
 const bus = useBus();
@@ -53,7 +53,7 @@ const form = reactive({
   uuid: '',
   name: '',
   color: '',
-  reflectivity:0,
+  reflectivity: 0,
 
   // envMap: null,
   // lightMap: null,
@@ -137,8 +137,8 @@ const threeSyncUi = (object: THREE.Mesh) => {
     <input-number-item label="透明度" name="opacity"/>
     <bool-item label="透明性" name="transparent"/>
 
-    <bool-item name="forceSinglePass" label="强制单通道"/>
-    <bool-item name="alphaTest" label="α测试"/>
+    <bool-item label="强制单通道" name="forceSinglePass"/>
+    <bool-item label="α测试" name="alphaTest"/>
     <bool-item label="深度测试" name="depthTest"/>
     <bool-item label="深度缓写" name="depthWrite"/>
     <bool-item label="线宽" name="wireframe"/>
