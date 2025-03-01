@@ -1,12 +1,13 @@
 import Stats from "stats.js";
-
-import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
+import {IModuleOptions, Module} from "../core/Module";
 import {deepMergeRetain} from "../tool";
+import {Subscription} from "rxjs";
 
-export interface IDebugOptions extends IBasePlumOptions {
+export interface IDebugOptions extends IModuleOptions {
     showMs?: boolean;
     showMb?: boolean;
-    showFps?: boolean
+    showFps?: boolean;
+    position?: DebugPosition;
 }
 
 export enum DebugPosition {
@@ -16,8 +17,9 @@ export enum DebugPosition {
     BottomRight,
 }
 
-export class DebugManager extends BasePlum<IDebugOptions> {
-    stats: Stats;
+export class DebugManager extends Module<IDebugOptions> {
+    stats: Stats | undefined
+    subscription: Subscription | undefined
 
     constructor(options: IDebugOptions) {
         super(options);
@@ -25,45 +27,66 @@ export class DebugManager extends BasePlum<IDebugOptions> {
             showFps: true,
             showMs: true,
             showMb: true,
+            position: DebugPosition.BottomLeft,
         },);
+    }
 
-        this.stats = new Stats();
-        this.setStats();
+    #enable = false
 
-        this.stats.dom.style.position = 'absolute'
+    set enable(value: boolean) {
+        if (value) {
+            if (!this.stats) {
+                this.stats = new Stats();
+                this.setStats();
+                this.stats.dom.style.position = 'absolute'
+                this.setPosition(this.options.position);
+                this.addToDom();
+            }
+            if (!this.subscription) {
+                this.subscription = this.eventManager.renderSubject.subscribe(() => {
+                    this.update();
+                })
+            }
+        } else {
+            if (this.subscription) {
+                this.subscription.unsubscribe();
+                this.subscription = undefined;
+            }
+            if (this.stats) {
+                this.dispose();
+            }
+        }
+        this.#enable = value;
+    }
 
-        this.addToDOM();
-        this.setPosition(DebugPosition.BottomLeft)
-        this.eventManager.renderSubject.subscribe(() => {
-            this.update();
-        })
+    get enable() {
+        return this.#enable
     }
 
     setStats() {
+        if (!this.stats) return;
+        const getElement = (index: number): HTMLElement => {
+            return this.stats!.dom.children[index] as HTMLElement;
+        }
         if (this.options.showFps) {
-            // @ts-ignore
-            this.stats.dom.children[0].style.display = 'block';
+            getElement(0).style.display = 'block';
         } else {
-            // @ts-ignore
-            this.stats.dom.children[0].style.display = 'none';
+            getElement(0).style.display = 'none';
         }
         if (this.options.showMs) {
-            // @ts-ignore
-            this.stats.dom.children[1].style.display = 'block';
+            getElement(1).style.display = 'block';
         } else {
-            // @ts-ignore
-            this.stats.dom.children[1].style.display = 'none';
+            getElement(1).style.display = 'none';
         }
         if (this.options.showMb) {
-            // @ts-ignore
-            this.stats.dom.children[2].style.display = 'block';
+            getElement(2).style.display = 'block';
         } else {
-            // @ts-ignore
-            this.stats.dom.children[2].style.display = 'none';
+            getElement(2).style.display = 'none';
         }
     }
 
     setPosition(value: DebugPosition) {
+        if (!this.stats) return;
         this.stats.dom.style.left = '';
         this.stats.dom.style.top = '';
         this.stats.dom.style.right = '';
@@ -88,17 +111,22 @@ export class DebugManager extends BasePlum<IDebugOptions> {
         }
     }
 
-    addToDOM() {
+
+    addToDom() {
+        if (!this.stats) return;
         const container = this.viewer.container;
         container.appendChild(this.stats.dom);
     }
 
     update() {
+        if (!this.stats) return;
         this.stats.update();
     }
 
     dispose() {
+        if (!this.stats) return;
         const container = this.viewer.container;
         container.removeChild(this.stats.dom);
+        this.stats = undefined;
     }
 }

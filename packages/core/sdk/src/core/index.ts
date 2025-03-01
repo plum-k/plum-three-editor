@@ -1,4 +1,4 @@
-export * from "./BasePlum";
+export * from "./Module";
 export * from "./CssRenderer";
 export * from "./Pick";
 export * from "./SerializeScene";

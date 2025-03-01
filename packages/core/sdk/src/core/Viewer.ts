@@ -1,5 +1,6 @@
 import {isString} from "lodash-es"; // 从 lodash-es 导入工具函数
 import * as THREE from 'three'; // 导入 Three.js 库
+import {AxesHelper} from 'three';
 import {
     AssetManager,
     DebugManager,
@@ -18,6 +19,7 @@ import {SerializeScene} from "./SerializeScene";
 import {DrawLine, MeasureTool, ThreeCameraControls} from "../control";
 import {CssRenderer} from "./CssRenderer";
 import {IOssApiOptions, OssApi} from "@plum-render/oss-api";
+import {Grid} from "../mesh";
 
 // 定义 Viewer 选项接口
 export interface IViewerOptions {
@@ -165,6 +167,52 @@ export class Viewer {
         this.threeCameraControls.setSize(width, height); // 设置相机控制器大小
         this.cssRenderer.setSize(width, height); // 设置 CSS 渲染器大小
         this.postProcessingManager.setSize(width, height); // 设置后处理管理器大小
+    }
+
+    //------------------------- 添加网格 开始 -------------------
+    grid: Grid | undefined = undefined;
+
+    #enableGrid = false;
+    set enableGrid(enable: boolean) {
+        if (enable) {
+            this.grid = new Grid({});
+            this.grid.name = "grid";
+            this.sceneHelpers.add(this.grid);
+            this.loop.addEffect(() => {
+                this.grid!.tick(this.threeCameraControls.camera)
+            })
+        } else {
+            if (!this.grid) return;
+            this.grid.geometry.dispose();
+            (this.grid.material as THREE.Material).dispose();
+            this.sceneHelpers.remove(this.grid);
+        }
+        this.#enableGrid = enable;
+    }
+
+    get enableGrid() {
+        return this.#enableGrid;
+    }
+
+    //---------------------- 坐标轴--------------------
+    #enableAxes = false;
+    axesHelper: AxesHelper | undefined = undefined;
+
+   set enableAxes(enable: boolean) {
+        if (enable) {
+            this.axesHelper = new THREE.AxesHelper(100);
+            this.sceneHelpers.add(this.axesHelper);
+        } else {
+            if (!this.axesHelper) return;
+            this.axesHelper.geometry.dispose();
+            (this.axesHelper.material as THREE.Material).dispose();
+            this.sceneHelpers.remove(this.axesHelper);
+        }
+        this.#enableAxes = enable;
+    }
+
+    get enableAxes() {
+        return this.#enableAxes;
     }
 
     //---------------- 查找节点---------------------

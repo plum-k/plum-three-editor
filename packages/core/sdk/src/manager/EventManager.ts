@@ -1,9 +1,9 @@
 import {fromEvent, Subject} from 'rxjs';
-import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
+import {Module, IModuleOptions } from "../core/Module";
 import * as THREE from 'three';
 import {ThreeTool} from "../tool/ThreeTool";
 
-export interface IEventManagerOptions extends IBasePlumOptions {
+export interface IEventManagerOptions extends IModuleOptions  {
 }
 
 export interface IPick {
@@ -11,7 +11,7 @@ export interface IPick {
     position: THREE.Vector3
 }
 
-export class EventManager extends BasePlum {
+export class EventManager extends Module {
 
 
     dblClickSubject = new Subject<MouseEvent>();

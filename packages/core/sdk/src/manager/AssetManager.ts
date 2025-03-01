@@ -13,7 +13,7 @@ import {
 import {GLTF, GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader";
 import Asset from "../core/asset/Asset";
-import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
+import {Module, IModuleOptions } from "../core/Module";
 import {
     LDrawLoader,
     LUT3dlLoader,
@@ -33,7 +33,7 @@ import {GltfModelAsset} from "../core/asset/GltfModelAsset";
 import {TextureAsset} from "../core/asset/TextureAsset";
 import {KTX2Loader} from "three/examples/jsm/loaders/KTX2Loader";
 
-export interface IResourceManagers extends IBasePlumOptions {
+export interface IResourceManagers extends IModuleOptions  {
     sdkUrl?: string;
 }
 
@@ -81,7 +81,7 @@ const DefaultLoadFun = {
     },
 }
 
-export class AssetManager extends BasePlum {
+export class AssetManager extends Module {
     loadingManager: LoadingManager;
     dracoLoader!: DRACOLoader;
     sdkUrl: string = "";

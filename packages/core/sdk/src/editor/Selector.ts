@@ -1,12 +1,12 @@
 import {isArray, isNil} from "lodash-es";
-import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
+import {Module, IModuleOptions } from "../core/Module";
 import * as  THREE from "three";
 
-export interface ISelectorOptions extends IBasePlumOptions {
+export interface ISelectorOptions extends IModuleOptions  {
 }
 
 // 对象选择相关封装
-export class Selector extends BasePlum {
+export class Selector extends Module {
     selectObject: THREE.Object3D | undefined = undefined
     selectionBox: THREE.BoxHelper = new THREE.BoxHelper(new THREE.Object3D())
 

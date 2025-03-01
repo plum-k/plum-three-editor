@@ -1,6 +1,6 @@
 import {Subscription} from "rxjs";
 import {DistanceMeasure, EDistanceMeasureTextModel, IBaseDistanceMeasureOptions, Measure} from "./index";
-import {BasePlum, IBasePlumOptions} from "../../core";
+import {Module, IModuleOptions } from "../../core";
 
 export enum MeasureMode {
     Distance,    // 距离测量
@@ -8,11 +8,11 @@ export enum MeasureMode {
     Angle           // 角度测量
 }
 
-export interface IMeasureToolOptions extends IBasePlumOptions {
+export interface IMeasureToolOptions extends IModuleOptions  {
 
 }
 
-export class MeasureTool extends BasePlum {
+export class MeasureTool extends Module {
 
     currentMeasure: Measure | undefined;
     leftClickSubscription: Subscription | null = null

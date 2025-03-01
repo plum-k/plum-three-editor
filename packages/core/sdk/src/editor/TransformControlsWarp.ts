@@ -1,12 +1,12 @@
-import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
+import {Module, IModuleOptions } from "../core/Module";
 import {TransformControls} from "three/examples/jsm/controls/TransformControls";
 import * as  THREE from "three";
 
-export interface IControlsManagerOptions extends IBasePlumOptions {
+export interface IControlsManagerOptions extends IModuleOptions  {
 }
 
 
-export class TransformControlsWarp extends BasePlum {
+export class TransformControlsWarp extends Module {
     transformControls!: TransformControls;
     objectPositionOnDown = new THREE.Vector3;
     objectRotationOnDown = new THREE.Euler;

@@ -15,7 +15,16 @@ CameraControls.install({THREE: THREE});
 export interface IThreeCameraControls {
     viewer: Viewer;
 }
-
+export enum CameraViewType {
+    Top = "top",        // 顶视图
+    Bottom = "bottom",  // 底视图
+    Left = "left",      // 左视图
+    Right = "right",    // 右视图
+    Back = "back",      // 后视图
+    Front = "front",    // 前视图
+    Ortho = "ortho",    // 正交视图
+    Perspective = "perspective" // 透视视图
+}
 /**
  * ThreeCameraControls类负责初始化和管理Three.js的摄像机控制。
  * 它通过与viewer实例配合，提供交互式摄像机控制功能。
@@ -70,4 +79,167 @@ export class ThreeCameraControls {
         this.perspectiveCamera.updateProjectionMatrix();
     }
 
+    /**
+     * 设置不同的视图模式
+     * @param cameraViewType
+     */
+    setCameraViewType(cameraViewType: CameraViewType) {
+        switch (cameraViewType) {
+            case CameraViewType.Top:
+                this.toTopView();
+                break;
+            case CameraViewType.Bottom:
+                this.toBottomView();
+                break;
+            case CameraViewType.Left:
+                this.toLeftView();
+                break;
+            case CameraViewType.Right:
+                this.toRightView();
+                break;
+            case CameraViewType.Back:
+                this.toBackView();
+                break;
+            case CameraViewType.Front:
+                this.toFrontView();
+                break;
+            case CameraViewType.Ortho:
+                this.toOrtho();
+                break;
+            case CameraViewType.Perspective:
+            default:
+                this.toPerspective();
+                break;
+        }
+    }
+
+    toTopView() {
+        // this._initRange();
+        // this.setOrthographic(true);
+        this.cameraControls.rotatePolarTo(0).then( );
+
+        this.cameraControls.minAzimuthAngle = - Infinity;
+        this.cameraControls.maxAzimuthAngle = Infinity;
+        this.cameraControls.minPolarAngle = 0;
+        this.cameraControls.maxPolarAngle = 0;
+    }
+
+    toBottomView() {
+        // this._initRange();
+        // this.setOrthographic(true);
+        this.cameraControls.rotatePolarTo(Math.PI);
+        this.cameraControls.minAzimuthAngle = - Infinity;
+        this.cameraControls.maxAzimuthAngle = Infinity;
+        this.cameraControls.minPolarAngle = Math.PI;
+        this.cameraControls.maxPolarAngle = Math.PI;
+    }
+
+    toLeftView() {
+        // this._initRange();
+        // this.setOrthographic(true);
+        this.cameraControls.rotateTo(-90, 90, {enableTransition: false});
+        this.cameraControls.minAzimuthAngle = -Math.PI;
+        this.cameraControls.maxAzimuthAngle = -Math.PI;
+        this.cameraControls.minPolarAngle = Math.PI / 2;
+        this.cameraControls.maxPolarAngle = Math.PI / 2;
+    }
+
+    toRightView() {
+        // this._initRange();
+        // this.setOrthographic(true);
+        this.cameraControls.rotateTo(90, 90, {enableTransition: false});
+        this.cameraControls.minAzimuthAngle = Math.PI;
+        this.cameraControls.maxAzimuthAngle = Math.PI;
+        this.cameraControls.minPolarAngle = Math.PI / 2;
+        this.cameraControls.maxPolarAngle = Math.PI / 2;
+    }
+
+    toBackView() {
+        // this._initRange();
+        // this.setOrthographic(true);
+        this.cameraControls.rotateTo(-180, 90, {enableTransition: false});
+        this.cameraControls.minAzimuthAngle = -Math.PI;
+        this.cameraControls.maxAzimuthAngle = -Math.PI;
+        this.cameraControls.minPolarAngle = Math.PI / 2;
+        this.cameraControls.maxPolarAngle = Math.PI / 2;
+    }
+
+    toFrontView() {
+        // this._initRange();
+        // this.setOrthographic(true);
+        this.cameraControls.rotateTo(0, 90, {enableTransition: false});
+        this.cameraControls.minAzimuthAngle = 0;
+        this.cameraControls.maxAzimuthAngle = 0;
+        this.cameraControls.minPolarAngle = Math.PI / 2;
+    }
+
+    toOrtho() {
+        this.toPerspective();
+        // this._initRange();
+        // this.setOrthographic(true);
+        this.setInteract({
+            mouseButtonMiddle: "pan"
+        });
+    }
+
+    toPerspective() {
+        // this._initRange();
+        // this.setOrthographic(false);
+        // this.resetInteract();
+        // this.saveState();
+        // this.resetState();
+    }
+    // setOrthographic(isOrthographic) {
+    //     if (!this.isOrthographic) {
+    //         // this.saveInteract();
+    //     }
+    //     if (isNull(isOrthographic) || this.isOrthographic === isOrthographic) return this;
+    //     const enable = this.viewer.rendererManager.effectRenderer.enable;
+    //     this.viewer.rendererManager.setMainRendererEnable(false);
+    //     const { perspectiveCamera, orthographicCamera,
+    //         orthographicCameraControls, perspectiveCameraControls } = this;
+    //     const center = this.center;
+    //     const position = this.position;
+    //     if (isOrthographic) {
+    //         if (!this.isOrthographic) {
+    //             // Thanks for sharing : https://stackoverflow.com/questions/48187416/how-to-switch-between-perspective-and-orthographic-cameras-keeping-size-of-desir
+    //             const fov = perspectiveCamera.fov;
+    //             const far = perspectiveCamera.far;
+    //             const depth = Math.tan(fov / 2.0 * Math.PI / 180.0) * 2.0;
+    //             var z = position.distanceTo(center);
+    //             var y = depth * z;
+    //             var x = y * perspectiveCamera.aspect;
+    //
+    //             orthographicCamera.left = - x / 2;
+    //             orthographicCamera.right = x / 2
+    //             orthographicCamera.top = y / 2;
+    //             orthographicCamera.bottom = - y / 2;
+    //             orthographicCamera.zoom = 1;
+    //
+    //             orthographicCamera.position.copy(position);
+    //             orthographicCamera.lookAt(center);
+    //
+    //             orthographicCameraControls.setLookAt(position.x, position.y, position.z, center.x, center.y, center.z, false);
+    //             this.cameraControls._sphericalEnd.makeSafe();
+    //             this.cameraControls._needsUpdate = true;
+    //         }
+    //     } else {
+    //         if (this.isOrthographic) {
+    //             const pos = position.clone();
+    //             pos.y = position.y / orthographicCamera.zoom;
+    //
+    //             perspectiveCamera.position.copy(pos);
+    //             perspectiveCamera.lookAt(center);
+    //
+    //             perspectiveCameraControls.setLookAt(position.x, position.y, position.z, center.x, center.y, center.z, false);
+    //             this.cameraControls._sphericalEnd.makeSafe();
+    //             this.cameraControls._needsUpdate = true;
+    //         }
+    //     }
+    //
+    //     this.isOrthographic = !this.isOrthographic;
+    //     this.camera.updateProjectionMatrix();
+    //     this._cameraUpdateDelay();
+    //     return this;
+    // }
 }

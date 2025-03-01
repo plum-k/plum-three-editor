@@ -1,8 +1,8 @@
 import {BehaviorSubject, merge, Subject} from 'rxjs';
-import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
+import {Module, IModuleOptions } from "../core/Module";
 import * as THREE from 'three';
 
-export interface IEditorEventManagerOptions extends IBasePlumOptions {
+export interface IEditorEventManagerOptions extends IModuleOptions  {
 }
 
 export interface IPick {
@@ -10,7 +10,7 @@ export interface IPick {
     position: THREE.Vector3
 }
 
-export class EditorEventManager extends BasePlum {
+export class EditorEventManager extends Module {
     editScript = new Subject<any>();
 
     startPlayer = new Subject<any>();

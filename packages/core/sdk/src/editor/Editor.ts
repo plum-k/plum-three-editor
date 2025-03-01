@@ -1,4 +1,4 @@
-import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
+import {Module, IModuleOptions } from "../core/Module";
 import * as THREE from "three";
 import {Texture} from "three";
 import {PropertyPath} from "lodash-es";
@@ -31,10 +31,10 @@ import {EditorEventManager} from "./EditorEventManager";
 import {Selector} from "./Selector";
 import {TransformControlsWarp} from "./TransformControlsWarp";
 
-export interface IEditorOptions extends IBasePlumOptions {
+export interface IEditorOptions extends IModuleOptions  {
 }
 
-export class Editor extends BasePlum {
+export class Editor extends Module {
     editorEventManager!: EditorEventManager;
     history!: History;
     selector!: Selector;
@@ -49,8 +49,7 @@ export class Editor extends BasePlum {
 
     // 材质引用计数
     materialsRefCounter = new Map<THREE.Material, number>();
-    //------------------------- 添加网格 开始 -------------------
-    grid!: Grid
+
 
     constructor(options: IEditorOptions) {
         super(options);
@@ -69,16 +68,6 @@ export class Editor extends BasePlum {
         });
         // this.addGrid();
     }
-
-    addGrid() {
-        this.grid = new Grid({});
-        this.grid.name = "grid";
-        this.sceneHelpers.add(this.grid);
-        this.loop.addEffect(() => {
-            this.grid.tick(this.camera)
-        })
-    }
-
 
     objectByUuid(uuid: string) {
         return this.scene.getObjectByProperty('uuid', uuid);

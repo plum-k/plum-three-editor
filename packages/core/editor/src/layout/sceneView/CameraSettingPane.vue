@@ -70,12 +70,11 @@ const show = () => {
   <el-popover
       :width="200"
       placement="bottom"
-      title="Title"
-      trigger="hover"
+      trigger="click"
       @show="show"
   >
     <template #reference>
-      <el-button class="absolute top-[20px] right-[20px]">相机设置</el-button>
+      <el-button class="absolute top-[20px] right-[20px] z-999 ">相机设置</el-button>
     </template>
     <el-form :model="form" class="h-full" label-width="auto" size="small">
       <input-number-item label="视野" name="fov"/>

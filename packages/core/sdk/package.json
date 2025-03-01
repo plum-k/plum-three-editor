@@ -48,7 +48,7 @@
     "@types/lodash-es": "^4.17.12",
     "@types/stats.js": "^0.17.3",
     "@types/three": "^0.174.0",
-    "rollup": "^4.34.8",
+    "rollup": "^4.34.9",
     "tslib": "^2.8.1",
     "typescript": "^5.8.2"
   }

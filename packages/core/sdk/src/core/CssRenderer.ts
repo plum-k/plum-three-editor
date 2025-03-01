@@ -1,11 +1,11 @@
-import {BasePlum, IBasePlumOptions} from "./BasePlum";
+import {Module, IModuleOptions } from "./Module";
 import {CSS3DRenderer} from "three/examples/jsm/renderers/CSS3DRenderer";
 import {CSS2DRenderer} from "three-stdlib";
 
-export interface ICssRendererOptions extends IBasePlumOptions {
+export interface ICssRendererOptions extends IModuleOptions  {
 }
 
-export class CssRenderer extends BasePlum {
+export class CssRenderer extends Module {
     css2DRenderer: CSS2DRenderer;
     css3DRenderer: CSS3DRenderer;
     enableCss2D: boolean = false

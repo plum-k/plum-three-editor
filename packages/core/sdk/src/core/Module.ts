@@ -1,12 +1,12 @@
 import {Viewer} from "./Viewer";
 import {deepMergeRetain} from "../tool";
 
-export interface IBasePlumOptions {
+export interface IModuleOptions {
     viewer: Viewer;
 }
 
-export class BasePlum<T extends IBasePlumOptions = IBasePlumOptions> {
-    options: T;
+export class Module<T extends IModuleOptions = IModuleOptions> {
+    options: Required<T>;
     viewer: Viewer;
 
     constructor(options: T) {

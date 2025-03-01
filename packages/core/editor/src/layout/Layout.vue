@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {Pane, Splitpanes} from 'splitpanes'
-import 'splitpanes/dist/splitpanes.css'
+import '../styles/splitpanes.css'
 import LeftPanel from "./leftPanel/LeftPanel.vue";
 import SceneView from "./SceneView.vue";
 import AttributePane from "./AttributePane.vue";
@@ -21,5 +21,6 @@ import AttributePane from "./AttributePane.vue";
 </template>
 
 <style scoped>
+
 
 </style>

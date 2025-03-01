@@ -6,8 +6,11 @@ import {useAmbientLight} from "../testCore/useAmbientLight.ts";
 import * as THREE from "three";
 import {BoxGeometry, Mesh, MeshStandardMaterial} from "three";
 import {useBus, useSetViewer,} from "../hooks";
-import {Control, SidePane, Statistical} from "./sceneView";
+import {Control, CameraSettingPane, Statistical} from "./sceneView";
 import type {IDragInfo} from "../interface/IDragInfo.ts";
+import CameraView from "./sceneView/CameraView.vue";
+import CameraInfo from "./sceneView/CameraInfo.vue";
+import Tool from "./sceneView/Tool.vue";
 
 const canvasContainer = ref<HTMLDivElement>();
 const route = useRoute();
@@ -82,8 +85,8 @@ onMounted(() => {
     // url: "/aaa.glb",
   })
   _viewer.assetManager.loadGltf(asset).then((model) => {
-    console.log("model",model)
-    _viewer.editor.addObjectExecute(model);
+    console.log("model", model)
+    // _viewer.editor.addObjectExecute(model);
   })
 })
 const bus = useBus();
@@ -101,10 +104,10 @@ const onDrop = (event: DragEvent) => {
     console.log(viewer?.assetManager)
     console.log(viewer?.assetManager.dragHandler)
     viewer?.assetManager.dragHandler(event)
-  }else {
+  } else {
     const data = event!.dataTransfer!.getData('data');
     const info = JSON.parse(data) as IDragInfo;
-    if (info){
+    if (info) {
       panelDrop(info)
     }
   }
@@ -113,7 +116,7 @@ const onDrop = (event: DragEvent) => {
 /**
  * 从面板拖动到容器
  */
-const panelDrop = (info: IDragInfo)=>{
+const panelDrop = (info: IDragInfo) => {
   const viewer = bus.viewer;
   const scene = viewer?.scene!;
 
@@ -233,13 +236,18 @@ function createLight(info: IDragInfo) {
 </script>
 
 <template>
-  <div ref="canvasContainer" class="container" @drop="onDrop">
-    <control/>
-    <side-pane/>
-    <statistical/>
+  <div class="h-full w-full relative flex flex-col">
+    <div ref="canvasContainer" class="container w-full  relative flex-1"  @drop="onDrop">
+      <tool/>
+      <control/>
+      <camera-view/>
+      <camera-setting-pane/>
+    </div>
+    <camera-info/>
   </div>
 </template>
 
 <style scoped>
 
 </style>
+

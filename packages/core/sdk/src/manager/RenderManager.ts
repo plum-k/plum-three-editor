@@ -1,11 +1,11 @@
 import {SRGBColorSpace, WebGLRenderer} from "three";
-import {BasePlum, IBasePlumOptions} from "../core/BasePlum";
+import {Module, IModuleOptions } from "../core/Module";
 import {IResourceManagers} from "./AssetManager";
 
-export interface IRenderManagerOptions extends IBasePlumOptions {
+export interface IRenderManagerOptions extends IModuleOptions  {
 }
 
-export class RenderManager extends BasePlum {
+export class RenderManager extends Module {
     defaultWebGLRenderer: WebGLRenderer;
 
     constructor(options: IResourceManagers) {
