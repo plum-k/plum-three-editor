@@ -1,7 +1,7 @@
 import {fromEvent, Subject} from 'rxjs';
 import {Module, IModuleOptions } from "../core/Module";
 import * as THREE from 'three';
-import {ThreeTool} from "../tool/ThreeTool";
+import {Tool} from "../tool/Tool";
 
 export interface IEventManagerOptions extends IModuleOptions  {
 }
@@ -79,7 +79,7 @@ export class EventManager extends Module {
         //鼠标按下事件
         const pointerdown = fromEvent<DragEvent>(this.container, 'pointerdown');
         pointerdown.subscribe((event) => {
-            const array = ThreeTool.getMousePosition(event, this.container);
+            const array = Tool.getMousePosition(event, this.container);
             if (event.button === 0) {
                 this.onLeftDownPosition.fromArray(array);
                 // 
@@ -93,7 +93,7 @@ export class EventManager extends Module {
         //鼠标抬起事件
         const pointerup = fromEvent<DragEvent>(this.container, 'pointerup');
         pointerup.subscribe((event) => {
-            const array = ThreeTool.getMousePosition(event, this.container);
+            const array = Tool.getMousePosition(event, this.container);
             if (event.button === 0) {
                 this.onLeftUpPosition.fromArray(array);
                 if (this.onLeftDownPosition.distanceTo(this.onLeftUpPosition) === 0) {

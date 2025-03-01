@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Heatmap from "heatmap";
 import HeatmapInstance, {DataPoint, HeatmapConfig} from "heatmap";
-import {deepMergeRetain, ThreeTool} from "../../tool";
+import {deepMergeRetain, Tool} from "../../tool";
 import {Object3D} from "three/src/core/Object3D";
 
 export interface IHeatMap3dMeshSetDataOptions {
@@ -49,7 +49,7 @@ export class HeatMap3dMesh extends Object3D {
             return new THREE.Vector3(d.x, 0, d.y)
         });
 
-        const box3 = ThreeTool.getBox3ByV3Array(v3Array);
+        const box3 = Tool.getBox3ByV3Array(v3Array);
 
 
         let minValue = Number.MAX_SAFE_INTEGER

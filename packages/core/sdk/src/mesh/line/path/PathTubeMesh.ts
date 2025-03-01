@@ -7,7 +7,7 @@ export interface IPathTubePointListOptions extends PathTubeGeometryOptions {
     generateUv2?: boolean
 }
 
-export interface IPathTubeOptions {
+export interface IPathTubeMeshOptions {
     pathPointListParams: ISetPathPointListOptions;
     pathTubeGeometryParams: IPathTubePointListOptions;
     meshBasicMaterialParams?: MeshBasicMaterialParameters
@@ -17,7 +17,7 @@ export class PathTubeMesh extends Mesh<PathTubeGeometry> {
 
     pathPointList: PathPointList = new PathPointList();
 
-    constructor(_options: IPathTubeOptions) {
+    constructor(_options: IPathTubeMeshOptions) {
         super();
         const {pathPointListParams, pathTubeGeometryParams, meshBasicMaterialParams} = _options;
         this.setPathPointList(pathPointListParams);

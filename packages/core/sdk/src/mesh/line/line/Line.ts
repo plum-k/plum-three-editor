@@ -2,7 +2,7 @@ import * as THREE from "three";
 import {isNil} from "lodash-es";
 import {LineDashedMaterialParameters} from "three/src/materials/LineDashedMaterial";
 import {isColor} from "three-is";
-import {deepMergeRetain, ThreeTool} from "../../../tool";
+import {deepMergeRetain, Tool} from "../../../tool";
 
 export enum LineType {
     Line = "Line",
@@ -72,7 +72,7 @@ export class Line extends THREE.Object3D {
             !isNil(materialParams) && this.material.setValues(materialParams);
         }
         this.options = deepMergeRetain(this.options, _options);
-        this.points = ThreeTool.v3ArrayToVector3Array(this.options.points);
+        this.points = Tool.v3ArrayToVector3Array(this.options.points);
 
         this.setPoints();
         this.setColors();

@@ -3,7 +3,7 @@ import {Module, IModuleOptions } from "./Module";
 import {Object3D} from "three/src/core/Object3D";
 import {isPerspectiveCamera} from "three-is";
 import {isNil} from "lodash-es";
-import {ThreeTool} from "../tool/ThreeTool";
+import {Tool} from "../tool/Tool";
 
 export interface IPickOptions extends IModuleOptions  {
 }
@@ -17,26 +17,26 @@ export class Pick extends Module {
         this.raycaster = new THREE.Raycaster();
 
         this.eventManager.leftClickSubject.subscribe((event) => {
-            this.pointer.fromArray(ThreeTool.getNFC(event, this.container))
+            this.pointer.fromArray(Tool.getNFC(event, this.container))
             const pickObj = this.pick(this.scene, this.camera, event);
             this.eventManager.leftClickPickSubject.next(pickObj);
         })
 
         this.eventManager.rightClickSubject.subscribe((event) => {
-            this.pointer.fromArray(ThreeTool.getNFC(event, this.container))
+            this.pointer.fromArray(Tool.getNFC(event, this.container))
             const pickObj = this.pick(this.scene, this.camera, event);
             this.eventManager.rightClickPickSubject.next(pickObj);
         })
 
         // todo 性能消耗大
         // this.eventManager.pointerMoveSubject.subscribe((event) => {
-        //     this.pointer.fromArray(ThreeTool.getNFC(event, this.container))
+        //     this.pointer.fromArray(Tool.getNFC(event, this.container))
         //     const pickObj = this.pick(this.scene, this.camera, event);
         //     this.eventManager.pointerMovePickSubject.next(pickObj);
         // })
 
         this.eventManager.dblClickSubject.subscribe((event) => {
-            this.pointer.fromArray(ThreeTool.getNFC(event, this.container))
+            this.pointer.fromArray(Tool.getNFC(event, this.container))
             const pickObj = this.pick(this.scene, this.camera, event);
             this.eventManager.dblClickPickSubject.next(pickObj);
         })

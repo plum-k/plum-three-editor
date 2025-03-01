@@ -5,7 +5,7 @@ import {LineSegments2} from "three/examples/jsm/lines/LineSegments2";
 import {Wireframe} from "three-stdlib";
 import {isNil} from "lodash-es";
 import {isColor} from "three-is";
-import {deepMergeRetain, ThreeTool} from "../../../tool";
+import {deepMergeRetain, Tool} from "../../../tool";
 import {Object3D} from "three/src/core/Object3D";
 import {LineGeometry} from "three/examples/jsm/lines/LineGeometry";
 import {LineSegmentsGeometry} from "three/examples/jsm/lines/LineSegmentsGeometry";
@@ -98,7 +98,7 @@ export class Line2 extends Object3D {
         this.line.material = this.material;
 
         this.options = deepMergeRetain(this.options, _options);
-        this.points = ThreeTool.v3ArrayToVector3Array(this.options.points);
+        this.points = Tool.v3ArrayToVector3Array(this.options.points);
         this.setPoints();
         // this.setColors();
     }
@@ -120,7 +120,7 @@ export class Line2 extends Object3D {
 
     setPoints(points: Array<THREE.Vector3> = this.getLinePoints()) {
         this.updateGeometry();
-        let pointArray = ThreeTool.v3ArrayToNum3Array(points).flat();
+        let pointArray = Tool.v3ArrayToNum3Array(points).flat();
         this.line.geometry?.setPositions(pointArray);
         this.line.computeLineDistances();
     }

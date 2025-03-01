@@ -6,6 +6,6 @@ export * from "./extractFileNameAndExtension";
 export * from "./getStatistics";
 export * from "./LineTool";
 export * from "./shaderMaterial";
-export * from "./ThreeTool";
+export * from "./Tool";
 export * from "./core";
 export * from "./throw";

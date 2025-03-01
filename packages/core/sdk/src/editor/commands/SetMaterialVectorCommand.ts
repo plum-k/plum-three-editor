@@ -1,6 +1,6 @@
 import {Command} from "./Command";
 import * as THREE from "three";
-import {ThreeTool} from "../../tool";
+import {Tool} from "../../tool";
 
 export class SetMaterialVectorCommand extends Command<THREE.Vector3> {
     type: string = 'SetMaterialVectorCommand';
@@ -23,7 +23,7 @@ export class SetMaterialVectorCommand extends Command<THREE.Vector3> {
         this.object = object;
         this.materialSlot = materialSlot;
 
-        const material = (object !== null) ? ThreeTool.getObjectMaterial(object, materialSlot) : null;
+        const material = (object !== null) ? Tool.getObjectMaterial(object, materialSlot) : null;
 
         this.oldValue = (material !== null) ? material[attributeName].toArray() : null;
         this.newValue = newValue;
@@ -32,7 +32,7 @@ export class SetMaterialVectorCommand extends Command<THREE.Vector3> {
     }
 
     execute() {
-        const material = ThreeTool.getObjectMaterial(this.object, this.materialSlot);
+        const material = Tool.getObjectMaterial(this.object, this.materialSlot);
 
         material[this.attributeName].fromArray(this.newValue!);
 
@@ -40,7 +40,7 @@ export class SetMaterialVectorCommand extends Command<THREE.Vector3> {
     }
 
     undo() {
-        const material = ThreeTool.getObjectMaterial(this.object, this.materialSlot);
+        const material = Tool.getObjectMaterial(this.object, this.materialSlot);
 
         material[this.attributeName].fromArray(this.oldValue!);
 

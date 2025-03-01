@@ -2,14 +2,9 @@ import {PathPointList, PathTubeGeometry, PathTubeGeometryOptions} from "three.pa
 import * as THREE from "three";
 import {LineDashedMaterialParameters} from "three/src/materials/LineDashedMaterial";
 import {deepMergeRetain} from "../tool";
+import {PathPointListOptions} from "./Path";
 
 
-export interface PathPointListOptions {
-    cornerRadius?: number;
-    cornerSplit?: number;
-    up?: THREE.Vector3 | null;
-    close?: boolean;
-}
 
 export interface IPathTubeOptions {
     points?: Array<THREE.Vector3>;

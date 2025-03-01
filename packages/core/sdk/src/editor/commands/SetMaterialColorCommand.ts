@@ -1,6 +1,6 @@
 import {Command} from "./Command";
 import * as THREE from 'three';
-import {ThreeTool} from "../../tool";
+import {Tool} from "../../tool";
 
 
 export class SetMaterialColorCommand extends Command<number> {
@@ -15,7 +15,7 @@ export class SetMaterialColorCommand extends Command<number> {
         this.object = object;
         this.materialSlot = materialSlot;
 
-        const material = (object !== null) ? ThreeTool.getObjectMaterial(object, materialSlot) : null;
+        const material = (object !== null) ? Tool.getObjectMaterial(object, materialSlot) : null;
         // @ts-ignore
         this.oldValue = (material !== null) ? material[attributeName].getStyle() : null;
         
@@ -24,14 +24,14 @@ export class SetMaterialColorCommand extends Command<number> {
     }
 
     execute() {
-        const material = ThreeTool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
+        const material = Tool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
         // @ts-ignore
         material[this.attributeName].setStyle(this.newValue!);
         // this.editor.signals.materialChanged.dispatch(this.object, this.materialSlot);
     }
 
     undo() {
-        const material = ThreeTool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
+        const material = Tool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
         // @ts-ignore
         material[this.attributeName].setStyle(this.oldValue!);
         // this.editor.signals.materialChanged.dispatch(this.object, this.materialSlot);

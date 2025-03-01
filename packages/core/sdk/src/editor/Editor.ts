@@ -26,7 +26,7 @@ import {
 
 import {Grid} from "../mesh";
 import {VertexNormalsHelper} from "three-stdlib";
-import {ThreeTool} from "../tool";
+import {Tool} from "../tool";
 import {EditorEventManager} from "./EditorEventManager";
 import {Selector} from "./Selector";
 import {TransformControlsWarp} from "./TransformControlsWarp";
@@ -127,8 +127,8 @@ export class Editor extends Module {
                       newParentUUid: string,
                       newBefore: number) {
         // todo
-        const object = ThreeTool.getObjectByUuid(this.scene, objectUUid)!;
-        const newParent = ThreeTool.getObjectByUuid(this.scene, newParentUUid)!;
+        const object = Tool.getObjectByUuid(this.scene, objectUUid)!;
+        const newParent = Tool.getObjectByUuid(this.scene, newParentUUid)!;
         // 
         this.execute(new MoveObjectCommand(object, newParent, newBefore,))
     }

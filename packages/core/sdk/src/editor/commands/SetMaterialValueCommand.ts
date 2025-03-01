@@ -1,7 +1,7 @@
 import {Command} from "./Command";
 import * as THREE from 'three';
 import {set} from "lodash-es";
-import {ThreeTool} from "../../tool";
+import {Tool} from "../../tool";
 
 
 export class SetMaterialValueCommand extends Command {
@@ -21,7 +21,7 @@ export class SetMaterialValueCommand extends Command {
         this.object = object;
         this.materialSlot = materialSlot;
 
-        const material = (object !== null) ? ThreeTool.getObjectMaterial(object as THREE.Mesh, materialSlot) : null;
+        const material = (object !== null) ? Tool.getObjectMaterial(object as THREE.Mesh, materialSlot) : null;
 
         this.oldValue = (material !== null) ? material[attributeName] : null;
         this.newValue = newValue;
@@ -30,7 +30,7 @@ export class SetMaterialValueCommand extends Command {
     }
 
     execute(): void {
-        const material = ThreeTool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
+        const material = Tool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
         set(material, this.attributeName, this.newValue);
         material.needsUpdate = true;
         // this.editor.signals.objectChanged.dispatch(this.object!);
@@ -38,7 +38,7 @@ export class SetMaterialValueCommand extends Command {
     }
 
     undo(): void {
-        const material = ThreeTool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
+        const material = Tool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
         set(material, this.attributeName, this.oldValue);
         material.needsUpdate = true;
         // this.editor.signals.objectChanged.dispatch(this.object!);

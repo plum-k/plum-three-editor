@@ -5,7 +5,7 @@ import {IPick} from "../../manager/EventManager";
 import {Line2} from "../../mesh/line/line2/Line2";
 import {isNil, round} from "lodash-es";
 import {TextSprite} from "../../mesh/label/TextSprite";
-import {ThreeTool} from "../../tool";
+import {Tool} from "../../tool";
 
 export enum EDistanceMeasureTextModel {
     Segment, // 分段长度
@@ -142,10 +142,10 @@ export class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
         if (textModel === EDistanceMeasureTextModel.Segment) {
             distance = this.points[startIndex].distanceTo(this.points[startIndex + 1]);
         } else {
-            distance = ThreeTool.calculateTotalLength(this.points)
+            distance = Tool.calculateTotalLength(this.points)
             // const distance = this.points[startIndex].distanceTo(this.points[startIndex + 1]);
         }
-        const center = ThreeTool.calculateCenter(this.points[startIndex], this.points[startIndex + 1]);
+        const center = Tool.calculateCenter(this.points[startIndex], this.points[startIndex + 1]);
         const text = `${round(distance, 2)} 米`;
         return {
             text: text,
@@ -155,8 +155,8 @@ export class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
     }
 
     getLabelTotalInfo() {
-        const distance = ThreeTool.calculateTotalLength(this.points)
-        const center = ThreeTool.getBox3ByV3Array(this.points).getCenter(new THREE.Vector3());
+        const distance = Tool.calculateTotalLength(this.points)
+        const center = Tool.getBox3ByV3Array(this.points).getCenter(new THREE.Vector3());
         const text = `${round(distance, 2)} 米`;
         return {
             text: text,

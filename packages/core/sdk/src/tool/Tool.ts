@@ -7,7 +7,7 @@ export type Vector3Array = Array<THREE.Vector3>
 export type Num3Array = Array<[number, number, number]>
 export type V3Array = Num3Array | Vector3Array
 
-export class ThreeTool {
+export class Tool {
     static getObjectMaterial(object: THREE.Mesh, slot?: number): THREE.Material {
         let material = object.material;
         if (Array.isArray(material) && slot !== undefined) {
@@ -37,10 +37,9 @@ export class ThreeTool {
     }
 
     static calculateCenter(pointA: THREE.Vector3, pointB: THREE.Vector3) {
-        const centerPoint = new THREE.Vector3()
+        return new THREE.Vector3()
             .addVectors(pointA, pointB)
             .multiplyScalar(0.5);
-        return centerPoint;
     }
 
     static calculateTotalLength(points: Array<THREE.Vector3>) {
@@ -85,13 +84,13 @@ export class ThreeTool {
 
     static getQuadraticBezierCurve3Points(array: V3Array) {
         return {
-            vector3Array: ThreeTool.v3ArrayToVector3Array(array),
-            num3Array: ThreeTool.v3ArrayToNum3Array(array)
+            vector3Array: Tool.v3ArrayToVector3Array(array),
+            num3Array: Tool.v3ArrayToNum3Array(array)
         }
     }
 
     static getBox3ByV3Array(array: V3Array) {
-        const v3Array = ThreeTool.v3ArrayToVector3Array(array);
+        const v3Array = Tool.v3ArrayToVector3Array(array);
         return new THREE.Box3().setFromPoints(v3Array);
     }
 
@@ -135,7 +134,7 @@ export class ThreeTool {
 
     // 归一化设备坐标
     static getNFC(event: MouseEvent, dom: HTMLElement) {
-        let [x, y] = ThreeTool.getMousePosition(event, dom)
+        let [x, y] = Tool.getMousePosition(event, dom)
         x = normalize(x, 0, 1, -1, 1)
         y = normalize(y, 0, 1, -1, 1);
         return [x, -y];

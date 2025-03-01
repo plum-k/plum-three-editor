@@ -15,7 +15,7 @@ export interface IPathPointListOptions extends PathGeometryOptions {
     generateUv2?: boolean
 }
 
-export interface IPathOptions {
+export interface IPathMeshOptions {
     pathPointListParams: ISetPathPointListOptions;
     pathGeometryParams: IPathPointListOptions;
     meshBasicMaterialParams?: MeshBasicMaterialParameters
@@ -25,7 +25,7 @@ export class PathMesh extends Mesh<PathGeometry> {
 
     pathPointList: PathPointList = new PathPointList();
 
-    constructor(_options: IPathOptions) {
+    constructor(_options: IPathMeshOptions) {
         super();
         const {pathPointListParams, pathGeometryParams, meshBasicMaterialParams} = _options;
         this.setPathPointList(pathPointListParams);

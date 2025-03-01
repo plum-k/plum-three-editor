@@ -2,7 +2,7 @@ import {Command} from "./Command";
 import * as THREE from 'three';
 import {Material, ObjectLoader} from 'three';
 import {isMesh} from "three-is";
-import {ThreeTool} from "../../tool";
+import {Tool} from "../../tool";
 
 export class SetMaterialCommand extends Command<THREE.Material | null> {
     type: string = 'SetMaterialCommand';
@@ -16,17 +16,17 @@ export class SetMaterialCommand extends Command<THREE.Material | null> {
         this.object = object;
         this.materialSlot = materialSlot;
 
-        this.oldValue = isMesh(object) ? ThreeTool.getObjectMaterial(object, materialSlot) : null;
+        this.oldValue = isMesh(object) ? Tool.getObjectMaterial(object, materialSlot) : null;
         this.newValue = newValue;
     }
 
     execute(): void {
-        ThreeTool.setObjectMaterial(this.object as THREE.Mesh, this.materialSlot, this.newValue as THREE.Material);
+        Tool.setObjectMaterial(this.object as THREE.Mesh, this.materialSlot, this.newValue as THREE.Material);
         // this.editor.signals.materialChanged.dispatch(this.object, this.materialSlot);
     }
 
     undo(): void {
-        ThreeTool.setObjectMaterial(this.object as THREE.Mesh, this.materialSlot, this.oldValue as THREE.Material);
+        Tool.setObjectMaterial(this.object as THREE.Mesh, this.materialSlot, this.oldValue as THREE.Material);
         // this.editor.signals.materialChanged.dispatch(this.object, this.materialSlot);
     }
 

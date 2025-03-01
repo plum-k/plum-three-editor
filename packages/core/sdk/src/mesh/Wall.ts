@@ -1,6 +1,6 @@
 import {CatmullRomCurve3, ExtrudeGeometry, Mesh, MeshStandardMaterial, Object3D, Shape, Vector2, Vector3} from "three";
 import {CurveType} from "three/src/extras/curves/CatmullRomCurve3";
-import {ThreeTool, V3Array} from "../tool";
+import {Tool, V3Array} from "../tool";
 import {ExtrudeGeometryOptions} from "three/src/geometries/ExtrudeGeometry";
 
 export interface IWallOption {
@@ -33,7 +33,7 @@ export class Wall extends Object3D {
 
         const shape = new Shape(pts2);
 
-        this.points = ThreeTool.v3ArrayToVector3Array(points)
+        this.points = Tool.v3ArrayToVector3Array(points)
 
 
         const curve = new CatmullRomCurve3(this.points, closed, curveType, tension);
