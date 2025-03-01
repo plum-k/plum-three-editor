@@ -6,7 +6,7 @@ import {AssetLibrary, BaseResourcePanel} from "./resourcePanel";
 const activeName = ref('基础')
 
 const handleClick = (tab: any, event: Event) => {
-  console.log(tab, event)
+
 }
 
 </script>

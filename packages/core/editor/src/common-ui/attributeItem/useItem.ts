@@ -23,7 +23,7 @@ export const useItem = (props: IItemProps) => {
         sync()
         const viewer = bus.viewer!;
         viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
-            console.log('1111')
+            
             sync();
         })
     })

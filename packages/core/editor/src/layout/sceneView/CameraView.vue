@@ -18,7 +18,7 @@ const cameraViewArray = [
   { label: "左视图", value: CameraViewType.Left },
 ];
 const change = (val: CameraViewType) => {
-  console.log(val)
+
   const viewer = bus.viewer;
   if (viewer) {
       viewer.threeCameraControls.setCameraViewType(val);

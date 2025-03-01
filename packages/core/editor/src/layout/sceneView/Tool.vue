@@ -5,6 +5,7 @@ import {useBus} from "../../hooks";
 import {BoolItem, InputNumberItem} from "../../common-ui";
 import {getStatistics} from "@plum-render/three-sdk";
 import {throttleTime} from "rxjs";
+import {useAttributeProvide} from "../../hooks/useAttributeProvide.ts";
 
 const bus = useBus();
 const form = reactive({
@@ -35,8 +36,9 @@ const info = reactive({
   triangles: 0,
   frameTime: 0
 })
+const {objectAttributeChangeSubject} = useAttributeProvide()
+objectAttributeChangeSubject.subscribe((object) => {
 
-bus.objectAttributeChangeSubject.subscribe((object) => {
   const {name, value} = object;
   const viewer = bus.viewer;
   if (!viewer) return;
@@ -81,7 +83,7 @@ onMounted(() => {
     </template>
     <el-form :model="form" class="h-full" label-width="auto" size="small">
       <bool-item label="帧率" name="fps"/>
-      <input-number-item label="渲染信息" name="statistics"/>
+      <bool-item label="渲染信息" name="statistics"/>
       <bool-item label="网格显示" name="grid"/>
       <input-number-item label="网格大小" name="distance"/>
       <bool-item label="坐标轴显示" name="axes"/>

@@ -7,7 +7,7 @@ interface Props extends IDragInfo {
 
 const props = defineProps<Props>();
 const {label, icon} = props;
-console.log(props)
+
 const onDragStart = (event: any) => {
   event.dataTransfer.setData('data', JSON.stringify(props))
 }

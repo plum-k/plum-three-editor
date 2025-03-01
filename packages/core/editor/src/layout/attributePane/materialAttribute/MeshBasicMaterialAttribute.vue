@@ -4,7 +4,7 @@ import {computed, inject, onMounted, reactive, ref} from "vue";
 import {isArray, set} from "lodash-es";
 import * as THREE from "three";
 import {isMesh} from "three-is";
-import {useBus} from "../../../hooks";
+import {useAttributeProvide, useBus} from "../../../hooks";
 import {BoolItem, ColorItem, InputNumberItem, SelectItem, TextItem, Vector2Item} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
 
@@ -29,7 +29,7 @@ onMounted(() => {
 
 const sync = () => {
   const object = bus.selectObject;
-  console.log("更新材质对象", object);
+
   if (object && isMesh(object) && isActive.value) {
     isVisible.value = true;
     threeSyncUi(object);
@@ -39,8 +39,9 @@ const sync = () => {
 }
 
 // ui -> three
-bus.objectAttributeChangeSubject.subscribe((editValue) => {
-  console.log(editValue)
+const {objectAttributeChangeSubject} = useAttributeProvide()
+objectAttributeChangeSubject.subscribe((editValue) => {
+
   const {name, value} = editValue;
   const object = bus.selectObject;
   if (!object) return;
@@ -108,7 +109,7 @@ const threeSyncUi = (object: THREE.Mesh) => {
 
   form.wireframe = material.wireframe;
 
-  console.log(form)
+
 }
 </script>
 

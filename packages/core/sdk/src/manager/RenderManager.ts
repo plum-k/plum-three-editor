@@ -44,7 +44,7 @@ export class RenderManager extends Module {
     }
 
     animate() {
-        // console.log("动画")
+        // 
         const clock = this.viewer.clock;
         const delta = clock.getDelta();
         // this.eventManager.animateSubject.next(delta);
@@ -65,11 +65,11 @@ export class RenderManager extends Module {
         const cameraControls = this.threeCameraControls.cameraControls;
 
         const updated = cameraControls.update(delta);
-        // console.log(cameraControls.camera.position)
+        // 
 
         this.defaultWebGLRenderer.render(this.scene, this.camera);
 
-        // console.log("111111111")
+        // 
 
         // if (this.editor.view3DHelper.animating) {
         // cameraControls.enabled = false;

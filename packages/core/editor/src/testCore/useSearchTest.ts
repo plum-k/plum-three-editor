@@ -13,7 +13,7 @@ const useSearchTest = (viewer: Viewer) => {
             value: 'MeshStandardMaterial'
         }
     ])
-    console.log(aaa)
+    
 }
 
 export default useSearchTest;

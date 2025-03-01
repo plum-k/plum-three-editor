@@ -87,27 +87,27 @@ export class Editor extends Module {
     }
 
     setValueExecute(object: THREE.Object3D, attributePath: PropertyPath, newValue: any, oldValue: any = undefined) {
-        // console.log(newValue)
+        // 
         this.execute(new SetValueCommand(object, attributePath, newValue, oldValue))
     }
 
     setMaterialExecute(object: THREE.Object3D, newValue: THREE.Material, materialSlot: number = -1) {
-        // console.log(newValue)
+        // 
         this.execute(new SetMaterialCommand(object, newValue, materialSlot,))
     }
 
     setMaterialColorExecute(object: THREE.Object3D, attributeName: string = '', newValue: number, materialSlot: number = -1) {
-        // console.log(newValue)
+        // 
         this.execute(new SetMaterialColorCommand(object, attributeName, newValue, materialSlot,))
     }
 
     setMaterialValueExecute(object: THREE.Object3D, attributeName: string = '', newValue: number, materialSlot: number = -1) {
-        // console.log(newValue)
+        // 
         this.execute(new SetMaterialValueCommand(object, attributeName, newValue, materialSlot,))
     }
 
     // setMaterialMapExecute(object: THREE.Object3D, attributeName: string = '', newValue: TexImageSource | OffscreenCanvas, materialSlot: number = -1) {
-    //     // console.log(newValue)
+    //     // 
     //     const texture = new THREE.Texture(newValue)
     //     this.command(new SetMaterialMapCommand(object, attributeName, texture, materialSlot,))
     // }
@@ -129,7 +129,7 @@ export class Editor extends Module {
         // todo
         const object = ThreeTool.getObjectByUuid(this.scene, objectUUid)!;
         const newParent = ThreeTool.getObjectByUuid(this.scene, newParentUUid)!;
-        // console.log(newValue)
+        // 
         this.execute(new MoveObjectCommand(object, newParent, newBefore,))
     }
 

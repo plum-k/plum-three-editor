@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {ElEmpty} from "element-plus";
 import {onMounted, reactive, ref} from "vue";
-import {isArray} from "lodash-es";
+import {isArray, isNil} from "lodash-es";
 import {
   isLineBasicMaterial,
   isLineDashedMaterial,
@@ -39,12 +39,13 @@ import {
   SpriteMaterialAttribute
 } from "./materialAttribute";
 import {useBus} from "../../hooks";
-import * as THREE from "three";
 
 // const {isActive} = useAttributePane(props)
 const bus = useBus();
 // const props = defineProps<AttributePaneNameProps>();
 
+const show = ref(true);
+const text = ref("未选择对象");
 // 定义材质的显示状态
 const materialShow = reactive({
   isLineBasicMaterial: false,
@@ -67,8 +68,14 @@ const materialShow = reactive({
 
 // 同步材质状态的函数
 const sync = () => {
-  const object = bus.selectObject
+  const object = bus.selectObject;
+  if (isNil(object)) {
+    show.value = true;
+    text.value = "未选择对象";
+    return;
+  }
   if (isMesh(object)) {
+    show.value = false;
     const _material = object.material;
     const material = isArray(_material) ? _material[0] : _material;
     materialShow.isLineBasicMaterial = isLineBasicMaterial(material);
@@ -87,7 +94,9 @@ const sync = () => {
     materialShow.isShadowMaterial = isShadowMaterial(material);
     materialShow.isSpriteMaterial = isSpriteMaterial(material);
     materialShow.isPointsMaterial = isPointsMaterial(material);
-    console.log("materialShow", materialShow)
+  }else {
+    show.value = true;
+    text.value = "对象没有材质";
   }
 };
 bus.viewerInitSubject.subscribe(() => {
@@ -95,7 +104,7 @@ bus.viewerInitSubject.subscribe(() => {
   if (viewer) {
     viewer.editor.editorEventManager.objectSelected.subscribe(() => {
       sync();
-      console.log("监听22222222222222")
+
     })
     sync();
   }
@@ -106,7 +115,7 @@ onMounted(() => {
   sync();
   viewer.editor.editorEventManager.objectSelected.subscribe(() => {
     sync();
-    console.log("监听1111111111111111")
+
   })
 })
 
@@ -131,7 +140,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <line-basic-material-attribute v-if="materialShow.isLineBasicMaterial"/>
+  <div v-if="show" class="h-full flex justify-center items-center">
+    <el-empty :description="text"/>
+  </div>
+  <line-basic-material-attribute v-else-if="materialShow.isLineBasicMaterial"/>
   <line-dashed-material-attribute v-else-if="materialShow.isLineDashedMaterial"/>
   <mesh-basic-material-attribute v-else-if="materialShow.isMeshBasicMaterial"/>
   <mesh-depth-material-attribute v-else-if="materialShow.isMeshDepthMaterial"/>
@@ -146,9 +158,7 @@ onMounted(() => {
   <shader-material-attribute v-else-if="materialShow.isShaderMaterial"/>
   <shadow-material-attribute v-else-if="materialShow.isShadowMaterial"/>
   <sprite-material-attribute v-else-if="materialShow.isSpriteMaterial"/>
-  <div v-else class="h-full flex justify-center items-center">
-    <el-empty description="未选择对象"/>
-  </div>
+
 </template>
 
 <style scoped>

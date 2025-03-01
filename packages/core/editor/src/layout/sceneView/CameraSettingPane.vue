@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {reactive} from "vue";
 import {ElButton, ElForm, ElPopover} from "element-plus";
-import {useBus} from "../../hooks";
+import {useAttributeProvide, useBus} from "../../hooks";
 import {InputNumberItem} from "../../common-ui";
 import * as THREE from "three";
 import {set} from "lodash-es";
@@ -41,8 +41,9 @@ const threeToUi = () => {
   form.maxPolarAngle = cameraControls.maxPolarAngle;
 }
 
-bus.objectAttributeChangeSubject.subscribe((editValue) => {
-  console.log(editValue)
+const {objectAttributeChangeSubject} = useAttributeProvide()
+objectAttributeChangeSubject.subscribe((editValue) => {
+
   const {name, value} = editValue;
 
   const viewer = bus.viewer;

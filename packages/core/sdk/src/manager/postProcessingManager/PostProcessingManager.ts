@@ -203,7 +203,7 @@ export class PostProcessingManager extends Module {
 
     //----------------- effectPass -----------------
     initEffectPass() {
-        console.log(this.effects)
+        
         this.effectPass = new EffectPass(this.viewer.threeCameraControls.camera, ...this.effects);
     }
 
@@ -217,6 +217,6 @@ export class PostProcessingManager extends Module {
     setSize(width: number, height: number) {
         this.composer.setSize(width, height);
         // this.selectiveBloomEffect?.setSize(width, height);
-        // console.log(this?.selectiveBloomEffect)
+        // 
     }
 }

@@ -112,15 +112,15 @@ export class HeatMap3dMesh extends Object3D {
         const material = new THREE.MeshBasicMaterial();
         const heatmap = this.heatmap;
         // @ts-ignore
-        console.log(heatmap._renderer.canvas)
+        
         // @ts-ignore
         const texture = new THREE.CanvasTexture(heatmap._renderer.canvas)
-        console.log(texture)
+        
         material.map = texture;
         material.side = THREE.DoubleSide;
         material.transparent = true;
         material.onBeforeCompile = (shader) => {
-            console.log(this.options.zoom)
+            
             shader.uniforms["height"] = {value: this.options.zoom};
             shader.vertexShader = shader.vertexShader.replace("#include <common>", `
 						#include <common>
@@ -130,7 +130,7 @@ export class HeatMap3dMesh extends Object3D {
 			 vec4 frgColor = texture2D(map, uv);
 			 float z = height * frgColor.a;
 			 transformed = vec3( position.x, position.y, z);`);
-            // console.log(shader.vertexShader)
+            // 
         };
 
         var link = document.createElement('a');

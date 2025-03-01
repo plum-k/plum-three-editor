@@ -26,7 +26,7 @@ export default function useLine2(_viewer: Viewer) {
         // [0, 0, 0],
         // [0, 0, 0],
     ]
-    console.log(_viewer.getSizeVector2())
+    
     const line = new Line2(
         {
             points: cc,
@@ -47,7 +47,7 @@ export default function useLine2(_viewer: Viewer) {
     _viewer.scene.add(line)
 
     let PARAMS = clone(line.options)
-    // console.log(PARAMS)
+    // 
     const pane = new Pane({
         container: _viewer.container
     });
@@ -69,16 +69,16 @@ export default function useLine2(_viewer: Viewer) {
     pane.addBinding(PARAMS, 'lineType', {
         options: Line2Type
     });
-    console.log(PARAMS)
+    
 
     // pane.addBinding(PARAMS.materialParams, 'color');
     // pane.addBinding(PARAMS.materialParams, 'alphaToCoverage');
     // pane.addBinding(PARAMS.materialParams, 'dashSize');
     // pane.addBinding(PARAMS.materialParams, 'gapSize');
     pane.on('change', (ev) => {
-        // console.log(ev)
-        console.log(PARAMS)
-        // console.log('changed: ' + JSON.stringify(ev.value));
+        // 
+        
+        // 
         line.update(PARAMS)
     });
 

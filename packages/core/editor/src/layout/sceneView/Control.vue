@@ -21,7 +21,7 @@ const options = [
 const bus = useBus();
 
 const change = (val: string) => {
-  console.log(val)
+
   const viewer = bus.viewer;
   if (viewer) {
     viewer.editor.transformControlsWarp.transformControls.setMode(val);

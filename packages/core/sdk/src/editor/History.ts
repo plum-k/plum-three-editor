@@ -54,11 +54,11 @@ export class History {
         // if (this.config.getKey('settings/history')) {
         //     cmd.json = cmd.toJSON();	// serialize the cmd immediately after execution and append the json to the cmd
         // }
-        // console.log(cmd)
+        // 
         this.lastCmdTime = Date.now();
         // clearing all the redo-commands
         this.redos = [];
-        // console.log(this.undos)
+        // 
         // this.editor.signals.historyChanged.dispatch(cmd);
     }
 
@@ -73,7 +73,7 @@ export class History {
             // this.editor.signals.historyChanged.dispatch(cmd);
         }
 
-        console.log(this.undos)
+        
         return cmd;
     }
 

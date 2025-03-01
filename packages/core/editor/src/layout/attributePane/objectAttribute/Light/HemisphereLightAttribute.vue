@@ -5,7 +5,7 @@ import {isHemisphereLightt, isHemisphereLight, isPointLight, isSpotLight, isDire
 import * as THREE from "three";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
 import {ElCheckbox, ElCheckboxGroup, ElEmpty, ElForm, ElFormItem} from "element-plus";
-import {useBus} from "../../../../hooks";
+import {useAttributeProvide, useBus} from "../../../../hooks";
 import {set} from "lodash-es";
 const bus = useBus();
 
@@ -51,8 +51,9 @@ const threeToUi = () => {
   form.frustumCulled = object.frustumCulled
   form.renderOrder = object.renderOrder
 }
-bus.objectAttributeChangeSubject.subscribe((editValue) => {
-  console.log(editValue)
+const {objectAttributeChangeSubject} = useAttributeProvide()
+objectAttributeChangeSubject.subscribe((editValue) => {
+
   const {name, value} = editValue;
   const object = bus.selectObject as THREE.HemisphereLight;
   if (!object) return;

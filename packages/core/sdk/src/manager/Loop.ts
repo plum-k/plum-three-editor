@@ -96,7 +96,7 @@ export class Loop extends Module {
 
             this.sceneRendered.next(this.renderTime)
         } catch (e) {
-            console.log(e)
+            
         }
 
     }

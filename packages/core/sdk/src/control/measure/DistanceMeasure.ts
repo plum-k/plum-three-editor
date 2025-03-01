@@ -96,12 +96,12 @@ export class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
             return;
         }
         const {pointStopNum, textModel} = this.options;
-        // console.log(this.points.length < pointStopNum)
+        // 
         // if (this.points.length < pointStopNum) {
         //     return;
         // }
         const points = [...this.points, position];
-        // console.log(points)
+        // 
         this.line.setPoints(points);
     }
 

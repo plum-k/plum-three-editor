@@ -65,16 +65,16 @@ export default function usePostProcessingManagerTest(viewer: Viewer) {
     // viewer.postProcessingManager.addEffectPass();
 
     // viewer.eventManager.leftClickPickSubject.subscribe((e) => {
-    //     console.log(e)
+    //     
     //     let c = viewer.postProcessingManager.addSelectiveBloomEffectObject(e.intersects[0].object);
-    //     console.log(c)
+    //     
     // })
     // const cloud = create();
     // cloud.scale.setScalar(0.4);
     // viewer.scene.add(cloud);
 
     // const a = viewer.scene.getObjectByName("球体")
-    // console.log(a)
+    // 
 
 
 }

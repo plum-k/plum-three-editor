@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import {ElFormItem, ElSelect} from "element-plus";
+import {useAttributeInject} from "../../hooks/useAttributeInject.ts";
 
 interface Props {
   name: string | string[];
   label: string;
 }
 
-const {name, label} = defineProps<Props>();
-
+const props = defineProps<Props>();
+const {objectAttributeChangeSubject, change} = useAttributeInject(props)
 </script>
 
 <template>

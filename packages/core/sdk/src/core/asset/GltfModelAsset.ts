@@ -10,19 +10,19 @@ export interface IGltfModelAsset extends IAsset {
  * ```ts
  * asset.loadSubject.subscribe({
  *     next: (gltf) => {
- *         console.log(gltf.scene)
+ *         
  *     },
  *     error: (error) => {
- *         console.log(error)
+ *         
  *     }
  * })
  *
  * asset.progressSubject.subscribe({
  *     next: (progress) => {
- *         console.log(progress+"%")
+ *         
  *     },
  *     error: (error) => {
- *         console.log(error)
+ *         
  *     }
  * })
  * ```

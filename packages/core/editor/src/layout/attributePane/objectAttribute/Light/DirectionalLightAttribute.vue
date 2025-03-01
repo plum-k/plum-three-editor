@@ -3,7 +3,7 @@ import {onMounted, reactive} from "vue";
 import * as THREE from "three";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
 import {ElForm} from "element-plus";
-import {useBus} from "../../../../hooks";
+import {useAttributeProvide, useBus} from "../../../../hooks";
 import {set} from "lodash-es";
 import {isDirectionalLight, isObject3D} from "three-is";
 
@@ -60,8 +60,9 @@ const threeToUi = () => {
   form.frustumCulled = object.frustumCulled
   form.renderOrder = object.renderOrder
 }
-bus.objectAttributeChangeSubject.subscribe((editValue) => {
-  console.log(editValue)
+const {objectAttributeChangeSubject} = useAttributeProvide()
+objectAttributeChangeSubject.subscribe((editValue) => {
+
   const {name, value} = editValue;
   const object = bus.selectObject as THREE.DirectionalLight;
   if (!object) return;

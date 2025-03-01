@@ -21,6 +21,7 @@ const form = reactive({
 
 const bus = useBus();
 onMounted(() => {
+
   const viewer = bus.viewer;
   if (!viewer) return;
   viewer.editor.editorEventManager.objectSelected.subscribe(() => {

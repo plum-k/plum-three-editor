@@ -48,7 +48,7 @@ export default function useCubicBezierLine(_viewer: Viewer) {
     _viewer.scene.add(line)
 
     let PARAMS = clone(line.options)
-    // console.log(PARAMS)
+    // 
     const pane = new Pane({
         container: _viewer.container
     });
@@ -62,7 +62,7 @@ export default function useCubicBezierLine(_viewer: Viewer) {
     pane.addBinding(PARAMS, 'materialType', {
         options: LineMaterialType
     });
-    console.log(PARAMS)
+    
 
     pane.addFolder({title: 'LineBasicMaterial'})
 
@@ -77,9 +77,9 @@ export default function useCubicBezierLine(_viewer: Viewer) {
 
 
     pane.on('change', (ev) => {
-        // console.log(ev)
-        console.log(PARAMS)
-        // console.log('changed: ' + JSON.stringify(ev.value));
+        // 
+        
+        // 
         line.update(PARAMS)
     });
 

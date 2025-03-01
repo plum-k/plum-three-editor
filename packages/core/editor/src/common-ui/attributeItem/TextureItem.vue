@@ -15,11 +15,11 @@ interface Props {
 
 const props = defineProps<Props>();
 const {name, label} = props
-console.log("name", name)
+
 const bus = useBus();
 // const change = (value: boolean) => {
-//   console.log(value)
-//   bus.objectAttributeChangeSubject.next({
+//
+//   objectAttributeChangeSubject.next({
 //     name: name,
 //     value: value
 //   });

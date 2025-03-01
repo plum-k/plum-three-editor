@@ -3,6 +3,7 @@ import {ElFormItem, ElSwitch, formContextKey, type SwitchProps} from "element-pl
 import {computed, inject} from "vue";
 import {useBus} from "../../hooks";
 import {get, isNil} from "lodash-es";
+import {useAttributeInject} from "../../hooks/useAttributeInject.ts";
 
 interface Props extends Partial<SwitchProps> {
   name: string;
@@ -10,15 +11,10 @@ interface Props extends Partial<SwitchProps> {
 }
 
 const formContext = inject(formContextKey, undefined)
-const {name, label} = defineProps<Props>();
+const props = defineProps<Props>();
+const {name, label} = props
 const bus = useBus();
-const change = (val: string | number | boolean) => {
-  console.log(val)
-  bus.objectAttributeChangeSubject.next({
-    name: name,
-    value: val
-  });
-}
+const {objectAttributeChangeSubject, change} = useAttributeInject(props)
 const isRender = computed(() => {
   return !isNil(get(formContext.model, name))
 })

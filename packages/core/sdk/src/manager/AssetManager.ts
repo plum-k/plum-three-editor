@@ -160,22 +160,22 @@ export class AssetManager extends Module {
 
 
     onStart = (url: string, loaded: number, total: number) => {
-        // console.log("onStart ", url, loaded, total)
-        // console.log("onStart ", loaded, total)
+        // 
+        // 
         this.startSubject.next({url, loaded, total})
     }
     onLoad = () => {
-        // console.log('onLoad ')
+        // 
         this.loadSubject.next({})
     }
     onProgress = (url: string, loaded: number, total: number) => {
-        // console.log("onProgress ", url, loaded, total)
-        // console.log("onProgress ", loaded, total)
+        // 
+        // 
         this.progressSubject.next({url, loaded, total})
     }
 
     onError = (url: string) => {
-        // console.log("onError ", url)
+        // 
         this.errorSubject.next({url})
     }
 
@@ -397,7 +397,7 @@ export class AssetManager extends Module {
 
     // 拖动事件
     dragHandler(event: DragEvent) {
-        console.log("事件触发")
+        
         const items = event.dataTransfer!.items
         const files = event.dataTransfer!.files;
         if (items) {
@@ -514,7 +514,7 @@ export class AssetManager extends Module {
             // 如果传入了filesMap参数，则使用传入的文件映射；否则调用getMap函数创建一个新的文件映射
             const map = filesMap ?? getMap();
             // 打印当前的文件映射，这里可能是用于调试目的，查看文件映射的内容
-            console.log(map);
+            
             // 遍历文件映射中的每个键值对
             for (const [value, mapElement] of map) {
                 // 调用this对象的loadFile函数来加载当前遍历到的文件对象

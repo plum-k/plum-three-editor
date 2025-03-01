@@ -2,6 +2,7 @@
 import {ElFormItem, ElInputNumber, formContextKey} from "element-plus";
 import {inject} from "vue";
 import {useBus} from "../../hooks";
+import {useAttributeInject} from "../../hooks/useAttributeInject.ts";
 
 interface Props {
   name: string;
@@ -9,16 +10,18 @@ interface Props {
 }
 
 const formContext = inject(formContextKey, undefined)
-const {name, label} = defineProps<Props>();
+const props = defineProps<Props>();
+const {name, label} = props
+
 const bus = useBus();
+const {objectAttributeChangeSubject, } = useAttributeInject(props)
 const change = (value: number, key: string) => {
-  console.log(value)
-  bus.objectAttributeChangeSubject.next({
+
+  objectAttributeChangeSubject.next({
     name: [name, key],
     value: value
   });
 }
-
 </script>
 
 <template>

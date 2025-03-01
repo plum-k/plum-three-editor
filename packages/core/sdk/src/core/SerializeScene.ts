@@ -62,7 +62,7 @@ export class SerializeScene extends Module {
         function getObjectSize(obj) {
             const sizeInBytes = new Blob([isString(obj) ? obj : JSON.stringify(obj)]).size; // 计算字节大小
             const sizeInMB = sizeInBytes / (1024 * 1024); // 转换为 MB
-            console.log(`Object size: ${sizeInMB.toFixed(6)} MB`);
+            
         }
 
         let json = this.toJson();

@@ -7,7 +7,7 @@ import {round} from "lodash-es";
 const bus = useBus();
 
 bus.viewerInitSubject.subscribe((value) => {
-  console.log(value)
+
   const viewer = bus.viewer;
   if (!viewer) return
   const cameraControl = viewer.threeCameraControls.cameraControls;

@@ -39,8 +39,8 @@ export class CatmullRomLine2 extends Line2 {
         this.catmullRomCurve3.closed = closed;
         this.catmullRomCurve3.curveType = curveType;
         this.catmullRomCurve3.tension = tension;
-        console.log(this.points)
-        console.log(this.catmullRomCurve3.getPoints(this.options.segments))
+        
+        
         return this.catmullRomCurve3.getPoints(this.options.segments)
     }
 }

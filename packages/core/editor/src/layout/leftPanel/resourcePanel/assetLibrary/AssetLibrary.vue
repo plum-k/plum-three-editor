@@ -6,7 +6,7 @@ import AssetPanel from "./AssetPanel.vue";
 const activeName = ref('模型')
 
 const handleClick = (tab: any, event: Event) => {
-  console.log(tab, event)
+
 }
 
 </script>

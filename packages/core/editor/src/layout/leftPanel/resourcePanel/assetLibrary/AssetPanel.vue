@@ -53,16 +53,16 @@ const handleDir = (item: IFileInfo) => {
   getFolder(item)
 }
 const getFolder = (info: IFileInfo = fileInfo.value) => {
-  console.log("请求1111111111111")
+
   const viewer = bus.viewer;
   if (!viewer) return
   const oss = viewer!.ossApi!;
   const {rawName} = info;
-  console.log("请求 path", rawName);
+
   oss.list(rawName, "/").then((res) => {
     const info = getInfo(rawName, res)
-    console.log(res)
-    console.log(info)
+
+
     folders.value = info
   })
 }

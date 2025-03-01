@@ -4,11 +4,12 @@ import {isAmbientLight, isHemisphereLight, isObject3D, isPointLight, isSpotLight
 import * as THREE from "three";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
 import {ElCheckbox, ElCheckboxGroup, ElEmpty, ElForm, ElFormItem} from "element-plus";
-import {useBus} from "../../../../hooks";
+import {useAttributeProvide, useBus} from "../../../../hooks";
 import {set} from "lodash-es";
 const bus = useBus();
 
 onMounted(() => {
+
   const viewer = bus.viewer;
   if (!viewer) return;
   viewer.editor.editorEventManager.objectSelected.subscribe(() => {
@@ -47,8 +48,9 @@ const threeToUi = () => {
   form.renderOrder = object.renderOrder
 }
 
-bus.objectAttributeChangeSubject.subscribe((editValue) => {
-  console.log(editValue)
+const {objectAttributeChangeSubject} = useAttributeProvide()
+objectAttributeChangeSubject.subscribe((editValue) => {
+
   const {name, value} = editValue;
   const object = bus.selectObject as THREE.AmbientLight;
   if (!object) return;

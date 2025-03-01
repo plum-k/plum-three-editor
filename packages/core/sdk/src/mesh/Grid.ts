@@ -154,10 +154,10 @@ export class Grid extends THREE.Mesh {
 
     // 更新
     tick(camera: Camera) {
-        // console.log("更新")
+        // 
 
         this.plane.setFromNormalAndCoplanarPoint(this.upVector, this.zeroVector).applyMatrix4(this.matrixWorld)
-        // console.log(this.material)
+        // 
         const gridMaterial = this.material as THREE.ShaderMaterial
         const worldCamProjPosition = gridMaterial.uniforms.worldCamProjPosition as THREE.Uniform<THREE.Vector3>
         const worldPlanePosition = gridMaterial.uniforms.worldPlanePosition as THREE.Uniform<THREE.Vector3>

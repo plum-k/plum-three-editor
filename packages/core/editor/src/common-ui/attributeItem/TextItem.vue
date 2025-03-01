@@ -12,8 +12,8 @@ interface Props {
 const {name, label} = defineProps<Props>();
 const formContext = inject(formContextKey, undefined)
 const value = computed(() => {
-  // console.log(formContext)
-  // console.log(get(formContext?.model, prop))
+  //
+  //
   return get(formContext?.model, name)
 })
 

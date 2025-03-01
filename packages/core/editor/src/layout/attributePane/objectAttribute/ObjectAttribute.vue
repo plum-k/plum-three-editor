@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {ElEmpty} from "element-plus";
-import {useBus} from "../../../hooks";
+import {useAttributeProvide, useBus} from "../../../hooks";
 import * as THREE from "three";
 import {isGroup, isLight, isMesh, isObject3D} from "three-is";
 import {type AttributePaneNameProps, useAttributePane} from "../useAttributePane.ts";
@@ -21,23 +21,30 @@ const show = reactive({
   isObject3D: false,
 })
 
+
+watch(isActive, () => {
+  sync();
+})
+
+const sync = () => {
+  const object = bus.selectObject;
+  if (object && isActive.value) {
+    isVisible.value = true;
+    show.isLight = isLight(object);
+    show.isMesh = isMesh(object);
+    show.isGroup = isGroup(object);
+    show.isObject3D = isObject3D(object);
+  } else {
+    isVisible.value = false;
+  }
+}
 bus.viewerInitSubject.subscribe(() => {
   const viewer = bus.viewer;
   if (viewer) {
-    console.log("监听对象")
     // 监听对象选中
     viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
-      console.log("更新对象", object);
-      if (object && isActive.value) {
-        isVisible.value = true;
-        show.isLight = isLight(object);
-        show.isMesh = isMesh(object);
-        show.isGroup = isGroup(object);
-        show.isObject3D = isObject3D(object);
-        console.log("show", show)
-      } else {
-        isVisible.value = false;
-      }
+      console.log("111111")
+      sync();
     })
     // 监听对象变化
     viewer.editor.editorEventManager.objectChanged.subscribe((object) => {
@@ -46,16 +53,16 @@ bus.viewerInitSubject.subscribe(() => {
   }
 })
 
-bus.objectAttributeChangeSubject.subscribe((editValue) => {
-  console.log(editValue)
+const {objectAttributeChangeSubject} = useAttributeProvide()
+objectAttributeChangeSubject.subscribe((editValue) => {
   const {name, value} = editValue;
   const object = bus.selectObject;
   if (!object) return;
   if (!isActive.value) return;
 
   if (name === "color") {
-    console.log(value)
-    console.log(object)
+
+
     // object.color.setStyle(value)
   } else {
     // set(object, name, value);
@@ -77,10 +84,10 @@ const update = (object: THREE.Object3D, isInit: boolean = false) => {
 //   const changedField = changedFields[0];
 //   const names = changedField.name;
 //   const value = changedField.value;
-//   // console.log(name,value)
+//   //
 //   if (selectObject3D) {
-//     // console.log(names)
-//     // console.log(value)
+//     //
+//     //
 //     if (["rotation"].includes(names[0])) {
 //       viewer?.editor.setValueExecute(selectObject3D, names, THREE.MathUtils.degToRad(value));
 //     } else {

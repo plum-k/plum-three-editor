@@ -36,8 +36,8 @@ export class DrawLine<T extends abstract new (...args: any) => any> extends Modu
 
         })
         // this.eventManager.rightClickPickSubject.subscribe((value) => {
-        //     console.log("11")
-        //     console.log(value)
+        //     
+        //     
         // })
     }
 
@@ -59,8 +59,8 @@ export class DrawLine<T extends abstract new (...args: any) => any> extends Modu
             this.onStopEvent(value);
         })
         // this.eventManager.rightClickPickSubject.subscribe((value) => {
-        //     console.log("11")
-        //     console.log(value)
+        //     
+        //     
         // })
 
     }

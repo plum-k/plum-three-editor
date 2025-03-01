@@ -77,7 +77,7 @@ export class Environment extends Module {
             environmentRotation: this.scene.environmentRotation?.clone?.() ?? [0, 0, 0],
         }
         for (const [key, value] of Object.entries(sceneEnvAttribute)) {
-            console.log(`${key}: ${value}`);
+            
             this.scene[key] = value
         }
 
@@ -93,7 +93,7 @@ export class Environment extends Module {
                 this.scene.background = texture
                 break
         }
-        console.log(this.scene)
+        
     }
 
 
@@ -154,7 +154,7 @@ export class Environment extends Module {
             extension: extension
         })
         this.assetManager.loadAsset(asset).then((result) => {
-            console.log(result)
+            
             this.setEnv({
                 texture: result as THREE.Texture,
                 ..._options

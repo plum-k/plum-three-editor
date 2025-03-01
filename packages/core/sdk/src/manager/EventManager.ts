@@ -55,11 +55,11 @@ export class EventManager extends Module {
     initializeEventListeners() {
         // const mousedown = fromEvent<MouseEvent>(this.container, 'mousedown');
         // mousedown.subscribe((event) => {
-        //     console.log("mousedown")
+        //     
         // })
         // const mouseup = fromEvent<MouseEvent>(this.container, 'mouseup');
         // mouseup.subscribe((event) => {
-        //     console.log("mouseup")
+        //     
         // })
 
         const click = fromEvent<MouseEvent>(this.container, 'click');
@@ -82,12 +82,12 @@ export class EventManager extends Module {
             const array = ThreeTool.getMousePosition(event, this.container);
             if (event.button === 0) {
                 this.onLeftDownPosition.fromArray(array);
-                // console.log('Left mouse button clicked');
+                // 
             } else if (event.button === 2) {
                 this.onRightDownPosition.fromArray(array);
-                // console.log('Right mouse button clicked');
+                // 
             }
-            // console.log("pointerdown")
+            // 
         })
 
         //鼠标抬起事件
@@ -99,16 +99,16 @@ export class EventManager extends Module {
                 if (this.onLeftDownPosition.distanceTo(this.onLeftUpPosition) === 0) {
                     this.leftClickSubject.next(event);
                 }
-                // console.log('Left mouse button clicked');
+                // 
             } else if (event.button === 2) {
                 this.onRightUpPosition.fromArray(array);
                 if (this.onRightDownPosition.distanceTo(this.onRightUpPosition) === 0) {
                     this.rightClickSubject.next(event);
                 }
-                // console.log('Right mouse button clicked');
+                // 
             }
 
-            // console.log("pointerup")
+            // 
         })
 
         // 左键双击
@@ -118,7 +118,7 @@ export class EventManager extends Module {
 
         // const pointerenter = fromEvent<DragEvent>(this.container, 'pointerenter');
         // pointerenter.subscribe((event) => {
-        //     console.log("pointerenter")
+        //     
         // })
         dragover.subscribe((event) => {
             event.preventDefault(); // Prevent default behavior
@@ -140,7 +140,7 @@ export class EventManager extends Module {
             //     filter(clickArray => clickArray.length === 1)
             // )
             .subscribe(event => {
-                // console.log("点击")
+                // 
                 this.domClickSubject.next(event);
             });
 

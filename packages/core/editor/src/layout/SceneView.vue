@@ -29,7 +29,7 @@ const addBox = (_viewer, num) => {
   return cube;
 }
 onMounted(() => {
-  console.log("初始化")
+
   if (!canvasContainer.value) return
   let _viewer!: Viewer
   if (id) {
@@ -48,7 +48,7 @@ onMounted(() => {
   _viewer.assetManager.progressSubject.subscribe((value) => {
     // todo
     // setPercent(value.loaded / value.total)
-    // console.log(value.loaded / value.total)
+    //
     if (value.loaded === value.total) {
 
     }
@@ -85,7 +85,7 @@ onMounted(() => {
     // url: "/aaa.glb",
   })
   _viewer.assetManager.loadGltf(asset).then((model) => {
-    console.log("model", model)
+
     // _viewer.editor.addObjectExecute(model);
   })
 })
@@ -95,14 +95,14 @@ const setViewer = useSetViewer();
 
 
 const onDrop = (event: DragEvent) => {
-  console.log("onDrop", event)
+
   if (!event.dataTransfer) return
   const files = event.dataTransfer.files;
   if (files.length > 0) {
 
     const viewer = bus.viewer;
-    console.log(viewer?.assetManager)
-    console.log(viewer?.assetManager.dragHandler)
+
+
     viewer?.assetManager.dragHandler(event)
   } else {
     const data = event!.dataTransfer!.getData('data');

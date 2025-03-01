@@ -17,7 +17,7 @@ const getTree = (objects: Array<THREE.Object3D>) => {
     const object = objects[i];
     const {name, uuid, children, type, visible} = object;
     const _name = name === "" ? type : name; // 如果名称为空则使用类型
-    console.log(visible)
+
     let node: any = {
       visible,
       label: _name,
@@ -45,7 +45,7 @@ const setHeight = () => {
     htmlRef = document.getElementById("sceneTree")!
   }
    height.value = htmlRef.clientHeight;
-  console.log("htmlRef.clientHeight",htmlRef.clientHeight)
+
 }
 
 

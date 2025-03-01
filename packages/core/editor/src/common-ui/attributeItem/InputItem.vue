@@ -3,6 +3,7 @@ import {ElFormItem, ElInput, ElSwitch, formContextKey} from "element-plus";
 import {computed, inject} from "vue";
 import {isNil} from "lodash-es";
 import {useBus} from "../../hooks";
+import {useAttributeInject} from "../../hooks/useAttributeInject.ts";
 
 interface Props {
   name: string;
@@ -10,14 +11,11 @@ interface Props {
 }
 const formContext = inject(formContextKey, undefined)
 const bus = useBus();
-const {name, label} = defineProps<Props>();
-const change = (value: string) => {
-  console.log(value)
-  bus.objectAttributeChangeSubject.next({
-    name: name,
-    value: value
-  });
-}
+const props = defineProps<Props>();
+const {name, label} = props;
+
+const {objectAttributeChangeSubject, change} = useAttributeInject(props)
+
 const isRender = computed(() => {
   return !isNil(formContext.model[name])
 })

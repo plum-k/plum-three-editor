@@ -53,9 +53,9 @@ export class Pick extends Module {
         }
         return obj
         // if (intersects.length > 0) {
-        // console.log(intersects[0].object.name)
-        // console.log(intersects[0].object.position)
-        // console.log(intersects[0].object.rotation)
+        // 
+        // 
+        // 
         // }
 
         const objects: Array<Object3D> = [];
@@ -64,7 +64,7 @@ export class Pick extends Module {
         });
 
         const intersectObject = this.raycaster.intersectObjects(objects, false);
-        // console.log(intersectObject)
+        // 
         return intersectObject;
     }
 

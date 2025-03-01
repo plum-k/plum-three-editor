@@ -42,14 +42,14 @@ export default function useQuadraticBezierLine(_viewer: Viewer) {
             }
         }
     )
-    console.log(line)
+    
     line.name = "adad";
 
 
     _viewer.scene.add(line)
 
     let PARAMS = clone(line.options)
-    // console.log(PARAMS)
+    // 
     const pane = new Pane({
         container: _viewer.container
     });
@@ -70,10 +70,10 @@ export default function useQuadraticBezierLine(_viewer: Viewer) {
     pane.addBinding(PARAMS.materialParams, 'dashSize');
     pane.addBinding(PARAMS.materialParams, 'gapSize');
     pane.on('change', (ev) => {
-        // console.log(ev)
-        console.log(PARAMS)
-        console.log("更新")
-        // console.log('changed: ' + JSON.stringify(ev.value));
+        // 
+        
+        
+        // 
         line.update(PARAMS)
     });
 
