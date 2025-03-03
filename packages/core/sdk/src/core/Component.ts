@@ -1,11 +1,11 @@
 import {Viewer} from "./Viewer";
 import {deepMergeRetain} from "../tool";
 
-export interface IModuleOptions {
+export interface IComponentOptions {
     viewer: Viewer;
 }
 
-export class Module<T extends IModuleOptions = IModuleOptions> {
+export class Component<T extends IComponentOptions = IComponentOptions> {
     options: Required<T>;
     viewer: Viewer;
 

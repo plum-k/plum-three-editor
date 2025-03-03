@@ -1,9 +1,7 @@
 import * as THREE from 'three';
-import {PerspectiveCamera} from 'three';
-
+import {OrthographicCamera, PerspectiveCamera} from 'three';
 import CameraControls from "camera-controls";
 import {Viewer} from "../core/Viewer";
-import {OrthographicCamera} from "three/src/cameras/OrthographicCamera";
 import {deepMergeRetain} from "../tool";
 
 // 安装camera-controls扩展，使其支持THREE库

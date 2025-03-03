@@ -1,6 +1,6 @@
-import {SceneJSONObject} from "three/src/scenes/Scene";
+import {SceneJSONObject} from "three";
 
-export namespace SerializeInterface {
+export namespace Serialize {
 
     export interface Metadata {
         version: number;

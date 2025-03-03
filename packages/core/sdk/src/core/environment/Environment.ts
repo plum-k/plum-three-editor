@@ -1,12 +1,12 @@
 import * as THREE from "three"
 import {presetsObj, PresetsType} from "./environmentAssets";
 import {isArray, isNil} from "lodash-es";
-import {IModuleOptions, Module} from "../Module";
+import {Component, IComponentOptions} from "../Component";
 import {TextureEncoding} from "three-stdlib/types/shared";
 import {Asset} from "../asset/Asset";
 import {deepMergeRetain} from "../../tool";
 
-export interface IEnvironment extends IModuleOptions {
+export interface IEnvironment extends IComponentOptions {
     frames?: number
     near?: number
     far?: number
@@ -54,7 +54,7 @@ export interface ISetEnvironmentOptions extends ISetEnvOption {
     encoding?: TextureEncoding;
 }
 
-export class Environment extends Module {
+export class Environment extends Component {
 
     constructor(options: IEnvironment) {
         super(options);

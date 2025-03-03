@@ -86,7 +86,7 @@ onMounted(() => {
   })
   _viewer.assetManager.loadGltf(asset).then((model) => {
 
-    // _viewer.editor.addObjectExecute(model);
+    _viewer.editor.addObjectExecute(model);
   })
 })
 const bus = useBus();

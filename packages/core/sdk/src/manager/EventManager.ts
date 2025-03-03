@@ -1,9 +1,9 @@
 import {fromEvent, Subject} from 'rxjs';
-import {IModuleOptions, Module} from "../core/Module";
+import {Component, IComponentOptions} from "../core/Component";
 import * as THREE from 'three';
 import {Tool} from "../tool/Tool";
 
-export interface IEventManagerOptions extends IModuleOptions {
+export interface IEventManagerOptions extends IComponentOptions {
 }
 
 export interface IPick {
@@ -11,7 +11,7 @@ export interface IPick {
     position: THREE.Vector3
 }
 
-export class EventManager extends Module {
+export class EventManager extends Component {
 
 
     dblClickSubject = new Subject<MouseEvent>();

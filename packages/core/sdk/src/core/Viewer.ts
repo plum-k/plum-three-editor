@@ -1,6 +1,6 @@
 import {isString} from "lodash-es"; // 从 lodash-es 导入工具函数
 import * as THREE from 'three'; // 导入 Three.js 库
-import {AxesHelper} from 'three';
+import {AxesHelper, Object3D} from 'three'; // 导入深度合并工具
 import {
     AssetManager,
     DebugManager,
@@ -13,21 +13,97 @@ import {
 import {Editor} from "../editor"; // 导入编辑器类
 import {Pick} from "./Pick"; // 导入拾取类
 import {Environment} from "./environment"; // 导入环境类
-import {Object3D} from "three/src/core/Object3D"; // 导入深度合并工具
 import {deepMergeRetain, ESearchMode, ICondition, Search} from "../tool";
-import {SerializeScene} from "./SerializeScene";
 import {DrawLine, MeasureTool, ThreeCameraControls} from "../control";
 import {CssRenderer} from "./CssRenderer";
 import {IOssApiOptions, OssApi} from "@plum-render/oss-api";
 import {Grid} from "../mesh";
+import {Subject} from "rxjs";
+import {getPackage} from "../serializeManage/PackageFactory";
+import {Package} from "../serializeManage/package";
+
+/**
+ * 定义场景加载类型的枚举
+ */
+export enum ESceneLoadType {
+    Load,
+    /**
+     * 表示场景加载类型为下载，即从网络或其他数据源下载场景资源
+     */
+    Down,
+    /**
+     * 表示场景加载类型为解压，即对下载后的压缩场景资源进行解压操作
+     */
+    UnZip
+}
+
+/**
+ * 定义场景加载进度事件的接口
+ */
+export interface ISceneLoadProgressEvent {
+    /**
+     * 当前场景加载操作的类型，取值为 ISceneLoadType 枚举中的值
+     */
+    type: ESceneLoadType;
+    /**
+     * 操作的名称
+     */
+    name: string;
+    /**
+     * 场景加载任务的总工作量，可以是字节数、文件数量等，具体含义取决于加载类型
+     */
+    total: number;
+    /**
+     * 当前场景加载任务已经完成的工作量，与 total 采用相同的度量单位
+     */
+    loaded: number;
+}
+
+export enum ESceneSaveType {
+    Save,
+    Put,
+    Zip
+}
+
+export interface ISceneSaveProgressEvent {
+    type: ESceneSaveType;
+    name: string;
+    total: number;
+    loaded: number;
+}
 
 // 定义 Viewer 选项接口
 export interface IViewerOptions {
-    appUrl?: string; // 应用程序的 URL（可选）
+    /**
+     * 应用程序的唯一标识符。
+     */
+    appId?: string;
+
+    /**
+     * 资源包的路径，用于加载相关资源。
+     */
+    packagePath?: string;
+    /**
+     * 包的类型
+     * - "part": 渐进式加载
+     * - "chunk": 切片包
+     * - "native": 原生包
+     */
+    packageType?: "part" | "chunk" | "native";
     /**
      * cos 配置
      */
     ossApiOptions?: IOssApiOptions;
+
+    /**
+     * 是否创建默认光源，默认为 false。
+     */
+    isCreateDefaultLight?: boolean;
+
+    /**
+     * 是否创建默认环境，默认为 false。
+     */
+    isCreateDefaultEnvironment?: boolean;
 }
 
 // 定义 Viewer 类
@@ -57,20 +133,28 @@ export class Viewer {
     drawLine!: DrawLine; // 绘制直线
     measureTool: MeasureTool; // 测量工具
 
-    serializeScene: SerializeScene;
+    serializer: SerializeScene;
 
     editor: Editor; // 编辑器
 
     // 阿里对象存储
     ossApi: OssApi | null = null;
-    //------------------------- 添加网格 开始 -------------------
+    //=----------------------- 辅组对象
     grid: Grid | undefined = undefined;
     axesHelper: AxesHelper | undefined = undefined;
+    // 初始化组件完成
+    initComponentSubject = new Subject();
+    // 场景初始化完成
+    initSubject = new Subject();
+    //---------- 事件
+    // 场景加载进度
+    sceneLoadProgressSubject = new Subject<ISceneLoadProgressEvent>();
+    // 场景保存进度
+    sceneSaveProgressSubject = new Subject<ISceneSaveProgressEvent>();
+    serializer: Package | undefined;
     #enableGrid = false;
-    //---------------------- 坐标轴--------------------
     #enableAxes = false;
 
-    // 构造函数
     constructor(container: string | HTMLDivElement, options: IViewerOptions = {}) {
         this.options = deepMergeRetain(options, {}); // 合并选项
         this.initContainer(container); // 初始化容器
@@ -99,8 +183,6 @@ export class Viewer {
         this.drawLine = new DrawLine({viewer: this});
         this.measureTool = new MeasureTool({viewer: this});
 
-        this.serializeScene = new SerializeScene({viewer: this});
-
         this.animationMixer = new THREE.AnimationMixer(this.scene); // 创建动画混合器实例
 
         this.addCanvasToContainer(); // 将画布添加到容器
@@ -118,13 +200,11 @@ export class Viewer {
         this.editor.initComponent();
 
         this.loop.startLoop(); // 启动循环
-        if (this.options.appUrl != null) {
-            this.serializeScene.loadSceneByUrl(this.options.appUrl);
-        } // 根据 URL 加载场景
-        // todo
         this.initComponent().then();
+        this.loadScene();
     }
 
+    //------------------------- 添加网格 开始 -------------------
     get enableGrid() {
         return this.#enableGrid;
     }
@@ -163,9 +243,48 @@ export class Viewer {
         this.#enableAxes = enable;
     }
 
+    /**
+     * 创建 Viewer
+     * @param container 容器
+     * @param options 配置项
+     */
+    static async create(container: string | HTMLDivElement, options ?: IViewerOptions): Promise<Viewer> {
+        return new Promise<Viewer>((resolve) => {
+            const viewer = new Viewer(container, options); // 创建 Viewer 实例
+            viewer.initComponentSubject.subscribe(() => {
+                resolve(viewer);
+            });
+        });
+    }
+
+    /**
+     * 初始化场景
+     */
+    loadScene() {
+        const serializer = getPackage(this);
+        if (serializer) {
+            this.serializer = serializer;
+            serializer.loadScene();
+        } else {
+            this.setInitState();
+        }
+    }
+
+    setInitState() {
+        this.sceneLoadProgressSubject.next({
+            type: ESceneLoadType.Load,
+            name: `加载场景中`,
+            total: 1,
+            loaded: 1,
+        })
+        this.isLoad = true;
+        this.initSubject.next(true);
+    }
+
     async initComponent() {
         if (this.options.ossApiOptions) {
             this.ossApi = await OssApi.create(this.options.ossApiOptions);
+            this.initComponentSubject.next(true);
         }
     }
 

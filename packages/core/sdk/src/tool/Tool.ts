@@ -1,6 +1,6 @@
 import * as THREE from "three";
+import {Object3D} from "three";
 import {isDataTexture, isVector3} from "three-is";
-import {Object3D} from "three/src/core/Object3D";
 import {ESearchMode, ICondition, normalize, Search} from "./core";
 
 export type Vector3Array = Array<THREE.Vector3>

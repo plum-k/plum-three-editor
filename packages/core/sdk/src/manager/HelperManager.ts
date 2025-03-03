@@ -1,11 +1,11 @@
 import * as  THREE from "three";
-import {IModuleOptions, Module} from "../core/Module";
+import {Component, IComponentOptions} from "../core/Component";
 
-export interface IHelperManagerOptions extends IModuleOptions {
+export interface IHelperManagerOptions extends IComponentOptions {
 
 }
 
-export class HelperManager extends Module {
+export class HelperManager extends Component {
     constructor(options: IHelperManagerOptions) {
         super(options);
     }

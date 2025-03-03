@@ -1,8 +1,8 @@
 import {BehaviorSubject, merge, Subject} from 'rxjs';
-import {IModuleOptions, Module} from "../core/Module";
+import {Component, IComponentOptions} from "../core/Component";
 import * as THREE from 'three';
 
-export interface IEditorEventManagerOptions extends IModuleOptions {
+export interface IEditorEventManagerOptions extends IComponentOptions {
 }
 
 export interface IPick {
@@ -10,7 +10,7 @@ export interface IPick {
     position: THREE.Vector3
 }
 
-export class EditorEventManager extends Module {
+export class EditorEventManager extends Component {
     editScript = new Subject<any>();
 
     startPlayer = new Subject<any>();

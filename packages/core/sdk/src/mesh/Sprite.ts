@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import {SpriteMaterial} from "three/src/materials/Materials";
+import {SpriteMaterial} from "three";
 
 import html2canvas from "html2canvas";
 

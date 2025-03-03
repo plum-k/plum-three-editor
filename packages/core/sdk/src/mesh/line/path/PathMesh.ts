@@ -1,6 +1,5 @@
-import {Mesh, MeshBasicMaterial, MeshBasicMaterialParameters, Vector3} from "three";
+import {Mesh, MeshBasicMaterial, MeshBasicMaterialParameters, Usage, Vector3} from "three";
 import {PathGeometry, PathGeometryOptions, PathPointList} from "three.path";
-import {Usage} from "three/src/constants";
 
 export interface ISetPathPointListOptions {
     points: Array<Vector3>;

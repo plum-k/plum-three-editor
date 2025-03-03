@@ -1,7 +1,16 @@
-import {CatmullRomCurve3, ExtrudeGeometry, Mesh, MeshStandardMaterial, Object3D, Shape, Vector2, Vector3} from "three";
-import {CurveType} from "three/src/extras/curves/CatmullRomCurve3";
+import {
+    CatmullRomCurve3,
+    CurveType,
+    ExtrudeGeometry,
+    ExtrudeGeometryOptions,
+    Mesh,
+    MeshStandardMaterial,
+    Object3D,
+    Shape,
+    Vector2,
+    Vector3
+} from "three";
 import {Tool, V3Array} from "../tool";
-import {ExtrudeGeometryOptions} from "three/src/geometries/ExtrudeGeometry";
 
 export interface IWallOption {
     width: number;

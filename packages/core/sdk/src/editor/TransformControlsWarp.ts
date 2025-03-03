@@ -1,12 +1,12 @@
-import {IModuleOptions, Module} from "../core/Module";
+import {Component, IComponentOptions} from "../core/Component";
 import {TransformControls} from "three/examples/jsm/controls/TransformControls";
 import * as  THREE from "three";
 
-export interface IControlsManagerOptions extends IModuleOptions {
+export interface IControlsManagerOptions extends IComponentOptions {
 }
 
 
-export class TransformControlsWarp extends Module {
+export class TransformControlsWarp extends Component {
     transformControls!: TransformControls;
     objectPositionOnDown = new THREE.Vector3;
     objectRotationOnDown = new THREE.Euler;

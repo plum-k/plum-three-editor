@@ -1,4 +1,4 @@
-import {IModuleOptions, Module} from "../core/Module";
+import {Component, IComponentOptions} from "../core/Component";
 import * as THREE from "three";
 import {Texture} from "three";
 import {PropertyPath} from "lodash-es";
@@ -29,10 +29,10 @@ import {EditorEventManager} from "./EditorEventManager";
 import {Selector} from "./Selector";
 import {TransformControlsWarp} from "./TransformControlsWarp";
 
-export interface IEditorOptions extends IModuleOptions {
+export interface IEditorOptions extends IComponentOptions {
 }
 
-export class Editor extends Module {
+export class Editor extends Component {
     editorEventManager!: EditorEventManager;
     history!: History;
     selector!: Selector;

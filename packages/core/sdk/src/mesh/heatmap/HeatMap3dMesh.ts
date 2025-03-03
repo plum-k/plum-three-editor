@@ -1,8 +1,8 @@
 import * as THREE from "three";
+import {Object3D} from "three";
 import Heatmap from "heatmap";
 import HeatmapInstance, {DataPoint, HeatmapConfig} from "heatmap";
 import {deepMergeRetain, Tool} from "../../tool";
-import {Object3D} from "three/src/core/Object3D";
 
 export interface IHeatMap3dMeshSetDataOptions {
     max: number;

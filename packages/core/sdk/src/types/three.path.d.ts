@@ -1,7 +1,6 @@
 declare module 'three.path' {
     import * as THREE from "three";
-    import {BufferGeometry} from "three";
-    import {Usage} from "three/src/constants";
+    import {BufferGeometry, Usage} from "three";
 
     /**
      * PathPoint

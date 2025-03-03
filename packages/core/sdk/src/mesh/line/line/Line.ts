@@ -1,6 +1,6 @@
 import * as THREE from "three";
+import {LineDashedMaterialParameters} from "three";
 import {isNil} from "lodash-es";
-import {LineDashedMaterialParameters} from "three/src/materials/LineDashedMaterial";
 import {isColor} from "three-is";
 import {deepMergeRetain, Tool} from "../../../tool";
 

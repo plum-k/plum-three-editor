@@ -1,14 +1,14 @@
 import * as  THREE from "three";
-import {IModuleOptions, Module} from "./Module";
-import {Object3D} from "three/src/core/Object3D";
+import {Object3D} from "three";
+import {Component, IComponentOptions} from "./Component";
 import {isPerspectiveCamera} from "three-is";
 import {isNil} from "lodash-es";
 import {Tool} from "../tool/Tool";
 
-export interface IPickOptions extends IModuleOptions {
+export interface IPickOptions extends IComponentOptions {
 }
 
-export class Pick extends Module {
+export class Pick extends Component {
     raycaster: THREE.Raycaster;
     pointer: THREE.Vector2 = new THREE.Vector2();
 

@@ -1,10 +1,10 @@
-import {IModuleOptions, Module} from "../core/Module";
+import {Component, IComponentOptions} from "../core/Component";
 import * as THREE from "three";
 import {isNil} from "lodash-es";
 import {IPick} from "../manager/EventManager";
 import {Subscription} from "rxjs";
 
-export interface IDrawLine extends IModuleOptions {
+export interface IDrawLine extends IComponentOptions {
 }
 
 export enum DrawType {
@@ -12,7 +12,7 @@ export enum DrawType {
     Point
 }
 
-export class DrawLine<T extends abstract new (...args: any) => any> extends Module {
+export class DrawLine<T extends abstract new (...args: any) => any> extends Component {
 
     pointGroup = new THREE.Group();
     points: Array<THREE.Vector3> = [];

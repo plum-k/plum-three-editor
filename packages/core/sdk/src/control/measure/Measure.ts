@@ -1,12 +1,12 @@
-import {IModuleOptions, Module} from "../../core/Module";
+import {Component, IComponentOptions} from "../../core/Component";
 import {IPick} from "../../manager";
 
-export interface IMeasureOptions extends IModuleOptions {
+export interface IMeasureOptions extends IComponentOptions {
 
 }
 
 
-export class Measure<T extends IMeasureOptions = IMeasureOptions> extends Module<T> {
+export class Measure<T extends IMeasureOptions = IMeasureOptions> extends Component<T> {
     constructor(options: T) {
         super(options);
     }

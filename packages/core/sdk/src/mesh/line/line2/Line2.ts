@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import {Object3D} from "three";
 import {LineMaterial, LineMaterialParameters} from "three/examples/jsm/lines/LineMaterial";
 import {Line2 as THREELine2} from "three/examples/jsm/lines/Line2";
 import {LineSegments2} from "three/examples/jsm/lines/LineSegments2";
@@ -6,7 +7,6 @@ import {Wireframe} from "three-stdlib";
 import {isNil} from "lodash-es";
 import {isColor} from "three-is";
 import {deepMergeRetain, Tool} from "../../../tool";
-import {Object3D} from "three/src/core/Object3D";
 import {LineGeometry} from "three/examples/jsm/lines/LineGeometry";
 import {LineSegmentsGeometry} from "three/examples/jsm/lines/LineSegmentsGeometry";
 

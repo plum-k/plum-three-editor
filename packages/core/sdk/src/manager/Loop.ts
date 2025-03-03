@@ -1,15 +1,15 @@
-import {IModuleOptions, Module} from "../core/Module";
+import {Component, IComponentOptions} from "../core/Component";
 import {Subject} from "rxjs";
 
 export type GlobalRenderCallback = (timeStamp: number) => void
 type SubItem = { callback: GlobalRenderCallback }
 export type GlobalEffectType = 'before' | 'after' | 'tail'
 
-export interface ILoop extends IModuleOptions {
+export interface ILoop extends IComponentOptions {
 
 }
 
-export class Loop extends Module {
+export class Loop extends Component {
 
     globalEffects: Set<Function> = new Set()
     globalAfterEffects: Set<Function> = new Set()

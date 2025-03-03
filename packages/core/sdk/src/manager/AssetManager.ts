@@ -13,7 +13,7 @@ import {
 import {GLTF, GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader";
 import Asset from "../core/asset/Asset";
-import {IModuleOptions, Module} from "../core/Module";
+import {Component, IComponentOptions} from "../core/Component";
 import {
     LDrawLoader,
     LUT3dlLoader,
@@ -33,7 +33,7 @@ import {GltfModelAsset} from "../core/asset/GltfModelAsset";
 import {TextureAsset} from "../core/asset/TextureAsset";
 import {KTX2Loader} from "three/examples/jsm/loaders/KTX2Loader";
 
-export interface IResourceManagers extends IModuleOptions {
+export interface IResourceManagers extends IComponentOptions {
     sdkUrl?: string;
 }
 
@@ -69,9 +69,6 @@ export interface loadAssetOption {
 
 export type LoaderProto<T> = new (...args: any) => Loader<T extends unknown ? any : T>
 
-type LoaderReturnType<L extends OBJLoader | GLTFLoader> = ReturnType<L['loadAsync']>;
-type JJ = GLTFLoader["loadAsync"]
-type CC = ReturnType<GLTFLoader["loadAsync"]>
 const DefaultLoadFun = {
     after: () => {
     },
@@ -81,7 +78,7 @@ const DefaultLoadFun = {
     },
 }
 
-export class AssetManager extends Module {
+export class AssetManager extends Component {
     loadingManager: LoadingManager;
     dracoLoader!: DRACOLoader;
     sdkUrl: string = "";
@@ -181,7 +178,6 @@ export class AssetManager extends Module {
 
     load(loaderType: any, asset: Asset, option: ILoadFun) {
         return new Promise<GLTF>((resolve, reject) => {
-
             let loader = this.memoizedLoaders.get(loaderType)
             const {before, after, tail} = option
             if (loader) {
@@ -229,9 +225,9 @@ export class AssetManager extends Module {
         })
     }
 
-    loadAsset(asset: Asset, option: ILoadFun = DefaultLoadFun): Promise<CC> {
+    loadAsset(asset: Asset, option: ILoadFun = DefaultLoadFun): Promise<unknown> {
         const extension = asset.extension;
-        return new Promise<CC>((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             // @ts-ignore
             resolve("")
             let loader: any

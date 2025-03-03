@@ -1,9 +1,9 @@
 import Stats from "stats.js";
-import {IModuleOptions, Module} from "../core/Module";
+import {Component, IComponentOptions} from "../core/Component";
 import {deepMergeRetain} from "../tool";
 import {Subscription} from "rxjs";
 
-export interface IDebugOptions extends IModuleOptions {
+export interface IDebugOptions extends IComponentOptions {
     showMs?: boolean;
     showMb?: boolean;
     showFps?: boolean;
@@ -17,7 +17,7 @@ export enum DebugPosition {
     BottomRight,
 }
 
-export class DebugManager extends Module<IDebugOptions> {
+export class DebugManager extends Component<IDebugOptions> {
     stats: Stats | undefined
     subscription: Subscription | undefined
     #enable = false
