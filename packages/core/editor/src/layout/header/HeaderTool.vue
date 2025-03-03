@@ -3,6 +3,7 @@ import {ElButton} from "element-plus";
 import {useFullscreen} from "@vueuse/core";
 import {useBus} from "../../hooks";
 import {useRoute} from "vue-router";
+import Icon from "../../components/Icon.vue";
 
 const {isFullscreen, enter, exit, toggle} = useFullscreen(document.body)
 const bus = useBus();
@@ -17,16 +18,17 @@ const capture = () => {
 const fit = () => {
   const viewer = bus.viewer;
   if (!viewer) return;
-  viewer.threeCameraControls.fitToScene(true)
+  viewer.threeCameraControls.fitToSceneBySphere(true)
 }
-
 </script>
 
 <template>
-  <el-button v-if="isFullscreen" @click="enter">推出全屏</el-button>
-  <el-button v-else @click="exit">全屏</el-button>
-  <el-button @click="capture">截屏</el-button>
-  <el-button @click="fit">聚焦</el-button>
+  <div class="flex items-center gap-2 ml-100 text-[1.2rem]">
+    <icon  icon-name="icon-quxiaoquanping" v-if="isFullscreen" @click="exit"/>
+    <icon icon-name="icon-quanping"  v-else @click="enter"/>
+    <icon icon-name="icon-jieping" @click="capture"/>
+    <icon icon-name="icon-jujiao" @click="fit"/>
+  </div>
 </template>
 
 <style scoped>

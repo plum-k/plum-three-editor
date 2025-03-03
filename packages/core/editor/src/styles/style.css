@@ -12,3 +12,7 @@ html, body, #app {
         position: relative !important;
     }
 }
+
+::backdrop {
+    background-color: white;
+}

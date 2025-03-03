@@ -26,7 +26,7 @@
     "@nestjs/axios": "^4.0.0",
     "@nestjs/bullmq": "^11.0.2",
     "@nestjs/common": "^11.0.11",
-    "@nestjs/config": "^4.0.0",
+    "@nestjs/config": "^4.0.1",
     "@nestjs/core": "^11.0.11",
     "@nestjs/platform-express": "^11.0.11",
     "@nestjs/terminus": "^11.0.0",
@@ -45,11 +45,11 @@
     "piscina": "5.0.0-alpha.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.21"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.5",
-    "@nestjs/schematics": "^11.0.1",
+    "@nestjs/schematics": "^11.0.2",
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/testing": "^11.0.11",
     "@types/express": "^5.0.0",

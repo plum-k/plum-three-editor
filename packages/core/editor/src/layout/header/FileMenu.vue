@@ -9,6 +9,16 @@ const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
 const bus = useBus();
+
+const save = () => {
+  console.log("11")
+  const viewer = bus.viewer;
+  if(!viewer) return
+  const chunkSerialize = new ChunkSerialize({viewer});
+  chunkSerialize.pack();
+}
+
+
 const chunkExport = () => {
   console.log("11")
   const viewer = bus.viewer;
@@ -20,8 +30,11 @@ const chunkExport = () => {
 
 <template>
   <el-dropdown placement="bottom">
-    <el-button> 文件 </el-button>
+    <el-button text size="small"> 文件 </el-button>
     <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item @click="save">保存</el-dropdown-item>
+      </el-dropdown-menu>
       <el-dropdown-menu>
         <el-dropdown-item>导出原生</el-dropdown-item>
         <el-dropdown-item @click="chunkExport">导出分包</el-dropdown-item>

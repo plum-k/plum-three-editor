@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import {OrthographicCamera, PerspectiveCamera} from 'three';
+import {Object3D, OrthographicCamera, PerspectiveCamera, Sphere} from 'three';
 import CameraControls from "camera-controls";
 import {Viewer} from "../core/Viewer";
 import {deepMergeRetain} from "../tool";
-import {isMesh} from "three-is";
+import {isGroup, isMesh} from "three-is";
 
 // 安装camera-controls扩展，使其支持THREE库
 CameraControls.install({THREE: THREE});
@@ -191,30 +191,94 @@ export class ThreeCameraControls {
         // this.resetState();
     }
 
+    getBox3ByObject3ds(objects: Object3D[]) {
+        const box3 = new THREE.Box3();
+        for (let i = 0; i < objects.length; i++) {
+            const object = objects[i];
+            if (isMesh(object)) {
+                if (object.geometry.boundingBox === null) {
+                    object.geometry.computeBoundingBox();
+                }
+                box3.union(object.geometry.boundingBox!.clone().applyMatrix4(object.matrixWorld));
+            } else if (isGroup(object)) {
+                const box = new THREE.Box3();
+                box.setFromObject(object);
+                box3.union(box)
+            }
+        }
+        return box3;
+    }
+
+    getSphereByObject3ds(objects: Object3D[]) {
+        const sphere = new THREE.Sphere();
+        for (let i = 0; i < objects.length; i++) {
+            const object = objects[i];
+            if (isMesh(object)) {
+                if (object.geometry.boundingSphere === null) {
+                    object.geometry.computeBoundingSphere();
+                }
+                sphere.union(object.geometry.boundingSphere!.clone().applyMatrix4(object.matrixWorld));
+            } else if (isGroup(object)) {
+                const box = new THREE.Box3();
+                box.setFromObject(object);
+                sphere.union(box.getBoundingSphere(new Sphere()))
+            }
+        }
+        return sphere;
+    }
+
     // 获取场景的包围盒
     getSceneBox() {
-        const boundingBox = new THREE.Box3();
-        this.viewer.scene.traverse((object) => {
-            if (isMesh(object)) {
-                object.geometry.computeBoundingBox();
-                if (object.geometry.boundingBox){
-                    boundingBox.union(object.geometry.boundingBox);
+        const box3 = new THREE.Box3();
+        this.viewer.scene.traverse((mesh) => {
+            if (isMesh(mesh)) {
+                mesh.geometry.computeBoundingBox();
+                if (mesh.geometry.boundingBox) {
+                    box3.union(mesh.geometry.boundingBox.clone().applyMatrix4(mesh.matrixWorld));
                 }
             }
         });
-        return boundingBox;
+        return box3;
+    }
+
+    getSceneSphere() {
+        const sphere = new THREE.Sphere();
+        this.viewer.scene.traverse((mesh) => {
+            if (isMesh(mesh)) {
+                mesh.geometry.computeBoundingSphere()
+                if (mesh.geometry.boundingSphere) {
+                    sphere.union(mesh.geometry.boundingSphere.clone().applyMatrix4(mesh.matrixWorld));
+                }
+            }
+        });
+        return sphere;
     }
 
     // 聚焦到场景
-    fitToScene(enableTransition: boolean = true) {
+    async fitToSceneByBox(enableTransition: boolean = true) {
         const boundingBox = this.getSceneBox();
-        this.cameraControls.fitToBox(boundingBox, enableTransition);
+        await this.cameraControls.fitToBox(boundingBox, enableTransition);
     }
 
-    // 聚焦到模型
-    fitToBox(box3OrObject: THREE.Box3 | THREE.Object3D,
-             enableTransition: boolean) {
-        this.cameraControls.fitToBox(box3OrObject, enableTransition);
+    // 聚焦到场景
+    async fitToSceneBySphere(enableTransition: boolean = true) {
+        const sphere = this.getSceneSphere();
+        await this.cameraControls.fitToSphere(sphere, enableTransition);
+    }
+
+    async fitToMeshBySphere(objects: Object3D[], enableTransition: boolean = true) {
+        const sphere = this.getSphereByObject3ds(objects);
+        await this.cameraControls.fitToSphere(sphere, enableTransition);
+    }
+
+    async fitToMeshByBox3(objects: Object3D[], enableTransition: boolean = true) {
+        const box3 = this.getBox3ByObject3ds(objects);
+        await this.cameraControls.fitToBox(box3, enableTransition);
+    }
+
+    async fitToMeshByBox(box3OrObject: THREE.Box3 | THREE.Object3D,
+                         enableTransition: boolean) {
+        await this.cameraControls.fitToBox(box3OrObject, enableTransition);
     }
 
     // setOrthographic(isOrthographic) {

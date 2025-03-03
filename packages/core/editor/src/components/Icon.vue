@@ -17,7 +17,7 @@ const click = () => {
 </script>
 
 <template>
-  <svg aria-hidden="true" class="icon" @click="click">
+  <svg aria-hidden="true" class="icon cursor-pointer" @click="click">
     <use :xlink:href="`#${iconName}`"/>
   </svg>
 </template>

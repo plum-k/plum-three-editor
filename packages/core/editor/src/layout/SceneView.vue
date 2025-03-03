@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import {ESceneLoadType, GltfModelAsset, Viewer} from "@plum-render/three-sdk";
+import {ESceneLoadType, Viewer} from "@plum-render/three-sdk";
 import {useRoute} from "vue-router";
 import * as THREE from "three";
 import {BoxGeometry, Mesh, MeshStandardMaterial} from "three";
-import {useBus, } from "../hooks";
+import {useBus,} from "../hooks";
 import {CameraSettingPane, Control} from "./sceneView";
 import type {IDragInfo} from "../interface/IDragInfo.ts";
 import CameraView from "./sceneView/CameraView.vue";
 import CameraInfo from "./sceneView/CameraInfo.vue";
 import Tool from "./sceneView/Tool.vue";
-import {type Id, toast, ToastPosition} from "vue3-toastify";
+import {type Id, toast} from "vue3-toastify";
 
 const canvasContainer = ref<HTMLDivElement>();
 
@@ -32,7 +32,7 @@ const addBox = (_viewer, num) => {
 const loadIdMao = new Map<string, Id>();
 const saveIdMao = new Map<string, Id>();
 
-onMounted( () => {
+onMounted(() => {
   if (!canvasContainer.value) return
   let _viewer!: Viewer
   _viewer = new Viewer(canvasContainer.value, {
@@ -49,7 +49,6 @@ onMounted( () => {
     bus.setViewer(_viewer)
     bus.viewerInitSubject.next(true);
   })
-
   // 场景加载进度条
   _viewer.sceneLoadProgressSubject.subscribe((event) => {
     const {type, name, total, loaded} = event;
@@ -57,8 +56,7 @@ onMounted( () => {
     const id = loadIdMao.get(name);
     if (id === undefined) {
       if (type === ESceneLoadType.Load) {
-        const newId =  toast.loading(name, {
-          autoClose: false,
+        const newId = toast.loading(name, {
           position: toast.POSITION.TOP_RIGHT,
           // containerId: 'toastContainer',
         });
@@ -68,7 +66,6 @@ onMounted( () => {
           return
         }
         const newId = toast.loading(name, {
-          autoClose: false,
           position: toast.POSITION.TOP_RIGHT,
           // containerId: 'toastContainer',
         });
@@ -76,14 +73,15 @@ onMounted( () => {
       }
     } else {
       if (type === ESceneLoadType.Load) {
-        toast.update(id, {
-          render: "场景加载成功", type: "success", isLoading: false, autoClose: 3000});
+        toast.update(id, {render: "场景加载成功", type: "success", isLoading: false, autoClose: 3000});
         loadIdMao.clear()
       } else {
         if (loaded === total) {
-          toast.remove(id);
-        }else {
-          toast.update(id, {render: name, progress: _progress});
+          window.setTimeout(() => {
+            toast.remove(id);
+          }, 100)
+        } else {
+          toast.update(id, {render: name, progress: _progress, autoClose: 3000});
         }
       }
     }
@@ -106,10 +104,6 @@ onMounted( () => {
   _viewer.threeCameraControls.cameraControls.setTarget(0, 0, 0);
 
 
-
-  addBox(_viewer, 1);
-
-
   setTimeout(() => {
     _viewer.setSize()
     // _viewer?.eventManager.objectSelected.next(cube);
@@ -125,18 +119,17 @@ onMounted( () => {
 
   }, 1000)
   window.viewer = _viewer;
+  // addBox(_viewer, 1);
 
-  const asset = new GltfModelAsset({
-    // loadUrl: "/Rampaging T-Rex.glb",
-    loadUrl: "/A319.glb",
-    // url: "/aaa.glb",
-  })
-  _viewer.assetManager.loadGltf(asset).then((model) => {
-
-    _viewer.editor.addObjectExecute(model);
-  })
+  // const asset = new GltfModelAsset({
+  //   // loadUrl: "/Rampaging T-Rex.glb",
+  //   loadUrl: "/A319.glb",
+  //   // url: "/aaa.glb",
+  // })
+  // _viewer.assetManager.loadGltf(asset).then((model) => {
+  //   _viewer.editor.addObjectExecute(model);
+  // })
 })
-
 
 
 const onDrop = (event: DragEvent) => {
