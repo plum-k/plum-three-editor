@@ -12,8 +12,8 @@ import {
 } from "../manager"; // 导入渲染管理类
 import {Editor} from "../editor"; // 导入编辑器类
 import {Pick} from "./Pick"; // 导入拾取类
-import {Environment} from "./environment"; // 导入环境类
-import {deepMergeRetain, ESearchMode, ICondition, Search} from "../tool";
+import {EnvironmentManage} from "./environment"; // 导入环境类
+import {deepMergeRetain, DownloadTool, ESearchMode, ICondition, Search} from "../tool";
 import {DrawLine, MeasureTool, ThreeCameraControls} from "../control";
 import {CssRenderer} from "./CssRenderer";
 import {IOssApiOptions, OssApi} from "@plum-render/oss-api";
@@ -21,6 +21,7 @@ import {Grid} from "../mesh";
 import {Subject} from "rxjs";
 import {getPackage} from "../serializeManage/PackageFactory";
 import {Package} from "../serializeManage/package";
+import {PScene} from "./PScene";
 
 /**
  * 定义场景加载类型的枚举
@@ -83,6 +84,9 @@ export interface IViewerOptions {
      * 资源包的路径，用于加载相关资源。
      */
     packagePath?: string;
+
+    // 基础路径
+    ossBaseUrl?: string;
     /**
      * 包的类型
      * - "part": 渐进式加载
@@ -128,12 +132,10 @@ export class Viewer {
     threeCameraControls: ThreeCameraControls; // 相机控制
     sceneHelpers: THREE.Scene; // 场景辅助
     pick: Pick; // 拾取
-    environment: Environment; // 环境
+    environmentManage: EnvironmentManage; // 环境
     // @ts-ignore
     drawLine!: DrawLine; // 绘制直线
     measureTool: MeasureTool; // 测量工具
-
-    serializer: SerializeScene;
 
     editor: Editor; // 编辑器
 
@@ -155,19 +157,23 @@ export class Viewer {
     #enableGrid = false;
     #enableAxes = false;
 
-    constructor(container: string | HTMLDivElement, options: IViewerOptions = {}) {
-        this.options = deepMergeRetain(options, {}); // 合并选项
-        this.initContainer(container); // 初始化容器
+    //------------------
+    isLoad = false;
 
+    constructor(container: string | HTMLDivElement, options: IViewerOptions = {}) {
+        this.options = deepMergeRetain(options, {
+            ossBaseUrl: "three"
+        }); // 合并选项
+        this.initContainer(container); // 初始化容器
 
         this.clock = new THREE.Clock(); // 创建时钟实例
 
         // 初始化场景
-        this.scene = new THREE.Scene();
+        this.scene = new PScene();
         this.scene.name = "scene"; // 设置场景名称
 
         // 初始化场景辅助
-        this.sceneHelpers = new THREE.Scene();
+        this.sceneHelpers = new PScene();
         this.sceneHelpers.name = "sceneHelpers"; // 设置辅助场景名称
 
         // 初始化各个管理类
@@ -179,7 +185,7 @@ export class Viewer {
         this.assetManager = new AssetManager({viewer: this});
         this.pick = new Pick({viewer: this});
         this.cssRenderer = new CssRenderer({viewer: this});
-        this.environment = new Environment({viewer: this});
+        this.environmentManage = new EnvironmentManage({viewer: this});
         this.drawLine = new DrawLine({viewer: this});
         this.measureTool = new MeasureTool({viewer: this});
 
@@ -201,7 +207,6 @@ export class Viewer {
 
         this.loop.startLoop(); // 启动循环
         this.initComponent().then();
-        this.loadScene();
     }
 
     //------------------------- 添加网格 开始 -------------------
@@ -286,6 +291,19 @@ export class Viewer {
             this.ossApi = await OssApi.create(this.options.ossApiOptions);
             this.initComponentSubject.next(true);
         }
+        this.initSubject.subscribe(() => {
+            if (this.options.isCreateDefaultLight) {
+                this.environmentManage.createDefaultLight();
+            }
+
+            if (this.options.isCreateDefaultEnvironment) {
+                this.environmentManage.createDefaultEnvironment();
+            }
+            if (this.editor) {
+                this.editor.editorEventManager.sceneGraphChanged.next(true);
+            }
+        })
+        this.loadScene();
     }
 
     // 将画布添加到容器
@@ -330,6 +348,16 @@ export class Viewer {
         this.threeCameraControls.setSize(width, height); // 设置相机控制器大小
         this.cssRenderer.setSize(width, height); // 设置 CSS 渲染器大小
         this.postProcessingManager.setSize(width, height); // 设置后处理管理器大小
+    }
+
+    //--------------------- 截屏
+
+    capture() {
+        return this.renderManager.defaultWebGLRenderer.domElement.toDataURL("image/png");
+    }
+    captureDown(name:string){
+        const data = this.capture();
+        DownloadTool.saveImg(data, name);
     }
 
     //---------------- 查找节点---------------------

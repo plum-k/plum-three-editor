@@ -6,11 +6,3 @@ export function useBus() {
     return proxy!.bus;
 }
 
-export function useSetViewer() {
-    const {proxy, ctx} = getCurrentInstance()!
-    return (value: Viewer) => {
-        proxy!.bus.setViewer(value)
-    };
-}
-
-

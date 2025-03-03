@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import {ElMenu, ElMenuItem, ElSubMenu} from "element-plus";
+import {ElMenu, ElMenuItem, ElButton,ElDropdown, ElDropdownMenu, ElDropdownItem} from "element-plus";
 import {ref} from "vue";
 import {useBus} from "../../hooks";
-import {ChunkSerialize} from "@plum-render/three-sdk/src/serializeManage/package";
+import {ChunkSerialize} from "@plum-render/three-sdk";
 
 const activeIndex = ref('1')
 const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
 const bus = useBus();
-const test1 = () => {
+const chunkExport = () => {
   console.log("11")
   const viewer = bus.viewer;
   if(!viewer) return
@@ -19,24 +19,16 @@ const test1 = () => {
 </script>
 
 <template>
-  <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo w-2xl"
-      mode="horizontal"
-      @select="handleSelect"
-  >
-    <el-menu-item index="1">测试</el-menu-item>
-    <el-sub-menu index="2">
-      <template #title>文件</template>
-      <el-menu-item index="2-1">分包</el-menu-item>
-      <el-menu-item index="2-2">item two</el-menu-item>
-      <el-menu-item index="2-3">item three</el-menu-item>
-      <el-sub-menu index="2-4">
-        <template #title>导出</template>
-        <el-menu-item index="2-4-1" @click="test1">分包1</el-menu-item>
-      </el-sub-menu>
-    </el-sub-menu>
-  </el-menu>
+  <el-dropdown placement="bottom">
+    <el-button> 文件 </el-button>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item>导出原生</el-dropdown-item>
+        <el-dropdown-item @click="chunkExport">导出分包</el-dropdown-item>
+        <el-dropdown-item>导出渐进</el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
 </template>
 
 <style scoped>

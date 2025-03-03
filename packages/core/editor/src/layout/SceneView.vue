@@ -1,21 +1,22 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import {GltfModelAsset, Viewer} from "@plum-render/three-sdk";
+import {ESceneLoadType, GltfModelAsset, Viewer} from "@plum-render/three-sdk";
 import {useRoute} from "vue-router";
-import {useAmbientLight} from "../testCore/useAmbientLight.ts";
 import * as THREE from "three";
 import {BoxGeometry, Mesh, MeshStandardMaterial} from "three";
-import {useBus, useSetViewer,} from "../hooks";
+import {useBus, } from "../hooks";
 import {CameraSettingPane, Control} from "./sceneView";
 import type {IDragInfo} from "../interface/IDragInfo.ts";
 import CameraView from "./sceneView/CameraView.vue";
 import CameraInfo from "./sceneView/CameraInfo.vue";
 import Tool from "./sceneView/Tool.vue";
+import {type Id, toast, ToastPosition} from "vue3-toastify";
 
 const canvasContainer = ref<HTMLDivElement>();
-const route = useRoute();
 
-const id = route.params.appId as string;
+const bus = useBus();
+const route = useRoute();
+const appId = route.params.appId as string;
 const addBox = (_viewer, num) => {
   let cube;
   for (let i = 0; i < num; i++) {
@@ -28,23 +29,68 @@ const addBox = (_viewer, num) => {
   }
   return cube;
 }
-onMounted(() => {
+const loadIdMao = new Map<string, Id>();
+const saveIdMao = new Map<string, Id>();
 
+onMounted( () => {
   if (!canvasContainer.value) return
   let _viewer!: Viewer
-  if (id) {
-    _viewer = new Viewer(canvasContainer.value, {
-      // appUrl: "https://plum-1257591271.cos.ap-shanghai.myqcloud.com/test.zip"
-    });
-  } else {
-    _viewer = new Viewer(canvasContainer.value, {
-      // appUrl: "https://plum-1257591271.cos.ap-shanghai.myqcloud.com/test.zip"
-    });
-  }
+  _viewer = new Viewer(canvasContainer.value, {
+    appId: appId,
+    packageType: "chunk",
+    isCreateDefaultLight: true,
+    ossApiOptions: {
+      server: import.meta.env.VITE_SERVER,
+      bucket: import.meta.env.VITE_BUCKET,
+      region: import.meta.env.VITE_REGION,
+    }
+  });
+  _viewer.initSubject.subscribe(() => {
+    bus.setViewer(_viewer)
+    bus.viewerInitSubject.next(true);
+  })
+
+  // 场景加载进度条
+  _viewer.sceneLoadProgressSubject.subscribe((event) => {
+    const {type, name, total, loaded} = event;
+    const _progress = loaded / total;
+    const id = loadIdMao.get(name);
+    if (id === undefined) {
+      if (type === ESceneLoadType.Load) {
+        const newId =  toast.loading(name, {
+          autoClose: false,
+          position: toast.POSITION.TOP_RIGHT,
+          // containerId: 'toastContainer',
+        });
+        loadIdMao.set(name, newId);
+      } else {
+        if (total === loaded) {
+          return
+        }
+        const newId = toast.loading(name, {
+          autoClose: false,
+          position: toast.POSITION.TOP_RIGHT,
+          // containerId: 'toastContainer',
+        });
+        loadIdMao.set(name, newId);
+      }
+    } else {
+      if (type === ESceneLoadType.Load) {
+        toast.update(id, {
+          render: "场景加载成功", type: "success", isLoading: false, autoClose: 3000});
+        loadIdMao.clear()
+      } else {
+        if (loaded === total) {
+          toast.remove(id);
+        }else {
+          toast.update(id, {render: name, progress: _progress});
+        }
+      }
+    }
+  })
   _viewer.assetManager.startSubject.subscribe((value) => {
     // setPercent(value.loaded / value.total)
   })
-
   _viewer.assetManager.progressSubject.subscribe((value) => {
     // todo
     // setPercent(value.loaded / value.total)
@@ -59,13 +105,15 @@ onMounted(() => {
   _viewer.threeCameraControls.cameraControls.setPosition(5, 5, 5);
   _viewer.threeCameraControls.cameraControls.setTarget(0, 0, 0);
 
+
+
   addBox(_viewer, 1);
 
 
   setTimeout(() => {
     _viewer.setSize()
     // _viewer?.eventManager.objectSelected.next(cube);
-    useAmbientLight(_viewer)
+    // useAmbientLight(_viewer)
     // useDraw(_viewer)
 
     // useEnvironment(_viewer)
@@ -73,8 +121,7 @@ onMounted(() => {
     // usePostProcessingManagerTest(_viewer);
     // useSearchTest(_viewer)
     // useMeasureTest(_viewer)
-    setViewer(_viewer)
-    bus.viewerInitSubject.next(true);
+    // bus.viewerInitSubject.next(true);
 
   }, 1000)
   window.viewer = _viewer;
@@ -89,9 +136,7 @@ onMounted(() => {
     _viewer.editor.addObjectExecute(model);
   })
 })
-const bus = useBus();
 
-const setViewer = useSetViewer();
 
 
 const onDrop = (event: DragEvent) => {
@@ -237,7 +282,7 @@ function createLight(info: IDragInfo) {
 
 <template>
   <div class="h-full w-full relative flex flex-col">
-    <div ref="canvasContainer" class="container w-full  relative flex-1" @drop="onDrop">
+    <div ref="canvasContainer" id="canvasContainer" class="container w-full  relative flex-1" @drop="onDrop">
       <tool/>
       <control/>
       <camera-view/>

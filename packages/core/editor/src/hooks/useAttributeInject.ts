@@ -1,5 +1,5 @@
 import {inject} from "vue";
-import {useBus} from "./useViewer.ts";
+import {useBus} from "./useBus.ts";
 import {Subject} from "rxjs";
 import type {IObjectAttributeChange} from "./useAttributeProvide.ts";
 

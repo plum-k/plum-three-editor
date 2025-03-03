@@ -1,6 +1,7 @@
 import OSS, {Credentials} from "ali-oss";
 
 export interface IOssApiOptions {
+
     // 授权地址
     server: string;
     // 区域

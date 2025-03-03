@@ -30,7 +30,6 @@ export class DrawLine<T extends abstract new (...args: any) => any> extends Comp
     constructor(options: IDrawLine) {
         super(options);
 
-        this.scene.add(this.pointGroup)
 
         this.eventManager.leftClickPickSubject.subscribe((value) => {
 
@@ -41,9 +40,11 @@ export class DrawLine<T extends abstract new (...args: any) => any> extends Comp
         // })
     }
 
+    init() {
+        this.scene.add(this.pointGroup)
+    }
     start() {
         this.initEvent();
-
     }
 
     stop() {

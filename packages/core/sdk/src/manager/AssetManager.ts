@@ -228,8 +228,6 @@ export class AssetManager extends Component {
     loadAsset(asset: Asset, option: ILoadFun = DefaultLoadFun): Promise<unknown> {
         const extension = asset.extension;
         return new Promise((resolve, reject) => {
-            // @ts-ignore
-            resolve("")
             let loader: any
             switch (extension) {
                 case "object":

@@ -1,4 +1,4 @@
 export * from "./Bus";
-export * from "./useViewer";
+export * from "./useBus.ts";
 export * from "./useAttributeProvide";
 export * from "./useAttributeInject";

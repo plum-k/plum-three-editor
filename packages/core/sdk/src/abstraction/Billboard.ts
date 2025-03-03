@@ -9,7 +9,7 @@ export interface BillboardOptions {
     group: Group;
 }
 
-const Billboard = (config: BillboardOptions) => {
+export const Billboard = (config: BillboardOptions) => {
     const {follow, lockX, lockY, lockZ, group} = config;
 
     // 在每帧循环中
@@ -31,5 +31,3 @@ const Billboard = (config: BillboardOptions) => {
     if (lockZ) group.rotation.z = prevRotation.z;
 }
 
-export
-Billboard;

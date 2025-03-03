@@ -3,6 +3,7 @@ import {OrthographicCamera, PerspectiveCamera} from 'three';
 import CameraControls from "camera-controls";
 import {Viewer} from "../core/Viewer";
 import {deepMergeRetain} from "../tool";
+import {isMesh} from "three-is";
 
 // 安装camera-controls扩展，使其支持THREE库
 CameraControls.install({THREE: THREE});
@@ -188,6 +189,32 @@ export class ThreeCameraControls {
         // this.resetInteract();
         // this.saveState();
         // this.resetState();
+    }
+
+    // 获取场景的包围盒
+    getSceneBox() {
+        const boundingBox = new THREE.Box3();
+        this.viewer.scene.traverse((object) => {
+            if (isMesh(object)) {
+                object.geometry.computeBoundingBox();
+                if (object.geometry.boundingBox){
+                    boundingBox.union(object.geometry.boundingBox);
+                }
+            }
+        });
+        return boundingBox;
+    }
+
+    // 聚焦到场景
+    fitToScene(enableTransition: boolean = true) {
+        const boundingBox = this.getSceneBox();
+        this.cameraControls.fitToBox(boundingBox, enableTransition);
+    }
+
+    // 聚焦到模型
+    fitToBox(box3OrObject: THREE.Box3 | THREE.Object3D,
+             enableTransition: boolean) {
+        this.cameraControls.fitToBox(box3OrObject, enableTransition);
     }
 
     // setOrthographic(isOrthographic) {

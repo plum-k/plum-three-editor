@@ -41,7 +41,7 @@ export class EditorEventManager extends Component {
     sceneFogSettingsChanged = new Subject<any>();
 
     // 场景变化事件
-    sceneGraphChanged = new BehaviorSubject(null);
+    sceneGraphChanged = new BehaviorSubject(false);
 
 
     cameraChanged = new Subject<any>();

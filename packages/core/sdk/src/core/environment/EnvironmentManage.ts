@@ -5,6 +5,7 @@ import {Component, IComponentOptions} from "../Component";
 import {TextureEncoding} from "three-stdlib/types/shared";
 import {Asset} from "../asset/Asset";
 import {deepMergeRetain} from "../../tool";
+import {isDirectionalLight} from "three-is";
 
 export interface IEnvironment extends IComponentOptions {
     frames?: number
@@ -54,7 +55,7 @@ export interface ISetEnvironmentOptions extends ISetEnvOption {
     encoding?: TextureEncoding;
 }
 
-export class Environment extends Component {
+export class EnvironmentManage extends Component {
 
     constructor(options: IEnvironment) {
         super(options);
@@ -160,5 +161,25 @@ export class Environment extends Component {
                 ..._options
             })
         })
+    }
+
+    createDefaultLight() {
+        let isHasDirectionalLight = false
+        this.scene.traverse((obj) => {
+            if (isDirectionalLight(obj)) {
+                isHasDirectionalLight = true;
+            }
+        })
+        if (!isHasDirectionalLight) {
+            const light = new THREE.DirectionalLight(0xffffff, 2);
+            light.name = 'DirectionalLight';
+            light.position.set(5, 10, 7.5);
+            this.scene.add(light);
+        }
+    }
+
+    createDefaultEnvironment() {
+
+
     }
 }

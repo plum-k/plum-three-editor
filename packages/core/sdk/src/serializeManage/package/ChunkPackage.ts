@@ -22,6 +22,7 @@ export class ChunkSerialize extends Package {
     }
 
     loadScene(): void {
+        console.log(new Error('加载场景中').stack)
         this.viewer.sceneLoadProgressSubject.next({
             type: ESceneLoadType.Load,
             name: `加载场景中`,
@@ -30,7 +31,7 @@ export class ChunkSerialize extends Package {
         })
         const options = this.viewer.options;
         const {appId, packagePath} = options;
-        let Key = `${appId}/${appId}.${ChunkSerialize.Type}`
+        let Key = `${this.viewer.options.ossBaseUrl}/scene/${appId}/${appId}.${ChunkSerialize.Type}`
         if (isNil(appId)) {
             throw new Error("appId 为空");
         }
@@ -38,6 +39,7 @@ export class ChunkSerialize extends Package {
             // 从远程存储加载场景
             this.viewer.ossApi.head(Key).then((data) => {
                 const url = this.viewer.ossApi!.signatureUrl(Key);
+                console.log("获取 url",url)
                 axios.get(url, {
                     responseType: "blob",
                     onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
@@ -153,6 +155,7 @@ export class ChunkSerialize extends Package {
         await zipReader.close();
         sceneInfo.geometries = geometries;
         sceneInfo.materials = materials;
+
         console.log("还原场景数据", sceneInfo)
         const asset = new Asset({
             result: sceneInfo,
@@ -169,7 +172,7 @@ export class ChunkSerialize extends Package {
     uploadPack(blob: Blob) {
         const appId = this.viewer.options.appId;
         if (!isNil(this.viewer.ossApi)) {
-            const name = `${appId}/${appId}.${ChunkSerialize.Type}`;
+            const name = `${this.viewer.options.ossBaseUrl}/scene/${appId}/${appId}.${ChunkSerialize.Type}`;
             this.viewer.ossApi.put(name, blob).then((data) => {
                 console.log(data)
                 this.viewer.sceneSaveProgressSubject.next({
