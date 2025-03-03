@@ -32,7 +32,7 @@ const sync = () => {
 
   if (object && isMesh(object) && isActive.value) {
     isVisible.value = true;
-    threeSyncUi(object);
+    threeToUi(object);
   } else {
     isVisible.value = false;
   }
@@ -76,7 +76,7 @@ const form = reactive({
 });
 
 // ui -> three
-const threeSyncUi = (object: THREE.Mesh) => {
+const threeToUi = (object: THREE.Mesh) => {
   const _material = object.material;
   const material: THREE.MeshPhysicalMaterial = isArray(_material) ? _material[0] as THREE.MeshPhysicalMaterial : _material as THREE.MeshPhysicalMaterial;
 
@@ -117,7 +117,7 @@ const threeSyncUi = (object: THREE.Mesh) => {
   <el-form :model="form" label-position="left" label-width="auto" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
-    <text-item label="名称" name="name"/>
+    <input-item label="名称" name="name"/>
     <color-item label="颜色" name="color"/>
     <input-number-item label="反射率" name="reflectivity"/>
 

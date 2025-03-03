@@ -12,6 +12,7 @@ interface Props extends Partial<InputNumberProps> {
 }
 
 const props = defineProps<Props>();
+const {name, label} = props
 const formContext = inject(formContextKey, undefined)
 
 const bus = useBus();

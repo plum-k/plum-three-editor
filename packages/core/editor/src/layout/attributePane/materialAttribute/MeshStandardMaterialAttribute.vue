@@ -5,7 +5,7 @@ import {isArray, set} from "lodash-es";
 import * as THREE from "three";
 import {isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
-import {BoolItem, ColorItem, InputNumberItem, SelectItem, TextItem, Vector2Item} from "../../../common-ui";
+import {BoolItem, ColorItem, InputItem, InputNumberItem, SelectItem, TextItem, Vector2Item} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
 
 const bus = useBus();
@@ -32,7 +32,7 @@ const sync = () => {
 
   if (object && isMesh(object) && isActive.value) {
     isVisible.value = true;
-    threeSyncUi(object);
+    threeToUi(object);
   } else {
     isVisible.value = false;
   }
@@ -103,7 +103,7 @@ const form = reactive({
 });
 
 // ui -> three
-const threeSyncUi = (object: THREE.Mesh) => {
+const threeToUi = (object: THREE.Mesh) => {
   const _material = object.material;
   const material: THREE.MeshStandardMaterial = isArray(_material) ? _material[0] as THREE.MeshStandardMaterial : _material as THREE.MeshStandardMaterial;
 
@@ -164,7 +164,8 @@ const threeSyncUi = (object: THREE.Mesh) => {
   <el-form :model="form" label-position="left" label-width="auto" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
-    <text-item label="名称" name="name"/>
+    <input-item label="名称" name="name"/>
+
     <color-item label="颜色" name="color"/>
 
     <color-item label="自发光" name="emissive"/>

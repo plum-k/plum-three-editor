@@ -1,3 +1,4 @@
+export * from "./bufferGeometry";
 export * from "./cameras";
 export * from './helpers';
 export * from './index';

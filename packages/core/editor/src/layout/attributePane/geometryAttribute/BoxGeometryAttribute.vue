@@ -1,164 +1,140 @@
 <script lang="ts" setup>
-import {ElEmpty} from "element-plus";
-import {onMounted, reactive, ref} from "vue";
-import {isArray, isNil} from "lodash-es";
-import {
-  isLineBasicMaterial,
-  isLineDashedMaterial,
-  isMesh,
-  isMeshBasicMaterial,
-  isMeshDepthMaterial,
-  isMeshLambertMaterial,
-  isMeshMatcapMaterial,
-  isMeshNormalMaterial,
-  isMeshPhongMaterial,
-  isMeshPhysicalMaterial,
-  isMeshStandardMaterial,
-  isMeshToonMaterial,
-  isPointsMaterial,
-  isRawShaderMaterial,
-  isShaderMaterial,
-  isShadowMaterial,
-  isSpriteMaterial
-} from "three-is";
-import {
-  LineBasicMaterialAttribute,
-  LineDashedMaterialAttribute,
-  MeshBasicMaterialAttribute,
-  MeshDepthMaterialAttribute,
-  MeshLambertMaterialAttribute,
-  MeshMatcapMaterialAttribute,
-  MeshNormalMaterialAttribute,
-  MeshPhysicalMaterialAttribute,
-  MeshStandardMaterialAttribute,
-  MeshToonMaterialAttribute,
-  PointsMaterialAttribute,
-  RawShaderMaterialAttribute,
-  ShaderMaterialAttribute,
-  ShadowMaterialAttribute,
-  SpriteMaterialAttribute
-} from "./materialAttribute";
-import {useBus} from "../../hooks";
+import {ElForm} from "element-plus";
+import {computed, inject, onMounted, reactive, ref} from "vue";
+import * as THREE from "three";
+import {isMesh} from "three-is";
+import {useAttributeProvide, useBus} from "../../../hooks";
+import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
 
-// const {isActive} = useAttributePane(props)
 const bus = useBus();
-// const props = defineProps<AttributePaneNameProps>();
 
-const show = ref(true);
-const text = ref("未选择对象");
-// 定义材质的显示状态
-const materialShow = reactive({
-  isLineBasicMaterial: false,
-  isLineDashedMaterial: false,
-  isMeshBasicMaterial: false,
-  isMeshDepthMaterial: false,
-  isMeshNormalMaterial: false,
-  isMeshLambertMaterial: false,
-  isMeshMatcapMaterial: false,
-  isMeshPhongMaterial: false,
-  isMeshToonMaterial: false,
-  isMeshStandardMaterial: false,
-  isMeshPhysicalMaterial: false,
-  isRawShaderMaterial: false,
-  isShaderMaterial: false,
-  isShadowMaterial: false,
-  isSpriteMaterial: false,
-  isPointsMaterial: false,
-});
+const tabActiveName = inject("tabActiveName", ref("几何"))
 
-// 同步材质状态的函数
-const sync = () => {
-  const object = bus.selectObject;
-  if (isNil(object)) {
-    show.value = true;
-    text.value = "未选择对象";
-    return;
-  }
-  if (isMesh(object)) {
-    show.value = false;
-    const _material = object.material;
-    const material = isArray(_material) ? _material[0] : _material;
-    materialShow.isLineBasicMaterial = isBoxGeometry(material);
-    materialShow.isLineDashedMaterial = isLineDashedMaterial(material);
-    materialShow.isMeshBasicMaterial = isMeshBasicMaterial(material);
-    materialShow.isMeshDepthMaterial = isMeshDepthMaterial(material);
-    materialShow.isMeshNormalMaterial = isMeshNormalMaterial(material);
-    materialShow.isMeshLambertMaterial = isMeshLambertMaterial(material);
-    materialShow.isMeshMatcapMaterial = isMeshMatcapMaterial(material);
-    materialShow.isMeshPhongMaterial = isMeshPhongMaterial(material);
-    materialShow.isMeshToonMaterial = isMeshToonMaterial(material);
-    materialShow.isMeshStandardMaterial = isMeshStandardMaterial(material);
-    materialShow.isMeshPhysicalMaterial = isMeshPhysicalMaterial(material);
-    materialShow.isRawShaderMaterial = isRawShaderMaterial(material);
-    materialShow.isShaderMaterial = isShaderMaterial(material);
-    materialShow.isShadowMaterial = isShadowMaterial(material);
-    materialShow.isSpriteMaterial = isSpriteMaterial(material);
-    materialShow.isPointsMaterial = isPointsMaterial(material);
-  } else {
-    show.value = true;
-    text.value = "对象没有材质";
-  }
-};
-bus.viewerInitSubject.subscribe(() => {
-  const viewer = bus.viewer;
-  if (viewer) {
-    viewer.editor.editorEventManager.objectSelected.subscribe(() => {
-      sync();
-
-    })
-    sync();
-  }
+const isActive = computed(() => {
+  return tabActiveName.value === "几何"
 })
+const isVisible = ref(false);
+
 onMounted(() => {
   const viewer = bus.viewer;
   if (!viewer) return;
   sync();
-  viewer.editor.editorEventManager.objectSelected.subscribe(() => {
-    sync();
 
+  viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
+    sync();
   })
 })
 
-// const materialClasses: Record<string, any> = {
-//   'LineBasicMaterial': THREE.LineBasicMaterial,
-//   'LineDashedMaterial': THREE.LineDashedMaterial,
-//   'MeshBasicMaterial': THREE.MeshBasicMaterial,
-//   'MeshDepthMaterial': THREE.MeshDepthMaterial,
-//   'MeshNormalMaterial': THREE.MeshNormalMaterial,
-//   'MeshLambertMaterial': THREE.MeshLambertMaterial,
-//   'MeshMatcapMaterial': THREE.MeshMatcapMaterial,
-//   'MeshPhongMaterial': THREE.MeshPhongMaterial,
-//   'MeshToonMaterial': THREE.MeshToonMaterial,
-//   'MeshStandardMaterial': THREE.MeshStandardMaterial,
-//   'MeshPhysicalMaterial': THREE.MeshPhysicalMaterial,
-//   'RawShaderMaterial': THREE.RawShaderMaterial,
-//   'ShaderMaterial': THREE.ShaderMaterial,
-//   'ShadowMaterial': THREE.ShadowMaterial,
-//   'SpriteMaterial': THREE.SpriteMaterial,
-//   'PointsMaterial': THREE.PointsMaterial
-// };
+const sync = () => {
+  const object = bus.selectObject;
+  if (object && isMesh(object) && isActive.value) {
+    isVisible.value = true;
+    threeToUi(object.geometry as THREE.BoxGeometry);
+  } else {
+    isVisible.value = false;
+  }
+}
+
+// ui -> three
+const {objectAttributeChangeSubject} = useAttributeProvide()
+objectAttributeChangeSubject.subscribe((editValue) => {
+  const {name, value} = editValue;
+  const object = bus.selectObject;
+  if (!object) return;
+  if (!isMesh(object)) return;
+  if (!isActive.value) return;
+  if (name === 'name') {
+    object.name = value;
+  } else {
+    const geometry = object.geometry as THREE.BoxGeometry;
+    const newGeometry = new THREE.BoxGeometry(
+        form.width,
+        form.height,
+        form.depth,
+        form.widthSegments,
+        form.heightSegments,
+        form.depthSegments
+    );
+    // object.geometry.dispose();
+    geometry.copy(newGeometry);
+  }
+
+})
+const form = reactive({
+  type: '',
+  uuid: '',
+  name: '',
+  width: 0,
+  height: 0,
+  depth: 0,
+  widthSegments: 0,
+  heightSegments: 0,
+  depthSegments: 0,
+});
+
+// ui -> three
+const threeToUi = (geometry: THREE.BoxGeometry) => {
+  form.type = geometry.type;
+  form.uuid = geometry.uuid;
+  form.name = geometry.name;
+  form.width = geometry.parameters.width;
+  form.height = geometry.parameters.height;
+  form.depth = geometry.parameters.depth;
+
+  form.widthSegments = geometry.parameters.widthSegments;
+  form.heightSegments = geometry.parameters.heightSegments;
+  form.depthSegments = geometry.parameters.depthSegments;
+}
+const items = useMemo(() => {
+  let list = []
+  if (geometry) {
+    if (geometry.index !== null) {
+      list.push({
+        key: '0',
+        label: '索引',
+        children: geometry.index.count,
+      })
+    }
+    const attributes = geometry.attributes;
+    for (const name in attributes) {
+      const attribute = attributes[name];
+      console.log(name)
+
+      let {count, itemSize} = attribute
+
+      list.push({
+        key: nameMap.get(name),
+        label: nameMap.get(name),
+        children: `${count}(${count / itemSize}*${itemSize})`,
+      })
+    }
+
+  }
+  return list
+}, [geometry])
+属性
+
+geometry.computeVertexNormals();
+计算顶点法线
+
+editor?.showNormals(selectObject3D as THREE.Object3D);
+显示顶点法线
 </script>
 
 <template>
-  <div v-if="show" class="h-full flex justify-center items-center">
-    <el-empty :description="text"/>
-  </div>
-  <line-basic-material-attribute v-else-if="materialShow.isLineBasicMaterial"/>
-  <line-dashed-material-attribute v-else-if="materialShow.isLineDashedMaterial"/>
-  <mesh-basic-material-attribute v-else-if="materialShow.isMeshBasicMaterial"/>
-  <mesh-depth-material-attribute v-else-if="materialShow.isMeshDepthMaterial"/>
-  <mesh-lambert-material-attribute v-else-if="materialShow.isMeshLambertMaterial"/>
-  <mesh-matcap-material-attribute v-else-if="materialShow.isMeshMatcapMaterial"/>
-  <mesh-normal-material-attribute v-else-if="materialShow.isMeshNormalMaterial"/>
-  <mesh-physical-material-attribute v-else-if="materialShow.isMeshPhysicalMaterial"/>
-  <mesh-standard-material-attribute v-else-if="materialShow.isMeshStandardMaterial"/>
-  <mesh-toon-material-attribute v-else-if="materialShow.isMeshToonMaterial"/>
-  <points-material-attribute v-else-if="materialShow.isPointsMaterial"/>
-  <raw-shader-material-attribute v-else-if="materialShow.isRawShaderMaterial"/>
-  <shader-material-attribute v-else-if="materialShow.isShaderMaterial"/>
-  <shadow-material-attribute v-else-if="materialShow.isShadowMaterial"/>
-  <sprite-material-attribute v-else-if="materialShow.isSpriteMaterial"/>
+  <el-form :model="form" label-position="left" label-width="auto" size="small">
+    <text-item label="类型" name="type"/>
+    <text-item label="uuid" name="uuid"/>
+    <input-item label="名称" name="name"/>
 
+    <input-number-item label="宽度" name="width"/>
+    <input-number-item label="高度" name="height"/>
+    <input-number-item label="深度" name="depth"/>
+
+    <input-number-item label="宽度分割数" name="widthSegments"/>
+    <input-number-item label="高度分割数" name="heightSegments"/>
+    <input-number-item label="深度分割数" name="depthSegments"/>
+  </el-form>
 </template>
 
 <style scoped>

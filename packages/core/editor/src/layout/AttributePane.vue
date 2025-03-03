@@ -20,7 +20,7 @@ provide("tabActiveName", activeName)
     </el-tab-pane>
     <el-tab-pane label="几何" name="几何">
       <el-scrollbar class="h-full">
-        <geometry-attribute/>
+        <geometry-attribute tab-name="几何"/>
       </el-scrollbar>
     </el-tab-pane>
     <el-tab-pane class="e-tabs h-full" label="材质" name="材质">
