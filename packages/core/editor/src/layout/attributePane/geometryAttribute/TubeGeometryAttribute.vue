@@ -4,7 +4,7 @@ import {computed, inject, onMounted, reactive, ref} from "vue";
 import * as THREE from "three";
 import {isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
-import {BoolItem, TextItem} from "../../../common-ui";
+import {BoolItem, InputItem, InputNumberItem, TextItem} from "../../../common-ui";
 
 const bus = useBus();
 

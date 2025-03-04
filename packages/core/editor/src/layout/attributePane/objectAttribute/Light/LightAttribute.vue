@@ -5,7 +5,6 @@ import SpotLightAttribute from "./SpotLightAttribute.vue";
 import AmbientLightAttribute from "./AmbientLightAttribute.vue";
 import PointLightAttribute from "./PointLightAttribute.vue";
 import {onMounted, reactive} from "vue";
-
 import {useBus} from "../../../../hooks";
 import {isAmbientLight, isDirectionalLight, isHemisphereLight, isPointLight, isSpotLight} from "three-is";
 

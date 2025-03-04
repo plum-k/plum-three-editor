@@ -5,12 +5,11 @@ import {useRoute} from "vue-router";
 import * as THREE from "three";
 import {BoxGeometry, Mesh, MeshStandardMaterial} from "three";
 import {useBus,} from "../hooks";
-import {CameraSettingPane, Control} from "./sceneView";
+import {Control} from "./sceneView";
 import type {IDragInfo} from "../interface/IDragInfo.ts";
-import CameraView from "./sceneView/CameraView.vue";
 import CameraInfo from "./sceneView/CameraInfo.vue";
-import Tool from "./sceneView/Tool.vue";
 import {type Id, toast} from "vue3-toastify";
+import ViewTool from "./sceneView/ViewTool.vue";
 
 const canvasContainer = ref<HTMLDivElement>();
 
@@ -39,6 +38,7 @@ onMounted(() => {
     appId: appId,
     packageType: "chunk",
     isCreateDefaultLight: true,
+    isGizmo: true,
     ossApiOptions: {
       server: import.meta.env.VITE_SERVER,
       bucket: import.meta.env.VITE_BUCKET,
@@ -57,7 +57,7 @@ onMounted(() => {
     if (id === undefined) {
       if (type === ESceneLoadType.Load) {
         const newId = toast.loading(name, {
-          position: toast.POSITION.TOP_RIGHT,
+          position: toast.POSITION.BOTTOM_CENTER,
           // containerId: 'toastContainer',
         });
         loadIdMao.set(name, newId);
@@ -66,7 +66,7 @@ onMounted(() => {
           return
         }
         const newId = toast.loading(name, {
-          position: toast.POSITION.TOP_RIGHT,
+          position: toast.POSITION.BOTTOM_CENTER,
           // containerId: 'toastContainer',
         });
         loadIdMao.set(name, newId);
@@ -137,10 +137,7 @@ const onDrop = (event: DragEvent) => {
   if (!event.dataTransfer) return
   const files = event.dataTransfer.files;
   if (files.length > 0) {
-
     const viewer = bus.viewer;
-
-
     viewer?.assetManager.dragHandler(event)
   } else {
     const data = event!.dataTransfer!.getData('data');
@@ -275,11 +272,9 @@ function createLight(info: IDragInfo) {
 
 <template>
   <div class="h-full w-full relative flex flex-col">
-    <div id="canvasContainer" ref="canvasContainer" class="container w-full  relative flex-1" @drop="onDrop">
-      <tool/>
+    <view-tool/>
+    <div id="canvasContainer" ref="canvasContainer" class="container w-full relative flex-1" @drop="onDrop">
       <control/>
-      <camera-view/>
-      <camera-setting-pane/>
     </div>
     <camera-info/>
   </div>

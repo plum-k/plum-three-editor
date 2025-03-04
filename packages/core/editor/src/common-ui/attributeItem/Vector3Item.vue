@@ -28,7 +28,7 @@ const change = (value: number, key: string) => {
 <template>
   <el-form-item :label="label" size="small">
     <el-form-item label="x" size="small">
-      <el-inpuel-number
+      <el-input-number
           v-model="formContext.model[name]['x']"
           controls-position="right"
           size="small"
@@ -36,7 +36,7 @@ const change = (value: number, key: string) => {
       />
     </el-form-item>
     <el-form-item label="y" size="small">
-      <el-inpuel-number
+      <el-input-number
           v-model="formContext.model[name]['y']"
           controls-position="right"
           size="small"
@@ -44,7 +44,7 @@ const change = (value: number, key: string) => {
       />
     </el-form-item>
     <el-form-item label="z" size="small">
-      <el-inpuel-number
+      <el-input-number
           v-model="formContext.model[name]['z']"
           controls-position="right"
           size="small"

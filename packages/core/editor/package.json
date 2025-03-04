@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "tdesign-vue-next": "^1.11.1",
     "@imengyu/vue3-context-menu": "^1.4.4",
     "@plum-render/three-sdk": "workspace:*",
     "@vueuse/core": "^12.7.0",

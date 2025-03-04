@@ -144,7 +144,6 @@ const list = computed(() => {
 <template>
   <div class="flex flex-wrap gap-2">
     <drag-card v-for="(item,index) in list" :key="index" v-bind="item">
-
     </drag-card>
   </div>
 </template>

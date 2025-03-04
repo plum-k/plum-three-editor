@@ -4,9 +4,9 @@ import {onMounted, reactive, ref} from "vue";
 import * as THREE from "three";
 import {Object3D} from "three";
 import {useBus} from "../../../hooks";
-import {BoolItem, TextItem, Vector3Item} from "../../../common-ui";
 import {isObject3D} from "three-is";
 import {find} from "lodash-es";
+import {BoolItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
 
 const form = reactive({
   type: "",

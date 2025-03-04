@@ -22,6 +22,7 @@ import {Subject} from "rxjs";
 import {getPackage} from "../serializeManage/PackageFactory";
 import {Package} from "../serializeManage/package";
 import {PScene} from "./PScene";
+import {GizmoManager} from "../manager/GizmoManager";
 
 /**
  * 定义场景加载类型的枚举
@@ -108,6 +109,10 @@ export interface IViewerOptions {
      * 是否创建默认环境，默认为 false。
      */
     isCreateDefaultEnvironment?: boolean;
+    /**
+     * 显示小控件
+     */
+    isGizmo?: boolean;
 }
 
 // 定义 Viewer 类
@@ -123,6 +128,7 @@ export class Viewer {
     assetManager: AssetManager; // 资源管理
     renderManager: RenderManager; // 渲染管理
     helperManager: HelperManager; // 辅助管理
+    gizmoManager: GizmoManager;
     postProcessingManager: PostProcessingManager; // 后处理管理
     debug: DebugManager; // 调试管理
     loop: Loop; // 循环管理
@@ -161,9 +167,10 @@ export class Viewer {
     isLoad = false;
 
     constructor(container: string | HTMLDivElement, options: IViewerOptions = {}) {
-        this.options = deepMergeRetain(options, {
-            ossBaseUrl: "three"
-        }); // 合并选项
+        this.options = deepMergeRetain({
+            ossBaseUrl: "three",
+            isGizmo: false,
+        },options); // 合并选项
         this.initContainer(container); // 初始化容器
 
         this.clock = new THREE.Clock(); // 创建时钟实例
@@ -188,14 +195,14 @@ export class Viewer {
         this.environmentManage = new EnvironmentManage({viewer: this});
         this.drawLine = new DrawLine({viewer: this});
         this.measureTool = new MeasureTool({viewer: this});
-
+        this.gizmoManager = new GizmoManager({viewer: this});
         this.animationMixer = new THREE.AnimationMixer(this.scene); // 创建动画混合器实例
 
         this.addCanvasToContainer(); // 将画布添加到容器
         this.setSize(); // 设置初始大小
 
         // 订阅窗口大小变化事件
-        this.eventManager.resizeSubject.subscribe(size => {
+        this.eventManager.resizeSubject.subscribe(() => {
             this.setSize(); // 调整大小
         });
 
@@ -291,6 +298,10 @@ export class Viewer {
             this.ossApi = await OssApi.create(this.options.ossApiOptions);
             this.initComponentSubject.next(true);
         }
+
+        if (this.options.isGizmo) {
+            this.gizmoManager.init();
+        }
         this.initSubject.subscribe(() => {
             if (this.options.isCreateDefaultLight) {
                 this.environmentManage.createDefaultLight();
@@ -302,6 +313,7 @@ export class Viewer {
             if (this.editor) {
                 this.editor.editorEventManager.sceneGraphChanged.next(true);
             }
+            this.eventManager.resizeSubject.next(true);
         })
         this.loadScene();
     }
@@ -355,7 +367,8 @@ export class Viewer {
     capture() {
         return this.renderManager.defaultWebGLRenderer.domElement.toDataURL("image/png");
     }
-    captureDown(name:string){
+
+    captureDown(name: string) {
         const data = this.capture();
         DownloadTool.saveImg(data, name);
     }

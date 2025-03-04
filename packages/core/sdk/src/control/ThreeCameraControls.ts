@@ -33,7 +33,8 @@ export enum CameraViewType {
 export class ThreeCameraControls {
     options: any;
     viewer: Viewer
-    perspectiveCamera: PerspectiveCamera | OrthographicCamera;
+    perspectiveCamera: PerspectiveCamera
+    orthographicCamera : OrthographicCamera;
     cameraControls: CameraControls;
     width: number;
     height: number;
@@ -57,7 +58,6 @@ export class ThreeCameraControls {
         this.perspectiveCamera = new THREE.PerspectiveCamera(60, width / height, 0.01, 18000);
         this.cameraControls = new CameraControls(this.perspectiveCamera, defaultWebGLRenderer.domElement);
 
-
         this.cameraControls.maxDistance = 99999;
         this.cameraControls.minDistance = -99999;
     }
@@ -75,8 +75,7 @@ export class ThreeCameraControls {
     setSize(width: number, height: number, updateStyle?: boolean) {
         this.width = width;
         this.height = height;
-        const aspect = width / height;
-        this.perspectiveCamera.aspect = aspect;
+        this.perspectiveCamera.aspect = width / height;
         this.perspectiveCamera.updateProjectionMatrix();
     }
 

@@ -20,8 +20,8 @@ const onDragStart = (event: any) => {
       draggable="true"
       @dragstart="onDragStart"
   >
-    <Icon :icon-name="icon" class="mel-3 ml-auto mr-auto"/>
-    <div class="mel-2 ml-auto mr-auto w-full texel-center truncate">{{ label }}</div>
+    <Icon :icon-name="icon" class="mt-3 ml-auto mr-auto"/>
+    <div class="mt-2 ml-auto mr-auto w-full text-center truncate">{{ label }}</div>
   </div>
 </template>
 

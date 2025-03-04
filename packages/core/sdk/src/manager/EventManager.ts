@@ -15,7 +15,7 @@ export class EventManager extends Component {
 
 
     dblClickSubject = new Subject<MouseEvent>();
-    resizeSubject = new Subject<UIEvent>();
+    resizeSubject = new Subject<boolean>();
     // 每次渲染更新时候触发
     renderSubject = new Subject<number>();
 
@@ -153,7 +153,7 @@ export class EventManager extends Component {
 
         // Resize
         resize.subscribe(event => {
-            this.resizeSubject.next(event);
+            this.resizeSubject.next(true);
         });
     }
 }

@@ -40,6 +40,7 @@ import SphereGeometryAttribute from "./geometryAttribute/SphereGeometryAttribute
 import TetrahedronGeometryAttribute from "./geometryAttribute/TetrahedronGeometryAttribute.vue";
 import TorusGeometryAttribute from "./geometryAttribute/TorusGeometryAttribute.vue";
 import TubeGeometryAttribute from "./geometryAttribute/TubeGeometryAttribute.vue";
+import TorusKnotGeometryAttribute from "./geometryAttribute/TorusKnotGeometryAttribute.vue";
 
 // const {isActive} = useAttributePane(props)
 const bus = useBus();
@@ -145,7 +146,7 @@ onMounted(() => {
   <sphere-geometry-attribute v-else-if="geometryShow.isSphereGeometry"/>
   <tetrahedron-geometry-attribute v-else-if="geometryShow.isTetrahedronGeometry"/>
   <torus-geometry-attribute v-else-if="geometryShow.isTorusGeometry"/>
-  <torus-knoel-geometry-attribute v-else-if="geometryShow.isTorusKnotGeometry"/>
+  <torus-knot-geometry-attribute v-else-if="geometryShow.isTorusKnotGeometry"/>
   <tube-geometry-attribute v-else-if="geometryShow.isTubeGeometry"/>
   <buffer-geometry-attribute v-else-if="geometryShow.isBufferGeometry"/>
 </template>

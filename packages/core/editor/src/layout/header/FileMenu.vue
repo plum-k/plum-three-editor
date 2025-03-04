@@ -1,22 +1,11 @@
 <script lang="ts" setup>
-import {ElButton, ElDropdown, ElDropdownItem, ElDropdownMenu} from "element-plus";
+import {Button as TButton, Dropdown as TDropdown, type DropdownProps, MessagePlugin} from 'tdesign-vue-next';
+
 import {useBus} from "../../hooks";
 import {ChunkSerialize, ExporterTool} from "@plum-render/three-sdk";
 import {isMesh} from "three-is";
 
 const bus = useBus();
-const save = () => {
-  const viewer = bus.viewer;
-  if (!viewer) return
-  const chunkSerialize = new ChunkSerialize({viewer});
-  chunkSerialize.pack();
-}
-const chunkExport = () => {
-  const viewer = bus.viewer;
-  if (!viewer) return
-  const chunkSerialize = new ChunkSerialize({viewer});
-  chunkSerialize.pack();
-}
 
 enum FileFormat {
   DRC = "DRC",
@@ -30,11 +19,68 @@ enum FileFormat {
   USDZ = "USDZ"
 }
 
-const handleExport = (format: FileFormat) => {
-  console.log(`导出为 ${format} 格式`);
+const options: DropdownProps['options'] = [
+  {
+    content: '保存',
+    value: 1,
+  },
+  {
+    content: '导出场景包',
+    value: 2,
+    children: [
+      {
+        content: '原生',
+        value: 5,
+      },
+      {
+        content: '压缩',
+        value: 6,
+      },
+      {
+        content: '分包',
+        value: 6,
+      },
+    ],
+  },
+  {
+    content: '导出模型',
+    value: '导出模型',
+    children: [
+      {content: FileFormat.DRC, value: FileFormat.DRC},
+      {content: FileFormat.GLB, value: FileFormat.GLB},
+      {content: FileFormat.GLTF, value: FileFormat.GLTF},
+      {content: FileFormat.OBJ, value: FileFormat.OBJ},
+      {content: FileFormat.PLY, value: FileFormat.PLY},
+      {content: FileFormat.PLY_BINARY, value: FileFormat.PLY_BINARY},
+      {content: FileFormat.STL, value: FileFormat.STL},
+      {content: FileFormat.STL_BINARY, value: FileFormat.STL_BINARY},
+      {content: FileFormat.USDZ, value: FileFormat.USDZ}
+    ]
+  }
+];
+const clickHandler: DropdownProps['onClick'] = (data) => {
+  console.log(data)
+  MessagePlugin.success(`选中【${data.content}】`);
+
   const viewer = bus.viewer;
   const exporterTool = ExporterTool.getInstance();
-  switch (format) {
+  switch (data.content) {
+    case "保存": {
+      const viewer = bus.viewer;
+      if (!viewer) return
+      const chunkSerialize = new ChunkSerialize({viewer});
+      chunkSerialize.pack();
+      break;
+    }
+    case "原生": {
+      break;
+    }
+    case "压缩": {
+      break;
+    }
+    case "分包": {
+      break;
+    }
     case FileFormat.DRC: {
       const object = viewer?.editor.selector.selectObject
       if (isMesh(object)) {
@@ -105,27 +151,19 @@ const handleExport = (format: FileFormat) => {
       break;
     }
   }
+
+
 };
+
 </script>
 
+
 <template>
-  <el-dropdown placement="bottom">
-    <el-button size="small" text> 文件</el-button>
-    <template #dropdown>
-      <el-dropdown-menu>
-        <el-dropdown-item @click="save">保存</el-dropdown-item>
-      </el-dropdown-menu>
-      <el-dropdown-menu>
-        <el-dropdown-item>导出原生</el-dropdown-item>
-        <el-dropdown-item @click="chunkExport">导出分包</el-dropdown-item>
-        <el-dropdown-item>导出渐进</el-dropdown-item>
-      </el-dropdown-menu>
-      <el-dropdown-menu>
-        <el-dropdown-item v-for="(value, key) in FileFormat" :key="key" @click="handleExport(value)">{{ value }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </template>
-  </el-dropdown>
+  <t-dropdown :max-column-width="120" :options="options" @click="clickHandler">
+    <t-button variant="text">
+      文件
+    </t-button>
+  </t-dropdown>
 </template>
 
 <style scoped>

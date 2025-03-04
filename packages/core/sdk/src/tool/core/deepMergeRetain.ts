@@ -1,5 +1,11 @@
 import {get, isNil, isPlainObject} from "lodash-es";
 
+
+/**
+ * 合并对象
+ * @param target
+ * @param source 默认参数
+ */
 export function deepMergeRetain(target: object, source?: Object): any {
     if (isNil(source)) {
         return target;

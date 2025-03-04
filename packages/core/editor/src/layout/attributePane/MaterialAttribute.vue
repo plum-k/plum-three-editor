@@ -26,6 +26,7 @@ import {
   LineDashedMaterialAttribute,
   MeshBasicMaterialAttribute,
   MeshDepthMaterialAttribute,
+  MeshLambertMaterialAttribute,
   MeshMatcapMaterialAttribute,
   MeshNormalMaterialAttribute,
   MeshPhysicalMaterialAttribute,
@@ -146,7 +147,7 @@ onMounted(() => {
   <line-dashed-material-attribute v-else-if="materialShow.isLineDashedMaterial"/>
   <mesh-basic-material-attribute v-else-if="materialShow.isMeshBasicMaterial"/>
   <mesh-depth-material-attribute v-else-if="materialShow.isMeshDepthMaterial"/>
-  <mesh-lamberel-material-attribute v-else-if="materialShow.isMeshLambertMaterial"/>
+  <mesh-lambert-material-attribute v-else-if="materialShow.isMeshLambertMaterial"/>
   <mesh-matcap-material-attribute v-else-if="materialShow.isMeshMatcapMaterial"/>
   <mesh-normal-material-attribute v-else-if="materialShow.isMeshNormalMaterial"/>
   <mesh-physical-material-attribute v-else-if="materialShow.isMeshPhysicalMaterial"/>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {onMounted, reactive} from "vue";
 import * as THREE from "three";
-import {BoolItem, ColorItem, TextItem, Vector3Item} from "../../../../common-ui";
+import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
 import {ElForm} from "element-plus";
 import {useAttributeProvide, useBus} from "../../../../hooks";
 import {set} from "lodash-es";

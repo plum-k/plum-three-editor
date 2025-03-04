@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import {onMounted, reactive} from "vue";
-import {ElButton, ElCol, ElForm, ElRow} from "element-plus";
-import {useBus} from "../../hooks";
-import {BoolItem} from "../../common-ui";
+import {ElButton, ElCol, ElForm, ElPopover, ElRow} from "element-plus";
+import {useAttributeProvide, useBus} from "../../hooks";
+import {BoolItem, InputNumberItem} from "../../common-ui";
 import {getStatistics} from "@plum-render/three-sdk";
 import {throttleTime} from "rxjs";
-import {useAttributeProvide} from "../../hooks/useAttributeProvide.ts";
 
 const bus = useBus();
 const form = reactive({
@@ -79,7 +78,7 @@ onMounted(() => {
       @show="show"
   >
     <template #reference>
-      <el-button class="absolute top-[20px] righel-[200px] z-999 ">调试</el-button>
+      <el-button class="z-999" text>调试</el-button>
     </template>
     <el-form :model="form" class="h-full" label-width="auto" size="small">
       <bool-item label="帧率" name="fps"/>

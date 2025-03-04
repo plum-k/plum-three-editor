@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {reactive} from "vue";
-import {ElButton, ElForm} from "element-plus";
+import {ElButton, ElForm, ElPopover} from "element-plus";
 import {useAttributeProvide, useBus} from "../../hooks";
 import * as THREE from "three";
 import {set} from "lodash-es";
@@ -75,7 +75,7 @@ const show = () => {
       @show="show"
   >
     <template #reference>
-      <el-button class="absolute top-[20px] righel-[20px] z-999 ">相机设置</el-button>
+      <el-button class="z-999 " text>相机设置</el-button>
     </template>
     <el-form :model="form" class="h-full" label-width="auto" size="small">
       <input-number-item label="视野" name="fov"/>
