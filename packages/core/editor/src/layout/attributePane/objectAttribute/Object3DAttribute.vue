@@ -1,10 +1,12 @@
-<script lang="ts" setup>
-import {ElCheckbox, ElCheckboxGroup, ElForm, ElFormItem} from "element-plus";
-import {onMounted, reactive} from "vue";
+<script lang="ts" setup xmlns="">
+import {ElButton, ElCheckbox, ElCheckboxGroup, ElCol, ElForm, ElFormItem, ElRow} from "element-plus";
+import {onMounted, reactive, ref} from "vue";
 import * as THREE from "three";
+import {Object3D} from "three";
 import {useBus} from "../../../hooks";
-import {BoolItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
+import {BoolItem, TextItem, Vector3Item} from "../../../common-ui";
 import {isObject3D} from "three-is";
+import {find} from "lodash-es";
 
 const form = reactive({
   type: "",
@@ -65,9 +67,32 @@ const threeToUi = () => {
 
   form.visible = object.visible
   form.frustumCulled = object.frustumCulled
-  form.renderOrder = object.renderOrder
+  form.renderOrder = object.renderOrder;
+
+  animationsList.value = animationsToList(object)
+}
+const animationsList = ref<{ name: string }[]>([])
+const animationsToList = (object: Object3D) => {
+  const animations = object.animations;
+  const list = []
+  for (let i = 0; i < animations.length; i++) {
+    const animation = animations[i];
+    list.push({
+      name: animation.name,
+    })
+  }
+  return list
 }
 
+const play = (item: string) => {
+  const viewer = bus.viewer;
+  const selectObject3D = bus.selectObject;
+  if (viewer && selectObject3D) {
+    const animation = find(selectObject3D.animations, {name: item})!;
+    const action = viewer.animationMixer.clipAction(animation, selectObject3D);
+    action.isRunning() ? action.stop() : action.play();
+  }
+}
 </script>
 
 <template>
@@ -92,6 +117,13 @@ const threeToUi = () => {
     <bool-item label="可见性" name="visible"/>
     <bool-item label="视锥体裁剪" name="frustumCulled"/>
     <input-number-item label="渲染次序" name="renderOrder"/>
+
+    <el-row v-for="(item, index) in animationsList" :key="index">
+      <el-col :span="12">{{ item.name }}</el-col>
+      <el-col :span="12">
+        <el-button @click="play(item.name)">播放</el-button>
+      </el-col>
+    </el-row>
     <!--        <JsonItem label="自定义数据" name="userData"/>-->
   </el-form>
 

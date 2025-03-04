@@ -70,7 +70,7 @@ const handleDir = (value: IApplication) => {
 <template>
   <div class="bg-black/80 w-screen h-screen">
     <div
-        class="bg-white w-3/5 h-3/5 top-0 left-0 bottom-0 right-0 m-auto fixed  border rounded-[0.5rem] shadow flex flex-col">
+        class="bg-white w-3/5 h-3/5 top-0 lefel-0 bottom-0 righel-0 m-auto fixed  border rounded-[0.5rem] shadow flex flex-col">
       <div class="border-b p-2">
         <div class="flex justify-center items-center">
           <el-button class="mr-2" @click="add">新建</el-button>

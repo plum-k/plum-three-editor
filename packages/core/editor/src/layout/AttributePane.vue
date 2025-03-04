@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import {ElScrollbar, ElTabPane, ElTabs} from 'element-plus'
+import {ElScrollbar, ElTabs} from 'element-plus'
 import {ref} from 'vue'
-import ObjectAttribute from "./attributePane/objectAttribute/ObjectAttribute.vue";
 import GeometryAttribute from "./attributePane/GeometryAttribute.vue";
 import MaterialAttribute from "./attributePane/MaterialAttribute.vue";
 import SceneAttribute from "./attributePane/SceneAttribute.vue";
@@ -13,31 +12,31 @@ provide("tabActiveName", activeName)
 
 <template>
   <el-tabs v-model="activeName" :tab-position="'left'" class="h-full">
-    <el-tab-pane label="属性" name="属性">
+    <el-tab-panel label="属性" name="属性">
       <el-scrollbar class="h-full">
-        <object-attribute tab-name="属性"/>
+        <objecel-attribute tab-name="属性"/>
       </el-scrollbar>
-    </el-tab-pane>
-    <el-tab-pane label="几何" name="几何">
+    </el-tab-panel>
+    <el-tab-panel label="几何" name="几何">
       <el-scrollbar class="h-full">
         <geometry-attribute tab-name="几何"/>
       </el-scrollbar>
-    </el-tab-pane>
-    <el-tab-pane class="e-tabs h-full" label="材质" name="材质">
+    </el-tab-panel>
+    <el-tab-panel class="e-tabs h-full" label="材质" name="材质">
       <el-scrollbar class="h-full">
         <material-attribute tabName="材质"/>
       </el-scrollbar>
-    </el-tab-pane>
-    <el-tab-pane label="场景" name="场景">
+    </el-tab-panel>
+    <el-tab-panel label="场景" name="场景">
       <el-scrollbar class="h-full">
         <scene-attribute/>
       </el-scrollbar>
-    </el-tab-pane>
+    </el-tab-panel>
   </el-tabs>
 </template>
 
 <style scoped>
-:deep(.el-tab-pane) {
+:deep(.el-tab-panel) {
   height: 100%;
 }
 

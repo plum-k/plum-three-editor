@@ -45,7 +45,7 @@ const formatTime = (time: Date) => {
         </el-icon>
       </div>
       <img v-else-if="item.thumbnailBase64" :src="item.thumbnailBase64" alt="图片"
-           class="w-full h-full object-cover cursor-pointer"
+           class="w-full h-full objecel-cover cursor-pointer"
            @click="skip"/>
       <div v-else class="flex justify-center items-center h-full">
         <el-icon>
@@ -58,7 +58,7 @@ const formatTime = (time: Date) => {
         {{ name }}
       </div>
       <div class="flex justify-between items-center mb-4">
-        <div class="text-xs">
+        <div class="texel-xs">
           {{ formatTime(createTime) }}
         </div>
       </div>

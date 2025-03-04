@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import {ElButton} from "element-plus";
 import {useFullscreen} from "@vueuse/core";
 import {useBus} from "../../hooks";
 import {useRoute} from "vue-router";
@@ -23,9 +22,9 @@ const fit = () => {
 </script>
 
 <template>
-  <div class="flex items-center gap-2 ml-100 text-[1.2rem]">
-    <icon  icon-name="icon-quxiaoquanping" v-if="isFullscreen" @click="exit"/>
-    <icon icon-name="icon-quanping"  v-else @click="enter"/>
+  <div class="flex items-center gap-2 ml-100 texel-[1.2rem]">
+    <icon v-if="isFullscreen" icon-name="icon-quxiaoquanping" @click="exit"/>
+    <icon v-else icon-name="icon-quanping" @click="enter"/>
     <icon icon-name="icon-jieping" @click="capture"/>
     <icon icon-name="icon-jujiao" @click="fit"/>
   </div>

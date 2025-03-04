@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import {onMounted, reactive} from "vue";
-import {ElButton, ElCol, ElForm, ElPopover, ElRow} from "element-plus";
+import {ElButton, ElCol, ElForm, ElRow} from "element-plus";
 import {useBus} from "../../hooks";
-import {BoolItem, InputNumberItem} from "../../common-ui";
+import {BoolItem} from "../../common-ui";
 import {getStatistics} from "@plum-render/three-sdk";
 import {throttleTime} from "rxjs";
 import {useAttributeProvide} from "../../hooks/useAttributeProvide.ts";
@@ -79,7 +79,7 @@ onMounted(() => {
       @show="show"
   >
     <template #reference>
-      <el-button class="absolute top-[20px] right-[200px] z-999 ">调试</el-button>
+      <el-button class="absolute top-[20px] righel-[200px] z-999 ">调试</el-button>
     </template>
     <el-form :model="form" class="h-full" label-width="auto" size="small">
       <bool-item label="帧率" name="fps"/>
@@ -91,7 +91,7 @@ onMounted(() => {
     </el-form>
   </el-popover>
 
-  <div v-if="form.statistics" class="absolute bottom-0 left-[100px] z-999 color-white w-[120px]">
+  <div v-if="form.statistics" class="absolute bottom-0 lefel-[100px] z-999 color-white w-[120px]">
     <el-row>
       <el-col :span="12">
         物体

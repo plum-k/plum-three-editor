@@ -5,7 +5,7 @@ import {isArray, set} from "lodash-es";
 import * as THREE from "three";
 import {isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
-import {BoolItem, ColorItem, InputNumberItem, SelectItem, TextItem} from "../../../common-ui";
+import {BoolItem, ColorItem, TextItem} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
 
 const bus = useBus();

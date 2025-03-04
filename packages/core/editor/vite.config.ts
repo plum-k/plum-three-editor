@@ -24,7 +24,10 @@ export default defineConfig((env) => {
         server:{
             port: 4333
         },
-        plugins: [tailwindcss(), ElementPlus({}), vue(), viteStaticCopy({
+        plugins: [tailwindcss(),
+            ElementPlus({}),
+
+            vue(), viteStaticCopy({
             targets: isBuild ? buildTargets : serveTargets,
         })],
     }

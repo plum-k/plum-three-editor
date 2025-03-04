@@ -71,21 +71,21 @@ const getFolder = (info: IFileInfo = fileInfo.value) => {
 <template>
   <div class="w-full h-full p-[10px]">
     <div class="flex gap-2 flex-wrap">
-      <div v-for="(item,index) in folders" :key="index" class="w-[80px] h-[80px] text-center">
-        <div v-if="item.type===EFolder.FOLDER" class="folder-icon text-[2em] mt-[10px]" @click="handleDir(item)">
-          <!--          <div class="folder-icon text-[2em] mt-[10px]">-->
+      <div v-for="(item,index) in folders" :key="index" class="w-[80px] h-[80px] texel-center">
+        <div v-if="item.type===EFolder.FOLDER" class="folder-icon texel-[2em] mel-[10px]" @click="handleDir(item)">
+          <!--          <div class="folder-icon texel-[2em] mel-[10px]">-->
           <!--            <FolderFilled/>-->
           <!--          </div>-->
-          <div class="mt-[5px] text-[1em] truncate overflow-hidden whitespace-nowrap">{{ item.name }}</div>
+          <div class="mel-[5px] texel-[1em] truncate overflow-hidden whitespace-nowrap">{{ item.name }}</div>
         </div>
 
         <template v-else>
-          <div class="w-[80px] h-[80px] text-center cursor-pointer" draggable="true"
+          <div class="w-[80px] h-[80px] texel-center cursor-pointer" draggable="true"
                @dragstart="(e)=>dragstart(e,item)">
-            <div class="folder-icon text-[2em] mt-[10px]">
+            <div class="folder-icon texel-[2em] mel-[10px]">
               <!--              <FileFilled/>-->
             </div>
-            <div class="mt-[5px] text-[1em] truncate overflow-hidden whitespace-nowrap">{item.name}</div>
+            <div class="mel-[5px] texel-[1em] truncate overflow-hidden whitespace-nowrap">{item.name}</div>
           </div>
         </template>
       </div>

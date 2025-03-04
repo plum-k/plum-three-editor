@@ -31,7 +31,6 @@ const info = reactive({
 
 <template>
   <div class="bottom-[0px] z-999 h-[30px] flex items-center">
-
     <div>{{ info.target }}</div>
     <div class="ml-2">{{ info.position }}</div>
   </div>

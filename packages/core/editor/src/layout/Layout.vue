@@ -7,7 +7,7 @@ import AttributePane from "./AttributePane.vue";
 </script>
 
 <template>
-  <splitpanes class="default-theme" style="height: calc(100% - 32px)">
+  <splitpanes class="defaulel-theme" style="height: calc(100% - 32px)">
     <pane size="20">
       <LeftPanel/>
     </pane>

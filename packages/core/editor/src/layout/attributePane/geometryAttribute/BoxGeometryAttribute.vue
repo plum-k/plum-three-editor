@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import {ElForm} from "element-plus";
+import {ElButton, ElDescriptions, ElDescriptionsItem, ElForm} from "element-plus";
 import {computed, inject, onMounted, reactive, ref} from "vue";
 import * as THREE from "three";
 import {isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
-import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
+import {InputNumberItem, TextItem} from "../../../common-ui";
 
 const bus = useBus();
 
@@ -58,7 +58,6 @@ objectAttributeChangeSubject.subscribe((editValue) => {
     // object.geometry.dispose();
     geometry.copy(newGeometry);
   }
-
 })
 const form = reactive({
   type: '',
@@ -84,41 +83,61 @@ const threeToUi = (geometry: THREE.BoxGeometry) => {
   form.widthSegments = geometry.parameters.widthSegments;
   form.heightSegments = geometry.parameters.heightSegments;
   form.depthSegments = geometry.parameters.depthSegments;
+
+  getGeometry(geometry)
 }
-const items = useMemo(() => {
-  let list = []
-  if (geometry) {
-    if (geometry.index !== null) {
-      list.push({
-        key: '0',
-        label: '索引',
-        children: geometry.index.count,
-      })
-    }
-    const attributes = geometry.attributes;
-    for (const name in attributes) {
-      const attribute = attributes[name];
-      console.log(name)
 
-      let {count, itemSize} = attribute
+interface IList {
+  label: string
+  count: number,
+  itemSize: number,
+}
 
-      list.push({
-        key: nameMap.get(name),
-        label: nameMap.get(name),
-        children: `${count}(${count / itemSize}*${itemSize})`,
-      })
-    }
-
+const list = ref<IList[]>([])
+const attributesObject = {
+  "position": "位置",
+  "normal": "法线",
+  "uv": "uv",
+}
+const getGeometry = (geometry: THREE.BufferGeometry) => {
+  if (geometry.index !== null) {
+    list.value.push({
+      label: '索引',
+      count: geometry.index.count,
+      itemSize: 0,
+    })
   }
-  return list
-}, [geometry])
-属性
+  const attributes = geometry.attributes;
+  for (const name in attributes) {
+    const attribute = attributes[name];
+    let {count, itemSize} = attribute
+    list.value.push({
+      label: Reflect.get(attributesObject, name),
+      count: count,
+      itemSize: itemSize,
+    })
+  }
+}
 
-geometry.computeVertexNormals();
-计算顶点法线
+const computeVertexNormals = () => {
+  const geometry = bus.selectGeometry;
+  if (geometry) {
+    geometry.computeVertexNormals();
+  }
+}
+const computeVertexTangents = () => {
+  // if (geometry) {
+  //   geometry.computeVertexTangents();
+  // }
+}
+const showVertexNormals = () => {
+  const editor = bus.editor;
+  const selectObject = bus.selectObject;
+  if (editor && selectObject) {
+    editor?.showNormals(selectObject);
+  }
+}
 
-editor?.showNormals(selectObject3D as THREE.Object3D);
-显示顶点法线
 </script>
 
 <template>
@@ -134,6 +153,22 @@ editor?.showNormals(selectObject3D as THREE.Object3D);
     <input-number-item label="宽度分割数" name="widthSegments"/>
     <input-number-item label="高度分割数" name="heightSegments"/>
     <input-number-item label="深度分割数" name="depthSegments"/>
+
+    <el-descriptions title="属性">
+      <el-descriptions-item v-for="item in list" :key="item.label" :label="item.label">
+        {{ item.count }} ({{ item.itemSize !== 0 ? item.itemSize : "" }})
+      </el-descriptions-item>
+    </el-descriptions>
+
+    <el-button text @click="computeVertexNormals">
+      计算顶点法线
+    </el-button>
+    <el-button text @click="computeVertexTangents">
+      计算切线
+    </el-button>
+    <el-button text @click="showVertexNormals">
+      显示顶点法线
+    </el-button>
   </el-form>
 </template>
 

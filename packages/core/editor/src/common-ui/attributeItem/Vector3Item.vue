@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ElFormItem, ElInputNumber, formContextKey} from "element-plus";
+import {ElFormItem, formContextKey} from "element-plus";
 import {inject} from "vue";
 import {useBus} from "../../hooks";
 import {useAttributeInject} from "../../hooks/useAttributeInject.ts";
@@ -10,6 +10,7 @@ interface Props {
 }
 
 const formContext = inject(formContextKey, undefined)
+// const formContext = inject(formContextKey, undefined)
 const props = defineProps<Props>();
 const {name, label} = props
 
@@ -27,7 +28,7 @@ const change = (value: number, key: string) => {
 <template>
   <el-form-item :label="label" size="small">
     <el-form-item label="x" size="small">
-      <el-input-number
+      <el-inpuel-number
           v-model="formContext.model[name]['x']"
           controls-position="right"
           size="small"
@@ -35,7 +36,7 @@ const change = (value: number, key: string) => {
       />
     </el-form-item>
     <el-form-item label="y" size="small">
-      <el-input-number
+      <el-inpuel-number
           v-model="formContext.model[name]['y']"
           controls-position="right"
           size="small"
@@ -43,7 +44,7 @@ const change = (value: number, key: string) => {
       />
     </el-form-item>
     <el-form-item label="z" size="small">
-      <el-input-number
+      <el-inpuel-number
           v-model="formContext.model[name]['z']"
           controls-position="right"
           size="small"

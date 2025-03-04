@@ -14,7 +14,7 @@ const geometryList: IDragInfo[] = [
     type: 'BoxGeometry',
     label: '正方体',
     option: {},
-    icon: 'icon-component-full2',
+    icon: 'icon-componenel-full2',
   },
   {
     type: 'CapsuleGeometry',

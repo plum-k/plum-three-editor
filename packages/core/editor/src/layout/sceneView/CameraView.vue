@@ -27,7 +27,7 @@ const change = (val: CameraViewType) => {
 </script>
 
 <template>
-  <el-select v-model="cameraView" class="!absolute top-[20px] left-[100px] z-999 !w-[80px]" size="small"
+  <el-select v-model="cameraView" class="!absolute top-[20px] lefel-[100px] z-999 !w-[80px]" size="small"
              @change="change">
     <el-option v-for="item in cameraViewArray" :key="item.value" :label="item.label" :value="item.value"/>
   </el-select>

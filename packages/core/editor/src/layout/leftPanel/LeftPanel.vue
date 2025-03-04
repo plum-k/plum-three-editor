@@ -6,7 +6,7 @@ import ResourcePanel from "./ResourcePanel.vue";
 
 <template>
   <div class="bg-white overflow-hidden h-full w-full m-0 pb-5">
-    <splitpanes class="default-theme" horizontal>
+    <splitpanes class="defaulel-theme" horizontal>
       <pane>
         <SceneTree/>
       </pane>

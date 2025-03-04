@@ -122,7 +122,7 @@ onMounted(() => {
   // addBox(_viewer, 1);
 
   // const asset = new GltfModelAsset({
-  //   // loadUrl: "/Rampaging T-Rex.glb",
+  //   // loadUrl: "/Rampaging el-Rex.glb",
   //   loadUrl: "/A319.glb",
   //   // url: "/aaa.glb",
   // })
@@ -275,7 +275,7 @@ function createLight(info: IDragInfo) {
 
 <template>
   <div class="h-full w-full relative flex flex-col">
-    <div ref="canvasContainer" id="canvasContainer" class="container w-full  relative flex-1" @drop="onDrop">
+    <div id="canvasContainer" ref="canvasContainer" class="container w-full  relative flex-1" @drop="onDrop">
       <tool/>
       <control/>
       <camera-view/>

@@ -9,8 +9,7 @@ import ContextMenu from '@imengyu/vue3-context-menu'
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'vue3-toastify/dist/index.css';
-import Vue3Toastify, { type ToastContainerOptions } from 'vue3-toastify';
-
+import Vue3Toastify from 'vue3-toastify';
 
 const pinia = createPinia()
 const app = createApp(App)
