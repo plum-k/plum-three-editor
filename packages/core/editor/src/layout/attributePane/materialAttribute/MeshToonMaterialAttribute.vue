@@ -104,8 +104,8 @@ const threeToUi = (object: THREE.Mesh) => {
   form.type = material.type;
   form.uuid = material.uuid;
   form.name = material.name;
-  form.color = material.color.getHexString();
-  form.emissive = material.emissive.getHexString();
+  form.color = `#${material.color.getHexString()}`;
+  form.emissive =  `#${material.emissive.getHexString()}`;
 
   form.vertexColors = material.vertexColors;
 

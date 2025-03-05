@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
 import {computed, inject, onMounted, reactive, ref} from "vue";
-import {isArray, set} from "lodash-es";
+import {get, invoke, isArray, set} from "lodash-es";
 import * as THREE from "three";
 import {isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
@@ -15,6 +15,7 @@ const tabActiveName = inject("tabActiveName", ref("材质"))
 const isActive = computed(() => {
   return tabActiveName.value === "材质"
 })
+
 const isVisible = ref(false);
 
 onMounted(() => {
@@ -41,12 +42,18 @@ const sync = () => {
 // ui -> three
 const {objectAttributeChangeSubject} = useAttributeProvide()
 objectAttributeChangeSubject.subscribe((editValue) => {
-
   const {name, value} = editValue;
   const object = bus.selectObject;
+  const selectMaterial = bus.selectMaterial;
   if (!object) return;
   if (!isActive.value) return;
-  set(object, name, value);
+  if (selectMaterial && !isArray(name)) {
+    if (["color", "emissive"].includes(name)) {
+      invoke(get(selectMaterial, name), "setStyle", [value])
+    } else {
+      set(selectMaterial, name, value);
+    }
+  }
 })
 const form = reactive({
   type: '',
@@ -147,10 +154,10 @@ const threeToUi = (object: THREE.Mesh) => {
   form.uuid = material.uuid;
   form.name = material.name;
 
-  form.color = material.color.getHexString();
-  form.emissive = material.emissive.getHexString();
+  form.color = `#${material.color.getHexString()}`;
+  form.emissive = `#${material.emissive.getHexString()}`;
   form.emissiveIntensity = material.emissiveIntensity;
-
+  console.log("form", form)
   form.reflectivity = material.reflectivity;
   form.ior = material.ior;
 
@@ -167,11 +174,11 @@ const threeToUi = (object: THREE.Mesh) => {
 
   form.sheen = material.sheen;
   form.sheenRoughness = material.sheenRoughness;
-  form.sheenColor = material.sheenColor.getHexString();
+  form.sheenColor = `#${material.sheenColor.getHexString()}`;
 
   form.transmission = material.transmission;
   form.attenuationDistance = material.attenuationDistance;
-  form.attenuationColor = material.attenuationColor.getHexString();
+  form.attenuationColor = `#${material.attenuationColor.getHexString()}`
 
   form.thickness = material.thickness;
   form.vertexColors = material.vertexColors;
@@ -230,45 +237,43 @@ const threeToUi = (object: THREE.Mesh) => {
   form.depthWrite = material.depthWrite;
 
   form.wireframe = material.wireframe;
-
-
 }
 </script>
 
 <template>
-  <el-form :model="form" label-position="left" label-width="auto" size="small">
+  <el-form :model="form" label-position="left" :label-width="80" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>
 
     <color-item label="颜色" name="color"/>
     <color-item label="自发光" name="emissive"/>
-    <input-number-item label="自发光强度" name="emissiveIntensity"/>
+    <input-number-item label="自发光强度" name="emissiveIntensity" :formProps="{max:1,min:0,step:0.01,precision:2  }"/>
 
-    <input-number-item label="反射率" name="reflectivity"/>
+    <!--    todo 值联动-->
+    <input-number-item label="反射率" name="reflectivity" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
     <input-number-item label="IOR" name="ior"/>
 
-    <input-number-item label="粗糙度" name="roughness"/>
-    <input-number-item label="金属度" name="metalness"/>
+    <input-number-item label="粗糙度" name="roughness" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <input-number-item label="金属度" name="metalness" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
 
+    <input-number-item label="清漆" name="clearcoat" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <input-number-item label="清漆粗糙度" name="clearcoatroughness" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <input-number-item label="色散" name="dispersion" :formProps="{max:10,min:0,step:0.01,precision:2 }"/>
 
-    <input-number-item label="清漆" name="clearcoat"/>
-    <input-number-item label="清漆粗糙度" name="clearcoatroughness"/>
-    <input-number-item label="色散" name="dispersion"/>
+    <input-number-item label="彩虹色" name="iridescence" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <input-number-item label="彩虹色折射率" name="iridescenceIOR" :formProps="{max:5,min:0,step:0.01,precision:2 }"/>
+    <vector2-item label="彩虹色厚度" name="iridescenceThicknessRange" :formProps="{max:5,min:0,step:1}"/>
 
-    <input-number-item label="彩虹色" name="iridescence"/>
-    <input-number-item label="彩虹色折射率" name="iridescenceIOR"/>
-    <vector2-item label="彩虹色厚度" name="iridescenceThicknessRange"/>
-
-    <input-number-item label="光泽" name="sheen"/>
-    <input-number-item label="光泽粗超度" name="sheenRoughness"/>
+    <input-number-item label="光泽" name="sheen" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <input-number-item label="光泽粗超度" name="sheenRoughness" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
     <color-item label="光泽颜色" name="sheenColor"/>
 
-    <input-number-item label="透光" name="transmission"/>
+    <input-number-item label="透光" name="transmission" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
     <input-number-item label="衰减距离" name="attenuationDistance"/>
     <color-item label="衰减色" name="attenuationColor"/>
 
-    <input-number-item label="厚度" name="thickness"/>
+    <input-number-item label="厚度" name="thickness" :formProps="{step:0.01,precision:2 }"/>
     <bool-item label="顶点颜色" name="vertexColors"/>
 
     <texture-item label="贴图" name="map"/>
@@ -279,7 +284,7 @@ const threeToUi = (object: THREE.Mesh) => {
     <input-number-item label="凹凸缩放" name="bumpScale"/>
 
     <texture-item label="法线贴图" name="bumpMap"/>
-    <vector2-item label="法线缩放" name="normalScale"/>
+    <vector2-item label="法线缩放" name="normalScale" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
 
     <texture-item label="清漆贴图" name="clearcoatMap"/>
     <texture-item label="清漆法线贴图" name="clearcoatNormalMap"/>
@@ -297,27 +302,38 @@ const threeToUi = (object: THREE.Mesh) => {
     <texture-item label="光泽粗超度贴图" name="sheenRoughnessMap"/>
 
     <texture-item label="彩虹色厚度贴图" name="iridescenceThicknessMap"/>
-    <texture-item label="彩虹色厚度缩放贴图" name="iridescenceThicknessRange"/>
+    <vector2-item label="彩虹色厚度贴图缩放" name="iridescenceThicknessRange" :formProps="{step:1}"/>
 
     <texture-item label="环境贴图" name="envMap"/>
     <texture-item label="光照贴图" name="lightMap"/>
     <texture-item label="环境光遮蔽贴图" name="aoMap"/>
-    <input-number-item label="环境光遮蔽贴图强度" name="aoMapIntensity"/>
+    <input-number-item label="环境光遮蔽贴图强度" name="aoMapIntensity"
+                       :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
 
     <texture-item label="透光贴图" name="transmissionMap"/>
     <texture-item label="厚度贴图" name="thicknessMap"/>
 
-    <select-item label="面" name="side"/>
+    <select-item label="面" name="side" :options="[{value: 0, label: '正面'}, {value: 1, label: '背面'}, {
+                            value: 2,
+                            label: '双面'
+                        }]" />
 
     <bool-item label="平面着色" name="flatShading"/>
 
-    <select-item label="混合" name="blending"/>
-    <input-number-item label="透明度" name="opacity"/>
+    <select-item label="混合" name="blending" :options="[{value: '0', label: 'No'}, {
+                            value: '1',
+                            label: 'Normal'
+                        }, {value: '2', label: 'Additive'}, {value: '3', label: 'Subtractive'}, {
+                            value: '4',
+                            label: 'Multiply'
+                        }, {value: '5', label: 'Custom'}]"/>
+
+    <input-number-item label="透明度" name="opacity" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
     <bool-item label="透明性" name="transparent"/>
 
     <bool-item label="强制单通道" name="forceSinglePass"/>
 
-    <bool-item label="α测试" name="alphaTest"/>
+    <bool-item label="α测试" name="alphaTest" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
     <bool-item label="深度测试" name="depthTest"/>
     <bool-item label="深度缓写" name="depthWrite"/>
 
@@ -327,5 +343,7 @@ const threeToUi = (object: THREE.Mesh) => {
 </template>
 
 <style scoped>
-
+:deep(.el-form-item--small .el-form-item__label) {
+  height: max-content;
+}
 </style>

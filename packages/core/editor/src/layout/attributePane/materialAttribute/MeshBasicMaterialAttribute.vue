@@ -83,7 +83,7 @@ const threeToUi = (object: THREE.Mesh) => {
   form.type = material.type;
   form.uuid = material.uuid;
   form.name = material.name;
-  form.color = material.color.getHexString();
+  form.color = `#${material.color.getHexString()}`;
   form.reflectivity = material.reflectivity;
 
   // form.map = material.map;

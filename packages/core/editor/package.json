@@ -9,10 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "tdesign-vue-next": "^1.11.1",
+    "tdesign-vue-next": "^1.11.2",
     "@imengyu/vue3-context-menu": "^1.4.4",
     "@plum-render/three-sdk": "workspace:*",
-    "@vueuse/core": "^12.7.0",
+    "@vueuse/core": "^12.8.2",
     "axios": "^1.8.1",
     "dayjs": "^1.11.13",
     "element-plus": "^2.9.5",

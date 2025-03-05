@@ -1,29 +1,25 @@
 <script lang="ts" setup>
+import type {InputNumberProps} from "element-plus";
 import {ElFormItem, ElInputNumber, formContextKey} from "element-plus";
-import {computed, inject} from "vue";
-import type {InputNumberProps} from "element-plus/es/components/input-number/src/input-number";
-import {get, isNil} from "lodash-es";
-import {useBus} from "../../hooks";
-import {useAttributeInject} from "../../hooks/useAttributeInject.ts";
+import {inject} from "vue";
+import {useAttributeInject, useBus} from "../../hooks";
 
-interface Props extends Partial<InputNumberProps> {
+interface Props {
   name: string;
   label: string;
+  formProps?: Partial<InputNumberProps>;
 }
 
 const props = defineProps<Props>();
 const {name, label} = props
 const formContext = inject(formContextKey, undefined)
 const bus = useBus();
-const isRender = computed(() => {
-  return !isNil(get(formContext.model, name))
-})
 const {objectAttributeChangeSubject, change} = useAttributeInject(props)
 </script>
 
 <template>
-  <el-form-item v-if="isRender" :label="label" size="small">
-    <el-input-number v-model="formContext.model[name]" :bind="props" @change="change"/>
+  <el-form-item :label="label" size="small">
+    <el-input-number v-model="formContext!.model![name]" v-bind="props.formProps" @change="change" controls-position="right"/>
   </el-form-item>
 </template>
 

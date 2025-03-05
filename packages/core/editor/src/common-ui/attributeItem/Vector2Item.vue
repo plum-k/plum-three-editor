@@ -1,21 +1,20 @@
 <script lang="ts" setup>
-import {ElFormItem, formContextKey,ElInputNumber} from "element-plus";
+import {ElFormItem, ElInputNumber, formContextKey, type InputNumberProps} from "element-plus";
 import {inject} from "vue";
-import {useBus} from "../../hooks";
-import {useAttributeInject} from "../../hooks/useAttributeInject.ts";
+import {useAttributeInject} from "../../hooks";
 
 interface Props {
   name: string;
   label: string;
+  formProps?: Partial<InputNumberProps>;
 }
 
 const formContext = inject(formContextKey, undefined)
 const props = defineProps<Props>();
 const {name, label} = props
 
-const bus = useBus();
 const {objectAttributeChangeSubject,} = useAttributeInject(props)
-const change = (value: number, key: string) => {
+const change = (value: number | undefined, key: string) => {
 
   objectAttributeChangeSubject.next({
     name: [name, key],
@@ -26,22 +25,30 @@ const change = (value: number, key: string) => {
 
 <template>
   <el-form-item :label="label" size="small">
-    <el-form-item label="x" size="small">
+    <div class="flex  gap-1.5">
+      <div>
+        x:
+      </div>
       <el-input-number
-          v-model="formContext.model[name]['x']"
+          v-model="formContext!.model![name]['x']"
           controls-position="right"
           size="small"
           @change="(value)=>change(value,'x')"
+          v-bind="props.formProps"
       />
-    </el-form-item>
-    <el-form-item label="y" size="small">
+    </div>
+    <div class="flex  gap-1.5 mt-1">
+      <div>
+        y:
+      </div>
       <el-input-number
-          v-model="formContext.model[name]['y']"
+          v-model="formContext!.model![name]['y']"
           controls-position="right"
           size="small"
           @change="(value)=>change(value,'y')"
+          v-bind="props.formProps"
       />
-    </el-form-item>
+    </div>
   </el-form-item>
 </template>
 

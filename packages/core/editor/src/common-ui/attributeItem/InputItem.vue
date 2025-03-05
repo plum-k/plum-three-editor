@@ -24,7 +24,7 @@ const isRender = computed(() => {
 
 <template>
   <el-form-item v-if="isRender" :label="label" size="small">
-    <el-input v-model="formContext.model[name]" @change="change"/>
+    <el-input v-model="formContext!.model![name]" @change="change"/>
   </el-form-item>
 </template>
 
