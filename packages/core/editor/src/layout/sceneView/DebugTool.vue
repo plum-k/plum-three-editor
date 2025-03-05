@@ -5,6 +5,7 @@ import {useAttributeProvide, useBus} from "../../hooks";
 import {BoolItem, InputNumberItem} from "../../common-ui";
 import {getStatistics} from "@plum-render/three-sdk";
 import {throttleTime} from "rxjs";
+import {useStore} from "../../store/store.ts";
 
 const bus = useBus();
 const form = reactive({
@@ -35,6 +36,7 @@ const info = reactive({
   triangles: 0,
   frameTime: 0
 })
+const {setShowSceneStatistics} = useStore();
 const {objectAttributeChangeSubject} = useAttributeProvide()
 objectAttributeChangeSubject.subscribe((object) => {
 
@@ -45,6 +47,7 @@ objectAttributeChangeSubject.subscribe((object) => {
     viewer.debug.enable = value;
   } else if (name === "statistics") {
     form.statistics = value;
+    setShowSceneStatistics(value)
   } else if (name === "grid") {
     viewer.enableGrid = value;
   } else if (name === "axes") {
@@ -90,40 +93,6 @@ onMounted(() => {
     </el-form>
   </el-popover>
 
-  <div v-if="form.statistics" class="absolute bottom-0 lefel-[100px] z-999 color-white w-[120px]">
-    <el-row>
-      <el-col :span="12">
-        物体
-      </el-col>
-      <el-col :span="12">
-        {{ info.objects }}
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="12">
-        顶点
-      </el-col>
-      <el-col :span="12">
-        {{ info.vertices }}
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="12">
-        三角形
-      </el-col>
-      <el-col :span="12">
-        {{ info.triangles }}
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="12">
-        渲染时间
-      </el-col>
-      <el-col :span="12">
-        {{ info.frameTime.toFixed(1) }}
-      </el-col>
-    </el-row>
-  </div>
 </template>
 
 <style scoped>

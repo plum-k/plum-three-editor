@@ -10,6 +10,7 @@ import type {IDragInfo} from "../interface/IDragInfo.ts";
 import CameraInfo from "./sceneView/CameraInfo.vue";
 import {type Id, toast} from "vue3-toastify";
 import ViewTool from "./sceneView/ViewTool.vue";
+import SceneStatistics from "./sceneView/SceneStatistics.vue";
 
 const canvasContainer = ref<HTMLDivElement>();
 
@@ -38,7 +39,8 @@ onMounted(() => {
     appId: appId,
     packageType: "chunk",
     isCreateDefaultLight: true,
-    isGizmo: true,
+    isCubeGizmo: true,
+    isSphereGizmo: true,
     ossApiOptions: {
       server: import.meta.env.VITE_SERVER,
       bucket: import.meta.env.VITE_BUCKET,
@@ -275,6 +277,7 @@ function createLight(info: IDragInfo) {
     <view-tool/>
     <div id="canvasContainer" ref="canvasContainer" class="container w-full relative flex-1" @drop="onDrop">
       <control/>
+      <scene-statistics/>
     </div>
     <camera-info/>
   </div>

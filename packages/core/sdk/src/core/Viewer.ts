@@ -112,7 +112,8 @@ export interface IViewerOptions {
     /**
      * 显示小控件
      */
-    isGizmo?: boolean;
+    isCubeGizmo?: boolean;
+    isSphereGizmo?: boolean;
 }
 
 // 定义 Viewer 类
@@ -299,9 +300,13 @@ export class Viewer {
             this.initComponentSubject.next(true);
         }
 
-        if (this.options.isGizmo) {
-            this.gizmoManager.init();
+        if (this.options.isCubeGizmo) {
+            this.gizmoManager.initCubeGizmo();
         }
+        if (this.options.isSphereGizmo) {
+            this.gizmoManager.initSphereGizmo();
+        }
+
         this.initSubject.subscribe(() => {
             if (this.options.isCreateDefaultLight) {
                 this.environmentManage.createDefaultLight();

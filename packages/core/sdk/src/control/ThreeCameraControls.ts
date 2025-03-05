@@ -1,9 +1,8 @@
 import * as THREE from 'three';
-import {Object3D, OrthographicCamera, PerspectiveCamera, Sphere} from 'three';
+import {Object3D, OrthographicCamera, PerspectiveCamera} from 'three';
 import CameraControls from "camera-controls";
 import {Viewer} from "../core/Viewer";
-import {deepMergeRetain} from "../tool";
-import {isGroup, isMesh} from "three-is";
+import {deepMergeRetain, Tool} from "../tool";
 
 // 安装camera-controls扩展，使其支持THREE库
 CameraControls.install({THREE: THREE});
@@ -15,27 +14,36 @@ export interface IThreeCameraControls {
     viewer: Viewer;
 }
 
-export enum CameraViewType {
+export enum ECameraViewType {
+    PerspectiveView = "PerspectiveView",        //
     Top = "top",        // 顶视图
     Bottom = "bottom",  // 底视图
     Left = "left",      // 左视图
     Right = "right",    // 右视图
     Back = "back",      // 后视图
     Front = "front",    // 前视图
-    Ortho = "ortho",    // 正交视图
-    Perspective = "perspective" // 透视视图
 }
+
+export enum ECameraType {
+    PerspectiveCamera = "PerspectiveCamera",
+    OrthographicCamera = "OrthographicCamera",
+}
+
+const DEG90 = Math.PI * 0.5;
+const DEG180 = Math.PI;
 
 /**
  * ThreeCameraControls类负责初始化和管理Three.js的摄像机控制。
  * 它通过与viewer实例配合，提供交互式摄像机控制功能。
  */
 export class ThreeCameraControls {
-    options: any;
-    viewer: Viewer
-    perspectiveCamera: PerspectiveCamera
-    orthographicCamera : OrthographicCamera;
-    cameraControls: CameraControls;
+    options: IThreeCameraControls;
+    viewer: Viewer;
+    cameraType: ECameraType = ECameraType.PerspectiveCamera;
+    perspectiveCamera: PerspectiveCamera;
+    orthographicCamera: OrthographicCamera;
+    perspectiveCameraControls: CameraControls;
+    orthographicCameraControls: CameraControls;
     width: number;
     height: number;
 
@@ -51,19 +59,41 @@ export class ThreeCameraControls {
         let defaultWebGLRenderer = this.viewer.renderManager.defaultWebGLRenderer;
         let {width, height} = this.viewer.getSize();
 
-        // 根据视图尺寸初始化摄像机和相机控制
         this.width = width;
         this.height = height;
         // todo
         this.perspectiveCamera = new THREE.PerspectiveCamera(60, width / height, 0.01, 18000);
-        this.cameraControls = new CameraControls(this.perspectiveCamera, defaultWebGLRenderer.domElement);
+        this.perspectiveCameraControls = new CameraControls(this.perspectiveCamera, defaultWebGLRenderer.domElement);
+
+        this.orthographicCamera = new OrthographicCamera(
+            width / -2,
+            width / 2,
+            height / 2,
+            height / -2,
+            0.01,
+            18000
+        );
+
+        this.orthographicCameraControls = new CameraControls(this.orthographicCamera, defaultWebGLRenderer.domElement);
 
         this.cameraControls.maxDistance = 99999;
         this.cameraControls.minDistance = -99999;
     }
 
+    get cameraControls() {
+        return this.cameraType === ECameraType.PerspectiveCamera ? this.perspectiveCameraControls : this.orthographicCameraControls;
+    }
+
+    get target() {
+        return this.cameraControls.getTarget(new THREE.Vector3());
+    }
+
+    get position() {
+        return this.cameraControls.getPosition(new THREE.Vector3());
+    }
+
     get camera() {
-        return this.perspectiveCamera;
+        return this.cameraType === ECameraType.PerspectiveCamera ? this.perspectiveCamera : this.orthographicCamera;
     }
 
     /**
@@ -77,201 +107,188 @@ export class ThreeCameraControls {
         this.height = height;
         this.perspectiveCamera.aspect = width / height;
         this.perspectiveCamera.updateProjectionMatrix();
+
+        this.orthographicCamera.left = -width / 2;
+        this.orthographicCamera.right = width / 2
+        this.orthographicCamera.top = height / 2;
+        this.orthographicCamera.bottom = -height / 2;
+        this.orthographicCamera.updateProjectionMatrix();
     }
 
     /**
      * 设置不同的视图模式
      * @param cameraViewType
      */
-    setCameraViewType(cameraViewType: CameraViewType) {
+    setCameraViewType(cameraViewType: ECameraViewType) {
         switch (cameraViewType) {
-            case CameraViewType.Top:
-                this.toTopView();
+            case ECameraViewType.PerspectiveView:
+                this.setPerspectiveView();
                 break;
-            case CameraViewType.Bottom:
-                this.toBottomView();
+            case ECameraViewType.Top:
+                this.resetViewLimits();
+                this.setTopView();
                 break;
-            case CameraViewType.Left:
-                this.toLeftView();
+            case ECameraViewType.Bottom:
+                this.resetViewLimits();
+                this.setBottomView();
                 break;
-            case CameraViewType.Right:
-                this.toRightView();
+            case ECameraViewType.Left:
+                this.resetViewLimits();
+                this.setLeftView();
                 break;
-            case CameraViewType.Back:
-                this.toBackView();
+            case ECameraViewType.Right:
+                this.resetViewLimits();
+                this.setRightView();
                 break;
-            case CameraViewType.Front:
-                this.toFrontView();
+            case ECameraViewType.Back:
+                this.resetViewLimits();
+                this.setBackView();
                 break;
-            case CameraViewType.Ortho:
-                this.toOrtho();
+            case ECameraViewType.Front:
+                this.resetViewLimits();
+                this.setFrontView();
                 break;
-            case CameraViewType.Perspective:
             default:
-                this.toPerspective();
-                break;
+                throw new Error(`未知的视图类型: ${cameraViewType}`);
         }
     }
 
-    toTopView() {
-        // this._initRange();
-        // this.setOrthographic(true);
-        this.cameraControls.rotatePolarTo(0).then();
+    /**
+     * 重置视图限制
+     */
+    resetViewLimits() {
+        this.cameraControls.minAzimuthAngle = -Infinity;
+        this.cameraControls.maxAzimuthAngle = Infinity;
+        this.cameraControls.minPolarAngle = -Infinity;
+        this.cameraControls.maxPolarAngle = Infinity;
+    }
 
+    /**
+     * 设置透视视图
+     */
+    setPerspectiveView() {
+       this.resetViewLimits();
+    }
+
+    /**
+     * 设置顶视图
+     */
+    setTopView() {
+        this.cameraControls.rotateTo(0, 0, false).then();
         this.cameraControls.minAzimuthAngle = -Infinity;
         this.cameraControls.maxAzimuthAngle = Infinity;
         this.cameraControls.minPolarAngle = 0;
         this.cameraControls.maxPolarAngle = 0;
     }
 
-    toBottomView() {
-        // this._initRange();
-        // this.setOrthographic(true);
-        this.cameraControls.rotatePolarTo(Math.PI);
+    /**
+     * 设置底视图
+     */
+    setBottomView() {
+
+        this.cameraControls.rotateTo(0, DEG180, false).then();
         this.cameraControls.minAzimuthAngle = -Infinity;
         this.cameraControls.maxAzimuthAngle = Infinity;
         this.cameraControls.minPolarAngle = Math.PI;
         this.cameraControls.maxPolarAngle = Math.PI;
     }
 
-    toLeftView() {
-        // this._initRange();
-        // this.setOrthographic(true);
-        this.cameraControls.rotateTo(-90, 90, {enableTransition: false});
+
+    /**
+     * 设置左视图
+     */
+    setLeftView() {
+        this.cameraControls.rotateTo(-DEG90, DEG90, false).then();
         this.cameraControls.minAzimuthAngle = -Math.PI;
         this.cameraControls.maxAzimuthAngle = -Math.PI;
         this.cameraControls.minPolarAngle = Math.PI / 2;
         this.cameraControls.maxPolarAngle = Math.PI / 2;
     }
 
-    toRightView() {
-        // this._initRange();
-        // this.setOrthographic(true);
-        this.cameraControls.rotateTo(90, 90, {enableTransition: false});
+    /**
+     * 设置右视图
+     */
+    setRightView() {
+        this.cameraControls.rotateTo(DEG90, DEG90, false).then();
         this.cameraControls.minAzimuthAngle = Math.PI;
         this.cameraControls.maxAzimuthAngle = Math.PI;
         this.cameraControls.minPolarAngle = Math.PI / 2;
         this.cameraControls.maxPolarAngle = Math.PI / 2;
     }
 
-    toBackView() {
-        // this._initRange();
-        // this.setOrthographic(true);
-        this.cameraControls.rotateTo(-180, 90, {enableTransition: false});
+    /**
+     *
+     */
+    setBackView() {
+        this.cameraControls.rotateTo(DEG180, DEG90, false).then();
         this.cameraControls.minAzimuthAngle = -Math.PI;
         this.cameraControls.maxAzimuthAngle = -Math.PI;
         this.cameraControls.minPolarAngle = Math.PI / 2;
         this.cameraControls.maxPolarAngle = Math.PI / 2;
     }
 
-    toFrontView() {
-        // this._initRange();
-        // this.setOrthographic(true);
-        this.cameraControls.rotateTo(0, 90, {enableTransition: false});
+    /**
+     * 设置前视图
+     */
+    setFrontView() {
+        this.cameraControls.rotateTo(0, DEG90, false).then();
         this.cameraControls.minAzimuthAngle = 0;
         this.cameraControls.maxAzimuthAngle = 0;
         this.cameraControls.minPolarAngle = Math.PI / 2;
     }
 
-    toOrtho() {
-        this.toPerspective();
-        // this._initRange();
-        // this.setOrthographic(true);
-        this.setInteract({
-            mouseButtonMiddle: "pan"
-        });
-    }
+    /**
+     * 设置视图类型
+     * @param type
+     */
+    setCameraType(type: ECameraType = ECameraType.PerspectiveCamera) {
+        if (this.cameraType === type) return this;
 
-    toPerspective() {
-        // this._initRange();
-        // this.setOrthographic(false);
-        // this.resetInteract();
-        // this.saveState();
-        // this.resetState();
-    }
+        const target = this.target;
+        const position = this.position;
+        // 切换到透视
+        if (type === ECameraType.PerspectiveCamera) {
+            this.perspectiveCameraControls.setLookAt(position.x, position.y, position.z, target.x, target.y, target.z, false).then();
+        } else if (type === ECameraType.OrthographicCamera) {
+            // https://stackoverflow.com/questions/48187416/how-to-switch-between-perspective-and-orthographic-cameras-keeping-size-of-desir
+            const fov = this.perspectiveCamera.fov;
+            const far = this.perspectiveCamera.far;
+            const depth = Math.tan(fov / 2.0 * Math.PI / 180.0) * 2.0;
+            const z = position.distanceTo(target);
+            const y = depth * z;
+            const x = y * this.perspectiveCamera.aspect;
 
-    getBox3ByObject3ds(objects: Object3D[]) {
-        const box3 = new THREE.Box3();
-        for (let i = 0; i < objects.length; i++) {
-            const object = objects[i];
-            if (isMesh(object)) {
-                if (object.geometry.boundingBox === null) {
-                    object.geometry.computeBoundingBox();
-                }
-                box3.union(object.geometry.boundingBox!.clone().applyMatrix4(object.matrixWorld));
-            } else if (isGroup(object)) {
-                const box = new THREE.Box3();
-                box.setFromObject(object);
-                box3.union(box)
-            }
+            this.orthographicCamera.left = -x / 2;
+            this.orthographicCamera.right = x / 2
+            this.orthographicCamera.top = y / 2;
+            this.orthographicCamera.bottom = -y / 2;
+            this.orthographicCamera.zoom = 1;
+            this.orthographicCameraControls.setLookAt(position.x, position.y, position.z,
+                target.x, target.y, target.z, false).then();
         }
-        return box3;
+        this.cameraType = type;
     }
 
-    getSphereByObject3ds(objects: Object3D[]) {
-        const sphere = new THREE.Sphere();
-        for (let i = 0; i < objects.length; i++) {
-            const object = objects[i];
-            if (isMesh(object)) {
-                if (object.geometry.boundingSphere === null) {
-                    object.geometry.computeBoundingSphere();
-                }
-                sphere.union(object.geometry.boundingSphere!.clone().applyMatrix4(object.matrixWorld));
-            } else if (isGroup(object)) {
-                const box = new THREE.Box3();
-                box.setFromObject(object);
-                sphere.union(box.getBoundingSphere(new Sphere()))
-            }
-        }
-        return sphere;
-    }
-
-    // 获取场景的包围盒
-    getSceneBox() {
-        const box3 = new THREE.Box3();
-        this.viewer.scene.traverse((mesh) => {
-            if (isMesh(mesh)) {
-                mesh.geometry.computeBoundingBox();
-                if (mesh.geometry.boundingBox) {
-                    box3.union(mesh.geometry.boundingBox.clone().applyMatrix4(mesh.matrixWorld));
-                }
-            }
-        });
-        return box3;
-    }
-
-    getSceneSphere() {
-        const sphere = new THREE.Sphere();
-        this.viewer.scene.traverse((mesh) => {
-            if (isMesh(mesh)) {
-                mesh.geometry.computeBoundingSphere()
-                if (mesh.geometry.boundingSphere) {
-                    sphere.union(mesh.geometry.boundingSphere.clone().applyMatrix4(mesh.matrixWorld));
-                }
-            }
-        });
-        return sphere;
-    }
-
+    //--------------------- 聚焦相关-----------------------
     // 聚焦到场景
     async fitToSceneByBox(enableTransition: boolean = true) {
-        const boundingBox = this.getSceneBox();
+        const boundingBox = Tool.getSceneBox(this.viewer.scene);
         await this.cameraControls.fitToBox(boundingBox, enableTransition);
     }
 
     // 聚焦到场景
     async fitToSceneBySphere(enableTransition: boolean = true) {
-        const sphere = this.getSceneSphere();
+        const sphere = Tool.getSceneSphere(this.viewer.scene);
         await this.cameraControls.fitToSphere(sphere, enableTransition);
     }
 
     async fitToMeshBySphere(objects: Object3D[], enableTransition: boolean = true) {
-        const sphere = this.getSphereByObject3ds(objects);
+        const sphere = Tool.getSphereByObject3ds(objects);
         await this.cameraControls.fitToSphere(sphere, enableTransition);
     }
 
     async fitToMeshByBox3(objects: Object3D[], enableTransition: boolean = true) {
-        const box3 = this.getBox3ByObject3ds(objects);
+        const box3 = Tool.getBox3ByObject3ds(objects);
         await this.cameraControls.fitToBox(box3, enableTransition);
     }
 
@@ -279,58 +296,4 @@ export class ThreeCameraControls {
                          enableTransition: boolean) {
         await this.cameraControls.fitToBox(box3OrObject, enableTransition);
     }
-
-    // setOrthographic(isOrthographic) {
-    //     if (!this.isOrthographic) {
-    //         // this.saveInteract();
-    //     }
-    //     if (isNull(isOrthographic) || this.isOrthographic === isOrthographic) return this;
-    //     const enable = this.viewer.rendererManager.effectRenderer.enable;
-    //     this.viewer.rendererManager.setMainRendererEnable(false);
-    //     const { perspectiveCamera, orthographicCamera,
-    //         orthographicCameraControls, perspectiveCameraControls } = this;
-    //     const center = this.center;
-    //     const position = this.position;
-    //     if (isOrthographic) {
-    //         if (!this.isOrthographic) {
-    //             // Thanks for sharing : https://stackoverflow.com/questions/48187416/how-to-switch-between-perspective-and-orthographic-cameras-keeping-size-of-desir
-    //             const fov = perspectiveCamera.fov;
-    //             const far = perspectiveCamera.far;
-    //             const depth = Math.tan(fov / 2.0 * Math.PI / 180.0) * 2.0;
-    //             var z = position.distanceTo(center);
-    //             var y = depth * z;
-    //             var x = y * perspectiveCamera.aspect;
-    //
-    //             orthographicCamera.left = - x / 2;
-    //             orthographicCamera.right = x / 2
-    //             orthographicCamera.top = y / 2;
-    //             orthographicCamera.bottom = - y / 2;
-    //             orthographicCamera.zoom = 1;
-    //
-    //             orthographicCamera.position.copy(position);
-    //             orthographicCamera.lookAt(center);
-    //
-    //             orthographicCameraControls.setLookAt(position.x, position.y, position.z, center.x, center.y, center.z, false);
-    //             this.cameraControls._sphericalEnd.makeSafe();
-    //             this.cameraControls._needsUpdate = true;
-    //         }
-    //     } else {
-    //         if (this.isOrthographic) {
-    //             const pos = position.clone();
-    //             pos.y = position.y / orthographicCamera.zoom;
-    //
-    //             perspectiveCamera.position.copy(pos);
-    //             perspectiveCamera.lookAt(center);
-    //
-    //             perspectiveCameraControls.setLookAt(position.x, position.y, position.z, center.x, center.y, center.z, false);
-    //             this.cameraControls._sphericalEnd.makeSafe();
-    //             this.cameraControls._needsUpdate = true;
-    //         }
-    //     }
-    //
-    //     this.isOrthographic = !this.isOrthographic;
-    //     this.camera.updateProjectionMatrix();
-    //     this._cameraUpdateDelay();
-    //     return this;
-    // }
 }

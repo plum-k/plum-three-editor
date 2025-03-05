@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import {Object3D} from "three";
-import {isDataTexture, isVector3} from "three-is";
+import {Object3D, Sphere} from "three";
+import {isDataTexture, isGroup, isMesh, isVector3} from "three-is";
 import {ESearchMode, ICondition, normalize, Search} from "./core";
 
 export type Vector3Array = Array<THREE.Vector3>
@@ -139,4 +139,83 @@ export class Tool {
         y = normalize(y, 0, 1, -1, 1);
         return [x, -y];
     }
+
+
+    /**
+     * 获取多个物体的包围盒
+     * @param objects
+     */
+    static   getBox3ByObject3ds(objects: Object3D[]) {
+        const box3 = new THREE.Box3();
+        for (let i = 0; i < objects.length; i++) {
+            const object = objects[i];
+            if (isMesh(object)) {
+                if (object.geometry.boundingBox === null) {
+                    object.geometry.computeBoundingBox();
+                }
+                box3.union(object.geometry.boundingBox!.clone().applyMatrix4(object.matrixWorld));
+            } else if (isGroup(object)) {
+                const box = new THREE.Box3();
+                box.setFromObject(object);
+                box3.union(box)
+            }
+        }
+        return box3;
+    }
+    /**
+     * 获取多个物体的包围球
+     * @param objects
+     */
+    static   getSphereByObject3ds(objects: Object3D[]) {
+        const sphere = new THREE.Sphere();
+        for (let i = 0; i < objects.length; i++) {
+            const object = objects[i];
+            if (isMesh(object)) {
+                if (object.geometry.boundingSphere === null) {
+                    object.geometry.computeBoundingSphere();
+                }
+                sphere.union(object.geometry.boundingSphere!.clone().applyMatrix4(object.matrixWorld));
+            } else if (isGroup(object)) {
+                const box = new THREE.Box3();
+                box.setFromObject(object);
+                sphere.union(box.getBoundingSphere(new Sphere()))
+            }
+        }
+        return sphere;
+    }
+
+    /**
+     * 获取场景的包围盒
+     * @param scene
+     */
+    static getSceneBox(scene: THREE.Scene) {
+        const box3 = new THREE.Box3();
+       scene.traverse((mesh) => {
+            if (isMesh(mesh)) {
+                mesh.geometry.computeBoundingBox();
+                if (mesh.geometry.boundingBox) {
+                    box3.union(mesh.geometry.boundingBox.clone().applyMatrix4(mesh.matrixWorld));
+                }
+            }
+        });
+        return box3;
+    }
+    /**
+     * 获取场景的包围球
+     * @param scene
+     */
+    static  getSceneSphere(scene: THREE.Scene) {
+        const sphere = new THREE.Sphere();
+       scene.traverse((mesh) => {
+            if (isMesh(mesh)) {
+                mesh.geometry.computeBoundingSphere()
+                if (mesh.geometry.boundingSphere) {
+                    sphere.union(mesh.geometry.boundingSphere.clone().applyMatrix4(mesh.matrixWorld));
+                }
+            }
+        });
+        return sphere;
+    }
+
+
 }

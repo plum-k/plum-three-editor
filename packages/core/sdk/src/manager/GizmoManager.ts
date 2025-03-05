@@ -7,13 +7,53 @@ export interface IGizmoOptions extends IComponentOptions {
 
 export class GizmoManager extends Component {
 
-    viewportGizmo: ViewportGizmo | undefined;
+    cubeGizmo: ViewportGizmo | undefined;
+    sphereGizmo: ViewportGizmo | undefined;
 
     constructor(options: IGizmoOptions) {
         super(options);
     }
 
-    init() {
+    initSphereGizmo() {
+        this.sphereGizmo = new ViewportGizmo(this.camera, this.renderer, {
+            container: this.container,
+            placement: "top-right",
+            lineWidth: 10,
+            corners: {
+                // enabled: true,
+            },
+            edges: {
+                // enabled: true,
+            },
+        });
+        const cameraControls = this.cameraControls;
+        const camera = this.camera;
+
+        this.sphereGizmo.addEventListener("start", () => {
+            cameraControls.enabled = false
+        });
+        this.sphereGizmo.addEventListener("end", () => {
+            cameraControls.enabled = true
+        });
+        this.sphereGizmo.addEventListener("change", () => {
+            cameraControls.setPosition(...camera.position.toArray()).then();
+        });
+
+        cameraControls.addEventListener("update", () => {
+            cameraControls.getTarget(this.sphereGizmo!.target);
+            this.sphereGizmo!.update();
+        });
+
+        this.eventManager.renderSubject.subscribe(() => {
+            this.sphereGizmo!.render();
+        })
+
+        this.eventManager.resizeSubject.subscribe(() => {
+            this.sphereGizmo!.update();
+        })
+    }
+
+    initCubeGizmo() {
         const darkColors = {
             color: 0x333333,
             labelColor: 0xdddddd,
@@ -59,32 +99,32 @@ export class GizmoManager extends Component {
         };
 
 
-        this.viewportGizmo = new ViewportGizmo(this.camera, this.renderer, darkCubeConfig);
+        this.cubeGizmo = new ViewportGizmo(this.camera, this.renderer, darkCubeConfig);
         const cameraControls = this.cameraControls;
         const camera = this.camera;
 
         // Set the events listeners
-        this.viewportGizmo.addEventListener("start", () => {
+        this.cubeGizmo.addEventListener("start", () => {
             cameraControls.enabled = false
         });
-        this.viewportGizmo.addEventListener("end", () => {
+        this.cubeGizmo.addEventListener("end", () => {
             cameraControls.enabled = true
         });
-        this.viewportGizmo.addEventListener("change", () => {
+        this.cubeGizmo.addEventListener("change", () => {
             cameraControls.setPosition(...camera.position.toArray()).then();
         });
 
         cameraControls.addEventListener("update", () => {
-            cameraControls.getTarget(this.viewportGizmo!.target);
-            this.viewportGizmo!.update();
+            cameraControls.getTarget(this.cubeGizmo!.target);
+            this.cubeGizmo!.update();
         });
 
         this.eventManager.renderSubject.subscribe(() => {
-            this.viewportGizmo!.render();
+            this.cubeGizmo!.render();
         })
 
         this.eventManager.resizeSubject.subscribe(() => {
-            this.viewportGizmo!.update();
+            this.cubeGizmo!.update();
         })
     }
 }

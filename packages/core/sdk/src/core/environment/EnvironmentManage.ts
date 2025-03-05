@@ -172,7 +172,7 @@ export class EnvironmentManage extends Component {
         })
         if (!isHasDirectionalLight) {
             const light = new THREE.DirectionalLight(0xffffff, 2);
-            light.name = 'DirectionalLight';
+            light.name = 'DefaultDirectionalLight';
             light.position.set(5, 10, 7.5);
             this.scene.add(light);
         }

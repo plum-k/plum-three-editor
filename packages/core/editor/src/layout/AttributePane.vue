@@ -34,9 +34,9 @@ provide("tabActiveName", activeName)
         <scene-attribute tabName="场景"/>
       </el-scrollbar>
     </el-tab-pane>
-    <el-tab-pane label="后处理" name="后处理">
+    <el-tab-pane label="后期" name="后期">
       <el-scrollbar class="h-full">
-        <post-processing tabName="后处理"/>
+        <post-processing tabName="后期"/>
       </el-scrollbar>
     </el-tab-pane>
   </el-tabs>
