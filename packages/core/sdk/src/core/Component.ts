@@ -26,11 +26,11 @@ export class Component<T extends IComponentOptions = IComponentOptions> {
         return this.viewer.eventManager
     }
 
-    get threeCameraControls() {
-        return this.viewer.threeCameraControls;
+    get cameraManager() {
+        return this.viewer.cameraManager;
     }
     get cameraControls() {
-        return this.viewer.threeCameraControls.cameraControls;
+        return this.viewer.cameraManager.cameraControls;
     }
     get renderer() {
         return this.viewer.renderManager.defaultWebGLRenderer;
@@ -44,7 +44,7 @@ export class Component<T extends IComponentOptions = IComponentOptions> {
     }
 
     get camera() {
-        return this.viewer.threeCameraControls.camera;
+        return this.viewer.cameraManager.camera;
     }
 
     get container() {

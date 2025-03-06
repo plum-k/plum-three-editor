@@ -110,7 +110,7 @@ const fitMesh = (data: any) => {
     if (object) {
       if (isDirectionalLight(object)) {
       } else {
-        viewer.threeCameraControls.fitToMeshBySphere([object], true);
+        viewer.cameraManager.fitToMeshBySphere([object], true);
       }
     }
   }

@@ -331,7 +331,7 @@ export class Editor extends Component {
                 box.getCenter(center);
 
                 const promises = [];
-                const cameraControls = this.viewer.threeCameraControls.cameraControls
+                const cameraControls = this.viewer.cameraManager.cameraControls
                 const {polarAngle, azimuthAngle} = cameraControls
                 promises.push(cameraControls.fitToBox(box, enableTransition));
                 promises.push(cameraControls.rotateTo(azimuthAngle, polarAngle, false));

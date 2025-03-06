@@ -10,7 +10,7 @@ CameraControls.install({THREE: THREE});
 /**
  * 交互控制类，用于管理Three.js场景中的摄像机控制。
  */
-export interface IThreeCameraControls {
+export interface IcameraManager {
     viewer: Viewer;
 }
 
@@ -33,11 +33,11 @@ const DEG90 = Math.PI * 0.5;
 const DEG180 = Math.PI;
 
 /**
- * ThreeCameraControls类负责初始化和管理Three.js的摄像机控制。
+ * cameraManager类负责初始化和管理Three.js的摄像机控制。
  * 它通过与viewer实例配合，提供交互式摄像机控制功能。
  */
-export class ThreeCameraControls {
-    options: IThreeCameraControls;
+export class CameraManager {
+    options: IcameraManager;
     viewer: Viewer;
     cameraType: ECameraType = ECameraType.PerspectiveCamera;
     perspectiveCamera: PerspectiveCamera;
@@ -48,10 +48,10 @@ export class ThreeCameraControls {
     height: number;
 
     /**
-     * 构造函数初始化ThreeCameraControls实例。
+     * 构造函数初始化cameraManager实例。
      * @param options - 包含viewer实例的选项对象。
      */
-    constructor(options: IThreeCameraControls) {
+    constructor(options: IcameraManager) {
         this.options = deepMergeRetain(options, {})
         this.viewer = this.options.viewer
 

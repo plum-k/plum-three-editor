@@ -4,7 +4,6 @@ import {useBus} from "../../hooks";
 import {useRoute} from "vue-router";
 import Icon from "../../components/Icon.vue";
 import {ElTooltip} from "element-plus";
-import {watch} from "vue";
 
 const {isFullscreen, enter, exit, toggle} = useFullscreen(document.body)
 const bus = useBus();
@@ -18,17 +17,8 @@ const capture = () => {
 
 const fit = () => {
   const viewer = bus.viewer;
-  if (!viewer) return;
-  viewer.threeCameraControls.fitToSceneBySphere(true)
+  viewer?.cameraManager.fitToSceneBySphere(true)
 }
-
-watch(isFullscreen, (value) => {
-  if (!value) {
-    const viewer = bus.viewer;
-    // viewer?.eventManager.resizeSubject.next(true);
-  }
-})
-
 
 </script>
 

@@ -10,7 +10,7 @@ bus.viewerInitSubject.subscribe((value) => {
 
   const viewer = bus.viewer;
   if (!viewer) return
-  const cameraControl = viewer.threeCameraControls.cameraControls;
+  const cameraControl = viewer.cameraManager.cameraControls;
 
   let position = new THREE.Vector3();
   let target = new THREE.Vector3();

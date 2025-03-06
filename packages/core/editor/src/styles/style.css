@@ -12,7 +12,8 @@ html, body, #app {
         position: relative !important;
     }
 }
-
+#canvasContainer{
+}
 ::backdrop {
     background-color: white;
 }

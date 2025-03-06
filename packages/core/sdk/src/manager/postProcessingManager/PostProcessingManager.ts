@@ -65,14 +65,14 @@ export class PostProcessingManager extends Component {
 
     addRenderPass() {
         const scene = this.viewer.scene;
-        this.renderPass = new RenderPass(scene, this.viewer.threeCameraControls.camera);
+        this.renderPass = new RenderPass(scene, this.viewer.cameraManager.camera);
         this.composer.addPass(this.renderPass);
     }
 
     //----------------- selectiveBloomEffect -----------------
     initSelectiveBloomEffect(options?: BloomEffectOptions) {
         // const init = () => {
-        this.selectiveBloomEffect = new SelectiveBloomEffect(this.viewer.scene, this.viewer.threeCameraControls.camera, {
+        this.selectiveBloomEffect = new SelectiveBloomEffect(this.viewer.scene, this.viewer.cameraManager.camera, {
             blendFunction: BlendFunction.ADD,
             mipmapBlur: true,
             luminanceThreshold: 0,
@@ -105,7 +105,7 @@ export class PostProcessingManager extends Component {
     //----------------- outlineEffect -----------------
     initOutlineEffect(options: any) {
         const renderer = this.composer.getRenderer();
-        this.outlineEffect = new OutlineEffect(this.viewer.scene, this.viewer.threeCameraControls.camera, {
+        this.outlineEffect = new OutlineEffect(this.viewer.scene, this.viewer.cameraManager.camera, {
             blendFunction: BlendFunction.SCREEN,
             multisampling: Math.min(4, renderer.capabilities.maxSamples),
             edgeStrength: 2.5,
@@ -202,7 +202,7 @@ export class PostProcessingManager extends Component {
     //----------------- effectPass -----------------
     initEffectPass() {
 
-        this.effectPass = new EffectPass(this.viewer.threeCameraControls.camera, ...this.effects);
+        this.effectPass = new EffectPass(this.viewer.cameraManager.camera, ...this.effects);
     }
 
     addEffectPass() {

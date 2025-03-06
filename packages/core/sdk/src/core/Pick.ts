@@ -88,7 +88,7 @@ export class Pick extends Component {
         const min = 1e-4;
         const normalY = new THREE.Vector3(0, 1, 0)
         const dotNormalY = normalY.dot(screenPosition);
-        const center = this.threeCameraControls.cameraControls.getTarget(new THREE.Vector3());
+        const center = this.cameraManager.cameraControls.getTarget(new THREE.Vector3());
         if (!(Math.abs(dotNormalY) < min)) {
             // 计算距离
             const distance = (-cameraPosition.y + (height || 0) + center.y) / screenPosition.y; // center.y

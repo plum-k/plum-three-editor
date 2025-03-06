@@ -13,8 +13,8 @@ export interface IPick {
 
 export class EventManager extends Component {
 
-
     dblClickSubject = new Subject<MouseEvent>();
+    // 容器重置
     resizeSubject = new Subject<boolean>();
     // 每次渲染更新时候触发
     renderSubject = new Subject<number>();

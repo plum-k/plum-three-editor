@@ -4,10 +4,20 @@ import '../styles/splitpanes.css'
 import LeftPanel from "./leftPanel/LeftPanel.vue";
 import SceneView from "./SceneView.vue";
 import AttributePane from "./AttributePane.vue";
+import {useBus} from "../hooks";
+
+const bus = useBus();
+const resize = () => {
+  const viewer = bus.viewer;
+  if (viewer) {
+    viewer.eventManager.resizeSubject.next(true);
+  }
+}
+
 </script>
 
 <template>
-  <splitpanes class="defaulel-theme" style="height: calc(100% - 32px)">
+  <splitpanes class="default-theme" style="height: calc(100% - 32px)" @resize="resize">
     <pane size="20">
       <LeftPanel/>
     </pane>

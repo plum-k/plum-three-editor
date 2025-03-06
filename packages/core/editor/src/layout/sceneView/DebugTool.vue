@@ -25,7 +25,7 @@ const show = () => {
   form.fps = viewer.debug.enable;
 
   form.grid = viewer.enableGrid;
-  // form.distance = viewer.threeCameraControls.cameraControls.minDistance;
+  // form.distance = viewer.cameraManager.cameraControls.minDistance;
 
   form.axes = viewer.enableAxes;
 }

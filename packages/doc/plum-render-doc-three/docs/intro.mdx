@@ -21,8 +21,8 @@ export const Highlight = () => {
         if (canvasContainer.current) {
             let _threeViewer = new Viewer(canvasContainer.current, {});
             //addBox(_threeViewer, 1)
-            _threeViewer.threeCameraControls.cameraControls.setPosition(-5, 5, 5);
-            _threeViewer.threeCameraControls.cameraControls.setTarget(0, 0, 0);
+            _threeViewer.cameraManager.cameraControls.setPosition(-5, 5, 5);
+            _threeViewer.cameraManager.cameraControls.setTarget(0, 0, 0);
 
             const line = new Line({
                 points: points,

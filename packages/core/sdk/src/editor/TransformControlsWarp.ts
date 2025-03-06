@@ -35,7 +35,7 @@ export class TransformControlsWarp extends Component {
                 this.objectRotationOnDown = object.rotation.clone();
                 this.objectScaleOnDown = object.scale.clone();
             }
-            this.threeCameraControls.cameraControls.enabled = false;
+            this.cameraManager.cameraControls.enabled = false;
         });
         this.transformControls.addEventListener('mouseUp', () => {
             const object = this.transformControls.object;
@@ -58,7 +58,7 @@ export class TransformControlsWarp extends Component {
                         break;
                 }
             }
-            this.threeCameraControls.cameraControls.enabled = true;
+            this.cameraManager.cameraControls.enabled = true;
         });
         const gizmo = this.transformControls.getHelper();
         this.sceneHelpers.add(gizmo);

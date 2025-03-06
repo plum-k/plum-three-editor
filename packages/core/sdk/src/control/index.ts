@@ -1,3 +1,3 @@
 export * from "./DrawLine";
-export * from "./ThreeCameraControls";
+export * from "./CameraManager";
 export * from "./measure";

@@ -102,8 +102,8 @@ onMounted(() => {
 
   // useLightTest(_viewer)
 
-  _viewer.threeCameraControls.cameraControls.setPosition(5, 5, 5);
-  _viewer.threeCameraControls.cameraControls.setTarget(0, 0, 0);
+  _viewer.cameraManager.cameraControls.setPosition(5, 5, 5);
+  _viewer.cameraManager.cameraControls.setTarget(0, 0, 0);
 
 
   setTimeout(() => {

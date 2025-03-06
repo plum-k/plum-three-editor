@@ -21,9 +21,9 @@ const change = (val: ECameraType | ECameraViewType) => {
   const viewer = bus.viewer;
   if (viewer) {
     if (val === ECameraType.PerspectiveCamera) {
-      viewer.threeCameraControls.setCameraType(val);
+      viewer.cameraManager.setCameraType(val);
     } else {
-      viewer.threeCameraControls.setCameraViewType(val);
+      viewer.cameraManager.setCameraViewType(val);
     }
   }
 }

@@ -20,7 +20,7 @@ export class HelperManager extends Component {
         this.viewer.scene.add(axesHelper);
     }
 
-    addCameraHelper(camera: THREE.Camera = this.viewer.threeCameraControls.perspectiveCamera) {
+    addCameraHelper(camera: THREE.Camera = this.viewer.cameraManager.perspectiveCamera) {
         const cameraHelper = new THREE.CameraHelper(camera);
         this.viewer.scene.add(cameraHelper);
     }

@@ -26,8 +26,8 @@ bus.viewerInitSubject.subscribe(() => {
 const threeToUi = () => {
   const viewer = bus.viewer;
   if (!viewer) return
-  const cameraControls = viewer.threeCameraControls.cameraControls;
-  const camera = viewer.threeCameraControls.cameraControls.camera as THREE.PerspectiveCamera;
+  const cameraControls = viewer.cameraManager.cameraControls;
+  const camera = viewer.cameraManager.cameraControls.camera as THREE.PerspectiveCamera;
 
   form.fov = camera.fov;
   form.near = camera.near;
@@ -48,8 +48,8 @@ objectAttributeChangeSubject.subscribe((editValue) => {
 
   const viewer = bus.viewer;
   if (!viewer) return
-  const cameraControls = viewer.threeCameraControls.cameraControls;
-  const camera = viewer.threeCameraControls.cameraControls.camera as THREE.PerspectiveCamera;
+  const cameraControls = viewer.cameraManager.cameraControls;
+  const camera = viewer.cameraManager.cameraControls.camera as THREE.PerspectiveCamera;
 
   const isCamera = ["fov", "near", "far"].includes(name as string)
   if (isCamera) {

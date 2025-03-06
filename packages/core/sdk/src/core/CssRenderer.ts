@@ -21,7 +21,7 @@ export class CssRenderer extends Component {
 
     setSize(width: number, height: number) {
         this.renderManager.setSize(width, height);
-        this.threeCameraControls.setSize(width, height);
+        this.cameraManager.setSize(width, height);
     }
 
     render() {

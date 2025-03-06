@@ -62,7 +62,7 @@ export class RenderManager extends Component {
         const delta = clock.getDelta();
         // this.defaultWebGLRenderer.autoClear = false;
         // this.defaultWebGLRenderer.setClearColor("red");
-        const cameraControls = this.threeCameraControls.cameraControls;
+        const cameraControls = this.cameraManager.cameraControls;
 
         const updated = cameraControls.update(delta);
         // 
