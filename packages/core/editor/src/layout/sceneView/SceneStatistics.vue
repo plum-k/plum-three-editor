@@ -29,7 +29,7 @@ bus.viewerInitSubject.subscribe(() => {
     info.frameTime = value
   })
 })
-console.log("store.showSceneStatistics",store.showSceneStatistics)
+console.log("store.showSceneStatistics", store.showSceneStatistics)
 </script>
 
 <template>

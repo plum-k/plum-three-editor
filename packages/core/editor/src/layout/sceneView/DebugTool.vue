@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {onMounted, reactive} from "vue";
-import {ElButton, ElCol, ElForm, ElPopover, ElRow} from "element-plus";
+import {ElButton, ElForm, ElPopover} from "element-plus";
 import {useAttributeProvide, useBus} from "../../hooks";
 import {BoolItem, InputNumberItem} from "../../common-ui";
 import {getStatistics} from "@plum-render/three-sdk";

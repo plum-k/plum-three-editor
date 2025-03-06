@@ -9,6 +9,7 @@ export class Bus {
     // 视图
     viewer: Viewer | null = null;
     viewerInitSubject = new Subject<boolean>();
+    materialIndex = 0
 
     constructor() {
     }
@@ -23,9 +24,11 @@ export class Bus {
     get selectObject() {
         return this.viewer?.editor.selector.selectObject;
     }
+
     get scene() {
         return this.viewer?.scene;
     }
+
     /**
      * 选中的几何
      */
@@ -35,8 +38,6 @@ export class Bus {
         }
         return null
     }
-
-    materialIndex = 0
 
     /**
      * 选中的材质

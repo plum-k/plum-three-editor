@@ -37,32 +37,32 @@ watch(isFullscreen, (value) => {
 
     <el-tooltip
         v-if="isFullscreen"
-        effect="dark"
         content="推出全屏"
+        effect="dark"
         placement="bottom"
     >
       <icon icon-name="icon-quxiaoquanping" @click="exit"/>
     </el-tooltip>
     <el-tooltip v-else
                 class="box-item"
-                effect="dark"
                 content="全屏"
+                effect="dark"
                 placement="bottom"
     >
       <icon icon-name="icon-quanping" @click="enter"/>
     </el-tooltip>
     <el-tooltip
         class="box-item"
-        effect="dark"
         content="截图"
+        effect="dark"
         placement="bottom"
     >
       <icon icon-name="icon-jieping" @click="capture"/>
     </el-tooltip>
     <el-tooltip
         class="box-item"
-        effect="dark"
         content="聚焦场景"
+        effect="dark"
         placement="bottom"
     >
       <icon icon-name="icon-jujiao" @click="fit"/>

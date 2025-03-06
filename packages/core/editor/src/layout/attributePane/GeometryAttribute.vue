@@ -22,33 +22,32 @@ import {
   isTetrahedronGeometry
 } from "three-is";
 import {useBus} from "../../hooks";
-import BoxGeometryAttribute from "./geometryAttribute/BoxGeometryAttribute.vue";
-import BufferGeometryAttribute from "./geometryAttribute/BufferGeometryAttribute.vue";
-import CapsuleGeometryAttribute from "./geometryAttribute/CapsuleGeometryAttribute.vue";
-import CircleGeometryAttribute from "./geometryAttribute/CircleGeometryAttribute.vue";
-import CylinderGeometryAttribute from "./geometryAttribute/CylinderGeometryAttribute.vue";
-import DodecahedronGeometryAttribute from "./geometryAttribute/DodecahedronGeometryAttribute.vue";
-import ExtrudeGeometryAttribute from "./geometryAttribute/ExtrudeGeometryAttribute.vue";
-import IcosahedronGeometryAttribute from "./geometryAttribute/IcosahedronGeometryAttribute.vue";
-import LatheGeometryAttribute from "./geometryAttribute/LatheGeometryAttribute.vue";
-import ModifiersAttribute from "./geometryAttribute/ModifiersAttribute.vue";
-import OctahedronGeometryAttribute from "./geometryAttribute/OctahedronGeometryAttribute.vue";
-import PlaneGeometryAttribute from "./geometryAttribute/PlaneGeometryAttribute.vue";
-import RingGeometryAttribute from "./geometryAttribute/RingGeometryAttribute.vue";
-import ShapeGeometryAttribute from "./geometryAttribute/ShapeGeometryAttribute.vue";
-import SphereGeometryAttribute from "./geometryAttribute/SphereGeometryAttribute.vue";
-import TetrahedronGeometryAttribute from "./geometryAttribute/TetrahedronGeometryAttribute.vue";
-import TorusGeometryAttribute from "./geometryAttribute/TorusGeometryAttribute.vue";
-import TubeGeometryAttribute from "./geometryAttribute/TubeGeometryAttribute.vue";
-import TorusKnotGeometryAttribute from "./geometryAttribute/TorusKnotGeometryAttribute.vue";
+import {
+  BoxGeometryAttribute,
+  BufferGeometryAttribute,
+  CapsuleGeometryAttribute,
+  CircleGeometryAttribute,
+  CylinderGeometryAttribute,
+  DodecahedronGeometryAttribute,
+  ExtrudeGeometryAttribute,
+  IcosahedronGeometryAttribute,
+  LatheGeometryAttribute,
+  ModifiersAttribute,
+  OctahedronGeometryAttribute,
+  PlaneGeometryAttribute,
+  RingGeometryAttribute,
+  ShapeGeometryAttribute,
+  SphereGeometryAttribute,
+  TetrahedronGeometryAttribute,
+  TorusGeometryAttribute,
+  TubeGeometryAttribute,
+  TorusKnotGeometryAttribute
+} from "./geometryAttribute";
 
-// const {isActive} = useAttributePane(props)
 const bus = useBus();
-// const props = defineProps<AttributePaneNameProps>();
-
 const show = ref(true);
 const text = ref("未选择对象");
-// 定义材质的显示状态
+
 const geometryShow = reactive({
   isBoxGeometry: false,
   isBufferGeometry: false,
@@ -118,7 +117,6 @@ onMounted(() => {
   sync();
   viewer.editor.editorEventManager.objectSelected.subscribe(() => {
     sync();
-
   })
 })
 </script>

@@ -32,8 +32,8 @@ const change = (value: number | undefined, key: string) => {
           v-model="formContext!.model![name]['x']"
           controls-position="right"
           size="small"
-          @change="(value)=>change(value,'x')"
           v-bind="props.formProps"
+          @change="(value)=>change(value,'x')"
       />
     </div>
     <div class="flex  gap-1.5 mt-1">
@@ -44,20 +44,20 @@ const change = (value: number | undefined, key: string) => {
           v-model="formContext!.model![name]['y']"
           controls-position="right"
           size="small"
-          @change="(value)=>change(value,'y')"
           v-bind="props.formProps"
+          @change="(value)=>change(value,'y')"
       />
     </div>
     <div class="flex  gap-1.5 mt-1">
       <div>
-          z:
+        z:
       </div>
       <el-input-number
           v-model="formContext!.model![name]['z']"
           controls-position="right"
           size="small"
-          @change="(value)=>change(value,'z')"
           v-bind="props.formProps"
+          @change="(value)=>change(value,'z')"
       />
     </div>
   </el-form-item>

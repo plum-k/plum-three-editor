@@ -8,7 +8,7 @@ import PostProcessing from "./attributePane/PostProcessing.vue";
 import {useProvideRef} from "../hooks/useProvideRef.ts";
 
 
-const activeName = useProvideRef("tabActiveName", '场景');
+const activeName = useProvideRef("tabActiveName", '属性');
 </script>
 
 <template>

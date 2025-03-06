@@ -270,9 +270,9 @@ const getTexture = () => {
     <select-item :options="overrideMaterialList" label="覆盖材质" name="overrideMaterial"/>
     <select-item :options="backgroundTypeList" label="背景类型" name="backgroundType"/>
     <color-item v-if="form.backgroundType === '颜色'" label="背景颜色" name="backgroundColor"/>
-    <texture-item v-if="form.backgroundType==='贴图' || form.backgroundType==='全景'" label="背景图片"
-                  name="backgroundTexture"
-                  :get-texture="getTexture"/>
+    <texture-item v-if="form.backgroundType==='贴图' || form.backgroundType==='全景'" :get-texture="getTexture"
+                  label="背景图片"
+                  name="backgroundTexture"/>
 
     <input-number-item v-if="form.backgroundType ==='全景'" :formProps="{max:1,min:0,step:0.01,precision:2  }"
                        label="背景模糊" name="backgroundBlurriness"/>
@@ -284,8 +284,10 @@ const getTexture = () => {
 
     <select-item :options="envTypeList" label="环境类型" name="environmentType"/>
 
-    <input-number-item v-if="form.environmentType !== '无'" :formProps="{max:1,min:0,step:0.01,precision:2  }" label="环境强度" name="environmentIntensity"/>
-    <vector3-item v-if="form.environmentType !== '无'" :formProps="{step:1,precision:2 }" label="环境旋转" name="environmentRotation"/>
+    <input-number-item v-if="form.environmentType !== '无'" :formProps="{max:1,min:0,step:0.01,precision:2  }"
+                       label="环境强度" name="environmentIntensity"/>
+    <vector3-item v-if="form.environmentType !== '无'" :formProps="{step:1,precision:2 }" label="环境旋转"
+                  name="environmentRotation"/>
 
     <select-item :options="fogList" label="雾" name="fogType"/>
 

@@ -45,7 +45,7 @@ objectAttributeChangeSubject.subscribe((editValue) => {
   const selectMaterial = bus.selectMaterial;
   if (!object) return;
   if (!isActive.value) return;
-  if (!selectMaterial)return;
+  if (!selectMaterial) return;
   if (!isArray(name)) {
     if (["color", "emissive"].includes(name)) {
       invoke(get(selectMaterial, name), "setStyle", [value])

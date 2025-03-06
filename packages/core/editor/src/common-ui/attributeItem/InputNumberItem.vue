@@ -19,7 +19,8 @@ const {objectAttributeChangeSubject, change} = useAttributeInject(props)
 
 <template>
   <el-form-item :label="label" size="small">
-    <el-input-number v-model="formContext!.model![name]" v-bind="props.formProps" @change="change" controls-position="right"/>
+    <el-input-number v-model="formContext!.model![name]" controls-position="right" v-bind="props.formProps"
+                     @change="change"/>
   </el-form-item>
 </template>
 

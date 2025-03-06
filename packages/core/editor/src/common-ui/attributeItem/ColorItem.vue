@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import {ElColorPicker, ElFormItem, formContextKey} from "element-plus";
-import {computed, inject} from "vue";
-import {type IAttributeProps, useBus} from "../../hooks";
-import {isNil} from "lodash-es";
-import {useAttributeInject} from "../../hooks";
+import {inject} from "vue";
+import {type IAttributeProps, useAttributeInject} from "../../hooks";
 
 
 const props = defineProps<IAttributeProps>();
