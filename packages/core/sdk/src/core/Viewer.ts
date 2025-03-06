@@ -116,7 +116,6 @@ export interface IViewerOptions {
     isSphereGizmo?: boolean;
 }
 
-// 定义 Viewer 类
 export class Viewer {
     options: IViewerOptions; // 存储选项
     container!: HTMLElement; // 容器元素

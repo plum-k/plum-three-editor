@@ -1,20 +1,18 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import {computed, inject, onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {get, invoke, isArray, set} from "lodash-es";
 import * as THREE from "three";
 import {isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, SelectItem, TextItem, Vector2Item} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
+import {blendingOptions, sideOptions} from "./selectOptions.ts";
+import {useActiveTab} from "../../../hooks/useActiveTab.ts";
 
 const bus = useBus();
 
-const tabActiveName = inject("tabActiveName", ref("材质"))
-
-const isActive = computed(() => {
-  return tabActiveName.value === "材质"
-})
+const {isActive} = useActiveTab("材质")
 
 const isVisible = ref(false);
 
@@ -23,7 +21,7 @@ onMounted(() => {
   if (!viewer) return;
   sync();
 
-  viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
+  viewer.editor.editorEventManager.objectSelected.subscribe(() => {
     sync();
   })
 })
@@ -241,39 +239,39 @@ const threeToUi = (object: THREE.Mesh) => {
 </script>
 
 <template>
-  <el-form :model="form" label-position="left" :label-width="80" size="small">
+  <el-form :label-width="80" :model="form" label-position="left" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>
 
     <color-item label="颜色" name="color"/>
     <color-item label="自发光" name="emissive"/>
-    <input-number-item label="自发光强度" name="emissiveIntensity" :formProps="{max:1,min:0,step:0.01,precision:2  }"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2  }" label="自发光强度" name="emissiveIntensity"/>
 
     <!--    todo 值联动-->
-    <input-number-item label="反射率" name="reflectivity" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="反射率" name="reflectivity"/>
     <input-number-item label="IOR" name="ior"/>
 
-    <input-number-item label="粗糙度" name="roughness" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
-    <input-number-item label="金属度" name="metalness" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="粗糙度" name="roughness"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="金属度" name="metalness"/>
 
-    <input-number-item label="清漆" name="clearcoat" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
-    <input-number-item label="清漆粗糙度" name="clearcoatroughness" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
-    <input-number-item label="色散" name="dispersion" :formProps="{max:10,min:0,step:0.01,precision:2 }"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="清漆" name="clearcoat"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="清漆粗糙度" name="clearcoatroughness"/>
+    <input-number-item :formProps="{max:10,min:0,step:0.01,precision:2 }" label="色散" name="dispersion"/>
 
-    <input-number-item label="彩虹色" name="iridescence" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
-    <input-number-item label="彩虹色折射率" name="iridescenceIOR" :formProps="{max:5,min:0,step:0.01,precision:2 }"/>
-    <vector2-item label="彩虹色厚度" name="iridescenceThicknessRange" :formProps="{max:5,min:0,step:1}"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="彩虹色" name="iridescence"/>
+    <input-number-item :formProps="{max:5,min:0,step:0.01,precision:2 }" label="彩虹色折射率" name="iridescenceIOR"/>
+    <vector2-item :formProps="{max:5,min:0,step:1}" label="彩虹色厚度" name="iridescenceThicknessRange"/>
 
-    <input-number-item label="光泽" name="sheen" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
-    <input-number-item label="光泽粗超度" name="sheenRoughness" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="光泽" name="sheen"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="光泽粗超度" name="sheenRoughness"/>
     <color-item label="光泽颜色" name="sheenColor"/>
 
-    <input-number-item label="透光" name="transmission" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="透光" name="transmission"/>
     <input-number-item label="衰减距离" name="attenuationDistance"/>
     <color-item label="衰减色" name="attenuationColor"/>
 
-    <input-number-item label="厚度" name="thickness" :formProps="{step:0.01,precision:2 }"/>
+    <input-number-item :formProps="{step:0.01,precision:2 }" label="厚度" name="thickness"/>
     <bool-item label="顶点颜色" name="vertexColors"/>
 
     <texture-item label="贴图" name="map"/>
@@ -284,7 +282,7 @@ const threeToUi = (object: THREE.Mesh) => {
     <input-number-item label="凹凸缩放" name="bumpScale"/>
 
     <texture-item label="法线贴图" name="bumpMap"/>
-    <vector2-item label="法线缩放" name="normalScale" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <vector2-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="法线缩放" name="normalScale"/>
 
     <texture-item label="清漆贴图" name="clearcoatMap"/>
     <texture-item label="清漆法线贴图" name="clearcoatNormalMap"/>
@@ -302,38 +300,29 @@ const threeToUi = (object: THREE.Mesh) => {
     <texture-item label="光泽粗超度贴图" name="sheenRoughnessMap"/>
 
     <texture-item label="彩虹色厚度贴图" name="iridescenceThicknessMap"/>
-    <vector2-item label="彩虹色厚度贴图缩放" name="iridescenceThicknessRange" :formProps="{step:1}"/>
+    <vector2-item :formProps="{step:1}" label="彩虹色厚度贴图缩放" name="iridescenceThicknessRange"/>
 
     <texture-item label="环境贴图" name="envMap"/>
     <texture-item label="光照贴图" name="lightMap"/>
     <texture-item label="环境光遮蔽贴图" name="aoMap"/>
-    <input-number-item label="环境光遮蔽贴图强度" name="aoMapIntensity"
-                       :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="环境光遮蔽贴图强度"
+                       name="aoMapIntensity"/>
 
     <texture-item label="透光贴图" name="transmissionMap"/>
     <texture-item label="厚度贴图" name="thicknessMap"/>
 
-    <select-item label="面" name="side" :options="[{value: 0, label: '正面'}, {value: 1, label: '背面'}, {
-                            value: 2,
-                            label: '双面'
-                        }]" />
+    <select-item :options="sideOptions" label="面" name="side"/>
 
     <bool-item label="平面着色" name="flatShading"/>
 
-    <select-item label="混合" name="blending" :options="[{value: '0', label: 'No'}, {
-                            value: '1',
-                            label: 'Normal'
-                        }, {value: '2', label: 'Additive'}, {value: '3', label: 'Subtractive'}, {
-                            value: '4',
-                            label: 'Multiply'
-                        }, {value: '5', label: 'Custom'}]"/>
+    <select-item :options="blendingOptions" label="混合" name="blending"/>
 
-    <input-number-item label="透明度" name="opacity" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="透明度" name="opacity"/>
     <bool-item label="透明性" name="transparent"/>
 
     <bool-item label="强制单通道" name="forceSinglePass"/>
 
-    <bool-item label="α测试" name="alphaTest" :formProps="{max:1,min:0,step:0.01,precision:2 }"/>
+    <bool-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="α测试" name="alphaTest"/>
     <bool-item label="深度测试" name="depthTest"/>
     <bool-item label="深度缓写" name="depthWrite"/>
 

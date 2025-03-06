@@ -7,23 +7,42 @@ import {WebGLRenderer} from "three";
 import {get, isArray} from "lodash-es";
 import {isCompressedTexture, isDataTexture} from "three-is";
 import {FullScreenQuad} from "three-stdlib";
+import {Asset} from "@plum-render/three-sdk";
 
 interface Props {
   name: string;
   label: string;
+  getTexture?: () => THREE.Texture | undefined;
 }
 
 const props = defineProps<Props>();
-const {name, label} = props
-
+const {name, label, getTexture} = props
 const bus = useBus();
-// const change = (value: boolean) => {
-//
-//   objectAttributeChangeSubject.next({
-//     name: name,
-//     value: value
-//   });
-// }
+
+const input = document.createElement('input');
+input.type = 'file';
+input.addEventListener('change', (event) => {
+  const target = event.target as HTMLInputElement;
+  loadFile(target?.files![0] as File);
+});
+
+const click = () => {
+  input.click();
+}
+
+function loadFile(file: File) {
+  // const extension = file.name.split('.').pop().toLowerCase();
+  // const reader = new FileReader();
+  //
+  // const hash = `${file.lastModified}_${file.size}_${file.name}`;
+
+  const asset = new Asset({
+    file: file,
+  })
+  bus.viewer?.assetManager.loadAsset(asset).then(asset => {
+    console.log("asset", asset)
+  })
+}
 
 const canvasRef = ref<HTMLCanvasElement>()
 
@@ -45,11 +64,16 @@ function renderToCanvas(texture: THREE.Texture) {
 }
 
 onMounted(() => {
-  const object = bus.selectObject as THREE.Mesh;
-  const _material = object.material;
-  const material = isArray(_material) ? _material[0] : _material
+  let texture;
 
-  const texture = get(material, name) as THREE.Texture;
+  if (getTexture) {
+    texture = getTexture();
+  } else {
+    const object = bus.selectObject as THREE.Mesh;
+    const _material = object.material;
+    const material = isArray(_material) ? _material[0] : _material
+    texture = get(material, name) as THREE.Texture;
+  }
 
   const canvas = canvasRef.value;
   if (canvas) {
@@ -63,7 +87,6 @@ onMounted(() => {
       context.clearRect(0, 0, canvas.width, canvas.height);
     }
     if (texture !== null) {
-
       const image = texture.image;
       if (image !== undefined && image !== null && image.width > 0) {
         const scale = canvas.width / image.width;
@@ -81,12 +104,12 @@ onMounted(() => {
   }
 })
 
+
 </script>
 
 <template>
   <el-form-item :label="label" size="small">
-    <canvas ref="canvasRef">
-    </canvas>
+    <canvas ref="canvasRef" @click="click"/>
   </el-form-item>
 </template>
 

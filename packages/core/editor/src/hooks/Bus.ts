@@ -23,7 +23,9 @@ export class Bus {
     get selectObject() {
         return this.viewer?.editor.selector.selectObject;
     }
-
+    get scene() {
+        return this.viewer?.scene;
+    }
     /**
      * 选中的几何
      */

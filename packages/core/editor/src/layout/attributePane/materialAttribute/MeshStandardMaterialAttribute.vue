@@ -1,20 +1,18 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import {computed, inject, onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {isArray, set} from "lodash-es";
 import * as THREE from "three";
 import {isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, SelectItem, TextItem, Vector2Item} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
+import {blendingOptions} from "./selectOptions.ts";
+import {useActiveTab} from "../../../hooks/useActiveTab.ts";
 
 const bus = useBus();
 
-const tabActiveName = inject("tabActiveName", ref("材质"))
-
-const isActive = computed(() => {
-  return tabActiveName.value === "材质"
-})
+const {isActive} = useActiveTab("材质")
 const isVisible = ref(false);
 
 onMounted(() => {
@@ -112,7 +110,7 @@ const threeToUi = (object: THREE.Mesh) => {
   form.name = material.name;
 
   form.color = `#${material.color.getHexString()}`;
-  form.emissive =  `#${material.emissive.getHexString()}`;
+  form.emissive = `#${material.emissive.getHexString()}`;
   form.emissiveIntensity = material.emissiveIntensity;
 
   form.roughness = material.roughness;
@@ -200,7 +198,7 @@ const threeToUi = (object: THREE.Mesh) => {
 
     <bool-item label="平面着色" name="flatShading"/>
 
-    <select-item label="混合" name="blending"/>
+    <select-item :options="blendingOptions" label="混合" name="blending"/>
     <input-number-item label="透明度" name="opacity"/>
     <bool-item label="透明性" name="transparent"/>
 

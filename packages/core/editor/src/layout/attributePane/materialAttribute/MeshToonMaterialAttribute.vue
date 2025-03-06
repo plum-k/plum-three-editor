@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import {computed, inject, onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {isArray, set} from "lodash-es";
 import * as THREE from "three";
 import {isMesh} from "three-is";
@@ -8,14 +8,12 @@ import {useBus} from "../../../hooks";
 import {BoolItem, ColorItem, InputNumberItem, SelectItem, TextItem, Vector2Item} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
 import {useAttributeProvide} from "../../../hooks/useAttributeProvide.ts";
+import {blendingOptions, sideOptions} from "./selectOptions.ts";
+import {useActiveTab} from "../../../hooks/useActiveTab.ts";
 
 const bus = useBus();
 
-const tabActiveName = inject("tabActiveName", ref("材质"))
-
-const isActive = computed(() => {
-  return tabActiveName.value === "材质"
-})
+const {isActive} = useActiveTab("材质")
 const isVisible = ref(false);
 
 onMounted(() => {
@@ -105,7 +103,7 @@ const threeToUi = (object: THREE.Mesh) => {
   form.uuid = material.uuid;
   form.name = material.name;
   form.color = `#${material.color.getHexString()}`;
-  form.emissive =  `#${material.emissive.getHexString()}`;
+  form.emissive = `#${material.emissive.getHexString()}`;
 
   form.vertexColors = material.vertexColors;
 
@@ -176,10 +174,10 @@ const threeToUi = (object: THREE.Mesh) => {
 
     <texture-item label="渐变贴图" name="gradientMap"/>
 
-    <select-item label="面" name="side"/>
+    <select-item :options="sideOptions" label="面" name="side"/>
     <bool-item label="平面着色" name="flatShading"/>
 
-    <select-item label="混合" name="blending"/>
+    <select-item :options="blendingOptions" label="混合" name="blending"/>
     <input-number-item label="透明度" name="opacity"/>
     <bool-item label="透明性" name="transparent"/>
 

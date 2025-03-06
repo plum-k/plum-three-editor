@@ -3,18 +3,12 @@ import {ElColorPicker, ElFormItem, formContextKey} from "element-plus";
 import {computed, inject} from "vue";
 import {type IAttributeProps, useBus} from "../../hooks";
 import {isNil} from "lodash-es";
-import {useAttributeInject} from "../../hooks/useAttributeInject.ts";
+import {useAttributeInject} from "../../hooks";
 
 
 const props = defineProps<IAttributeProps>();
 const {name, label} = props
 const formContext = inject(formContextKey, undefined)
-const bus = useBus();
-
-const isRender = computed(() => {
-  return !isNil(formContext.model[name])
-})
-
 const {objectAttributeChangeSubject, change} = useAttributeInject(props)
 
 </script>

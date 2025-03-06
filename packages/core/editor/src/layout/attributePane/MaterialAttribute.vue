@@ -104,7 +104,6 @@ bus.viewerInitSubject.subscribe(() => {
   if (viewer) {
     viewer.editor.editorEventManager.objectSelected.subscribe(() => {
       sync();
-
     })
     sync();
   }
@@ -115,7 +114,6 @@ onMounted(() => {
   sync();
   viewer.editor.editorEventManager.objectSelected.subscribe(() => {
     sync();
-
   })
 })
 

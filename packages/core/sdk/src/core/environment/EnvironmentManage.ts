@@ -3,7 +3,7 @@ import {presetsObj, PresetsType} from "./environmentAssets";
 import {isArray, isNil} from "lodash-es";
 import {Component, IComponentOptions} from "../Component";
 import {TextureEncoding} from "three-stdlib/types/shared";
-import {Asset} from "../asset/Asset";
+import {Asset} from "../../manager/asset/Asset";
 import {deepMergeRetain} from "../../tool";
 import {isDirectionalLight} from "three-is";
 

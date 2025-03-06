@@ -12,7 +12,7 @@ import {
 } from "three";
 import {GLTF, GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader";
-import Asset from "../core/asset/Asset";
+import Asset from "./asset/Asset";
 import {Component, IComponentOptions} from "../core/Component";
 import {
     LDrawLoader,
@@ -29,8 +29,7 @@ import {EXRLoader} from "three/examples/jsm/loaders/EXRLoader";
 import {GainMapLoader, HDRJPGLoader} from "@monogrid/gainmap-js";
 import {buildGraph} from "../tool/buildGraph";
 import {Subject} from "rxjs";
-import {GltfModelAsset} from "../core/asset/GltfModelAsset";
-import {TextureAsset} from "../core/asset/TextureAsset";
+import {GltfModelAsset} from "./asset/GltfModelAsset";
 import {KTX2Loader} from "three/examples/jsm/loaders/KTX2Loader";
 
 export interface IResourceManagers extends IComponentOptions {
@@ -111,48 +110,44 @@ export class AssetManager extends Component {
     }
 
     initAllLoader() {
-        // let loader = this.memoizedLoaders.get(Proto)!
-        // if (!loader) {
-        //     loader = new Proto()
-        // }
         this.dracoLoader = new DRACOLoader(this.loadingManager);
         this.dracoLoader.setDecoderPath(`${this.sdkUrl}/libs/draco/`);
         this.dracoLoader.preload();
-        this.memoizedLoaders.set(DRACOLoader, this.dracoLoader)
+        this.memoizedLoaders.set(DRACOLoader, this.dracoLoader);
 
         this.textureLoader = new TextureLoader();
-        this.memoizedLoaders.set(TextureLoader, this.textureLoader)
+        this.memoizedLoaders.set(TextureLoader, this.textureLoader);
 
         this.kTX2Loader = new KTX2Loader();
         this.kTX2Loader.setTranscoderPath(`${this.sdkUrl}/libs/basis/`);
         this.kTX2Loader.detectSupport(this.viewer.renderManager.defaultWebGLRenderer);
-        this.memoizedLoaders.set(KTX2Loader, this.kTX2Loader)
+        this.memoizedLoaders.set(KTX2Loader, this.kTX2Loader);
 
         const gLTFLoader = new GLTFLoader(this.loadingManager);
         gLTFLoader.setDRACOLoader(this.dracoLoader);
         gLTFLoader.setKTX2Loader(this.kTX2Loader);
-        this.memoizedLoaders.set(GLTFLoader, gLTFLoader)
+        this.memoizedLoaders.set(GLTFLoader, gLTFLoader);
 
         const cubeTextureLoader = new CubeTextureLoader(this.loadingManager);
-        this.memoizedLoaders.set(CubeTextureLoader as unknown as LoaderProto<any>, cubeTextureLoader as unknown as Loader<any>)
+        this.memoizedLoaders.set(CubeTextureLoader as unknown as LoaderProto<any>, cubeTextureLoader as unknown as Loader<any>);
 
         const rGBELoader = new RGBELoader(this.loadingManager);
-        this.memoizedLoaders.set(RGBELoader, rGBELoader)
+        this.memoizedLoaders.set(RGBELoader, rGBELoader);
 
         const eXRLoader = new EXRLoader(this.loadingManager);
-        this.memoizedLoaders.set(EXRLoader, eXRLoader)
+        this.memoizedLoaders.set(EXRLoader, eXRLoader);
 
         const hDRJPGLoader = new HDRJPGLoader();
-        this.memoizedLoaders.set(HDRJPGLoader, hDRJPGLoader)
+        this.memoizedLoaders.set(HDRJPGLoader, hDRJPGLoader);
 
         const gainMapLoader = new GainMapLoader();
-        this.memoizedLoaders.set(GainMapLoader as unknown as LoaderProto<any>, gainMapLoader as unknown as Loader<any>)
+        this.memoizedLoaders.set(GainMapLoader as unknown as LoaderProto<any>, gainMapLoader as unknown as Loader<any>);
 
         const fileLoader = new FileLoader(this.loadingManager);
-        this.memoizedLoaders.set(FileLoader, fileLoader)
+        this.memoizedLoaders.set(FileLoader, fileLoader);
 
         const objectLoader = new ObjectLoader(this.loadingManager);
-        this.memoizedLoaders.set(ObjectLoader, objectLoader)
+        this.memoizedLoaders.set(ObjectLoader, objectLoader);
     }
 
 
@@ -176,17 +171,62 @@ export class AssetManager extends Component {
         this.errorSubject.next({url})
     }
 
+    rgbeLoad(asset: Asset, option: ILoadFun = DefaultLoadFun) {
+        return new Promise<any>((resolve, reject) => {
+            let loader = this.memoizedLoaders.get(RGBELoader) as RGBELoader;
+            const {before, after, tail,} = option
+            if (loader) {
+                const {url, result, name, file, fileReader, loadSubject, progressSubject} = asset;
+                const loadFun = (data: any) => {
+                    loadSubject.next(data);
+                    resolve(data);
+                }
+                const errorFun = (error: any) => {
+                    loadSubject.error(error);
+                    reject(error);
+                }
+                before && before(loader)
+                if (!isNil(url)) {
+                    loader.load(url, loadFun, (xhr) => {
+                        const progress = (xhr.loaded / xhr.total * 100)
+                        progressSubject.next(progress)
+                    }, errorFun);
+                } else if (!isNil(result)) {
+                    const parse = Reflect.get(loader, "parse");
+                    if (parse) {
+                        if (loader instanceof ObjectLoader) {
+                            loader.parse(result, loadFun);
+                        } else {
+                            parse(result, "", loadFun, errorFun);
+                        }
+                    }
+                } else if (!isNil(file) && !isNil(fileReader)) {
+                    fileReader.addEventListener('progress', (event) => {
+                        const size = '(' + this.formatNumber(Math.floor(event.total / 1000)) + ' KB)';
+                        const progress = Math.floor((event.loaded / event.total) * 100)
+                        progressSubject.next(progress)
+                    });
+                    fileReader.addEventListener('load', async (event) => {
+                        const contents = event.target?.result;
+                        if (!isNil(contents) && !isString(contents)) {
+                            loader.parseAsync(contents, "").then(res => {
+                                loadFun(res)
+                            });
+                        }
+                    });
+                    fileReader.readAsArrayBuffer(file);
+                }
+            }
+        })
+    }
+
+
     load(loaderType: any, asset: Asset, option: ILoadFun) {
         return new Promise<GLTF>((resolve, reject) => {
             let loader = this.memoizedLoaders.get(loaderType)
-            const {before, after, tail} = option
+            const {before, after, tail,} = option
             if (loader) {
-                const url = asset.url;
-                const result = asset.result;
-                const name = asset.name;
-
-                const loadSubject = asset.loadSubject;
-                const progressSubject = asset.progressSubject;
+                const {url, result, name, file, fileReader, loadSubject, progressSubject} = asset;
                 const loadFun = (data: any) => {
                     if (data.scene) {
                         // 修改下模型名称
@@ -220,6 +260,21 @@ export class AssetManager extends Component {
                             parse(result, "", loadFun, errorFun);
                         }
                     }
+                } else if (!isNil(file) && !isNil(fileReader)) {
+                    fileReader.addEventListener('progress', (event) => {
+                        const size = '(' + this.formatNumber(Math.floor(event.total / 1000)) + ' KB)';
+                        const progress = Math.floor((event.loaded / event.total) * 100)
+                        progressSubject.next(progress)
+                    });
+                    fileReader.addEventListener('load', async (event) => {
+                        const contents = event.target?.result;
+                        if (!isNil(contents) && !isString(contents)) {
+                            loader.parseAsync(contents, "").then(res => {
+                                loadFun(res)
+                            });
+                        }
+                    });
+                    fileReader.readAsArrayBuffer(file);
                 }
             }
         })
@@ -239,6 +294,9 @@ export class AssetManager extends Component {
                     break
                 case "tga":
                     loader = TGALoader;
+                    break;
+                case "ktx2":
+                    loader = KTX2Loader;
                     break;
                 case "pdb":
                     loader = PDBLoader;
@@ -276,6 +334,7 @@ export class AssetManager extends Component {
                     loader = CubeTextureLoader;
                     break;
                 case 'hdr':
+                case "pic":
                     loader = RGBELoader;
                     break;
                 case 'exr':
@@ -304,7 +363,7 @@ export class AssetManager extends Component {
         })
     }
 
-    loadGltf(asset: GltfModelAsset, option: ILoadFun = DefaultLoadFun) {
+    loadGltf(asset: Asset, option: ILoadFun = DefaultLoadFun) {
         return new Promise<GLTF>((resolve, reject) => {
             let loader = this.memoizedLoaders.get(GLTFLoader) as GLTFLoader;
             const {before, after, tail} = option
@@ -353,7 +412,7 @@ export class AssetManager extends Component {
         })
     }
 
-    loadTexture(asset: TextureAsset, option: ILoadFun = DefaultLoadFun) {
+    loadTexture(asset: Asset, option: ILoadFun = DefaultLoadFun) {
         return new Promise<Texture>((resolve, reject) => {
             let loader = this.memoizedLoaders.get(TextureLoader) as TextureLoader;
             const {before, after, tail} = option
@@ -538,7 +597,7 @@ export class AssetManager extends Component {
                 })
                 this.loadGltf(asset).then(gltf => {
                     this.scene.add(gltf as unknown as Group)
-                    this.editor.editorEventManager.sceneGraphChanged.next(null);
+                    this.editor.editorEventManager.sceneGraphChanged.next(true);
                 })
                 break;
         }

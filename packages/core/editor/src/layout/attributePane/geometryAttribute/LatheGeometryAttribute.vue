@@ -1,18 +1,15 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import {computed, inject, onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import * as THREE from "three";
 import {isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
+import {useActiveTab} from "../../../hooks/useActiveTab.ts";
 
 const bus = useBus();
 
-const tabActiveName = inject("tabActiveName", ref("几何"))
-
-const isActive = computed(() => {
-  return tabActiveName.value === "几何"
-})
+const {isActive} = useActiveTab("几何")
 const isVisible = ref(false);
 
 onMounted(() => {
