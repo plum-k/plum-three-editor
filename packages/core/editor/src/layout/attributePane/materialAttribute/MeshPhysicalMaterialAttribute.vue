@@ -45,14 +45,18 @@ objectAttributeChangeSubject.subscribe((editValue) => {
   const selectMaterial = bus.selectMaterial;
   if (!object) return;
   if (!isActive.value) return;
-  if (selectMaterial && !isArray(name)) {
+  if (!selectMaterial)return;
+  if (!isArray(name)) {
     if (["color", "emissive"].includes(name)) {
       invoke(get(selectMaterial, name), "setStyle", [value])
     } else {
       set(selectMaterial, name, value);
     }
+  } else if (["iridescenceThicknessRange"].includes(name[0])) {
+    set(selectMaterial, name, value);
   }
 })
+
 const form = reactive({
   type: '',
   uuid: '',
@@ -118,8 +122,10 @@ const form = reactive({
   // sheenRoughnessMap: null,
 
   // iridescenceThicknessMap: null,
-  iridescenceThicknessRange: [0, 0],
-
+  iridescenceThicknessRange: {
+    x: 0,
+    y: 0
+  },
   // envMap: null,
   // lightMap: null,
   // aoMap: null,
@@ -168,7 +174,8 @@ const threeToUi = (object: THREE.Mesh) => {
 
   form.iridescence = material.iridescence;
   form.iridescenceIOR = material.iridescenceIOR;
-  form.iridescenceThicknessRange = material.iridescenceThicknessRange;
+  form.iridescenceThicknessRange.x = material.iridescenceThicknessRange[0];
+  form.iridescenceThicknessRange.y = material.iridescenceThicknessRange[1];
 
   form.sheen = material.sheen;
   form.sheenRoughness = material.sheenRoughness;
@@ -176,6 +183,7 @@ const threeToUi = (object: THREE.Mesh) => {
 
   form.transmission = material.transmission;
   form.attenuationDistance = material.attenuationDistance;
+
   form.attenuationColor = `#${material.attenuationColor.getHexString()}`
 
   form.thickness = material.thickness;
@@ -212,8 +220,8 @@ const threeToUi = (object: THREE.Mesh) => {
   // form.sheenRoughnessMap= material.sheenRoughnessMap;
 
   // form.iridescenceThicknessMap= material.iridescenceThicknessMap;
-  form.iridescenceThicknessRange = material.iridescenceThicknessRange;
-
+  form.iridescenceThicknessRange.x = material.iridescenceThicknessRange[0];
+  form.iridescenceThicknessRange.y = material.iridescenceThicknessRange[1];
   // form.envMap= material.envMap;
   // form.lightMap= material.lightMap;
   // form.aoMap= material.aoMap;
@@ -256,7 +264,7 @@ const threeToUi = (object: THREE.Mesh) => {
     <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="金属度" name="metalness"/>
 
     <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="清漆" name="clearcoat"/>
-    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="清漆粗糙度" name="clearcoatroughness"/>
+    <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="清漆粗糙度" name="clearcoatRoughness"/>
     <input-number-item :formProps="{max:10,min:0,step:0.01,precision:2 }" label="色散" name="dispersion"/>
 
     <input-number-item :formProps="{max:1,min:0,step:0.01,precision:2 }" label="彩虹色" name="iridescence"/>

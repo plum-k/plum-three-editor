@@ -275,7 +275,7 @@ function createLight(info: IDragInfo) {
 <template>
   <div class="h-full w-full relative flex flex-col">
     <view-tool/>
-    <div id="canvasContainer" ref="canvasContainer" class="container w-full relative flex-1" @drop="onDrop">
+    <div id="canvasContainer" ref="canvasContainer" class="container w-full relative h-[calc(100%-62px)]" @drop="onDrop">
       <control/>
       <scene-statistics/>
     </div>

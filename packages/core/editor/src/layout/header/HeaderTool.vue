@@ -3,6 +3,8 @@ import {useFullscreen} from "@vueuse/core";
 import {useBus} from "../../hooks";
 import {useRoute} from "vue-router";
 import Icon from "../../components/Icon.vue";
+import {ElTooltip} from "element-plus";
+import {watch} from "vue";
 
 const {isFullscreen, enter, exit, toggle} = useFullscreen(document.body)
 const bus = useBus();
@@ -19,14 +21,52 @@ const fit = () => {
   if (!viewer) return;
   viewer.threeCameraControls.fitToSceneBySphere(true)
 }
+
+watch(isFullscreen, (value) => {
+  if (!value) {
+    const viewer = bus.viewer;
+    // viewer?.eventManager.resizeSubject.next(true);
+  }
+})
+
+
 </script>
 
 <template>
   <div class="flex items-center gap-2 ml-100 texel-[1.2rem]">
-    <icon v-if="isFullscreen" icon-name="icon-quxiaoquanping" @click="exit"/>
-    <icon v-else icon-name="icon-quanping" @click="enter"/>
-    <icon icon-name="icon-jieping" @click="capture"/>
-    <icon icon-name="icon-jujiao" @click="fit"/>
+
+    <el-tooltip
+        v-if="isFullscreen"
+        effect="dark"
+        content="推出全屏"
+        placement="bottom"
+    >
+      <icon icon-name="icon-quxiaoquanping" @click="exit"/>
+    </el-tooltip>
+    <el-tooltip v-else
+                class="box-item"
+                effect="dark"
+                content="全屏"
+                placement="bottom"
+    >
+      <icon icon-name="icon-quanping" @click="enter"/>
+    </el-tooltip>
+    <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="截图"
+        placement="bottom"
+    >
+      <icon icon-name="icon-jieping" @click="capture"/>
+    </el-tooltip>
+    <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="聚焦场景"
+        placement="bottom"
+    >
+      <icon icon-name="icon-jujiao" @click="fit"/>
+    </el-tooltip>
   </div>
 </template>
 
