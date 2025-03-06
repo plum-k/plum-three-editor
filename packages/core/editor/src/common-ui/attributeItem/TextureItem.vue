@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import {ElFormItem} from "element-plus";
 import {onMounted, ref} from "vue";
-import {useBus} from "../../hooks";
+import {useAttributeInject, useBus} from "../../hooks";
 import * as THREE from "three";
-import {WebGLRenderer} from "three";
+import {Texture, WebGLRenderer} from "three";
 import {get, isArray} from "lodash-es";
 import {isCompressedTexture, isDataTexture} from "three-is";
 import {FullScreenQuad} from "three-stdlib";
@@ -29,18 +29,23 @@ input.addEventListener('change', (event) => {
 const click = () => {
   input.click();
 }
+const {objectAttributeChangeSubject, change} = useAttributeInject(props)
 
 function loadFile(file: File) {
   // const extension = file.name.split('.').pop().toLowerCase();
   // const reader = new FileReader();
   //
   // const hash = `${file.lastModified}_${file.size}_${file.name}`;
-
   const asset = new Asset({
     file: file,
   })
-  bus.viewer?.assetManager.loadAsset(asset).then(asset => {
+  bus.viewer?.assetManager.loadAsset(asset).then(value => {
     console.log("asset", asset)
+    objectAttributeChangeSubject.next({
+      name: name,
+      value: value
+    });
+    renderTexture(value as Texture)
   })
 }
 
@@ -64,6 +69,10 @@ function renderToCanvas(texture: THREE.Texture) {
 }
 
 onMounted(() => {
+  renderTexture();
+})
+
+const renderTexture = (inTexture?: THREE.Texture) => {
   let texture;
 
   if (getTexture) {
@@ -74,7 +83,9 @@ onMounted(() => {
     const material = isArray(_material) ? _material[0] : _material
     texture = get(material, name) as THREE.Texture;
   }
-
+  if (inTexture) {
+    texture = inTexture;
+  }
   const canvas = canvasRef.value;
   if (canvas) {
     canvas.width = 32;
@@ -102,8 +113,7 @@ onMounted(() => {
       canvas.title = 'empty';
     }
   }
-})
-
+}
 
 </script>
 

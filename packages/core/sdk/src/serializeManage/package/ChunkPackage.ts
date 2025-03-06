@@ -162,6 +162,7 @@ export class ChunkSerialize extends Package {
             extension: "object"
         })
         this.assetManager.loadAsset(asset).then((scene) => {
+
             let _scene = scene as THREE.Scene;
             this.viewer.scene.copy(_scene);
             _scene = null;

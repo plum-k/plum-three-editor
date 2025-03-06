@@ -1,36 +1,25 @@
 import {isNil, isString} from "lodash-es";
 import {
-    AudioLoader,
     CubeTextureLoader,
     FileLoader,
     Group,
     Loader,
     LoadingManager,
+    Object3D,
     ObjectLoader,
+    SRGBColorSpace,
     Texture,
     TextureLoader
 } from "three";
 import {GLTF, GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader";
-import Asset from "./asset/Asset";
-import {Component, IComponentOptions} from "../core/Component";
-import {
-    LDrawLoader,
-    LUT3dlLoader,
-    MMDLoader,
-    OBJLoader,
-    PCDLoader,
-    PDBLoader,
-    RGBELoader,
-    Rhino3dmLoader,
-    TGALoader
-} from "three-stdlib";
+import {RGBELoader, TGALoader} from "three-stdlib";
 import {EXRLoader} from "three/examples/jsm/loaders/EXRLoader";
 import {GainMapLoader, HDRJPGLoader} from "@monogrid/gainmap-js";
 import {buildGraph} from "../tool/buildGraph";
 import {Subject} from "rxjs";
-import {GltfModelAsset} from "./asset/GltfModelAsset";
 import {KTX2Loader} from "three/examples/jsm/loaders/KTX2Loader";
+import {Asset, Component, IComponentOptions} from "../core";
 
 export interface IResourceManagers extends IComponentOptions {
     sdkUrl?: string;
@@ -85,11 +74,18 @@ export class AssetManager extends Component {
     textureLoader!: TextureLoader;
     kTX2Loader!: KTX2Loader;
 
-    memoizedLoaders = new WeakMap<LoaderProto<any>, Loader<any>>()
     startSubject = new Subject<IStartSubject>();
     loadSubject = new Subject<ILoadSubject>();
     progressSubject = new Subject<IProgressSubject>();
     errorSubject = new Subject<IErrorSubject>();
+    private cubeTextureLoader: CubeTextureLoader;
+    private rGBELoader: RGBELoader;
+    private eXRLoader: EXRLoader;
+    private hDRJPGLoader: HDRJPGLoader;
+    private gainMapLoader: GainMapLoader;
+    private fileLoader: FileLoader;
+    private objectLoader: ObjectLoader;
+    private tGALoader: TGALoader;
 
     constructor(options: IResourceManagers) {
         super(options);
@@ -100,54 +96,41 @@ export class AssetManager extends Component {
         this.loadingManager.onProgress = this.onProgress;
         this.loadingManager.onError = this.onError;
 
-        this.initAllLoader();
-
         // const db = new Dexie('FriendDatabase');
         // db.version(1).stores({
         //     friends: '++id, age'
         // });
         this.addDrop();
-    }
 
-    initAllLoader() {
         this.dracoLoader = new DRACOLoader(this.loadingManager);
         this.dracoLoader.setDecoderPath(`${this.sdkUrl}/libs/draco/`);
         this.dracoLoader.preload();
-        this.memoizedLoaders.set(DRACOLoader, this.dracoLoader);
 
         this.textureLoader = new TextureLoader();
-        this.memoizedLoaders.set(TextureLoader, this.textureLoader);
 
         this.kTX2Loader = new KTX2Loader();
         this.kTX2Loader.setTranscoderPath(`${this.sdkUrl}/libs/basis/`);
         this.kTX2Loader.detectSupport(this.viewer.renderManager.defaultWebGLRenderer);
-        this.memoizedLoaders.set(KTX2Loader, this.kTX2Loader);
 
-        const gLTFLoader = new GLTFLoader(this.loadingManager);
-        gLTFLoader.setDRACOLoader(this.dracoLoader);
-        gLTFLoader.setKTX2Loader(this.kTX2Loader);
-        this.memoizedLoaders.set(GLTFLoader, gLTFLoader);
+        this.gLTFLoader = new GLTFLoader(this.loadingManager);
+        this.gLTFLoader.setDRACOLoader(this.dracoLoader);
+        this.gLTFLoader.setKTX2Loader(this.kTX2Loader);
 
-        const cubeTextureLoader = new CubeTextureLoader(this.loadingManager);
-        this.memoizedLoaders.set(CubeTextureLoader as unknown as LoaderProto<any>, cubeTextureLoader as unknown as Loader<any>);
+        this.cubeTextureLoader = new CubeTextureLoader(this.loadingManager);
 
-        const rGBELoader = new RGBELoader(this.loadingManager);
-        this.memoizedLoaders.set(RGBELoader, rGBELoader);
+        this.rGBELoader = new RGBELoader(this.loadingManager);
 
-        const eXRLoader = new EXRLoader(this.loadingManager);
-        this.memoizedLoaders.set(EXRLoader, eXRLoader);
+        this.eXRLoader = new EXRLoader(this.loadingManager);
 
-        const hDRJPGLoader = new HDRJPGLoader();
-        this.memoizedLoaders.set(HDRJPGLoader, hDRJPGLoader);
+        this.hDRJPGLoader = new HDRJPGLoader();
 
-        const gainMapLoader = new GainMapLoader();
-        this.memoizedLoaders.set(GainMapLoader as unknown as LoaderProto<any>, gainMapLoader as unknown as Loader<any>);
+        this.tGALoader = new TGALoader(this.loadingManager);
 
-        const fileLoader = new FileLoader(this.loadingManager);
-        this.memoizedLoaders.set(FileLoader, fileLoader);
+        this.gainMapLoader = new GainMapLoader();
 
-        const objectLoader = new ObjectLoader(this.loadingManager);
-        this.memoizedLoaders.set(ObjectLoader, objectLoader);
+        this.fileLoader = new FileLoader(this.loadingManager);
+
+        this.objectLoader = new ObjectLoader(this.loadingManager);
     }
 
 
@@ -173,13 +156,16 @@ export class AssetManager extends Component {
 
     rgbeLoad(asset: Asset, option: ILoadFun = DefaultLoadFun) {
         return new Promise<any>((resolve, reject) => {
-            let loader = this.memoizedLoaders.get(RGBELoader) as RGBELoader;
+            let loader = this.rGBELoader
             const {before, after, tail,} = option
             if (loader) {
                 const {url, result, name, file, fileReader, loadSubject, progressSubject} = asset;
-                const loadFun = (data: any) => {
-                    loadSubject.next(data);
-                    resolve(data);
+                const loadFun = (hdrTexture: Texture) => {
+                    if (file) {
+                        // hdrTexture.sourceFile = file.name;
+                    }
+                    loadSubject.next(hdrTexture);
+                    resolve(hdrTexture);
                 }
                 const errorFun = (error: any) => {
                     loadSubject.error(error);
@@ -191,15 +177,6 @@ export class AssetManager extends Component {
                         const progress = (xhr.loaded / xhr.total * 100)
                         progressSubject.next(progress)
                     }, errorFun);
-                } else if (!isNil(result)) {
-                    const parse = Reflect.get(loader, "parse");
-                    if (parse) {
-                        if (loader instanceof ObjectLoader) {
-                            loader.parse(result, loadFun);
-                        } else {
-                            parse(result, "", loadFun, errorFun);
-                        }
-                    }
                 } else if (!isNil(file) && !isNil(fileReader)) {
                     fileReader.addEventListener('progress', (event) => {
                         const size = '(' + this.formatNumber(Math.floor(event.total / 1000)) + ' KB)';
@@ -208,11 +185,12 @@ export class AssetManager extends Component {
                     });
                     fileReader.addEventListener('load', async (event) => {
                         const contents = event.target?.result;
-                        if (!isNil(contents) && !isString(contents)) {
-                            loader.parseAsync(contents, "").then(res => {
-                                loadFun(res)
-                            });
-                        }
+                        if (!contents) return
+                        const blobURL = URL.createObjectURL(new Blob([contents]));
+                        loader.load(blobURL, loadFun, (xhr) => {
+                            const progress = (xhr.loaded / xhr.total * 100)
+                            progressSubject.next(progress)
+                        }, errorFun);
                     });
                     fileReader.readAsArrayBuffer(file);
                 }
@@ -220,25 +198,19 @@ export class AssetManager extends Component {
         })
     }
 
-
-    load(loaderType: any, asset: Asset, option: ILoadFun) {
-        return new Promise<GLTF>((resolve, reject) => {
-            let loader = this.memoizedLoaders.get(loaderType)
+    tgaLoad(asset: Asset, option: ILoadFun = DefaultLoadFun) {
+        return new Promise<any>((resolve, reject) => {
+            let loader = this.tGALoader;
             const {before, after, tail,} = option
             if (loader) {
                 const {url, result, name, file, fileReader, loadSubject, progressSubject} = asset;
-                const loadFun = (data: any) => {
-                    if (data.scene) {
-                        // 修改下模型名称
-                        data.scene.name = name;
-                        // data.scene.animations.push(...data.animations);
-                        Object.assign(data, buildGraph(data.scene))
-                        loadSubject.next(data.scene);
-                        resolve(data.scene);
-                    } else {
-                        loadSubject.next(data);
-                        resolve(data);
+                const loadFun = (texture: Texture) => {
+                    if (file) {
+                        // hdrTexture.sourceFile = file.name;
                     }
+                    texture.colorSpace = SRGBColorSpace;
+                    loadSubject.next(texture);
+                    resolve(texture);
                 }
                 const errorFun = (error: any) => {
                     loadSubject.error(error);
@@ -246,20 +218,10 @@ export class AssetManager extends Component {
                 }
                 before && before(loader)
                 if (!isNil(url)) {
-                    // @ts-ignore
                     loader.load(url, loadFun, (xhr) => {
                         const progress = (xhr.loaded / xhr.total * 100)
                         progressSubject.next(progress)
                     }, errorFun);
-                } else if (!isNil(result)) {
-                    const parse = Reflect.get(loader, "parse");
-                    if (parse) {
-                        if (loader instanceof ObjectLoader) {
-                            loader.parse(result, loadFun);
-                        } else {
-                            parse(result, "", loadFun, errorFun);
-                        }
-                    }
                 } else if (!isNil(file) && !isNil(fileReader)) {
                     fileReader.addEventListener('progress', (event) => {
                         const size = '(' + this.formatNumber(Math.floor(event.total / 1000)) + ' KB)';
@@ -268,10 +230,11 @@ export class AssetManager extends Component {
                     });
                     fileReader.addEventListener('load', async (event) => {
                         const contents = event.target?.result;
-                        if (!isNil(contents) && !isString(contents)) {
-                            loader.parseAsync(contents, "").then(res => {
-                                loadFun(res)
-                            });
+                        if (isString(contents)) {
+                            loader.load(contents, loadFun, (xhr) => {
+                                const progress = (xhr.loaded / xhr.total * 100)
+                                progressSubject.next(progress)
+                            }, errorFun);
                         }
                     });
                     fileReader.readAsArrayBuffer(file);
@@ -280,92 +243,101 @@ export class AssetManager extends Component {
         })
     }
 
-    loadAsset(asset: Asset, option: ILoadFun = DefaultLoadFun): Promise<unknown> {
-        const extension = asset.extension;
-        return new Promise((resolve, reject) => {
-            let loader: any
-            switch (extension) {
-                case "object":
-                    loader = ObjectLoader;
-                    break;
-                case "blob":
-                case "zip":
-                    loader = FileLoader;
-                    break
-                case "tga":
-                    loader = TGALoader;
-                    break;
-                case "ktx2":
-                    loader = KTX2Loader;
-                    break;
-                case "pdb":
-                    loader = PDBLoader;
-                    break;
-                case "pcd":
-                    loader = PCDLoader;
-                    break;
-                case "pmd":
-                    loader = MMDLoader;
-                    break;
-                // case "cube":
-                //     loader = LUTCubeLoader;
-                //     break;
-                case "3dl":
-                    loader = LUT3dlLoader;
-                    break;
-                case "ldr":
-                case "dat":
-                    loader = LDrawLoader;
-                    break;
-                case "3dm":
-                    loader = Rhino3dmLoader
-                    break;
-                case "obj":
-                    loader = OBJLoader;
-                    break;
-                case "ogg":
-                    loader = AudioLoader;
-                    break;
-                case "gltf":
-                case "glb":
-                    loader = GLTFLoader;
-                    break;
-                case 'cube':
-                    loader = CubeTextureLoader;
-                    break;
-                case 'hdr':
-                case "pic":
-                    loader = RGBELoader;
-                    break;
-                case 'exr':
-                    loader = EXRLoader;
-                    break;
-                case 'jpg':
-                case 'jpeg':
-                    loader = HDRJPGLoader;
-                    break;
-                case 'webp':
-                    loader = GainMapLoader;
-                    break;
-                default:
-                    break;
-            }
+    ktx2Load(asset: Asset, option: ILoadFun = DefaultLoadFun) {
+        return new Promise<any>((resolve, reject) => {
+            let loader = this.kTX2Loader
+            const {before, after, tail,} = option
             if (loader) {
-                this.load(loader, asset, option).then((data) => {
-                    // @ts-ignore
-                    resolve(data);
-                }).catch((error) => {
-                    reject(error)
-                })
-            } else {
-                throw new Error("当前文件类型找不到,加载器");
+                const {url, result, name, file, fileReader, loadSubject, progressSubject} = asset;
+                const loadFun = (texture: Texture) => {
+                    if (file) {
+                        // hdrTexture.sourceFile = file.name;
+                    }
+                    texture.colorSpace = SRGBColorSpace;
+                    loadSubject.next(texture);
+                    resolve(texture);
+                }
+                const errorFun = (error: any) => {
+                    loadSubject.error(error);
+                    reject(error);
+                }
+                before && before(loader)
+                if (!isNil(url)) {
+                    loader.load(url, loadFun, (xhr) => {
+                        const progress = (xhr.loaded / xhr.total * 100)
+                        progressSubject.next(progress)
+                    }, errorFun);
+                } else if (!isNil(file) && !isNil(fileReader)) {
+                    fileReader.addEventListener('progress', (event) => {
+                        const size = '(' + this.formatNumber(Math.floor(event.total / 1000)) + ' KB)';
+                        const progress = Math.floor((event.loaded / event.total) * 100)
+                        progressSubject.next(progress)
+                    });
+                    fileReader.addEventListener('load', async (event) => {
+                        const contents = event.target?.result;
+                        if (!contents) return
+                        const blobURL = URL.createObjectURL(new Blob([contents]));
+                        loader.load(blobURL, loadFun, (xhr) => {
+                            const progress = (xhr.loaded / xhr.total * 100)
+                            progressSubject.next(progress)
+                        }, errorFun);
+                    });
+                    fileReader.readAsArrayBuffer(file);
+                }
+            }
+        })
+    }
+
+    textureLoad(asset: Asset, option: ILoadFun = DefaultLoadFun) {
+        return new Promise<Texture>((resolve, reject) => {
+            let loader = this.textureLoader;
+            const {before, after, tail} = option;
+            if (loader) {
+                let {url, result, name, file, fileReader, loadSubject, progressSubject} = asset;
+                before && before(loader)
+                const loadFun = (hdrTexture: Texture) => {
+                    if (file) {
+                        // hdrTexture.sourceFile = file.name;
+                    }
+                    loadSubject.next(hdrTexture);
+                    resolve(hdrTexture);
+                }
+                const errorFun = (error: any) => {
+                    loadSubject.error(error);
+                    reject(error);
+                }
+                if (!isNil(url)) {
+                    loader.load(
+                        url, loadFun,
+                        (xhr) => {
+                            const progress = Math.floor((xhr.loaded / xhr.total) * 100)
+                            progressSubject.next(progress)
+                        },
+                        errorFun);
+                } else if (!isNil(file) && !isNil(fileReader)) {
+                    fileReader.addEventListener('progress', (event) => {
+                        const size = '(' + this.formatNumber(Math.floor(event.total / 1000)) + ' KB)';
+                        const progress = Math.floor((event.loaded / event.total) * 100)
+                        progressSubject.next(progress)
+                    });
+                    fileReader.addEventListener('load', async (event) => {
+                        const contents = event.target?.result;
+                        if (!contents) return
+                        const blobURL = URL.createObjectURL(new Blob([contents]));
+                        loader.load(blobURL, loadFun, (xhr) => {
+                            const progress = (xhr.loaded / xhr.total * 100)
+                            progressSubject.next(progress)
+                        }, errorFun);
+                    });
+                    fileReader.readAsArrayBuffer(file);
+                }
             }
         })
     }
 
     loadGltf(asset: Asset, option: ILoadFun = DefaultLoadFun) {
         return new Promise<GLTF>((resolve, reject) => {
-            let loader = this.memoizedLoaders.get(GLTFLoader) as GLTFLoader;
+            let loader = this.gLTFLoader;
             const {before, after, tail} = option
             if (loader) {
                 let {url, result, name, file, fileReader, loadSubject, progressSubject} = asset;
@@ -412,32 +384,105 @@ export class AssetManager extends Component {
         })
     }
 
-    loadTexture(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        return new Promise<Texture>((resolve, reject) => {
-            let loader = this.memoizedLoaders.get(TextureLoader) as TextureLoader;
+    objectLoad(asset: Asset, option: ILoadFun = DefaultLoadFun) {
+        return new Promise((resolve, reject) => {
+            let loader = this.objectLoader;
             const {before, after, tail} = option
             if (loader) {
                 let {url, result, name, file, fileReader, loadSubject, progressSubject} = asset;
                 before && before(loader)
+                const loadFun = (data: Object3D) => {
+                    loadSubject.next(data);
+                    resolve(data);
+                }
+                const errorFun = (error: any) => {
+                    loadSubject.error(error);
+                    reject(error);
+                }
                 if (!isNil(url)) {
-                    loader.load(
-                        url,
-                        (texture) => {
-                            loadSubject.next(texture);
-                            resolve(texture);
-                        },
+                    loader.load(url, loadFun,
                         (xhr) => {
                             const progress = Math.floor((xhr.loaded / xhr.total) * 100)
                             progressSubject.next(progress)
                         },
-                        (error) => {
-                            loadSubject.error(error);
-                            reject(error);
-                        });
+                        errorFun);
+                } else if (!isNil(result)) {
+                    loader.parse(result, (data) => {
+                            loadSubject.next(data);
+                            resolve(data);
+                        }
+                    )
                 }
             }
         })
     }
+
+    loadAsset(asset: Asset, option: ILoadFun = DefaultLoadFun): Promise<unknown> {
+        const extension = asset.extension;
+        switch (extension) {
+            case "object":
+                return this.objectLoad(asset, option)
+            case "blob":
+            case "zip":
+                // loader = FileLoader;
+                break
+            case "tga":
+                return this.tgaLoad(asset, option)
+            case "ktx2":
+                return this.ktx2Load(asset, option)
+            case "pdb":
+                // loader = PDBLoader;
+                break;
+            case "pcd":
+                // loader = PCDLoader;
+                break;
+            case "pmd":
+                // loader = MMDLoader;
+                break;
+            // case "cube":
+            //     loader = LUTCubeLoader;
+            //     break;
+            case "3dl":
+                //     loader = LUT3dlLoader;
+                break;
+            case "ldr":
+            case "dat":
+                // loader = LDrawLoader;
+                break;
+            case "3dm":
+                // loader = Rhino3dmLoader
+                break;
+            case "obj":
+                // loader = OBJLoader;
+                break;
+            case "ogg":
+                // loader = AudioLoader;
+                break;
+            case "gltf":
+            case "glb":
+                // loader = GLTFLoader;
+                break;
+            case 'cube':
+                // loader = CubeTextureLoader;
+                break;
+            case 'hdr':
+            case "pic":
+                return this.rgbeLoad(asset, option)
+            case 'exr':
+                // loader = EXRLoader;
+                break;
+            case 'jpg':
+            case 'png':
+            case 'jpeg':
+                return this.textureLoad(asset, option)
+            case 'webp':
+                // loader = GainMapLoader;
+                break;
+            default:
+                return Promise.reject(new Error(`无法识别的文件类型：${extension}`))
+        }
+    }
+
 
     //------------------------- 离线文件加载 开始 -------------------
 
@@ -450,7 +495,6 @@ export class AssetManager extends Component {
 
     // 拖动事件
     dragHandler(event: DragEvent) {
-
         const items = event.dataTransfer!.items
         const files = event.dataTransfer!.files;
         if (items) {
@@ -590,7 +634,7 @@ export class AssetManager extends Component {
         switch (extension) {
             case "gltf":
             case 'glb':
-                const asset = new GltfModelAsset({
+                const asset = new Asset({
                     name: filename,
                     file: file,
                     extension: extension
