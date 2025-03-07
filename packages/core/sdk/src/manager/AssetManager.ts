@@ -207,7 +207,7 @@ export class AssetManager extends Component {
         })
     }
 
-    buildPromise<T>(asset: Asset): Promise<T> {
+    buildPromise<T>(asset: Asset, fun: Function): Promise<T> {
         const {loadSubject, errorSubject} = asset;
         return new Promise<any>((resolve, reject) => {
             loadSubject.subscribe((value) => {
@@ -216,6 +216,8 @@ export class AssetManager extends Component {
             errorSubject.subscribe((error) => {
                 reject(error);
             })
+
+            fun && fun();
         })
     }
 
@@ -245,292 +247,316 @@ export class AssetManager extends Component {
     }
 
     loadKtx2(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.kTX2Loader
-        const {before, after, tail,} = option
-        let {
-            url, result, name, file
-            , onLoad
-            , onProgress, onError, loadFile,
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(file)) {
-            loadFile((event) => {
-                const contents = event.target?.result;
-                if (!contents) return
-                const blobURL = URL.createObjectURL(new Blob([contents]));
-                loader.load(blobURL, onLoad, onProgress, onError);
-            });
-        }
-        return this.buildPromise(asset)
+        return this.buildPromise(asset, () => {
+            let loader = this.kTX2Loader
+            const {before, after, tail,} = option
+            let {
+                url, result, name, file
+                , onLoad
+                , onProgress, onError, loadFile,
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(file)) {
+                loadFile((event) => {
+                    const contents = event.target?.result;
+                    if (!contents) return
+                    const blobURL = URL.createObjectURL(new Blob([contents]));
+                    loader.load(blobURL, onLoad, onProgress, onError);
+                });
+            }
+        })
     }
 
     loadTexture(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.textureLoader;
-        const {before, after, tail} = option;
-        let {
-            url, file
-            , onLoad
-            , onProgress, onError, loadFile
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(file)) {
-            loadFile((event) => {
-                const contents = event.target?.result;
-                if (!contents) return
-                const blobURL = URL.createObjectURL(new Blob([contents]));
-                loader.load(blobURL, onLoad, onProgress, onError);
-            });
-        }
-        return this.buildPromise(asset)
+        return this.buildPromise(asset, () => {
+            let loader = this.textureLoader;
+            const {before, after, tail} = option;
+            let {
+                url, file
+                , onLoad
+                , onProgress, onError, loadFile
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(file)) {
+                loadFile((event) => {
+                    const contents = event.target?.result;
+                    if (!contents) return
+                    const blobURL = URL.createObjectURL(new Blob([contents]));
+                    loader.load(blobURL, onLoad, onProgress, onError);
+                });
+            }
+        })
     }
 
     loadGltf(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.gLTFLoader;
-        const {before, after, tail} = option;
-        let {
-            url, name, file, loadSubject
-            , onProgress, onError, loadFile
-        } = asset;
+        return this.buildPromise(asset, () => {
+            let loader = this.gLTFLoader;
+            const {before, after, tail} = option;
+            let {
+                url, name, file, loadSubject
+                , onProgress, onError, loadFile
+            } = asset;
 
-        const loadFun = (data: any) => {
-            if (data.scene) {
-                // 修改下模型名称
-                data.scene.name = name;
-                // data.scene.animations.push(...data.animations);
-                Object.assign(data, buildGraph(data.scene))
-            }
-            loadSubject.next(data.scene);
-        }
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, loadFun, onProgress, onError);
-        } else if (!isNil(file)) {
-            loadFile((event) => {
-                const contents = event.target?.result;
-                if (!isNil(contents) && !isString(contents)) {
-                    loader.parseAsync(contents, "").then(res => {
-                        loadFun(res)
-                    });
+            const loadFun = (data: any) => {
+                if (data.scene) {
+                    // 修改下模型名称
+                    data.scene.name = name;
+                    // data.scene.animations.push(...data.animations);
+                    Object.assign(data, buildGraph(data.scene))
                 }
-            })
-        }
-        return this.buildPromise(asset)
+                loadSubject.next(data.scene);
+            }
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, loadFun, onProgress, onError);
+            } else if (!isNil(file)) {
+                loadFile((event) => {
+                    const contents = event.target?.result;
+                    if (!isNil(contents) && !isString(contents)) {
+                        loader.parseAsync(contents, "").then(res => {
+                            loadFun(res)
+                        });
+                    }
+                })
+            }
+        })
     }
 
     loadObject(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.objectLoader;
-        const {before, after, tail} = option
-        let {
-            url, result, loadSubject,
-            onLoad, onProgress, onError, loadFile
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-            loader.parse(result, (data) => {
-                    loadSubject.next(data);
-                }
-            )
-        }
-        return this.buildPromise(asset)
+
+
+        return this.buildPromise(asset, () => {
+            let loader = this.objectLoader;
+            const {before, after, tail} = option
+            let {url, result, loadSubject, onLoad, onProgress, onError} = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+                loader.parse(result, (data) => {
+                        console.log("解析完成")
+                        loadSubject.next(data);
+                    }
+                )
+            }
+        })
     }
 
     loadPDB(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.pDBLoader;
-        const {before, after, tail} = option
-        let {
-            url, result,
-            onLoad, onProgress, onError, loadFile
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress,
-                onError);
-        } else if (!isNil(result)) {
-            loader.parse(result);
-        }
-        return this.buildPromise(asset)
+
+        return this.buildPromise(asset, () => {
+            let loader = this.pDBLoader;
+            const {before, after, tail} = option
+            let {
+                url, result,
+                onLoad, onProgress, onError, loadFile
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress,
+                    onError);
+            } else if (!isNil(result)) {
+                loader.parse(result);
+            }
+        })
     }
 
     loadPCD(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.pCDLoader;
-        const {before, after, tail} = option
-        let {
-            url, result,
-            onLoad, onProgress, onError,
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-            loader.parse(result);
-        }
-        return this.buildPromise(asset)
+
+        return this.buildPromise(asset, () => {
+            let loader = this.pCDLoader;
+            const {before, after, tail} = option
+            let {
+                url, result,
+                onLoad, onProgress, onError,
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+                loader.parse(result);
+            }
+        })
     }
 
     loadMMD(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.mMDLoader;
-        const {before, after, tail} = option
-        let {
-            url, result, name, file, fileReader
-            , loadSubject, progressSubject,
-            onLoad, onProgress, onError, loadFile
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-        }
-        return this.buildPromise(asset)
+
+        return this.buildPromise(asset, () => {
+            let loader = this.mMDLoader;
+            const {before, after, tail} = option
+            let {
+                url, result, name, file, fileReader
+                , loadSubject, progressSubject,
+                onLoad, onProgress, onError, loadFile
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+            }
+        })
     }
 
     loadLUTCube(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.lUTCubeLoader;
-        const {before, after, tail} = option
-        let {
-            url, result, name, file, fileReader
-            , loadSubject, progressSubject,
-            onLoad, onProgress, onError, loadFile
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-        }
-        return this.buildPromise(asset)
+        return this.buildPromise(asset, () => {
+            let loader = this.lUTCubeLoader;
+            const {before, after, tail} = option
+            let {
+                url, result, name, file, fileReader
+                , loadSubject, progressSubject,
+                onLoad, onProgress, onError, loadFile
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+            }
+        })
     }
 
     loadLUT3d(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.lUT3dlLoader;
-        const {before, after, tail} = option
+        return this.buildPromise(asset, () => {
+            let loader = this.lUT3dlLoader;
+            const {before, after, tail} = option
 
-        let {
-            url, result, name, file, fileReader
-            , loadSubject, progressSubject,
-            onLoad, onProgress, onError, loadFile
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-        }
-        return this.buildPromise(asset)
+            let {
+                url, result, name, file, fileReader
+                , loadSubject, progressSubject,
+                onLoad, onProgress, onError, loadFile
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+            }
+        })
     }
 
     loadLDraw(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.lDrawLoader;
-        const {before, after, tail} = option
-        let {
-            url, result,
-            onLoad, onProgress, onError, loadFile
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-        }
-        return this.buildPromise(asset)
+
+        return this.buildPromise(asset, () => {
+            let loader = this.lDrawLoader;
+            const {before, after, tail} = option
+            let {
+                url, result,
+                onLoad, onProgress, onError, loadFile
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+            }
+        })
     }
 
     loadRhino3dm(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.rhino3dmLoader;
-        const {before, after, tail} = option
-        let {
-            url, result,
-            onLoad, onProgress, onError, loadFile
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-        }
-        return this.buildPromise(asset)
+        return this.buildPromise(asset, () => {
+            let loader = this.rhino3dmLoader;
+            const {before, after, tail} = option
+            let {
+                url, result,
+                onLoad, onProgress, onError, loadFile
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+            }
+        })
     }
 
     loadOBJ(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.oBJLoader;
-        const {before, after, tail} = option
-        let {
-            url, result, name, file, fileReader
-            , loadSubject, progressSubject,
-            onLoad, onProgress, onError, loadFile
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-        }
-        return this.buildPromise(asset)
+
+        return this.buildPromise(asset, () => {
+            let loader = this.oBJLoader;
+            const {before, after, tail} = option
+            let {
+                url, result, name, file, fileReader
+                , loadSubject, progressSubject,
+                onLoad, onProgress, onError, loadFile
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+            }
+        })
     }
 
     loadAudio(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.audioLoader;
-        const {before, after, tail} = option
-        let {
-            url, result,
-            onLoad, onProgress, onError,
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-        }
-        return this.buildPromise(asset)
+
+        return this.buildPromise(asset, () => {
+            let loader = this.audioLoader;
+            const {before, after, tail} = option
+            let {
+                url, result,
+                onLoad, onProgress, onError,
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+            }
+        })
     }
 
     loadCubeTexture(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.cubeTextureLoader;
-        const {before, after, tail} = option
-        let {
-            url, result,
-            onLoad, onProgress, onError,
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            // todo 没用
-            //@ts-ignore
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-        }
-        return this.buildPromise(asset)
+
+        return this.buildPromise(asset, () => {
+            let loader = this.cubeTextureLoader;
+            const {before, after, tail} = option
+            let {
+                url, result,
+                onLoad, onProgress, onError,
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                // todo 没用
+                //@ts-ignore
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+            }
+        })
     }
 
     loadEXR(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.eXRLoader;
-        const {before, after, tail} = option
-        let {
-            url, result,
-            onLoad, onProgress, onError,
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-        }
-        return this.buildPromise(asset)
+
+        return this.buildPromise(asset, () => {
+            let loader = this.eXRLoader;
+            const {before, after, tail} = option
+            let {
+                url, result,
+                onLoad, onProgress, onError,
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+            }
+        })
     }
 
     loadFile(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        let loader = this.eXRLoader;
-        const {before, after, tail} = option
-        let {
-            url, result,
-            onLoad, onProgress, onError,
-        } = asset;
-        before && before(loader)
-        if (!isNil(url)) {
-            loader.load(url, onLoad, onProgress, onError);
-        } else if (!isNil(result)) {
-        }
-        return this.buildPromise(asset)
+        return this.buildPromise(asset, () => {
+            let loader = this.eXRLoader;
+            const {before, after, tail} = option
+            let {
+                url, result,
+                onLoad, onProgress, onError,
+            } = asset;
+            before && before(loader)
+            if (!isNil(url)) {
+                loader.load(url, onLoad, onProgress, onError);
+            } else if (!isNil(result)) {
+            }
+        })
     }
 
-    loadAsset(asset: Asset, option: ILoadFun = DefaultLoadFun) {
+    loadAsset(asset: Asset, option: ILoadFun = DefaultLoadFun): Promise<any> {
         const extension = asset.extension;
         switch (extension) {
             case "object":
@@ -575,11 +601,11 @@ export class AssetManager extends Component {
             case 'png':
             case 'jpeg':
                 return this.loadTexture(asset, option)
-            case 'webp':
+                // case 'webp':
                 // loader = GainMapLoader;
                 break;
             default:
-                return Promise.reject(new Error(`无法识别的文件类型：${extension}`))
+                throw new Error(`无法识别的文件类型：${extension}`)
         }
     }
 

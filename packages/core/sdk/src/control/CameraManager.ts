@@ -3,6 +3,8 @@ import {Object3D, OrthographicCamera, PerspectiveCamera} from 'three';
 import CameraControls from "camera-controls";
 import {Viewer} from "../core/Viewer";
 import {deepMergeRetain, Tool} from "../tool";
+import {Serialize} from "../serializeManage/SerializeInterface";
+import {Asset} from "../manager/asset";
 
 // 安装camera-controls扩展，使其支持THREE库
 CameraControls.install({THREE: THREE});
@@ -61,7 +63,7 @@ export class CameraManager {
 
         this.width = width;
         this.height = height;
-        // todo
+
         this.perspectiveCamera = new THREE.PerspectiveCamera(60, width / height, 0.01, 18000);
         this.perspectiveCameraControls = new CameraControls(this.perspectiveCamera, defaultWebGLRenderer.domElement);
 
@@ -78,6 +80,40 @@ export class CameraManager {
 
         this.cameraControls.maxDistance = 99999;
         this.cameraControls.minDistance = -99999;
+        window.test11 = () => {
+            this.toJSON();
+        }
+    }
+
+    toJSON() {
+        const perspectiveCameraControlsJson = JSON.parse(this.perspectiveCameraControls.toJSON());
+        const perspectiveCameraJson = this.perspectiveCamera.toJSON();
+        console.log(perspectiveCameraControlsJson);
+        console.log(perspectiveCameraJson);
+
+        return {
+            perspectiveCameraControls: perspectiveCameraControlsJson,
+            perspectiveCamera: perspectiveCameraJson,
+        }
+    }
+
+    /**
+     * 还原控制器
+     */
+    async fromJSON(json: Serialize.CameraManagerJson) {
+        const asset = new Asset({
+            result: json.perspectiveCamera,
+            extension: "object"
+        })
+        const object = await this.viewer.assetManager.loadObject(asset) as THREE.PerspectiveCamera;
+        this.perspectiveCameraControls.camera.copy(object);
+        this.perspectiveCameraControls.fromJSON(JSON.stringify(json.perspectiveCameraControls),false);
+    }
+
+    test() {
+        console.log(JSON.parse(this.cameraControls.toJSON()));
+        console.log("azimuthAngle", THREE.MathUtils.radToDeg(this.cameraControls.azimuthAngle));
+        console.log("polarAngle", THREE.MathUtils.radToDeg(this.cameraControls.polarAngle));
     }
 
     get cameraControls() {
@@ -167,7 +203,7 @@ export class CameraManager {
      * 设置透视视图
      */
     setPerspectiveView() {
-       this.resetViewLimits();
+        this.resetViewLimits();
     }
 
     /**
@@ -175,8 +211,8 @@ export class CameraManager {
      */
     setTopView() {
         this.cameraControls.rotateTo(0, 0, false).then();
-        this.cameraControls.minAzimuthAngle = -Infinity;
-        this.cameraControls.maxAzimuthAngle = Infinity;
+        this.cameraControls.minAzimuthAngle = 0
+        this.cameraControls.maxAzimuthAngle = 0
         this.cameraControls.minPolarAngle = 0;
         this.cameraControls.maxPolarAngle = 0;
     }
@@ -185,12 +221,11 @@ export class CameraManager {
      * 设置底视图
      */
     setBottomView() {
-
         this.cameraControls.rotateTo(0, DEG180, false).then();
-        this.cameraControls.minAzimuthAngle = -Infinity;
-        this.cameraControls.maxAzimuthAngle = Infinity;
-        this.cameraControls.minPolarAngle = Math.PI;
-        this.cameraControls.maxPolarAngle = Math.PI;
+        this.cameraControls.minAzimuthAngle = 0
+        this.cameraControls.maxAzimuthAngle = 0;
+        this.cameraControls.minPolarAngle = DEG180;
+        this.cameraControls.maxPolarAngle = DEG180;
     }
 
 
@@ -199,10 +234,10 @@ export class CameraManager {
      */
     setLeftView() {
         this.cameraControls.rotateTo(-DEG90, DEG90, false).then();
-        this.cameraControls.minAzimuthAngle = -Math.PI;
-        this.cameraControls.maxAzimuthAngle = -Math.PI;
-        this.cameraControls.minPolarAngle = Math.PI / 2;
-        this.cameraControls.maxPolarAngle = Math.PI / 2;
+        this.cameraControls.minAzimuthAngle = -DEG90;
+        this.cameraControls.maxAzimuthAngle = -DEG90;
+        this.cameraControls.minPolarAngle = DEG90;
+        this.cameraControls.maxPolarAngle = DEG90;
     }
 
     /**
@@ -210,10 +245,10 @@ export class CameraManager {
      */
     setRightView() {
         this.cameraControls.rotateTo(DEG90, DEG90, false).then();
-        this.cameraControls.minAzimuthAngle = Math.PI;
-        this.cameraControls.maxAzimuthAngle = Math.PI;
-        this.cameraControls.minPolarAngle = Math.PI / 2;
-        this.cameraControls.maxPolarAngle = Math.PI / 2;
+        this.cameraControls.minAzimuthAngle = DEG90;
+        this.cameraControls.maxAzimuthAngle = DEG90;
+        this.cameraControls.minPolarAngle = DEG90;
+        this.cameraControls.maxPolarAngle = DEG90;
     }
 
     /**
@@ -221,10 +256,10 @@ export class CameraManager {
      */
     setBackView() {
         this.cameraControls.rotateTo(DEG180, DEG90, false).then();
-        this.cameraControls.minAzimuthAngle = -Math.PI;
-        this.cameraControls.maxAzimuthAngle = -Math.PI;
-        this.cameraControls.minPolarAngle = Math.PI / 2;
-        this.cameraControls.maxPolarAngle = Math.PI / 2;
+        this.cameraControls.minAzimuthAngle = DEG180;
+        this.cameraControls.maxAzimuthAngle = DEG180;
+        this.cameraControls.minPolarAngle = DEG90;
+        this.cameraControls.maxPolarAngle = DEG90;
     }
 
     /**
@@ -232,10 +267,23 @@ export class CameraManager {
      */
     setFrontView() {
         this.cameraControls.rotateTo(0, DEG90, false).then();
+        // 左右
         this.cameraControls.minAzimuthAngle = 0;
         this.cameraControls.maxAzimuthAngle = 0;
-        this.cameraControls.minPolarAngle = Math.PI / 2;
-        this.cameraControls.maxPolarAngle = Math.PI / 2;
+        // 上下
+        this.cameraControls.minPolarAngle = DEG90;
+        this.cameraControls.maxPolarAngle = DEG90;
+    }
+
+    /**
+     * 同步控制器属性
+     */
+    syncView() {
+        const targetControls = this.cameraType === ECameraType.PerspectiveCamera ? this.orthographicCameraControls : this.perspectiveCameraControls;
+        targetControls.minAzimuthAngle = this.cameraControls.minAzimuthAngle
+        targetControls.maxAzimuthAngle = this.cameraControls.maxAzimuthAngle
+        targetControls.minPolarAngle = this.cameraControls.minPolarAngle
+        targetControls.maxPolarAngle = this.cameraControls.maxPolarAngle
     }
 
     /**
@@ -244,9 +292,9 @@ export class CameraManager {
      */
     setCameraType(type: ECameraType = ECameraType.PerspectiveCamera) {
         if (this.cameraType === type) return this;
-
         const target = this.target;
         const position = this.position;
+        this.syncView();
         // 切换到透视
         if (type === ECameraType.PerspectiveCamera) {
             this.perspectiveCameraControls.setLookAt(position.x, position.y, position.z, target.x, target.y, target.z, false).then();
@@ -254,7 +302,7 @@ export class CameraManager {
             // https://stackoverflow.com/questions/48187416/how-to-switch-between-perspective-and-orthographic-cameras-keeping-size-of-desir
             const fov = this.perspectiveCamera.fov;
             const far = this.perspectiveCamera.far;
-            const depth = Math.tan(fov / 2.0 * Math.PI / 180.0) * 2.0;
+            const depth = Math.tan(fov / 2.0 * DEG180 / 180.0) * 2.0;
             const z = position.distanceTo(target);
             const y = depth * z;
             const x = y * this.perspectiveCamera.aspect;

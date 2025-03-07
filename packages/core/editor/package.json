@@ -13,9 +13,9 @@
     "@imengyu/vue3-context-menu": "^1.4.4",
     "@plum-render/three-sdk": "workspace:*",
     "@vueuse/core": "^12.8.2",
-    "axios": "^1.8.1",
+    "axios": "^1.8.2",
     "dayjs": "^1.11.13",
-    "element-plus": "^2.9.5",
+    "element-plus": "^2.9.6",
     "lodash-es": "^4.17.21",
     "pinia": "^3.0.1",
     "rxjs": "^7.8.2",
@@ -38,8 +38,8 @@
     "typescript": "^5.8.2",
     "vite": "^6.2.1",
     "vue-tsc": "^2.2.8",
-    "tailwindcss": "^4.0.11",
+    "tailwindcss": "^4.0.12",
     "@types/three": "^0.174.0",
-    "@tailwindcss/vite": "^4.0.11"
+    "@tailwindcss/vite": "^4.0.12"
   }
 }

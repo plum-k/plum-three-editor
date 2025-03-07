@@ -1,4 +1,4 @@
-import {SceneJSONObject} from "three";
+import {PerspectiveCameraJSON, SceneJSON, SceneJSONObject} from "three";
 
 export namespace Serialize {
 
@@ -134,8 +134,12 @@ export namespace Serialize {
         metadata: Array<string>;
         textures: Array<string>;
     }
-
-    export interface ZipViewer {
+    export interface CameraManagerJson {
+        perspectiveCamera: PerspectiveCameraJSON;
+        perspectiveCameraControls: any
+    }
+    export interface ViewerJson {
         scene: ZipScene;
+        cameraManager: CameraManagerJson
     }
 }

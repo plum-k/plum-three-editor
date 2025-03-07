@@ -395,5 +395,14 @@ export class Viewer {
         return result;
     }
 
+    //-------------------
+    toJSON(){
+        const sceneJson = this.scene.toJSON();
+        const cameraManager = this.cameraManager.toJSON();
+        return {
+            scene: sceneJson,
+            cameraManager
+        }
+    }
 
 }

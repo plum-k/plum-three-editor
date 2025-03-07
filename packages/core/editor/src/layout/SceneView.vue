@@ -11,6 +11,7 @@ import CameraInfo from "./sceneView/CameraInfo.vue";
 import {type Id, toast} from "vue3-toastify";
 import ViewTool from "./sceneView/ViewTool.vue";
 import SceneStatistics from "./sceneView/SceneStatistics.vue";
+import {uniqueId} from "lodash-es";
 
 const canvasContainer = ref<HTMLDivElement>();
 
@@ -234,7 +235,8 @@ function createMesh(info: IDragInfo) {
   }
   if (!geometry) return null;
   const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
-
+  mesh.name = `${uniqueId(info.type)}`;
+  mesh.geometry.name = mesh.name
   return mesh;
 }
 
@@ -243,31 +245,27 @@ function createLight(info: IDragInfo) {
   switch (info.type) {
     case 'AmbientLight':
       light = new THREE.AmbientLight(0x222222);
-      light.name = 'AmbientLight';
       break;
     case 'DirectionalLight':
       light = new THREE.DirectionalLight(0xffffff, 1);
-      light.name = 'DirectionalLight';
       light.position.set(5, 10, 7.5);
       break;
     case 'HemisphereLight':
       light = new THREE.HemisphereLight(0x00aaff, 0xffaa00, 1);
-      light.name = 'HemisphereLight';
       light.position.set(0, 10, 0);
       break;
     case 'PointLight':
       light = new THREE.PointLight(0xffffff, 1);
-      light.name = 'PointLight';
       break;
     case 'SpotLight':
       light = new THREE.SpotLight(0xffffff, 1);
-      light.name = 'SpotLight';
       light.position.set(5, 10, 7.5);
       break;
     default:
       console.warn(`Unknown light type: ${info.type}`);
       return null;
   }
+  light.name = `${uniqueId(info.type)}`;
   return light;
 }
 

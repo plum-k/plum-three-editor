@@ -39,7 +39,7 @@ export class ChunkSerialize extends Package {
             // 从远程存储加载场景
             this.viewer.ossApi.head(Key).then((data) => {
                 const url = this.viewer.ossApi!.signatureUrl(Key);
-                console.log("获取 url",url)
+                console.log("获取 url", url)
                 axios.get(url, {
                     responseType: "blob",
                     onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
@@ -74,25 +74,18 @@ export class ChunkSerialize extends Package {
         }
     }
 
-    // 获取 three 场景的json数据
-    toJson() {
-        const sceneJson = this.viewer.scene.toJSON();
-        return {
-            scene: sceneJson
-        }
-    }
-
     override async pack() {
-        let json = this.toJson() as unknown as Serialize.ZipViewer;
-        const sceneJson = json.scene;
+        let viewerJson = this.viewer.toJSON() as unknown as Serialize.ViewerJson;
+        const sceneJson = viewerJson.scene;
         const {geometries, materials} = sceneJson;
+        
         const geometriesBlob = await this.packMaterialsOrVertexData(geometries, "geometries", 100);
         const materialsBlob = await this.packMaterialsOrVertexData(materials, "materials", 300);
-        console.log(sceneJson)
+        console.log("viewerJson",viewerJson)
         const zipWriter = new ZipWriter(new BlobWriter());
 
-        const sceneInfo = this.packSceneInfo(sceneJson);
-        await zipWriter.add("sceneInfo.bin", sceneInfo, {
+        const viewerInfo = this.packSceneInfo(viewerJson);
+        await zipWriter.add("viewerInfo.bin", viewerInfo, {
             onprogress: (progress: number, total: number) => {
                 this.viewer.sceneSaveProgressSubject.next({
                     type: ESceneSaveType.Zip,
@@ -135,15 +128,15 @@ export class ChunkSerialize extends Package {
         const zipReader = new ZipReader(zipFileReader);
         const entries = await zipReader.getEntries();
 
-        let sceneInfo = {} as Serialize.ZipScene
+        let viewerInfo = {} as Serialize.ViewerJson
 
         let materials: Array<any> = []
         let geometries: Array<any> = []
-
+        
         for (let i = 0; i < entries.length; i++) {
             let entry = entries[i];
-            if (entry.filename === "sceneInfo.bin" && entry.getData) {
-                sceneInfo = await this.unPackSceneInfo(entry);
+            if (entry.filename === "viewerInfo.bin" && entry.getData) {
+                viewerInfo = await this.unPackSceneInfo(entry);
             }
             if (entry.filename === "geometries.zip" && entry.getData) {
                 geometries = await this.unPackMaterialsOrVertexData(entry, "geometries");
@@ -153,21 +146,18 @@ export class ChunkSerialize extends Package {
             }
         }
         await zipReader.close();
-        sceneInfo.geometries = geometries;
-        sceneInfo.materials = materials;
+        viewerInfo.scene.geometries = geometries;
+        viewerInfo.scene.materials = materials;
 
-        console.log("还原场景数据", sceneInfo)
+        console.log("还原场景数据", viewerInfo)
         const asset = new Asset({
-            result: sceneInfo,
+            result: viewerInfo.scene,
             extension: "object"
         })
-        this.assetManager.loadAsset(asset).then((scene) => {
-
-            let _scene = scene as THREE.Scene;
-            this.viewer.scene.copy(_scene);
-            _scene = null;
-            this.viewer.setInitState()
-        })
+        const scene = await this.assetManager.loadObject(asset) as THREE.Scene;
+        this.viewer.scene.copy(scene);
+        await this.viewer.cameraManager.fromJSON(viewerInfo.cameraManager);
+        this.viewer.setInitState()
     }
 
     uploadPack(blob: Blob) {
@@ -186,10 +176,10 @@ export class ChunkSerialize extends Package {
         }
     }
 
-    packSceneInfo(sceneObject: Serialize.ZipScene) {
-        sceneObject.geometries = [];
-        sceneObject.materials = [];
-        return SerializerTool.createUint8ArrayReaderPack(sceneObject);
+    packSceneInfo(viewerJson: Serialize.ViewerJson) {
+        viewerJson.scene.geometries = [];
+        viewerJson.scene.materials = [];
+        return SerializerTool.createUint8ArrayReaderPack(viewerJson);
     }
 
     // 打包材质或顶点
