@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ElEmpty} from "element-plus";
-import {onMounted, reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import {isNil} from "lodash-es";
 import {
   isBoxGeometry,
@@ -40,15 +40,25 @@ import {
   SphereGeometryAttribute,
   TetrahedronGeometryAttribute,
   TorusGeometryAttribute,
-  TubeGeometryAttribute,
-  TorusKnotGeometryAttribute
+  TorusKnotGeometryAttribute,
+  TubeGeometryAttribute
 } from "./geometryAttribute";
+import {type AttributePaneNameProps, useAttributePane} from "./useAttributePane.ts";
+import {useBindSubscribe} from "../../hooks/useBindSubscribe.ts";
 
 const bus = useBus();
-const show = ref(true);
+const showEmpty = ref(true);
 const text = ref("未选择对象");
 
-const geometryShow = reactive({
+const props = defineProps<AttributePaneNameProps>();
+const {isActive} = useAttributePane(props)
+
+watch(isActive, (value) => {
+  value && sync();
+  bindSubscribe();
+})
+
+const show = reactive({
   isBoxGeometry: false,
   isBufferGeometry: false,
   isCapsuleGeometry: false,
@@ -74,79 +84,66 @@ const geometryShow = reactive({
 const sync = () => {
   const object = bus.selectObject;
   if (isNil(object)) {
-    show.value = true;
+    showEmpty.value = true;
     text.value = "未选择对象";
     return;
   }
   if (isMesh(object)) {
-    show.value = false;
+    showEmpty.value = false;
     const geometry = object.geometry;
-    geometryShow.isBoxGeometry = isBoxGeometry(geometry)
-    geometryShow.isBufferGeometry = isBufferGeometry(geometry)
-    geometryShow.isCapsuleGeometry = isCapsuleGeometry(geometry)
-    geometryShow.isCircleGeometry = isCircleGeometry(geometry)
-    geometryShow.isCylinderGeometry = isCylinderGeometry(geometry)
-    geometryShow.isDodecahedronGeometry = isDodecahedronGeometry(geometry)
-    geometryShow.isExtrudeGeometry = isExtrudeGeometry(geometry)
-    geometryShow.isIcosahedronGeometry = isIcosahedronGeometry(geometry)
-    geometryShow.isLatheGeometry = isLatheGeometry(geometry)
-    geometryShow.isModifiers = isModifiers(geometry)
-    geometryShow.isOctahedronGeometry = isOctahedronGeometry(geometry)
-    geometryShow.isPlaneGeometry = isPlaneGeometry(geometry)
-    geometryShow.isRingGeometry = isRingGeometry(geometry)
-    geometryShow.isShapeGeometry = isShapeGeometry(geometry)
-    geometryShow.isSphereGeometry = isSphereGeometry(geometry)
-    geometryShow.isTetrahedronGeometry = isTetrahedronGeometry(geometry)
+    show.isBoxGeometry = isBoxGeometry(geometry)
+    show.isBufferGeometry = isBufferGeometry(geometry)
+    show.isCapsuleGeometry = isCapsuleGeometry(geometry)
+    show.isCircleGeometry = isCircleGeometry(geometry)
+    show.isCylinderGeometry = isCylinderGeometry(geometry)
+    show.isDodecahedronGeometry = isDodecahedronGeometry(geometry)
+    show.isExtrudeGeometry = isExtrudeGeometry(geometry)
+    show.isIcosahedronGeometry = isIcosahedronGeometry(geometry)
+    show.isLatheGeometry = isLatheGeometry(geometry)
+    show.isModifiers = isModifiers(geometry)
+    show.isOctahedronGeometry = isOctahedronGeometry(geometry)
+    show.isPlaneGeometry = isPlaneGeometry(geometry)
+    show.isRingGeometry = isRingGeometry(geometry)
+    show.isShapeGeometry = isShapeGeometry(geometry)
+    show.isSphereGeometry = isSphereGeometry(geometry)
+    show.isTetrahedronGeometry = isTetrahedronGeometry(geometry)
   } else {
-    show.value = true;
+    showEmpty.value = true;
     text.value = "对象不是网格体";
   }
+
+
 };
-bus.viewerInitSubject.subscribe(() => {
-  const viewer = bus.viewer;
-  if (viewer) {
-    viewer.editor.editorEventManager.objectSelected.subscribe(() => {
-      sync();
-    })
-    sync();
-  }
-})
-onMounted(() => {
-  const viewer = bus.viewer;
-  if (!viewer) return;
-  sync();
-  viewer.editor.editorEventManager.objectSelected.subscribe(() => {
-    sync();
-  })
-})
+const {bindSubscribe} = useBindSubscribe(sync, false);
+
 </script>
 
 <template>
-  <div v-if="show" class="h-full flex justify-center items-center">
+  <div v-if="showEmpty" class="h-full flex justify-center items-center">
     <el-empty :description="text"/>
   </div>
-  <box-geometry-attribute v-else-if="geometryShow.isBoxGeometry"/>
-  <capsule-geometry-attribute v-else-if="geometryShow.isCapsuleGeometry"/>
-  <circle-geometry-attribute v-else-if="geometryShow.isCircleGeometry"/>
-  <cylinder-geometry-attribute v-else-if="geometryShow.isCylinderGeometry"/>
+  <box-geometry-attribute v-else-if="show.isBoxGeometry"/>
+  <capsule-geometry-attribute v-else-if="show.isCapsuleGeometry"/>
+  <circle-geometry-attribute v-else-if="show.isCircleGeometry"/>
+  <cylinder-geometry-attribute v-else-if="show.isCylinderGeometry"/>
 
-  <dodecahedron-geometry-attribute v-else-if="geometryShow.isDodecahedronGeometry"/>
-  <extrude-geometry-attribute v-else-if="geometryShow.isExtrudeGeometry"/>
-  <icosahedron-geometry-attribute v-else-if="geometryShow.isIcosahedronGeometry"/>
-  <lathe-geometry-attribute v-else-if="geometryShow.isLatheGeometry"/>
+  <dodecahedron-geometry-attribute v-else-if="show.isDodecahedronGeometry"/>
+  <extrude-geometry-attribute v-else-if="show.isExtrudeGeometry"/>
+  <icosahedron-geometry-attribute v-else-if="show.isIcosahedronGeometry"/>
+  <lathe-geometry-attribute v-else-if="show.isLatheGeometry"/>
 
-  <modifiers-attribute v-else-if="geometryShow.isModifiers"/>
-  <octahedron-geometry-attribute v-else-if="geometryShow.isOctahedronGeometry"/>
-  <plane-geometry-attribute v-else-if="geometryShow.isPlaneGeometry"/>
-  <ring-geometry-attribute v-else-if="geometryShow.isRingGeometry"/>
-  <shape-geometry-attribute v-else-if="geometryShow.isShapeGeometry"/>
+  <modifiers-attribute v-else-if="show.isModifiers"/>
+  <octahedron-geometry-attribute v-else-if="show.isOctahedronGeometry"/>
+  <plane-geometry-attribute v-else-if="show.isPlaneGeometry"/>
+  <ring-geometry-attribute v-else-if="show.isRingGeometry"/>
+  <shape-geometry-attribute v-else-if="show.isShapeGeometry"/>
 
-  <sphere-geometry-attribute v-else-if="geometryShow.isSphereGeometry"/>
-  <tetrahedron-geometry-attribute v-else-if="geometryShow.isTetrahedronGeometry"/>
-  <torus-geometry-attribute v-else-if="geometryShow.isTorusGeometry"/>
-  <torus-knot-geometry-attribute v-else-if="geometryShow.isTorusKnotGeometry"/>
-  <tube-geometry-attribute v-else-if="geometryShow.isTubeGeometry"/>
-  <buffer-geometry-attribute v-else-if="geometryShow.isBufferGeometry"/>
+  <sphere-geometry-attribute v-else-if="show.isSphereGeometry"/>
+  <tetrahedron-geometry-attribute v-else-if="show.isTetrahedronGeometry"/>
+  <torus-geometry-attribute v-else-if="show.isTorusGeometry"/>
+  <torus-knot-geometry-attribute v-else-if="show.isTorusKnotGeometry"/>
+  <tube-geometry-attribute v-else-if="show.isTubeGeometry"/>
+  <buffer-geometry-attribute v-else-if="show.isBufferGeometry"/>
 </template>
 <style scoped>
 

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 import {ElFormItem, formContextKey} from "element-plus";
 import {computed, inject} from "vue";
 import {get} from "lodash-es";
@@ -12,11 +11,8 @@ interface Props {
 const {name, label} = defineProps<Props>();
 const formContext = inject(formContextKey, undefined)
 const value = computed(() => {
-  //
-  //
   return get(formContext?.model, name)
 })
-
 
 </script>
 

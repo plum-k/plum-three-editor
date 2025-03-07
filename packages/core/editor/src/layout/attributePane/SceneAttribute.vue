@@ -185,7 +185,6 @@ bus.viewerInitSubject.subscribe(() => {
 const sync = () => {
   const viewer = bus.viewer;
   if (!viewer) return;
-  console.log("form", form)
   updateOverrideMaterial(viewer);
   updateBackgroundType(viewer);
   updateEnvironmentType(viewer);

@@ -1,40 +1,24 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import {onMounted, reactive, ref} from "vue";
+import {reactive} from "vue";
 import {isArray, set} from "lodash-es";
 import * as THREE from "three";
-import {isMesh} from "three-is";
+import {isBoxGeometry, isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, SelectItem, TextItem} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
 import {blendingOptions, sideOptions} from "./selectOptions.ts";
-import {useActiveTab} from "../../../hooks/useActiveTab.ts";
+import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
 
 const bus = useBus();
 
-const {isActive} = useActiveTab("材质")
-const isVisible = ref(false);
-
-onMounted(() => {
-  const viewer = bus.viewer;
-  if (!viewer) return;
-  sync();
-
-  viewer.editor.editorEventManager.objectSelected.subscribe((object) => {
-    sync();
-  })
-})
-
 const sync = () => {
   const object = bus.selectObject;
-
-  if (object && isMesh(object) && isActive.value) {
-    isVisible.value = true;
-    threeToUi(object);
-  } else {
-    isVisible.value = false;
+  if (object && isMesh(object) && isBoxGeometry(object.geometry)) {
+    threeToUi(object.geometry);
   }
 }
+const {} = useBindSubscribe(sync);
 
 // ui -> three
 const {objectAttributeChangeSubject} = useAttributeProvide()
@@ -112,7 +96,7 @@ const threeToUi = (object: THREE.Mesh) => {
 </script>
 
 <template>
-  <el-form :model="form" label-position="left" label-width="auto" size="small">
+  <el-form :model="form" label-position="left" label-width="80" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>

@@ -143,6 +143,7 @@ const onDrop = (event: DragEvent) => {
     viewer?.assetManager.dragHandler(event)
   } else {
     const data = event!.dataTransfer!.getData('data');
+    if (data === "") return;
     const info = JSON.parse(data) as IDragInfo;
     if (info) {
       panelDrop(info)
@@ -161,12 +162,12 @@ const panelDrop = (info: IDragInfo) => {
   if (mesh) {
     // todo 历史记录
     scene.add(mesh);
-    viewer?.editor.editorEventManager.sceneGraphChanged.next(null);
+    viewer?.editor.editorEventManager.sceneGraphChanged.next(true);
   } else {
     const light = createLight(info);
     if (light) {
       scene.add(light);
-      viewer?.editor.editorEventManager.sceneGraphChanged.next(null);
+      viewer?.editor.editorEventManager.sceneGraphChanged.next(true);
     } else {
       console.warn(`Unknown type: ${info.type}`);
     }

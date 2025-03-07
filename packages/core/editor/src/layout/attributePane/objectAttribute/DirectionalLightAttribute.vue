@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import {onMounted, reactive} from "vue";
 import * as THREE from "three";
-import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
+import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
 import {ElForm} from "element-plus";
-import {useAttributeProvide, useBus} from "../../../../hooks";
+import {useAttributeProvide, useBus} from "../../../hooks";
 import {set} from "lodash-es";
-import {isPointLight} from "three-is";
+import {isDirectionalLight} from "three-is";
 
 const bus = useBus();
 
@@ -24,8 +24,6 @@ const form = reactive({
   position: {x: 11, y: 0, z: 0},
   intensity: 0,
   color: "",
-  distance: 0,
-  decay: 0,
   castShadow: false,
   shadowIntensity: 0,
   shadowBias: 0,
@@ -37,11 +35,10 @@ const form = reactive({
 })
 
 const threeToUi = () => {
-
   const object = bus.selectObject;
-  if (!isPointLight(object)) return
+  if (!isDirectionalLight(object)) return
 
-  form.type = "点光源"
+  form.type = "定向光"
   form.uuid = object.uuid
   form.name = object.name
 
@@ -51,9 +48,6 @@ const threeToUi = () => {
 
   form.intensity = object.intensity
   form.color = `#${object.color.getHexString()}`
-
-  form.distance = object.distance
-  form.decay = object.decay
 
   form.castShadow = object.castShadow
 
@@ -70,7 +64,7 @@ const {objectAttributeChangeSubject} = useAttributeProvide()
 objectAttributeChangeSubject.subscribe((editValue) => {
 
   const {name, value} = editValue;
-  const object = bus.selectObject as THREE.PointLight;
+  const object = bus.selectObject as THREE.DirectionalLight;
   if (!object) return;
 
   if (name === "color") {
@@ -83,20 +77,21 @@ objectAttributeChangeSubject.subscribe((editValue) => {
 </script>
 
 <template>
-  <el-form :model="form" label-width="auto" size="small">
+  <el-form :model="form" label-position="left" label-width="80" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>
     <vector3-item label="位置" name="position"/>
     <input-number-item label="强度" name="intensity"/>
     <color-item label="颜色" name="color"/>
-    <input-number-item label="距离" name="distance"/>
-    <input-number-item label="衰减" name="decay"/>
+
     <bool-item label="产生阴影" name="castShadow"/>
     <input-number-item label="阴影偏移" name="shadowIntensity"/>
     <input-number-item label="阴影偏移" name="shadowBias"/>
     <input-number-item label="阴影法线偏移" name="shadowNormalBias"/>
     <input-number-item label="阴影半径" name="shadowRadius"/>
+
+
     <bool-item label="可见性" name="visible"/>
     <bool-item label="视锥体裁剪" name="frustumCulled"/>
     <input-number-item label="渲染次序" name="renderOrder"/>

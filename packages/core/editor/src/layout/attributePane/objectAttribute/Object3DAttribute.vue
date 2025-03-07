@@ -3,11 +3,12 @@ import {ElButton, ElCheckbox, ElCheckboxGroup, ElCol, ElForm, ElFormItem, ElRow}
 import {onMounted, reactive, ref} from "vue";
 import * as THREE from "three";
 import {Object3D} from "three";
-import {useBus} from "../../../hooks";
-import {isObject3D} from "three-is";
-import {find} from "lodash-es";
+import {useAttributeProvide, useBus} from "../../../hooks";
+import {isMesh, isObject3D} from "three-is";
+import {find, set} from "lodash-es";
 import {BoolItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
 
+const bus = useBus();
 const form = reactive({
   type: "",
   uuid: "",
@@ -21,24 +22,21 @@ const form = reactive({
   visible: false,
 })
 
-const bus = useBus();
+const {objectAttributeChangeSubject} = useAttributeProvide()
+objectAttributeChangeSubject.subscribe((editValue) => {
+  const {name, value} = editValue;
+  const object = bus.selectObject;
+  if (!object) return;
+  if (!isMesh(object)) return;
+  set(object, name, value);
+})
 onMounted(() => {
-
   const viewer = bus.viewer;
   if (!viewer) return;
   viewer.editor.editorEventManager.objectSelected.subscribe(() => {
     threeToUi()
   })
   threeToUi()
-})
-bus.viewerInitSubject.subscribe(() => {
-  const viewer = bus.viewer;
-  if (viewer) {
-    viewer.editor.editorEventManager.objectSelected.subscribe(() => {
-      threeToUi()
-    })
-    threeToUi()
-  }
 })
 
 const threeToUi = () => {
@@ -96,8 +94,7 @@ const play = (item: string) => {
 </script>
 
 <template>
-
-  <el-form :model="form" label-width="auto" size="small">
+  <el-form :model="form" label-position="left" label-width="80" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>

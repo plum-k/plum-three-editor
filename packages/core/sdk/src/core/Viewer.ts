@@ -359,13 +359,12 @@ export class Viewer {
 
     // 设置渲染器和控制器的大小
     setSize() {
-        console.log("从这个111")
         const {width, height} = this.getSize(); // 获取大小
         this.cameraManager.setSize(width, height); // 设置相机控制器大小
         this.renderManager.setSize(width, height); // 设置渲染器大小
         this.cssRenderer.setSize(width, height); // 设置 CSS 渲染器大小
         this.postProcessingManager.setSize(width, height); // 设置后处理管理器大小
-        this.renderManager.render();
+        this.renderManager.render(); // 重置后必须重新渲染. 不然会闪烁
     }
 
     //--------------------- 截屏

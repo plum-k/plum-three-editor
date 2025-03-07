@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ElEmpty} from "element-plus";
-import {onMounted, reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import {isArray, isNil} from "lodash-es";
 import {
   isLineBasicMaterial,
@@ -39,13 +39,20 @@ import {
   SpriteMaterialAttribute
 } from "./materialAttribute";
 import {useBus} from "../../hooks";
+import {type AttributePaneNameProps, useAttributePane} from "./useAttributePane.ts";
+import {useBindSubscribe} from "../../hooks/useBindSubscribe.ts";
 
-// const {isActive} = useAttributePane(props)
 const bus = useBus();
-// const props = defineProps<AttributePaneNameProps>();
-
-const show = ref(true);
+const showEmpty = ref(true);
 const text = ref("未选择对象");
+
+const props = defineProps<AttributePaneNameProps>();
+const {isActive} = useAttributePane(props)
+
+watch(isActive, (value) => {
+  value && sync();
+  bindSubscribe();
+})
 // 定义材质的显示状态
 const materialShow = reactive({
   isLineBasicMaterial: false,
@@ -70,12 +77,12 @@ const materialShow = reactive({
 const sync = () => {
   const object = bus.selectObject;
   if (isNil(object)) {
-    show.value = true;
+    showEmpty.value = true;
     text.value = "未选择对象";
     return;
   }
   if (isMesh(object)) {
-    show.value = false;
+    showEmpty.value = false;
     const _material = object.material;
     const material = isArray(_material) ? _material[0] : _material;
     materialShow.isLineBasicMaterial = isLineBasicMaterial(material);
@@ -95,27 +102,13 @@ const sync = () => {
     materialShow.isSpriteMaterial = isSpriteMaterial(material);
     materialShow.isPointsMaterial = isPointsMaterial(material);
   } else {
-    show.value = true;
+    showEmpty.value = true;
     text.value = "对象没有材质";
   }
 };
-bus.viewerInitSubject.subscribe(() => {
-  const viewer = bus.viewer;
-  if (viewer) {
-    viewer.editor.editorEventManager.objectSelected.subscribe(() => {
-      sync();
-    })
-    sync();
-  }
-})
-onMounted(() => {
-  const viewer = bus.viewer;
-  if (!viewer) return;
-  sync();
-  viewer.editor.editorEventManager.objectSelected.subscribe(() => {
-    sync();
-  })
-})
+
+const {bindSubscribe} = useBindSubscribe(sync, false);
+
 
 // const materialClasses: Record<string, any> = {
 //   'LineBasicMaterial': THREE.LineBasicMaterial,
@@ -138,7 +131,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="show" class="h-full flex justify-center items-center">
+  <div v-if="showEmpty" class="h-full flex justify-center items-center">
     <el-empty :description="text"/>
   </div>
   <line-basic-material-attribute v-else-if="materialShow.isLineBasicMaterial"/>

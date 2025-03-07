@@ -40,7 +40,6 @@ function loadFile(file: File) {
     file: file,
   })
   bus.viewer?.assetManager.loadAsset(asset).then(value => {
-    console.log("asset", asset)
     objectAttributeChangeSubject.next({
       name: name,
       value: value

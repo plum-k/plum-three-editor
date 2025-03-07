@@ -17,16 +17,19 @@ export interface IAsset {
     extension?: string; // 资源的文件扩展名
 }
 
+
 /**
  * 资产类，用于管理单个资产的加载和存储。
  */
-export class Asset<T = unknown> {
+export class Asset{
     options: IAsset; // 资产选项，包含了初始化时的所有可能属性
     url: string | undefined; // 资源的URL
     result: ArrayBuffer | undefined; // 加载完成的资源数据
     name!: string; // 资源的名称
     extension!: string; // 资源的文件扩展名
-    loadSubject = new Subject<T>(); // 加载完成的观察者主题，用于通知加载的GLTF资源
+    loadSubject = new Subject<unknown>(); // 加载完成的观察者主题，用于通知加载的GLTF资源
+    errorSubject = new Subject<unknown>(); // 加载完成的观察者主题，用于通知加载的GLTF资源
+
     progressSubject = new Subject<number>(); // 加载进度的观察者主题，用于通知加载进度
 
     fileReader: FileReader | undefined
@@ -82,9 +85,34 @@ export class Asset<T = unknown> {
             this.file = this.options.file
             this.fileReader = new FileReader();
             let [fileName, fileExtension] = extractFileNameAndExtension(this.file);
-
-            this.name = fileName
-            this.extension = fileExtension
+            this.name = fileName;
+            this.extension = fileExtension;
         }
+    }
+
+    onLoad = (data: unknown) => {
+        this.loadSubject.next(data);
+    }
+
+    onProgress = (event: ProgressEvent) => {
+        const progress = Math.floor((event.loaded / event.total) * 100)
+        this.progressSubject.next(progress)
+    }
+    onError = (err: unknown) => {
+        this.errorSubject.error(err);
+    }
+
+    loadFile = (loadFun: (event: ProgressEvent<FileReader>) => void) => {
+        if (!this.fileReader) return;
+        if (!this.file) return;
+        this.fileReader.addEventListener('progress', (event) => {
+            // const size = '(' + this.formatNumber(Math.floor(event.total / 1000)) + ' KB)';
+            const progress = Math.floor((event.loaded / event.total) * 100)
+            this.progressSubject.next(progress)
+        });
+        this.fileReader.addEventListener('load', async (event) => {
+            loadFun(event);
+        });
+        this.fileReader.readAsArrayBuffer(this.file);
     }
 }

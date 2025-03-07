@@ -54,7 +54,6 @@ bus.viewerInitSubject.subscribe(() => {
   data.value = getSceneTree(viewer!);
   setHeight();
   viewer?.editor.editorEventManager.sceneGraphChanged.subscribe(() => {
-    console.log("111111111111")
     data.value = getSceneTree(viewer!);
     setHeight();
   })

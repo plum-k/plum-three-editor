@@ -2,9 +2,9 @@
 import {onMounted, reactive} from "vue";
 import {isAmbientLight} from "three-is";
 import * as THREE from "three";
-import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../../common-ui";
+import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
 import {ElForm} from "element-plus";
-import {useAttributeProvide, useBus} from "../../../../hooks";
+import {useAttributeProvide, useBus} from "../../../hooks";
 import {set} from "lodash-es";
 
 const bus = useBus();
@@ -51,7 +51,6 @@ const threeToUi = () => {
 
 const {objectAttributeChangeSubject} = useAttributeProvide()
 objectAttributeChangeSubject.subscribe((editValue) => {
-
   const {name, value} = editValue;
   const object = bus.selectObject as THREE.AmbientLight;
   if (!object) return;
@@ -66,7 +65,7 @@ objectAttributeChangeSubject.subscribe((editValue) => {
 </script>
 
 <template>
-  <el-form :model="form" label-width="auto" size="small">
+  <el-form :model="form" label-position="left" label-width="80" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>

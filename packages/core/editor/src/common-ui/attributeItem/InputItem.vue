@@ -1,22 +1,12 @@
 <script lang="ts" setup>
 import {ElFormItem, ElInput, formContextKey} from "element-plus";
 import {inject} from "vue";
-import {useBus} from "../../hooks";
-import {useAttributeInject} from "../../hooks";
-
-interface Props {
-  name: string;
-  label: string;
-}
+import {type IAttributeProps, useAttributeInject} from "../../hooks";
 
 const formContext = inject(formContextKey, undefined)
-const bus = useBus();
-const props = defineProps<Props>();
+const props = defineProps<IAttributeProps>();
 const {name, label} = props;
-
-const {objectAttributeChangeSubject, change} = useAttributeInject(props)
-
-
+const {change} = useAttributeInject(props)
 </script>
 
 <template>

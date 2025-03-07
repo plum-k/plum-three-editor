@@ -12,8 +12,10 @@ html, body, #app {
         position: relative !important;
     }
 }
-#canvasContainer{
+
+#canvasContainer {
 }
+
 ::backdrop {
     background-color: white;
 }

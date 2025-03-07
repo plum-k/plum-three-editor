@@ -217,7 +217,7 @@ export class CameraManager {
     }
 
     /**
-     *
+     * 设置后视图
      */
     setBackView() {
         this.cameraControls.rotateTo(DEG180, DEG90, false).then();
@@ -235,6 +235,7 @@ export class CameraManager {
         this.cameraControls.minAzimuthAngle = 0;
         this.cameraControls.maxAzimuthAngle = 0;
         this.cameraControls.minPolarAngle = Math.PI / 2;
+        this.cameraControls.maxPolarAngle = Math.PI / 2;
     }
 
     /**
