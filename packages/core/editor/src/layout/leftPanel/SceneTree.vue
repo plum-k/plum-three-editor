@@ -123,7 +123,7 @@ const fitMesh = (data: any) => {
       ref="treeRef"
       :data="data"
       :height="height"
-      :highlighel-current="true"
+      :highlight-current="true"
       class="h-full"
       @node-click="handleNodeClick"
       @node-contextmenu="handleNodeContextmenu"
@@ -131,7 +131,7 @@ const fitMesh = (data: any) => {
     <template #default="{ node }">
       <icon v-if="node.data.visible" icon-name="icon-show"/>
       <icon v-else icon-name="icon-hide"/>
-      <span class="m-1 selecel-none" @dblclick="fitMesh(node.data)">{{ node.label }}</span>
+      <span class="m-1 select-none" @dblclick="fitMesh(node.data)">{{ node.label }}</span>
     </template>
   </el-tree-v2>
 </template>

@@ -23,7 +23,7 @@ const fit = () => {
 </script>
 
 <template>
-  <div class="flex items-center gap-2 ml-100 texel-[1.2rem]">
+  <div class="flex items-center gap-2 ml-100 text-[1.2rem]">
 
     <el-tooltip
         v-if="isFullscreen"

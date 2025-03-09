@@ -22,7 +22,7 @@ export default defineConfig((env) => {
     }]
     return {
         server:{
-            port: 4333
+            port: 4010
         },
         plugins: [tailwindcss(),
             ElementPlus({}),

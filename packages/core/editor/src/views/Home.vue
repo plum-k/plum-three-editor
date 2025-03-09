@@ -7,12 +7,14 @@ import {ElBreadcrumb, ElBreadcrumbItem, ElButton, ElIcon} from "element-plus";
 import {HomeFilled} from "@element-plus/icons-vue";
 import {findIndex} from "lodash-es";
 import AddAppModalForm from "../components/home/AddAppModalForm.vue";
+import EditAppModalForm from "../components/home/EditAppModalForm.vue";
+import Icon from "../components/Icon.vue";
 
 const folders = ref<IApplication[]>([]);
 
 const dirList = ref<IApplication[]>([]);
 const appInfo = ref<IApplication | null>(null);
-const editAppInfo = ref<IApplication>(null);
+const editAppInfo = ref<IApplication| null>(null);
 
 const getFolders = (appInfo: null | IApplication) => {
   ApplicationApi.getAll(appInfo?.id).then(res => {
@@ -26,9 +28,6 @@ onMounted(() => {
   getFolders(null)
 })
 
-const add = () => {
-
-}
 
 const example = () => {
   window.open(import.meta.env.VITE_EXAMPLE, '_blank');
@@ -62,11 +61,16 @@ const editPath = (info?: IApplication) => {
   }
 }
 const handleDir = (value: IApplication) => {
+  debugger
   appInfo.value = value;
   getFolders(value);
   dirList.value = [...dirList.value, value];
 }
+const handleEdit = (value: IApplication) => {
+  editAppInfo.value = value;
 
+}
+const dialogEditVisible = ref(false);
 const dialogFormVisible = ref(false);
 watch(dialogFormVisible, (value) => {
   if (value === false) {
@@ -74,7 +78,15 @@ watch(dialogFormVisible, (value) => {
     getFolders(appInfo.value);
   }
 })
-
+watch(dialogEditVisible, (value) => {
+  if (value === false) {
+    editAppInfo.value = null;
+    getFolders(appInfo.value);
+  }
+})
+const reset = () => {
+  getFolders(appInfo.value);
+}
 </script>
 
 <template>
@@ -85,15 +97,15 @@ watch(dialogFormVisible, (value) => {
         <div class="flex justify-center items-center">
           <el-button class="mr-2" @click="dialogFormVisible = true">新建</el-button>
           <add-app-modal-form :appInfo="appInfo" v-model:visible="dialogFormVisible"/>
+          <edit-app-modal-form :appInfo="editAppInfo" v-model:visible="dialogEditVisible"/>
           <el-breadcrumb separator="/" @click="editPath">
             <el-breadcrumb-item>
-              <el-icon>
-                <HomeFilled/>
-              </el-icon>
+              <icon icon-name="icon-home"/>
             </el-breadcrumb-item>
-            <el-breadcrumb-item v-for="(item,index) in items" :key="index" @click="editPath(item)">{{
-                item.name
-              }}
+            <el-breadcrumb-item v-for="(item,index) in items" :key="index" @click="editPath(item)">
+              <div class="flex items-center cursor-pointer">
+                {{item.name }}
+              </div>
             </el-breadcrumb-item>
           </el-breadcrumb>
           <div class="grow"></div>
@@ -103,7 +115,8 @@ watch(dialogFormVisible, (value) => {
       </div>
       <div class="p-4 overflow-hidden">
         <div class="grid gap-4 grid-cols-4 overflow-auto h-full w-full">
-          <Card v-for="(item,index) in folders" :key="index" :item="item" class="flex flex-col" @handleDir="handleDir">
+          <Card v-for="(item,index) in folders" :key="index" :item="item" class="flex flex-col" @handleDir="handleDir"
+                @handleEdit="handleEdit" @reset="reset">
           </Card>
         </div>
       </div>
