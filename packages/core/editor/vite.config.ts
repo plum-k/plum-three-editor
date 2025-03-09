@@ -7,11 +7,11 @@ export default defineConfig((env) => {
     const isBuild = env.command === 'build';
     let buildTargets = [
         {
-            src: '../sdk/public/basis',
+            src: '../sdk/public/hdr',
             dest: './'
         },
         {
-            src: '../sdk/public/draco',
+            src: '../sdk/public/libs',
             dest: './'
         }
     ]
