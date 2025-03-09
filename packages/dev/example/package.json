@@ -1,0 +1,26 @@
+{
+  "name": "@plum-render/three-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "build-notsc": "bun --filter @plum-render/babylon-sdk build && vite build",
+    "build-test": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vueuse/core": "^12.8.2",
+    "monaco-editor": "^0.52.2",
+    "naive-ui": "^2.41.0",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "vite-plugin-static-copy": "^2.3.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.1",
+    "vue-tsc": "^2.2.8"
+  }
+}

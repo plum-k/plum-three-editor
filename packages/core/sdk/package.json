@@ -5,7 +5,7 @@
   "scripts": {
     "api:build": "pnpm run api:build:rollup && pnpm run api:build:d",
     "api:build:rollup": "rollup --config rollup.config.ts --configPlugin esbuild",
-    "build:watch": "concurrently \"rollup --config rollup.config.ts --configPlugin esbuild --watch\" \"http-server ./lib -p 6000 -c-1 --cors\"",
+    "build:watch": "concurrently \"rollup --config rollup.config.ts --configPlugin esbuild --watch\" \"http-server ./lib -p 4000 -c-1 --cors\"",
     "api:build:d": "tsc --project tsconfig.d.json",
     "api:publish": "npm publish --registry http://192.168.102.110:4873/"
   },
