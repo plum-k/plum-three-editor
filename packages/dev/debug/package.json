@@ -1,5 +1,5 @@
 {
-  "name": "plum-three-debug",
+  "name": "@plum-render/three-debug",
   "private": true,
   "version": "0.0.0",
   "type": "module",
