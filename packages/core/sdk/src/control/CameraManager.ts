@@ -3,7 +3,7 @@ import {Object3D, OrthographicCamera, PerspectiveCamera} from 'three';
 import CameraControls from "camera-controls";
 import {Viewer} from "../core/Viewer";
 import {deepMergeRetain, Tool} from "../tool";
-import {Serialize} from "../serializeManage/SerializeInterface";
+import {Serialize} from "../serializeManage";
 import {Asset} from "../manager/asset";
 
 // 安装camera-controls扩展，使其支持THREE库

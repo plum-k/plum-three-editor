@@ -71,6 +71,7 @@ const threeToUi = () => {
   form.visible = object.visible
   form.frustumCulled = object.frustumCulled
   form.renderOrder = object.renderOrder
+  form.userData = JSON.stringify(object.userData, null, '\t')
 }
 const {objectAttributeChangeSubject} = useAttributeProvide()
 objectAttributeChangeSubject.subscribe((editValue) => {
@@ -108,6 +109,8 @@ objectAttributeChangeSubject.subscribe((editValue) => {
     <bool-item label="可见性" name="visible"/>
     <bool-item label="视锥体裁剪" name="frustumCulled"/>
     <input-number-item label="渲染次序" name="renderOrder"/>
+
+    <input-item label="元数据" name="userData" :form-props="{type:'textarea'}"/>
   </el-form>
 </template>
 

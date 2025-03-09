@@ -13,8 +13,7 @@ interface Props {
 const props = defineProps<Props>();
 const {name, label} = props
 const formContext = inject(formContextKey, undefined)
-const bus = useBus();
-const {objectAttributeChangeSubject, change} = useAttributeInject(props)
+const { change} = useAttributeInject(props)
 </script>
 
 <template>

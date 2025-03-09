@@ -86,7 +86,9 @@ export interface IViewerOptions {
      */
     packagePath?: string;
 
-    // 基础路径
+    /**
+     * 基础路径
+     */
     ossBaseUrl?: string;
     /**
      * 包的类型

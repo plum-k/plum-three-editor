@@ -1,14 +1,14 @@
 database:
-  name: plum-babylon-editor
-  host: sh-cdb-ievzd9jg.sql.tencentcdb.com
-  user: root
-  port: 22733
-  password: 0RaX4vLiE61qOJsFXBZJ1q
+  name:
+  host:
+  user:
+  port:
+  password:
 
 http:
   port: 5010
 
 oss:
-  roleArn: acs:ram::1355626034459372:role/3d-storage
-  accessKeyId: LTAI5tHwuA7YJNcE4cv4Xj1o
-  accessKeySecret: emarCc0Alz6FO0wvyuyiZwyS2J8YFD
+  roleArn:
+  accessKeyId:
+  accessKeySecret:
