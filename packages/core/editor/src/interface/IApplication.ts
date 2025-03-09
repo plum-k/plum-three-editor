@@ -1,6 +1,7 @@
 export enum EAppType {
     DIR = "DIR",
     BABYLON = "BABYLON",
+    THREE = "THREE",
 }
 
 export interface IApplication {

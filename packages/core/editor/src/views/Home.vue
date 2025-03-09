@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import Card from "../components/home/Card.vue";
 import type {IApplication} from "../interface";
 import {ApplicationApi} from "../api";
 import {ElBreadcrumb, ElBreadcrumbItem, ElButton, ElIcon} from "element-plus";
 import {HomeFilled} from "@element-plus/icons-vue";
 import {findIndex} from "lodash-es";
+import AddAppModalForm from "../components/home/AddAppModalForm.vue";
 
 const folders = ref<IApplication[]>([]);
 
@@ -65,6 +66,15 @@ const handleDir = (value: IApplication) => {
   getFolders(value);
   dirList.value = [...dirList.value, value];
 }
+
+const dialogFormVisible = ref(false);
+watch(dialogFormVisible, (value) => {
+  if (value === false) {
+    // appInfo.value = null;
+    getFolders(appInfo.value);
+  }
+})
+
 </script>
 
 <template>
@@ -73,7 +83,8 @@ const handleDir = (value: IApplication) => {
         class="bg-white w-3/5 h-3/5 top-0 left-0 bottom-0 right-0 m-auto fixed  border rounded-[0.5rem] shadow flex flex-col">
       <div class="border-b p-2">
         <div class="flex justify-center items-center">
-          <el-button class="mr-2" @click="add">新建</el-button>
+          <el-button class="mr-2" @click="dialogFormVisible = true">新建</el-button>
+          <add-app-modal-form :appInfo="appInfo" v-model:visible="dialogFormVisible"/>
           <el-breadcrumb separator="/" @click="editPath">
             <el-breadcrumb-item>
               <el-icon>
