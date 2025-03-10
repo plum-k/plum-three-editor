@@ -20,6 +20,7 @@ const getFolders = (appInfo: null | IApplication) => {
   ApplicationApi.getAll(appInfo?.id).then(res => {
     if (res.code === 1) {
       folders.value = res.data;
+      console.log("获取到的文件夹", folders.value)
     }
   })
 }
@@ -53,7 +54,6 @@ const editPath = (info?: IApplication) => {
     dirList.value = dirList.value.slice(0, index + 1);
     appInfo.value = info;
     appInfo.value = info;
-
   } else {
     appInfo.value = null;
     dirList.value = []
@@ -61,7 +61,6 @@ const editPath = (info?: IApplication) => {
   }
 }
 const handleDir = (value: IApplication) => {
-  debugger
   appInfo.value = value;
   getFolders(value);
   dirList.value = [...dirList.value, value];
@@ -115,7 +114,7 @@ const reset = () => {
       </div>
       <div class="p-4 overflow-hidden">
         <div class="grid gap-4 grid-cols-4 overflow-auto h-full w-full">
-          <Card v-for="(item,index) in folders" :key="index" :item="item" class="flex flex-col" @handleDir="handleDir"
+          <Card v-for="(item,index) in folders" :key="item.id" :item="item" class="flex flex-col" @handleDir="handleDir"
                 @handleEdit="handleEdit" @reset="reset">
           </Card>
         </div>

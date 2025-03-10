@@ -24,7 +24,6 @@ const isDir = computed(() => {
 });
 
 const skip = () => {
-  debugger
   if (isDir.value) {
     emit("handleDir", item)
   } else {
