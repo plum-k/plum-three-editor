@@ -1,12 +1,14 @@
 <script lang="ts" setup xmlns="">
 import {ElButton, ElCheckbox, ElCheckboxGroup, ElCol, ElForm, ElFormItem, ElRow} from "element-plus";
-import {onMounted, reactive, ref} from "vue";
+import {reactive, ref} from "vue";
 import * as THREE from "three";
 import {Object3D} from "three";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import {isMesh, isObject3D} from "three-is";
-import {find, set} from "lodash-es";
+import {find} from "lodash-es";
 import {BoolItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
+import {logStack} from "@plum-render/three-sdk";
+import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
 
 const bus = useBus();
 const form = reactive({
@@ -19,30 +21,15 @@ const form = reactive({
   shadowArray: [] as string[],
   frustumCulled: false,
   renderOrder: 0,
+  userData: {},
   visible: false,
 })
 
-const {objectAttributeChangeSubject} = useAttributeProvide()
-objectAttributeChangeSubject.subscribe((editValue) => {
-  const {name, value} = editValue;
-  const object = bus.selectObject;
-  if (!object) return;
-  if (!isMesh(object)) return;
-  set(object, name, value);
-})
-onMounted(() => {
-  const viewer = bus.viewer;
-  if (!viewer) return;
-  viewer.editor.editorEventManager.objectSelected.subscribe(() => {
-    threeToUi()
-  })
-  threeToUi()
-})
 
 const threeToUi = () => {
+  logStack()
   const object = bus.selectObject;
   if (!isObject3D(object)) return
-
   form.type = "组"
   form.uuid = object.uuid
   form.name = object.name
@@ -70,6 +57,9 @@ const threeToUi = () => {
 
   animationsList.value = animationsToList(object)
 }
+const {} = useBindSubscribe(threeToUi);
+const {} = useAttributeProvide()
+
 const animationsList = ref<{ name: string }[]>([])
 const animationsToList = (object: Object3D) => {
   const animations = object.animations;
@@ -116,7 +106,7 @@ const play = (item: string) => {
     <bool-item label="视锥体裁剪" name="frustumCulled"/>
     <input-number-item label="渲染次序" name="renderOrder"/>
 
-    <input-item label="元数据" name="userData" :form-props="{type:'textarea'}"/>
+    <input-item :form-props="{type:'textarea'}" label="元数据" name="userData"/>
 
     <el-row v-for="(item, index) in animationsList" :key="index">
       <el-col :span="12">{{ item.name }}</el-col>

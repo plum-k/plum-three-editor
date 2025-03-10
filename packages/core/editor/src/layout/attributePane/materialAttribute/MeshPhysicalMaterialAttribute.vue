@@ -20,7 +20,7 @@ const sync = () => {
 const {} = useBindSubscribe(sync);
 
 // ui -> three
-const {objectAttributeChangeSubject} = useAttributeProvide()
+const {objectAttributeChangeSubject} = useAttributeProvide(false)
 objectAttributeChangeSubject.subscribe((editValue) => {
   const {name, value} = editValue;
   const object = bus.selectObject;

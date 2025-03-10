@@ -18,12 +18,11 @@ const sync = () => {
 const {} = useBindSubscribe(sync);
 
 // ui -> three
-const {objectAttributeChangeSubject} = useAttributeProvide()
+const {objectAttributeChangeSubject} = useAttributeProvide(false)
 objectAttributeChangeSubject.subscribe((editValue) => {
   const {name, value} = editValue;
   const object = bus.selectObject;
-  if (!object) return;
-  if (!isMesh(object)) return;
+   if (!isMesh(object)) return;
   if (name === 'name') {
     object.name = value;
   } else {
@@ -38,7 +37,6 @@ objectAttributeChangeSubject.subscribe((editValue) => {
     // object.geometry.dispose();
     geometry.copy(newGeometry);
   }
-
 })
 const form = reactive({
   type: '',

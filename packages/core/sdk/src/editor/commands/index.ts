@@ -12,3 +12,6 @@ export * from "./SetMaterialRangeCommand";
 export * from "./SetMaterialValueCommand";
 export * from "./SetMaterialVectorCommand";
 export * from "./SetValueCommand";
+export * from "./SetColorValueCommand";
+
+

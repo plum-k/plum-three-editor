@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {onMounted, reactive} from "vue";
+import {reactive} from "vue";
 
 import {isHemisphereLight} from "three-is";
 import * as THREE from "three";
@@ -7,17 +7,10 @@ import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} 
 import {ElForm} from "element-plus";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import {set} from "lodash-es";
+import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
 
 const bus = useBus();
 
-onMounted(() => {
-  const viewer = bus.viewer;
-  if (!viewer) return;
-  viewer.editor.editorEventManager.objectSelected.subscribe(() => {
-    threeToUi()
-  })
-  threeToUi()
-})
 const form = reactive({
   type: "",
   uuid: "",
@@ -29,6 +22,7 @@ const form = reactive({
   visible: false,
   frustumCulled: false,
   renderOrder: 0,
+  userData: {},
 })
 
 const threeToUi = () => {
@@ -53,20 +47,8 @@ const threeToUi = () => {
   form.renderOrder = object.renderOrder
   form.userData = JSON.stringify(object.userData, null, '\t')
 }
-const {objectAttributeChangeSubject} = useAttributeProvide()
-objectAttributeChangeSubject.subscribe((editValue) => {
-
-  const {name, value} = editValue;
-  const object = bus.selectObject as THREE.HemisphereLight;
-  if (!object) return;
-
-  if (name === "color") {
-    object.color.setStyle(value)
-  } else {
-    set(object, name, value);
-  }
-})
-
+const {} = useBindSubscribe(threeToUi);
+const {} = useAttributeProvide()
 </script>
 
 <template>
@@ -82,7 +64,7 @@ objectAttributeChangeSubject.subscribe((editValue) => {
     <bool-item label="视锥体裁剪" name="frustumCulled"/>
     <input-number-item label="渲染次序" name="renderOrder"/>
 
-    <input-item label="元数据" name="userData" :form-props="{type:'textarea'}"/>
+    <input-item :form-props="{type:'textarea'}" label="元数据" name="userData"/>
   </el-form>
 </template>
 

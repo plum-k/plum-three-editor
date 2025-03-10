@@ -1,7 +1,6 @@
 import {Command} from "./Command";
 import * as THREE from 'three';
 import {get, isArray, isNil, PropertyPath, set} from "lodash-es";
-import {isEuler, isVector3} from "three-is";
 
 /**
  * SetValueCommand类用于在三维场景中更改对象的属性值
@@ -44,22 +43,9 @@ export class SetValueCommand extends Command<any> {
         // 根据isExecute的值决定使用newValue还是oldValue
         const value = isExecute ? this.newValue : this.oldValue;
         if (isArray(this.attributePath) && this.attributePath.length > 0) {
-            // 对value进行类型检查并相应地更新对象的属性
-            if (isVector3(value)) {
-                if (this.attributePath[0] === "position") {
-                    this.object.position.copy(value)
-                    this.editor.editorEventManager.objectChanged.next(this.object)
-                } else if (this.attributePath[0] === "scale") {
-                    this.object.scale.copy(value)
-                    this.editor.editorEventManager.objectChanged.next(this.object)
-                }
-            } else if (isEuler(this.newValue)) {
-                if (this.attributePath[0] === "rotation") {
-                    this.object.rotation.copy(value)
-                    this.editor.editorEventManager.objectChanged.next(this.object)
-                }
-            } else {
-                set(this.object, this.attributePath, value);
+            set(this.object, this.attributePath, value);
+            if (["position", "rotation", "scale"].includes(this.attributePath[0])) {
+                this.editor.editorEventManager.objectChanged.next(this.object)
             }
             // 当属性为显示隐藏时，触发场景图更新
             if (this.attributePath[0] === "visible") {
@@ -96,7 +82,6 @@ export class SetValueCommand extends Command<any> {
      */
     toJSON() {
         const output = super.toJSON();
-
         output.objectUuid = this.object!.uuid;
         output.attributeName = this.attributeName;
         output.oldValue = this.oldValue;

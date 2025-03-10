@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {Button as TButton, Dropdown as TDropdown, type DropdownProps, MessagePlugin} from 'tdesign-vue-next';
+import {Button as TButton, Dropdown as TDropdown, type DropdownProps} from 'tdesign-vue-next';
 
 import {useBus} from "../../hooks";
 import {ChunkSerialize, ExporterTool} from "@plum-render/three-sdk";

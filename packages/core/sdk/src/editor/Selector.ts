@@ -12,6 +12,7 @@ export class Selector extends Component {
 
     constructor(options: ISelectorOptions) {
         super(options);
+        
         this.initSelectionBox();
         this.initEvent();
     }
@@ -57,7 +58,7 @@ export class Selector extends Component {
                 this.editor.transformControlsWarp.transformControls.attach(object);
             }
         })
-
+        console.log("111111111111111111")
         // 选择对象属性改变时, 更新包围盒 和 辅助对象
         this.editor.editorEventManager.objectChanged.subscribe((object) => {
             this.selectionBox.setFromObject(object);

@@ -1,0 +1,48 @@
+import * as THREE from 'three';
+import {invoke, isArray, PropertyPath} from "lodash-es";
+import {SetValueCommand} from "./SetValueCommand";
+
+const color = new THREE.Color();
+
+export class SetColorValueCommand extends SetValueCommand {
+    type = 'SetColorValueCommand';
+
+    constructor(
+        object: THREE.Object3D,
+        attributePath: PropertyPath,
+        newValue: any,
+        oldValue: any
+    ) {
+        super(object, attributePath, newValue, oldValue);
+        this.attributePath = attributePath;
+        this.name = 'command/SetColorValueCommand' + ': ' + this.getAttributeName();
+        this.object = object;
+        this.newValue = newValue;
+        this.newValue = color.setStyle(newValue).getHex();
+        if (oldValue) {
+            this.oldValue = oldValue;
+        } else {
+            this.oldValue = invoke(object, [attributePath, "getHex"]);
+        }
+    }
+
+    /**
+     * 设置对象的属性值
+     * @param isExecute 是否执行命令，true为执行，false为撤销
+     */
+    setValue(isExecute: boolean) {
+        // 根据isExecute的值决定使用newValue还是oldValue
+        const value = isExecute ? this.newValue : this.oldValue;
+        if (isArray(this.attributePath) && this.attributePath.length > 0) {
+            invoke(this.object, [this.attributePath, "setHex"], value);
+        }
+    }
+
+    execute() {
+        this.setValue(true);
+    }
+
+    undo() {
+        this.setValue(false);
+    }
+}

@@ -7,7 +7,7 @@ import {
     AddObjectCommand,
     Command,
     MoveObjectCommand,
-    RemoveObjectCommand,
+    RemoveObjectCommand, SetColorValueCommand,
     SetMaterialColorCommand,
     SetMaterialCommand,
     SetMaterialMapCommand,
@@ -85,22 +85,20 @@ export class Editor extends Component {
     }
 
     setValueExecute(object: THREE.Object3D, attributePath: PropertyPath, newValue: any, oldValue: any = undefined) {
-        // 
         this.execute(new SetValueCommand(object, attributePath, newValue, oldValue))
     }
-
+    setColorValueCommand(object: THREE.Object3D, attributePath: PropertyPath, newValue: any, oldValue: any = undefined) {
+        this.execute(new SetColorValueCommand(object, attributePath, newValue, oldValue))
+    }
     setMaterialExecute(object: THREE.Object3D, newValue: THREE.Material, materialSlot: number = -1) {
-        // 
         this.execute(new SetMaterialCommand(object, newValue, materialSlot,))
     }
 
     setMaterialColorExecute(object: THREE.Object3D, attributeName: string = '', newValue: number, materialSlot: number = -1) {
-        // 
         this.execute(new SetMaterialColorCommand(object, attributeName, newValue, materialSlot,))
     }
 
     setMaterialValueExecute(object: THREE.Object3D, attributeName: string = '', newValue: number, materialSlot: number = -1) {
-        // 
         this.execute(new SetMaterialValueCommand(object, attributeName, newValue, materialSlot,))
     }
 

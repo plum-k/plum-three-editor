@@ -4,10 +4,9 @@ import {reactive} from "vue";
 import {isArray, set} from "lodash-es";
 import * as THREE from "three";
 import {isMesh} from "three-is";
-import {useBus} from "../../../hooks";
+import {useAttributeProvide, useBus} from "../../../hooks";
 import {BoolItem, ColorItem, InputNumberItem, SelectItem, TextItem, Vector2Item} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
-import {useAttributeProvide} from "../../../hooks";
 import {blendingOptions, sideOptions} from "./selectOptions.ts";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
 
@@ -21,7 +20,7 @@ const sync = () => {
 const {} = useBindSubscribe(sync);
 
 // ui -> three
-const {objectAttributeChangeSubject} = useAttributeProvide()
+const {objectAttributeChangeSubject} = useAttributeProvide(false)
 objectAttributeChangeSubject.subscribe((editValue) => {
 
   const {name, value} = editValue;

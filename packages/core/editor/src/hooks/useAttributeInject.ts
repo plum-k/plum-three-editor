@@ -1,6 +1,7 @@
-import {inject} from "vue";
+import {inject, ref} from "vue";
 import {Subject} from "rxjs";
 import type {IObjectAttributeChange} from "./useAttributeProvide.ts";
+import {formContextKey} from "element-plus";
 
 export interface IAttributeProps {
     /**
@@ -23,9 +24,22 @@ export const useAttributeInject = (props: IAttributeProps) => {
     const change = (value: any) => {
         objectAttributeChangeSubject!.next({
             name: name,
-            value: value
+            value: value,
+            initValue: initValue.value
         });
     }
-    return {objectAttributeChangeSubject, change};
+    const formContext = inject(formContextKey, undefined)
+    const activeChange = (value: any) => {
+        objectAttributeChangeSubject!.next({
+            name: name,
+            value: value,
+        });
+    }
+    const initValue = ref("");
+    const focus = () => {
+        initValue.value = formContext!.model![name];
+    }
+
+    return {objectAttributeChangeSubject, focus, formContext, change, activeChange};
 }
 

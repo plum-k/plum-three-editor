@@ -1,7 +1,7 @@
 import {getCurrentInstance} from "vue";
 
 export function useBus() {
-    const {proxy, ctx} = getCurrentInstance()!
+    const {proxy} = getCurrentInstance()!
     return proxy!.bus;
 }
 
