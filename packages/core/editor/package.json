@@ -14,7 +14,7 @@
     "tdesign-vue-next": "^1.11.2",
     "@imengyu/vue3-context-menu": "^1.4.4",
     "@plum-render/three-sdk": "workspace:*",
-    "@vueuse/core": "^12.8.2",
+    "@vueuse/core": "^13.0.0",
     "axios": "^1.8.2",
     "dayjs": "^1.11.13",
     "element-plus": "^2.9.6",

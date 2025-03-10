@@ -75,6 +75,12 @@ export class ChunkSerialize extends Package {
     }
 
     override async pack() {
+        this.viewer.sceneSaveProgressSubject.next({
+            type: ESceneSaveType.Save,
+            name: `场景保存中`,
+            total: 1,
+            loaded: 0,
+        })
         let viewerJson = this.viewer.toJSON() as unknown as Serialize.ViewerJson;
         const sceneJson = viewerJson.scene;
         const {geometries, materials} = sceneJson;
@@ -170,7 +176,7 @@ export class ChunkSerialize extends Package {
                     type: ESceneSaveType.Save,
                     name: `场景保存中`,
                     total: 1,
-                    loaded: 0,
+                    loaded: 1,
                 })
             })
         }

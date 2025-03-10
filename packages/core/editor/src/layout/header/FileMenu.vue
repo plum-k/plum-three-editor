@@ -63,8 +63,6 @@ const options: DropdownProps['options'] = [
 const route = useRoute();
 const appId = route.params.appId as string;
 const clickHandler: DropdownProps['onClick'] = (data) => {
-  MessagePlugin.success(`选中【${data.content}】`);
-
   const viewer = bus.viewer;
   const exporterTool = ExporterTool.getInstance();
   switch (data.content) {
