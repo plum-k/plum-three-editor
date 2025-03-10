@@ -4,6 +4,8 @@ import {Button as TButton, Dropdown as TDropdown, type DropdownProps, MessagePlu
 import {useBus} from "../../hooks";
 import {ChunkSerialize, ExporterTool} from "@plum-render/three-sdk";
 import {isMesh} from "three-is";
+import {ApplicationApi} from "../../api";
+import {useRoute} from "vue-router";
 
 const bus = useBus();
 
@@ -58,6 +60,8 @@ const options: DropdownProps['options'] = [
     ]
   }
 ];
+const route = useRoute();
+const appId = route.params.appId as string;
 const clickHandler: DropdownProps['onClick'] = (data) => {
   MessagePlugin.success(`选中【${data.content}】`);
 
@@ -68,7 +72,10 @@ const clickHandler: DropdownProps['onClick'] = (data) => {
       const viewer = bus.viewer;
       if (!viewer) return
       const chunkSerialize = new ChunkSerialize({viewer});
-      chunkSerialize.pack();
+      chunkSerialize.pack().then(() => {
+        const data = viewer.capture();
+        ApplicationApi.edit({id: Number(appId), thumbnailBase64: data})
+      })
       break;
     }
     case "原生": {

@@ -372,6 +372,8 @@ export class Viewer {
     //--------------------- 截屏
 
     capture() {
+        // 渲染一下, 不然会截取不到
+        this.renderManager.render();
         return this.renderManager.defaultWebGLRenderer.domElement.toDataURL("image/png");
     }
 

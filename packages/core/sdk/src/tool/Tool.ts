@@ -82,6 +82,10 @@ export class Tool {
         }
     }
 
+    /**
+     * 从V3Array创建QuadraticBezierCurve3Points
+     * @param array
+     */
     static getQuadraticBezierCurve3Points(array: V3Array) {
         return {
             vector3Array: Tool.v3ArrayToVector3Array(array),
@@ -89,11 +93,19 @@ export class Tool {
         }
     }
 
+    /**
+     * 从V3Array创建Box3
+     * @param array
+     */
     static getBox3ByV3Array(array: V3Array) {
         const v3Array = Tool.v3ArrayToVector3Array(array);
         return new THREE.Box3().setFromPoints(v3Array);
     }
 
+    /**
+     * 从Texture创建base64字符串
+     * @param texture
+     */
     static getBase64FromTexture(texture: THREE.Texture) {
         if (isDataTexture(texture)) {
             return undefined;
@@ -108,7 +120,10 @@ export class Tool {
         }
     }
 
-    // 从base64字符串创建Texture
+    /**
+     * 从base64字符串创建Texture
+     * @param base64
+     */
     static getTextureFromBase64(base64: string) {
         const texture = new THREE.Texture();
         const image = new Image();

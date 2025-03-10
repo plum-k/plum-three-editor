@@ -170,7 +170,7 @@ export class ChunkSerialize extends Package {
                     type: ESceneSaveType.Save,
                     name: `场景保存中`,
                     total: 1,
-                    loaded: 1,
+                    loaded: 0,
                 })
             })
         }

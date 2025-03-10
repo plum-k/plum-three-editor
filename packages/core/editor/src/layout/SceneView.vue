@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import {ESceneLoadType, Viewer} from "@plum-render/three-sdk";
+import {ESceneLoadType, ESceneSaveType, Viewer} from "@plum-render/three-sdk";
 import {useRoute} from "vue-router";
 import * as THREE from "three";
 import {BoxGeometry, Mesh, MeshStandardMaterial} from "three";
@@ -78,6 +78,43 @@ onMounted(() => {
       if (type === ESceneLoadType.Load) {
         toast.update(id, {render: "场景加载成功", type: "success", isLoading: false, autoClose: 3000});
         loadIdMao.clear()
+      } else {
+        if (loaded === total) {
+          window.setTimeout(() => {
+            toast.remove(id);
+          }, 100)
+        } else {
+          toast.update(id, {render: name, progress: _progress, autoClose: 3000});
+        }
+      }
+    }
+  })
+  _viewer.sceneSaveProgressSubject.subscribe((event) => {
+    const {type, name, total, loaded} = event;
+    const _progress = loaded / total;
+    const id = saveIdMao.get(name);
+    console.log(event)
+    if (id === undefined) {
+      if (type === ESceneSaveType.Save) {
+        const newId = toast.loading(name, {
+          position: toast.POSITION.BOTTOM_CENTER,
+          // containerId: 'toastContainer',
+        });
+        saveIdMao.set(name, newId);
+      } else {
+        if (total === loaded) {
+          return
+        }
+        const newId = toast.loading(name, {
+          position: toast.POSITION.BOTTOM_CENTER,
+          // containerId: 'toastContainer',
+        });
+        saveIdMao.set(name, newId);
+      }
+    } else {
+      if (type === ESceneSaveType.Save) {
+        toast.update(id, {render: "场景保存成功", type: "success", isLoading: false, autoClose: 3000});
+        saveIdMao.clear()
       } else {
         if (loaded === total) {
           window.setTimeout(() => {
