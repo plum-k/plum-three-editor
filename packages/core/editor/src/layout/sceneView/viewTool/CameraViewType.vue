@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {ref} from "vue";
 import {ElOption, ElSelect} from "element-plus";
-import {useBus} from "../../hooks";
+import {useBus} from "../../../hooks";
 import {ECameraType, ECameraViewType} from "@plum-render/three-sdk";
 
 const bus = useBus();
@@ -17,14 +17,10 @@ const cameraViewArray = [
   {label: "右视图", value: ECameraViewType.Right},
   {label: "左视图", value: ECameraViewType.Left},
 ];
-const change = (val: ECameraType | ECameraViewType) => {
+const change = (val:  ECameraViewType) => {
   const viewer = bus.viewer;
   if (viewer) {
-    if (val === ECameraType.PerspectiveCamera) {
-      viewer.cameraManager.setCameraType(val);
-    } else {
-      viewer.cameraManager.setCameraViewType(val);
-    }
+    viewer.cameraManager.setCameraViewType(val);
   }
 }
 </script>

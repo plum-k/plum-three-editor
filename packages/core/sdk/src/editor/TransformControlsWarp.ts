@@ -17,6 +17,10 @@ export class TransformControlsWarp extends Component {
         this.initTransformControls()
     }
 
+    setSpace(space: "world" | "local"){
+        this.transformControls.setSpace(space);
+    }
+
     initTransformControls() {
         this.transformControls = new TransformControls(this.camera, this.canvas);
 

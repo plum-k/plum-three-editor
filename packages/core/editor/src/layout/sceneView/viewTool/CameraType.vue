@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {ref} from "vue";
 import {ElOption, ElSelect} from "element-plus";
-import {useBus} from "../../hooks";
+import {useBus} from "../../../hooks";
 import {ECameraType, ECameraViewType} from "@plum-render/three-sdk";
 
 const bus = useBus();

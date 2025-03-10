@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import {reactive} from "vue";
 import {ElButton, ElForm, ElPopover} from "element-plus";
-import {useAttributeProvide, useBus} from "../../hooks";
+import {useAttributeProvide, useBus} from "../../../hooks";
 import * as THREE from "three";
 import {set} from "lodash-es";
-import {InputNumberItem} from "../../common-ui";
+import {InputNumberItem} from "../../../common-ui";
 
 const bus = useBus();
 const form = reactive({

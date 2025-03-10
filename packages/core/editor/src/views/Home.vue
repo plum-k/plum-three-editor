@@ -4,7 +4,6 @@ import Card from "../components/home/Card.vue";
 import type {IApplication} from "../interface";
 import {ApplicationApi} from "../api";
 import {ElBreadcrumb, ElBreadcrumbItem, ElButton, ElIcon} from "element-plus";
-import {HomeFilled} from "@element-plus/icons-vue";
 import {findIndex} from "lodash-es";
 import AddAppModalForm from "../components/home/AddAppModalForm.vue";
 import EditAppModalForm from "../components/home/EditAppModalForm.vue";

@@ -305,41 +305,7 @@ export class Editor extends Component {
         }
     }
 
-    //-------------------- 帮助对象相关 结束-------------------
-
-    //--------------------  定位-----------------
-    // 定位到场景
-    fitToScene() {
-        if (this.selector?.selectObject) {
-
-        }
-    }
-
-    // 定位到选中的单个对象
-    fitToSelected(enableTransition = true) {
-        return new Promise((resolve, reject) => {
-            if (this.selector?.selectObject) {
-                let object = this.selector?.selectObject;
-                const box = new THREE.Box3().setFromObject(object);
-                let center = new THREE.Vector3();
-
-                // 选择到了 空物体
-                if (box.isEmpty()) {
-                    box.setFromCenterAndSize(object?.position, new THREE.Vector3(1, 1, 1));
-                }
-
-                box.getCenter(center);
-
-                const promises = [];
-                const cameraControls = this.viewer.cameraManager.cameraControls
-                const {polarAngle, azimuthAngle} = cameraControls
-                promises.push(cameraControls.fitToBox(box, enableTransition));
-                promises.push(cameraControls.rotateTo(azimuthAngle, polarAngle, false));
-                promises.push(cameraControls.moveTo(center.x, center.y, center.z, enableTransition));
-                return Promise.all(promises);
-            } else {
-                reject()
-            }
-        })
+    setSpace(space: "world" | "local") {
+        this.transformControlsWarp.setSpace(space);
     }
 }
