@@ -3,7 +3,7 @@ import {Subject} from "rxjs";
 import {isObject3D} from "three-is";
 import * as THREE from "three";
 import {useBus} from "./useBus.ts";
-import {invoke, type PropertyPath} from "lodash-es";
+import {invoke, isArray, type PropertyPath} from "lodash-es";
 import {useToggle} from "@vueuse/core";
 
 export interface IObjectAttributeChange {
@@ -44,7 +44,7 @@ export const useAttributeProvide = (options: IUseAttributeProvide) => {
                 }
             } else {
                 // 没有更新过程的
-                if (["rotation"].includes(name[0])) {
+                if (isArray(name) && ["rotation"].includes(name[0])) {
                     editor.setValueExecute(object, name, THREE.MathUtils.degToRad(value));
                 } else if (name === "color") {
                     invoke(object, "color.setStyle", value);

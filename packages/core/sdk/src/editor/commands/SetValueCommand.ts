@@ -12,18 +12,13 @@ export class SetValueCommand extends Command<any> {
     /**
      * 构造函数
      * @param object 要修改的三维对象
-     * @param attributePath 属性路径，可以是字符串或字符串数组，指向具体的属性
+     * @param attributeName 属性路径，可以是字符串或字符串数组，指向具体的属性
      * @param newValue 新的属性值
      * @param oldValue 旧的属性值，如果未提供，则从对象中获取
      */
-    constructor(
-        object: THREE.Object3D,
-        attributePath: PropertyPath,
-        newValue: any,
-        oldValue: any
-    ) {
+    constructor(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, oldValue: any) {
         super();
-        this.attributePath = attributePath;
+        this.attributeName = attributeName;
 
         this.name = 'command/SetValue' + ': ' + this.getAttributeName();
         this.object = object;
@@ -31,7 +26,7 @@ export class SetValueCommand extends Command<any> {
         if (oldValue) {
             this.oldValue = oldValue;
         } else {
-            this.oldValue = isNil(object) ? null : get(object, attributePath);
+            this.oldValue = isNil(object) ? null : get(object, attributeName);
         }
     }
 
@@ -42,15 +37,15 @@ export class SetValueCommand extends Command<any> {
     setValue(isExecute: boolean) {
         // 根据isExecute的值决定使用newValue还是oldValue
         const value = isExecute ? this.newValue : this.oldValue;
-        if (isArray(this.attributePath) && this.attributePath.length > 0) {
-            set(this.object, this.attributePath, value);
-            if (["position", "rotation", "scale"].includes(this.attributePath[0])) {
+        if (isArray(this.attributeName) && this.attributeName.length > 0) {
+            set(this.object, this.attributeName, value);
+            if (["position", "rotation", "scale"].includes(this.attributeName[0])) {
                 this.editor.editorEventManager.objectChanged.next(this.object)
             }
         }else {
             // 当属性为显示隐藏时，触发场景图更新
-            set(this.object, this.attributePath, value);
-            if (this.attributePath === "visible") {
+            set(this.object, this.attributeName, value);
+            if (this.attributeName === "visible") {
                 this.editor.editorEventManager.sceneGraphChanged.next(null);
             }
         }

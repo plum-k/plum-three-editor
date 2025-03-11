@@ -1,4 +1,4 @@
-import {Command} from "./Command";
+import {Command} from "../Command";
 import * as THREE from 'three';
 import {isNumber} from "lodash-es";
 

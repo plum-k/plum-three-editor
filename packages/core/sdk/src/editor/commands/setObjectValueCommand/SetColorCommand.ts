@@ -1,28 +1,23 @@
 import * as THREE from 'three';
 import {invoke, isArray, PropertyPath} from "lodash-es";
-import {SetValueCommand} from "./SetValueCommand";
+import {SetValueCommand} from "../SetValueCommand";
 
 const color = new THREE.Color();
 
-export class SetColorValueCommand extends SetValueCommand {
-    type = 'SetColorValueCommand';
+export class SetColorCommand extends SetValueCommand {
+    type = 'SetColorCommand';
 
-    constructor(
-        object: THREE.Object3D,
-        attributePath: PropertyPath,
-        newValue: any,
-        oldValue: any
-    ) {
-        super(object, attributePath, newValue, oldValue);
-        this.attributePath = attributePath;
-        this.name = 'command/SetColorValueCommand' + ': ' + this.getAttributeName();
+    constructor(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, oldValue: any) {
+        super(object, attributeName, newValue, oldValue);
+        this.attributeName = attributeName;
+        this.name = 'command/SetColorCommand' + ': ' + this.getAttributeName();
         this.object = object;
         this.newValue = newValue;
         this.newValue = color.setStyle(newValue).getHex();
         if (oldValue) {
             this.oldValue = oldValue;
         } else {
-            this.oldValue = invoke(object, [attributePath, "getHex"]);
+            this.oldValue = invoke(object, [attributeName, "getHex"]);
         }
     }
 
@@ -33,11 +28,13 @@ export class SetColorValueCommand extends SetValueCommand {
     setValue(isExecute: boolean) {
         // 根据isExecute的值决定使用newValue还是oldValue
         const value = isExecute ? this.newValue : this.oldValue;
-        if (isArray(this.attributePath) && this.attributePath.length > 0) {
-            invoke(this.object, [this.attributePath, "setHex"], value);
+        if (isArray(this.attributeName) && this.attributeName.length > 0) {
+            invoke(this.object, [this.attributeName, "setHex"], value);
         }
     }
-
+    update(cmd: SetColorCommand) {
+        this.newValue = cmd.newValue;
+    }
     execute() {
         this.setValue(true);
     }

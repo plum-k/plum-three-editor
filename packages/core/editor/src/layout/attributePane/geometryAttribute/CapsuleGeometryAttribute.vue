@@ -6,6 +6,7 @@ import {useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
 import {getGeometryValue, useGeometryAttributeProvide} from "../../../hooks/useGeometryAttributeProvide.ts";
+import BaseGeometryAttribute from "./BaseGeometryAttribute.vue";
 
 const bus = useBus();
 
@@ -41,6 +42,8 @@ const {} = useBindSubscribe({
     <input-number-item :name="['parameters','length']" label="长度"/>
     <input-number-item :name="['parameters','capSegments']" label="切片数"/>
     <input-number-item :name="['parameters','radialSegments']" label="切片数"/>
+
+    <base-geometry-attribute/>
   </el-form>
 </template>
 

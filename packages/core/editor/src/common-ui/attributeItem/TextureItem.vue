@@ -1,22 +1,21 @@
 <script lang="ts" setup>
 import {ElFormItem} from "element-plus";
-import {onMounted, ref} from "vue";
-import {useAttributeInject, useBus} from "../../hooks";
+import {inject, onMounted, ref, type ShallowRef, watch} from "vue";
+import {type IAttributeProps, type IObjectAttributeChange, useAttributeInject, useBus} from "../../hooks";
 import * as THREE from "three";
 import {Texture, WebGLRenderer} from "three";
 import {get, isArray} from "lodash-es";
 import {isCompressedTexture, isDataTexture} from "three-is";
 import {FullScreenQuad} from "three-stdlib";
 import {Asset} from "@plum-render/three-sdk";
+import type {Subject} from "rxjs";
 
-interface Props {
-  name: string;
-  label: string;
-  getTexture?: () => THREE.Texture | undefined;
+interface Props extends IAttributeProps {
+  getTexture?: () => THREE.Texture | null;
 }
 
 const props = defineProps<Props>();
-const {name, label, getTexture} = props
+const {name, label,getTexture} = props
 const bus = useBus();
 
 const input = document.createElement('input');
@@ -29,7 +28,14 @@ input.addEventListener('change', (event) => {
 const click = () => {
   input.click();
 }
-const {objectAttributeChangeSubject, change} = useAttributeInject(props)
+const objectAttributeChangeSubject = inject<Subject<IObjectAttributeChange>>("objectAttributeChangeSubject")!;
+
+const getObject = inject<() => object>("getObject")!;
+const updateTrigger = inject<ShallowRef<boolean>>("updateTrigger")!;
+
+watch(updateTrigger, () => {
+  console.log("updateTrigger", updateTrigger.value)
+})
 
 function loadFile(file: File) {
   // const extension = file.name.split('.').pop().toLowerCase();
@@ -72,7 +78,7 @@ onMounted(() => {
 })
 
 const renderTexture = (inTexture?: THREE.Texture) => {
-  let texture;
+  let texture: THREE.Texture | null = null;
 
   if (getTexture) {
     texture = getTexture();

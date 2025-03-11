@@ -9,29 +9,11 @@ import {BoolItem, ColorItem, InputItem, InputNumberItem, SelectItem, TextItem, V
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
 import {blendingOptions, sideOptions} from "./selectOptions.ts";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
+import {getGeometryValue, useGeometryAttributeProvide} from "../../../hooks/useGeometryAttributeProvide.ts";
+import {useMaterialAttributeProvide} from "../../../hooks/useMaterialAttributeProvide.ts";
 
 const bus = useBus();
-const sync = () => {
-  const object = bus.selectObject;
-  if (object && isMesh(object)) {
-    threeToUi(object);
-  }
-}
- const {} = useBindSubscribe({
-  fun: sync,
-  isMounted: true,
-  isBindCallFun: true,
-})
 
-// ui -> three
-const {objectAttributeChangeSubject} = useAttributeProvide(false)
-objectAttributeChangeSubject.subscribe((editValue) => {
-
-  const {name, value} = editValue;
-  const object = bus.selectObject;
-  if (!object) return;
-  set(object, name, value);
-})
 const form = reactive({
   type: '',
   uuid: '',
@@ -139,9 +121,18 @@ const threeToUi = (object: THREE.Mesh) => {
   form.depthWrite = material.depthWrite;
 
   form.wireframe = material.wireframe;
-
-
 }
+
+const {objectAttributeChangeSubject, toggle,updateTrigger} = useMaterialAttributeProvide({
+  isAutoUpdate: false,
+})
+const {} = useBindSubscribe({
+  fun: toggle,
+  isMounted: true,
+  isBindCallFun: true,
+})
+
+
 </script>
 
 <template>

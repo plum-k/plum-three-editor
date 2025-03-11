@@ -1,50 +1,60 @@
-import {Command} from "./Command";
-import * as THREE from 'three';
-import {Tool} from "../../tool";
+import {Command} from "../Command";
+import * as THREE from "three";
+import {Tool} from "../../../tool";
 
-
-export class SetMaterialColorCommand extends Command<number> {
-    type: string = 'SetMaterialColorCommand';
+export class SetMaterialVectorCommand extends Command<THREE.Vector3> {
+    type: string = 'SetMaterialVectorCommand';
+    object: any;
     materialSlot: number;
+    oldValue: number[] | null;
+    newValue: number[] | null;
+    attributeName: string;
 
-    constructor(object: THREE.Object3D, attributeName: string = '', newValue: number, materialSlot: number = -1) {
+    constructor(
+        object: THREE.Object3D,
+        attributeName: string,
+        newValue: number[] | null = null,
+        materialSlot: number = -1
+    ) {
         super();
-        this.updatable = true;
-        this.name = 'command/SetMaterialColor' + ': ' + attributeName;
 
+        this.name = 'command/SetMaterialVector' + ': ' + attributeName;
+        this.updatable = true;
         this.object = object;
         this.materialSlot = materialSlot;
 
         const material = (object !== null) ? Tool.getObjectMaterial(object, materialSlot) : null;
-        // @ts-ignore
-        this.oldValue = (material !== null) ? material[attributeName].getStyle() : null;
 
+        this.oldValue = (material !== null) ? material[attributeName].toArray() : null;
         this.newValue = newValue;
+
         this.attributeName = attributeName;
     }
 
     execute() {
-        const material = Tool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
-        // @ts-ignore
-        material[this.attributeName].setStyle(this.newValue!);
+        const material = Tool.getObjectMaterial(this.object, this.materialSlot);
+
+        material[this.attributeName].fromArray(this.newValue!);
+
         // this.editor.signals.materialChanged.dispatch(this.object, this.materialSlot);
     }
 
     undo() {
-        const material = Tool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
-        // @ts-ignore
-        material[this.attributeName].setStyle(this.oldValue!);
+        const material = Tool.getObjectMaterial(this.object, this.materialSlot);
+
+        material[this.attributeName].fromArray(this.oldValue!);
+
         // this.editor.signals.materialChanged.dispatch(this.object, this.materialSlot);
     }
 
-    update(cmd: SetMaterialColorCommand) {
+    update(cmd: SetMaterialVectorCommand) {
         this.newValue = cmd.newValue;
     }
 
     toJSON() {
         const output = super.toJSON();
 
-        output.objectUuid = this.object!.uuid;
+        output.objectUuid = this.object.uuid;
         output.attributeName = this.attributeName;
         output.oldValue = this.oldValue;
         output.newValue = this.newValue;

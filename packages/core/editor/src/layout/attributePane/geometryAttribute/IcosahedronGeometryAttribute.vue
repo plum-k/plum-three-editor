@@ -6,58 +6,26 @@ import {isIcosahedronGeometry, isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
-import {getGeometryValue} from "../../../hooks/useGeometryAttributeProvide.ts";
+import {getGeometryValue, useGeometryAttributeProvide} from "../../../hooks/useGeometryAttributeProvide.ts";
+import BaseGeometryAttribute from "./BaseGeometryAttribute.vue";
 
 const bus = useBus();
 
-
-const sync = () => {
-  const object = bus.selectObject;
-  if (object && isMesh(object) && isIcosahedronGeometry(object.geometry)) {
-    threeToUi(object.geometry);
-  }
-}
-
-
 // ui -> three
-const {objectAttributeChangeSubject} = useAttributeProvide({
+const {objectAttributeChangeSubject, toggle,updateTrigger} = useGeometryAttributeProvide({
   isAutoUpdate: false,
-  getObject: () => {
-    return bus.selectObject!.geometry as any;
-  }
-})
-objectAttributeChangeSubject.subscribe((editValue) => {
-  const {name, value} = editValue;
-  const object = bus.selectObject;
-  if (!isMesh(object)) return;
-
-  if (name === 'name') {
-    object.name = value;
-  } else {
-    const geometry = object.geometry as THREE.IcosahedronGeometry;
-    const newGeometry = new THREE.IcosahedronGeometry(
+  getNewGeometry: (geometry, name, value) => {
+    return new THREE.IcosahedronGeometry(
         getGeometryValue(geometry, "radius", name, value),
         getGeometryValue(geometry, "detail", name, value),
     );
-    // object.geometry.dispose();
-    geometry.copy(newGeometry);
   }
-
 })
-const form = reactive({
-  type: '',
-  uuid: '',
-  name: '',
-
-});
-
-// ui -> three
-const threeToUi = (geometry: THREE.IcosahedronGeometry) => {
-  form.type = geometry.type;
-  form.uuid = geometry.uuid;
-  form.name = geometry.name;
-
-}
+const {} = useBindSubscribe({
+  fun: toggle,
+  isMounted: true,
+  isBindCallFun: true,
+})
 
 </script>
 
@@ -69,6 +37,8 @@ const threeToUi = (geometry: THREE.IcosahedronGeometry) => {
 
     <input-number-item :name="['parameters','radius']" label="半径"/>
     <input-number-item :name="['parameters','detail']" label="细节"/>
+
+    <base-geometry-attribute/>
   </el-form>
 </template>
 

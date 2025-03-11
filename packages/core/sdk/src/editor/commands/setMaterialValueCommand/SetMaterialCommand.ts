@@ -1,8 +1,8 @@
-import {Command} from "./Command";
+import {Command} from "../Command";
 import * as THREE from 'three';
 import {Material, ObjectLoader} from 'three';
 import {isMesh} from "three-is";
-import {Tool} from "../../tool";
+import {Tool} from "../../../tool";
 
 export class SetMaterialCommand extends Command<THREE.Material | null> {
     type: string = 'SetMaterialCommand';

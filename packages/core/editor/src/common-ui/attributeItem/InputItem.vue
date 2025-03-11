@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import {ElFormItem, ElInput, formContextKey, type InputProps} from "element-plus";
-import {inject} from "vue";
-import {type IAttributeProps, useAttributeInject, useBus} from "../../hooks";
+import {ElFormItem, ElInput, type InputProps} from "element-plus";
+import {type IAttributeProps, useAttributeInject} from "../../hooks";
 
 interface Props extends IAttributeProps {
   formProps?: Partial<InputProps>;
 }
+
 const props = defineProps<Props>();
 const {name, label} = props;
 const {change, modelValue} = useAttributeInject(props)

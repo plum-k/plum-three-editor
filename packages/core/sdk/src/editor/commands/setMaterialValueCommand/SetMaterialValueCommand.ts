@@ -1,19 +1,15 @@
-import {Command} from "./Command";
+import {Command} from "../Command";
 import * as THREE from 'three';
-import {set} from "lodash-es";
-import {Tool} from "../../tool";
-
+import {get, isArray, PropertyPath, set} from "lodash-es";
+import {Tool} from "../../../tool";
+import json from "@rollup/plugin-json";
 
 export class SetMaterialValueCommand extends Command {
     type: string = 'SetMaterialValueCommand';
     materialSlot: number;
     attributeName: string;
 
-    constructor(
-        object: THREE.Object3D,
-        attributeName: string,
-        newValue: any,
-        materialSlot = -1) {
+    constructor(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, materialSlot = -1) {
         super();
         this.updatable = true;
         this.name = 'command/SetMaterialValue' + ': ' + attributeName;
@@ -21,32 +17,38 @@ export class SetMaterialValueCommand extends Command {
         this.object = object;
         this.materialSlot = materialSlot;
 
-        const material = (object !== null) ? Tool.getObjectMaterial(object as THREE.Mesh, materialSlot) : null;
+        const material = Tool.getObjectMaterial(object as THREE.Mesh, materialSlot)
 
-        this.oldValue = (material !== null) ? material[attributeName] : null;
+        this.oldValue = get(material, attributeName);
         this.newValue = newValue;
 
         this.attributeName = attributeName;
     }
-
-    execute(): void {
+    /**
+     * 设置对象的属性值
+     * @param isExecute 是否执行命令，true为执行，false为撤销
+     */
+    setValue(isExecute: boolean) {
         const material = Tool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
-        set(material, this.attributeName, this.newValue);
+        const value = isExecute ? this.newValue : this.oldValue;
+        set(material, this.attributeName, value);
         material.needsUpdate = true;
         // this.editor.signals.objectChanged.dispatch(this.object!);
         // this.editor.signals.materialChanged.dispatch(this.object!, this.materialSlot);
     }
 
-    undo(): void {
-        const material = Tool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
-        set(material, this.attributeName, this.oldValue);
-        material.needsUpdate = true;
-        // this.editor.signals.objectChanged.dispatch(this.object!);
-        // this.editor.signals.materialChanged.dispatch(this.object!, this.materialSlot);
+    /**
+     * 执行命令
+     */
+    execute() {
+        this.setValue(true);
     }
 
-    update(cmd: SetMaterialValueCommand): void {
-        this.newValue = cmd.newValue;
+    /**
+     * 撤销命令
+     */
+    undo() {
+        this.setValue(false);
     }
 
     fromJSON(json: any) {
@@ -59,5 +61,8 @@ export class SetMaterialValueCommand extends Command {
         this.object = this.editor.objectByUuid(json.objectUuid);
         this.materialSlot = json.materialSlot;
 
+    }
+
+    update(command: this): void {
     }
 }

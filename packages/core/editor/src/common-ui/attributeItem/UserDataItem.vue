@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {InputItem} from "./index.ts";
 
 const getUserData = (value: any) => {
@@ -7,7 +7,7 @@ const getUserData = (value: any) => {
 </script>
 
 <template>
-  <input-item :form-props="{type:'textarea'}" label="元数据" name="userData" :getValue="getUserData"/>
+  <input-item :form-props="{type:'textarea'}" :getValue="getUserData" label="元数据" name="userData"/>
 </template>
 
 <style scoped>

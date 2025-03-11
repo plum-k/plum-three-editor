@@ -17,8 +17,7 @@ export abstract class Command<T = any> {
     type: string = '';
     name: string = '';
     editor!: Editor;
-    attributePath: PropertyPath = []
-    attributeName: string = ""
+    attributeName: PropertyPath = []
 
     object!: THREE.Object3D;
     oldValue!: T;
@@ -36,7 +35,7 @@ export abstract class Command<T = any> {
     abstract update(command: this): void
 
     getAttributeName() {
-        return toPath(this.attributePath);
+        return toPath(this.attributeName);
     }
 
     toJSON(): CommandJson {

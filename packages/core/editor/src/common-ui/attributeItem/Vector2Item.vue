@@ -1,12 +1,9 @@
 <script lang="ts" setup>
-import {ElFormItem, ElInputNumber, formContextKey, type InputNumberProps} from "element-plus";
-import {inject} from "vue";
-import {useAttributeInject} from "../../hooks";
+import {ElFormItem, type InputNumberProps} from "element-plus";
+import {type IAttributeProps, useAttributeInject} from "../../hooks";
 import InputNumberItem from "./InputNumberItem.vue";
 
-interface Props {
-  name: string;
-  label: string;
+interface Props extends IAttributeProps {
   formProps?: Partial<InputNumberProps>;
 }
 

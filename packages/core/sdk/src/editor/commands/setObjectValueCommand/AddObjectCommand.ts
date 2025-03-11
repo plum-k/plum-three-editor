@@ -1,5 +1,5 @@
 import {Object3D, ObjectLoader} from 'three';
-import {Command} from "./Command";
+import {Command} from "../Command";
 
 export class AddObjectCommand extends Command {
     type: string = 'AddObjectCommand';

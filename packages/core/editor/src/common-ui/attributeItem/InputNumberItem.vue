@@ -21,9 +21,9 @@ const formContext = inject(formContextKey, undefined);
 const {change, activeChange, focus, modelValue} = useAttributeInject({
   ...props,
   getValue: (value) => {
-    if (isRotation){
+    if (isRotation) {
       THREE.MathUtils.degToRad(value);
-    }else {
+    } else {
       return value
     }
   }

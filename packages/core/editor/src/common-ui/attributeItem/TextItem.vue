@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import {ElFormItem} from "element-plus";
-import {useAttributeInject} from "../../hooks";
+import {type IAttributeProps, useAttributeInject} from "../../hooks";
 
-interface Props {
-  name: string;
-  label: string;
+interface Props extends IAttributeProps {
 }
 
 const props = defineProps<Props>();

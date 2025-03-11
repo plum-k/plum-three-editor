@@ -1,17 +1,14 @@
 <script lang="ts" setup>
-import {ElFormItem, ElSwitch, formContextKey, type SwitchProps} from "element-plus";
-import {inject} from "vue";
-import {useAttributeInject} from "../../hooks";
+import {ElFormItem, ElSwitch} from "element-plus";
+import {type IAttributeProps, useAttributeInject} from "../../hooks";
 
-interface Props extends Partial<SwitchProps> {
-  name: string;
-  label: string;
+interface Props extends IAttributeProps {
+
 }
 
 const props = defineProps<Props>();
 const {name, label} = props
 const {change, modelValue} = useAttributeInject(props)
-
 </script>
 
 <template>

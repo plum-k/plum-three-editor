@@ -51,7 +51,6 @@ const {isActive} = useAttributePane(props)
 
 watch(isActive, (value) => {
   value && sync();
-  bindSubscribe();
 })
 // 定义材质的显示状态
 const materialShow = reactive({

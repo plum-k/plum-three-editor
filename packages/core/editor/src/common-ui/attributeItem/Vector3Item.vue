@@ -11,7 +11,7 @@ interface Props extends IAttributeProps {
 const props = withDefaults(defineProps<Props>(), {
   isRotation: false
 })
-const {name, label,isRotation} = props
+const {name, label, isRotation} = props
 const {objectAttributeChangeSubject,} = useAttributeInject(props)
 </script>
 
@@ -21,7 +21,7 @@ const {objectAttributeChangeSubject,} = useAttributeInject(props)
       <div>
         x:
       </div>
-      <input-number-item :name="[name  ,'x']" label="" :isRotatio="isRotation"/>
+      <input-number-item :isRotatio="isRotation" :name="[name  ,'x']" label=""/>
       <!--      <el-input-number-->
       <!--          v-model="formContext!.model![name]['x']"-->
       <!--          controls-position="right"-->
@@ -34,7 +34,7 @@ const {objectAttributeChangeSubject,} = useAttributeInject(props)
       <div>
         y:
       </div>
-      <input-number-item :name="[name as string,'y']" label="" :isRotatio="isRotation"/>
+      <input-number-item :isRotatio="isRotation" :name="[name as string,'y']" label=""/>
       <!--      <el-input-number-->
       <!--          v-model="formContext!.model![name]['y']"-->
       <!--          controls-position="right"-->
@@ -47,7 +47,7 @@ const {objectAttributeChangeSubject,} = useAttributeInject(props)
       <div>
         z:
       </div>
-      <input-number-item :name="[name as string,'z']" label="" :isRotatio="isRotation"/>
+      <input-number-item :isRotatio="isRotation" :name="[name as string,'z']" label=""/>
       <!--      <el-input-number-->
       <!--          v-model="formContext!.model![name]['z']"-->
       <!--          controls-position="right"-->

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {ElColorPicker, ElFormItem} from "element-plus";
 import {type IAttributeProps, useAttributeInject} from "../../hooks";
-
+import {ColorPickerPanel as TColorPickerPanel,ColorPicker as TColorPicker, ColorPickerPanelProps } from 'tdesign-vue-next';
 
 const props = defineProps<IAttributeProps>();
 const {name, label} = props
@@ -17,7 +17,15 @@ const {formContext, change, activeChange, focus, modelValue} = useAttributeInjec
 
 <template>
   <el-form-item :label="label" size="small">
-    <el-color-picker v-model="modelValue" @change="change" @active-change="activeChange" @focus="focus"/>
+    <t-color-picker
+        v-model="modelValue"
+        @change="change"
+        format="HEX"
+        borderless
+        size="small"
+        :color-modes="['monochrome']"
+    />
+<!--    <el-color-picker v-model="modelValue" @change="change" @focus="focus" @active-change="activeChange"/>-->
   </el-form-item>
 </template>
 
