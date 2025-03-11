@@ -1,70 +1,40 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import {reactive} from "vue";
 import * as THREE from "three";
-import {isMesh, isOctahedronGeometry} from "three-is";
-import {useAttributeProvide, useBus} from "../../../hooks";
-import {InputItem, TextItem} from "../../../common-ui";
+import {useBus} from "../../../hooks";
+import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
+import {getGeometryValue, useGeometryAttributeProvide} from "../../../hooks/useGeometryAttributeProvide.ts";
 
 const bus = useBus();
 
 
-const sync = () => {
-  const object = bus.selectObject;
-  if (object && isMesh(object) && isOctahedronGeometry(object.geometry)) {
-    threeToUi(object.geometry);
-  }
-}
-const {} = useBindSubscribe(sync);
-
-// ui -> three
-const {objectAttributeChangeSubject} = useAttributeProvide(false)
-objectAttributeChangeSubject.subscribe((editValue) => {
-  const {name, value} = editValue;
-  const object = bus.selectObject;
-   if (!isMesh(object)) return;
-
-  if (name === 'name') {
-    object.name = value;
-  } else {
-    const geometry = object.geometry as THREE.OctahedronGeometry;
-    const newGeometry = new THREE.OctahedronGeometry(
-        form.width,
-        form.height,
-        form.depth,
-        form.widthSegments,
-        form.heightSegments,
-        form.depthSegments
+const {objectAttributeChangeSubject, toggle} = useGeometryAttributeProvide({
+  isAutoUpdate: false,
+  getNewGeometry: (geometry, name, value) => {
+    return new THREE.OctahedronGeometry(
+        getGeometryValue(geometry, "radius", name, value),
+        getGeometryValue(geometry, "detail", name, value),
     );
-    // object.geometry.dispose();
-    geometry.copy(newGeometry);
   }
-
 })
-const form = reactive({
-  type: '',
-  uuid: '',
-  name: '',
+const {} = useBindSubscribe({
+  fun: toggle,
+  isMounted: true,
+  isBindCallFun: true,
+})
 
-});
-
-// ui -> three
-const threeToUi = (geometry: THREE.OctahedronGeometry) => {
-  form.type = geometry.type;
-  form.uuid = geometry.uuid;
-  form.name = geometry.name;
-
-}
 
 </script>
 
 <template>
-  <el-form :model="form" label-position="left" label-width="80" size="small">
+  <el-form label-position="left" label-width="80" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>
 
+    <input-number-item :name="['parameters','radius']" label="半径"/>
+    <input-number-item :name="['parameters','detail']" label="细节"/>
   </el-form>
 </template>
 

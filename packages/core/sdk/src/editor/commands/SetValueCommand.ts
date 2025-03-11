@@ -47,8 +47,10 @@ export class SetValueCommand extends Command<any> {
             if (["position", "rotation", "scale"].includes(this.attributePath[0])) {
                 this.editor.editorEventManager.objectChanged.next(this.object)
             }
+        }else {
             // 当属性为显示隐藏时，触发场景图更新
-            if (this.attributePath[0] === "visible") {
+            set(this.object, this.attributePath, value);
+            if (this.attributePath === "visible") {
                 this.editor.editorEventManager.sceneGraphChanged.next(null);
             }
         }

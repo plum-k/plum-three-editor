@@ -33,7 +33,7 @@ const onFinish = async () => {
 
 <template>
   <el-dialog v-model="dialogFormVisible" title="新建" width="350">
-    <el-form :model="form">
+    <el-form >
       <el-form-item label="名称">
         <el-input v-model="form.name"/>
       </el-form-item>

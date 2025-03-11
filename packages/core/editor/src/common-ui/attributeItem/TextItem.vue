@@ -1,24 +1,20 @@
 <script lang="ts" setup>
-import {ElFormItem, formContextKey} from "element-plus";
-import {computed, inject} from "vue";
-import {get} from "lodash-es";
+import {ElFormItem} from "element-plus";
+import {useAttributeInject} from "../../hooks";
 
 interface Props {
   name: string;
   label: string;
 }
 
-const {name, label} = defineProps<Props>();
-const formContext = inject(formContextKey, undefined)
-const value = computed(() => {
-  return get(formContext?.model, name)
-})
-
+const props = defineProps<Props>();
+const {label} = props
+const {modelValue} = useAttributeInject(props);
 </script>
 
 <template>
   <el-form-item :label="label" size="small">
-    {{ value }}
+    {{ modelValue }}
   </el-form-item>
 </template>
 

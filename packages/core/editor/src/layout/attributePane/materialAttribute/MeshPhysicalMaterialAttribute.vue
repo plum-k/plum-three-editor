@@ -17,7 +17,11 @@ const sync = () => {
     threeToUi(object);
   }
 }
-const {} = useBindSubscribe(sync);
+ const {} = useBindSubscribe({
+  fun: sync,
+  isMounted: true,
+  isBindCallFun: true,
+})
 
 // ui -> three
 const {objectAttributeChangeSubject} = useAttributeProvide(false)
@@ -227,7 +231,7 @@ const threeToUi = (object: THREE.Mesh) => {
 </script>
 
 <template>
-  <el-form :label-width="80" :model="form" label-position="left" size="small">
+  <el-form :label-width="80"  label-position="left" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>

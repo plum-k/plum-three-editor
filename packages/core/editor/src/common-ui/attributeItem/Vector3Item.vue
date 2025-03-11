@@ -1,25 +1,18 @@
 <script lang="ts" setup>
-import {ElFormItem, ElInputNumber, formContextKey, type InputNumberProps} from "element-plus";
-import {inject} from "vue";
-import {useAttributeInject} from "../../hooks";
+import {ElFormItem, type InputNumberProps} from "element-plus";
+import {type IAttributeProps, useAttributeInject} from "../../hooks";
+import InputNumberItem from "./InputNumberItem.vue";
 
-interface Props {
-  name: string;
-  label: string;
+interface Props extends IAttributeProps {
   formProps?: Partial<InputNumberProps>;
+  isRotation?: boolean
 }
 
-const formContext = inject(formContextKey, undefined)
-const props = defineProps<Props>();
-const {name, label} = props
-
+const props = withDefaults(defineProps<Props>(), {
+  isRotation: false
+})
+const {name, label,isRotation} = props
 const {objectAttributeChangeSubject,} = useAttributeInject(props)
-const change = (value: number | undefined, key: string) => {
-  objectAttributeChangeSubject.next({
-    name: [name, key],
-    value: value
-  });
-}
 </script>
 
 <template>
@@ -28,37 +21,40 @@ const change = (value: number | undefined, key: string) => {
       <div>
         x:
       </div>
-      <el-input-number
-          v-model="formContext!.model![name]['x']"
-          controls-position="right"
-          size="small"
-          v-bind="props.formProps"
-          @change="(value)=>change(value,'x')"
-      />
+      <input-number-item :name="[name  ,'x']" label="" :isRotatio="isRotation"/>
+      <!--      <el-input-number-->
+      <!--          v-model="formContext!.model![name]['x']"-->
+      <!--          controls-position="right"-->
+      <!--          size="small"-->
+      <!--          v-bind="props.formProps"-->
+      <!--          @change="(value)=>change(value,'x')"-->
+      <!--      />-->
     </div>
     <div class="flex  gap-1.5 mt-1">
       <div>
         y:
       </div>
-      <el-input-number
-          v-model="formContext!.model![name]['y']"
-          controls-position="right"
-          size="small"
-          v-bind="props.formProps"
-          @change="(value)=>change(value,'y')"
-      />
+      <input-number-item :name="[name as string,'y']" label="" :isRotatio="isRotation"/>
+      <!--      <el-input-number-->
+      <!--          v-model="formContext!.model![name]['y']"-->
+      <!--          controls-position="right"-->
+      <!--          size="small"-->
+      <!--          v-bind="props.formProps"-->
+      <!--          @change="(value)=>change(value,'y')"-->
+      <!--      />-->
     </div>
     <div class="flex  gap-1.5 mt-1">
       <div>
         z:
       </div>
-      <el-input-number
-          v-model="formContext!.model![name]['z']"
-          controls-position="right"
-          size="small"
-          v-bind="props.formProps"
-          @change="(value)=>change(value,'z')"
-      />
+      <input-number-item :name="[name as string,'z']" label="" :isRotatio="isRotation"/>
+      <!--      <el-input-number-->
+      <!--          v-model="formContext!.model![name]['z']"-->
+      <!--          controls-position="right"-->
+      <!--          size="small"-->
+      <!--          v-bind="props.formProps"-->
+      <!--          @change="(value)=>change(value,'z')"-->
+      <!--      />-->
     </div>
   </el-form-item>
 </template>

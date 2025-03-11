@@ -4,16 +4,11 @@ export {default as CapsuleGeometryAttribute} from "./CapsuleGeometryAttribute.vu
 export {default as CircleGeometryAttribute} from "./CircleGeometryAttribute.vue";
 export {default as CylinderGeometryAttribute} from "./CylinderGeometryAttribute.vue";
 export {default as DodecahedronGeometryAttribute} from "./DodecahedronGeometryAttribute.vue";
-export {default as ExtrudeGeometryAttribute} from "./ExtrudeGeometryAttribute.vue";
 export {default as IcosahedronGeometryAttribute} from "./IcosahedronGeometryAttribute.vue";
-export {default as LatheGeometryAttribute} from "./LatheGeometryAttribute.vue";
-export {default as ModifiersAttribute} from "./ModifiersAttribute.vue";
 export {default as OctahedronGeometryAttribute} from "./OctahedronGeometryAttribute.vue";
 export {default as PlaneGeometryAttribute} from "./PlaneGeometryAttribute.vue";
 export {default as RingGeometryAttribute} from "./RingGeometryAttribute.vue";
-export {default as ShapeGeometryAttribute} from "./ShapeGeometryAttribute.vue";
 export {default as SphereGeometryAttribute} from "./SphereGeometryAttribute.vue";
 export {default as TetrahedronGeometryAttribute} from "./TetrahedronGeometryAttribute.vue";
 export {default as TorusGeometryAttribute} from "./TorusGeometryAttribute.vue";
 export {default as TorusKnotGeometryAttribute} from "./TorusKnotGeometryAttribute.vue";
-export {default as TubeGeometryAttribute} from "./TubeGeometryAttribute.vue";

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {reactive} from "vue";
+import {provide, reactive} from "vue";
 import {ElButton, ElForm, ElPopover} from "element-plus";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import * as THREE from "three";
@@ -41,7 +41,22 @@ const threeToUi = () => {
   form.maxPolarAngle = cameraControls.maxPolarAngle;
 }
 
-const {objectAttributeChangeSubject} = useAttributeProvide()
+const {objectAttributeChangeSubject} = useAttributeProvide({
+  isAutoUpdate: false,
+  getObject: () => {
+    const viewer = bus.viewer;
+    if (!viewer) return
+    const cameraControls = viewer.cameraManager.cameraControls;
+    return viewer.cameraManager.cameraControls
+  }
+})
+
+provide("getObject", () => {
+  const viewer = bus.viewer;
+  if (!viewer) return
+  const cameraControls = viewer.cameraManager.cameraControls;
+  return viewer.cameraManager.cameraControls
+})
 objectAttributeChangeSubject.subscribe((editValue) => {
 
   const {name, value} = editValue;
@@ -77,7 +92,7 @@ const show = () => {
     <template #reference>
       <el-button class="z-999 " text>相机设置</el-button>
     </template>
-    <el-form :model="form" class="h-full" label-width="auto" size="small">
+    <el-form  class="h-full" label-width="auto" size="small">
       <input-number-item label="视野" name="fov"/>
       <input-number-item label="近裁剪平面" name="near"/>
       <input-number-item label="远裁剪平面" name="far"/>

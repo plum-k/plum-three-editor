@@ -1,64 +1,26 @@
 <script lang="ts" setup xmlns="">
-import {ElButton, ElCheckbox, ElCheckboxGroup, ElCol, ElForm, ElFormItem, ElRow} from "element-plus";
-import {reactive, ref} from "vue";
-import * as THREE from "three";
+import {ElButton, ElCol, ElForm, ElRow} from "element-plus";
+import {ref} from "vue";
 import {Object3D} from "three";
 import {useAttributeProvide, useBus} from "../../../hooks";
-import {isMesh, isObject3D} from "three-is";
 import {find} from "lodash-es";
 import {BoolItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
-import {logStack} from "@plum-render/three-sdk";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
+import UserDataItem from "../../../common-ui/attributeItem/UserDataItem.vue";
 
 const bus = useBus();
-const form = reactive({
-  type: "",
-  uuid: "",
-  name: '',
-  position: {x: 11, y: 0, z: 0},
-  rotation: {x: 0, y: 0, z: 0},
-  scale: {x: 0, y: 0, z: 0},
-  shadowArray: [] as string[],
-  frustumCulled: false,
-  renderOrder: 0,
-  userData: {},
-  visible: false,
+const {toggle} = useAttributeProvide({
+  isAutoUpdate: false,
+  getObject: () => {
+    return bus.selectObject
+  }
 })
-
-
-const threeToUi = () => {
-  logStack()
-  const object = bus.selectObject;
-  if (!isObject3D(object)) return
-  form.type = "组"
-  form.uuid = object.uuid
-  form.name = object.name
-
-  form.position.x = object.position.x;
-  form.position.y = object.position.y;
-  form.position.z = object.position.z;
-
-  form.position.x = object.position.x;
-  form.position.y = object.position.y;
-  form.position.z = object.position.z;
-
-  form.rotation.x = THREE.MathUtils.degToRad(object.rotation.x);
-  form.rotation.y = THREE.MathUtils.degToRad(object.rotation.y);
-  form.rotation.z = THREE.MathUtils.degToRad(object.rotation.z);
-
-  form.scale.x = object.scale.x;
-  form.scale.y = object.scale.y;
-  form.scale.z = object.scale.z;
-
-  form.visible = object.visible
-  form.frustumCulled = object.frustumCulled
-  form.renderOrder = object.renderOrder
-  form.userData = JSON.stringify(object.userData, null, '\t');
-
-  animationsList.value = animationsToList(object)
-}
-const {} = useBindSubscribe(threeToUi);
-const {} = useAttributeProvide()
+const {} = useBindSubscribe({
+  fun: toggle,
+  isMounted: true,
+  isViewerInit: false,
+  isBindCallFun: false,
+})
 
 const animationsList = ref<{ name: string }[]>([])
 const animationsToList = (object: Object3D) => {
@@ -85,28 +47,19 @@ const play = (item: string) => {
 </script>
 
 <template>
-  <el-form :model="form" label-position="left" label-width="80" size="small">
+  <el-form label-position="left" label-width="80" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>
     <vector3-item label="位置" name="position"/>
-    <vector3-item label="旋转" name="rotation"/>
+    <vector3-item label="旋转" name="rotation" isRotation/>
     <vector3-item label="缩放" name="scale"/>
-    <el-form-item label="阴影">
-      <el-checkbox-group v-model="form.shadowArray">
-        <el-checkbox name="type" value="castShadow">
-          产生
-        </el-checkbox>
-        <el-checkbox name="type" value="receiveShadow">
-          接收
-        </el-checkbox>
-      </el-checkbox-group>
-    </el-form-item>
+    <bool-item label="产生阴影" name="castShadow"/>
+    <bool-item label="接收阴影" name="receiveShadow"/>
     <bool-item label="可见性" name="visible"/>
     <bool-item label="视锥体裁剪" name="frustumCulled"/>
     <input-number-item label="渲染次序" name="renderOrder"/>
-
-    <input-item :form-props="{type:'textarea'}" label="元数据" name="userData"/>
+    <user-data-item/>
 
     <el-row v-for="(item, index) in animationsList" :key="index">
       <el-col :span="12">{{ item.name }}</el-col>
@@ -114,7 +67,6 @@ const play = (item: string) => {
         <el-button @click="play(item.name)">播放</el-button>
       </el-col>
     </el-row>
-    <!--        <JsonItem label="自定义数据" name="userData"/>-->
   </el-form>
 
 </template>

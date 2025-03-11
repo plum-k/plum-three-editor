@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ElEmpty} from "element-plus";
-import {reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {isNil} from "lodash-es";
 import {
   isBoxGeometry,
@@ -13,7 +13,6 @@ import {
   isIcosahedronGeometry,
   isLatheGeometry,
   isMesh,
-  isModifiers,
   isOctahedronGeometry,
   isPlaneGeometry,
   isRingGeometry,
@@ -29,19 +28,14 @@ import {
   CircleGeometryAttribute,
   CylinderGeometryAttribute,
   DodecahedronGeometryAttribute,
-  ExtrudeGeometryAttribute,
   IcosahedronGeometryAttribute,
-  LatheGeometryAttribute,
-  ModifiersAttribute,
   OctahedronGeometryAttribute,
   PlaneGeometryAttribute,
   RingGeometryAttribute,
-  ShapeGeometryAttribute,
   SphereGeometryAttribute,
   TetrahedronGeometryAttribute,
   TorusGeometryAttribute,
   TorusKnotGeometryAttribute,
-  TubeGeometryAttribute
 } from "./geometryAttribute";
 import {type AttributePaneNameProps, useAttributePane} from "./useAttributePane.ts";
 import {useBindSubscribe} from "../../hooks/useBindSubscribe.ts";
@@ -55,7 +49,7 @@ const {isActive} = useAttributePane(props)
 
 watch(isActive, (value) => {
   value && sync();
-  bindSubscribe();
+
 })
 
 const show = reactive({
@@ -68,7 +62,6 @@ const show = reactive({
   isExtrudeGeometry: false,
   isIcosahedronGeometry: false,
   isLatheGeometry: false,
-  isModifiers: false,
   isOctahedronGeometry: false,
   isPlaneGeometry: false,
   isRingGeometry: false,
@@ -97,25 +90,23 @@ const sync = () => {
     show.isCircleGeometry = isCircleGeometry(geometry)
     show.isCylinderGeometry = isCylinderGeometry(geometry)
     show.isDodecahedronGeometry = isDodecahedronGeometry(geometry)
-    show.isExtrudeGeometry = isExtrudeGeometry(geometry)
     show.isIcosahedronGeometry = isIcosahedronGeometry(geometry)
-    show.isLatheGeometry = isLatheGeometry(geometry)
-    show.isModifiers = isModifiers(geometry)
     show.isOctahedronGeometry = isOctahedronGeometry(geometry)
     show.isPlaneGeometry = isPlaneGeometry(geometry)
     show.isRingGeometry = isRingGeometry(geometry)
-    show.isShapeGeometry = isShapeGeometry(geometry)
     show.isSphereGeometry = isSphereGeometry(geometry)
     show.isTetrahedronGeometry = isTetrahedronGeometry(geometry)
   } else {
     showEmpty.value = true;
     text.value = "对象不是网格体";
   }
-
-
 };
-const {bindSubscribe} = useBindSubscribe(sync, false);
-
+const {} = useBindSubscribe({
+  fun: sync,
+  isMounted: false,
+  isViewerInit:true,
+  isBindCallFun: false,
+})
 </script>
 
 <template>
@@ -128,21 +119,16 @@ const {bindSubscribe} = useBindSubscribe(sync, false);
   <cylinder-geometry-attribute v-else-if="show.isCylinderGeometry"/>
 
   <dodecahedron-geometry-attribute v-else-if="show.isDodecahedronGeometry"/>
-  <extrude-geometry-attribute v-else-if="show.isExtrudeGeometry"/>
   <icosahedron-geometry-attribute v-else-if="show.isIcosahedronGeometry"/>
-  <lathe-geometry-attribute v-else-if="show.isLatheGeometry"/>
 
-  <modifiers-attribute v-else-if="show.isModifiers"/>
   <octahedron-geometry-attribute v-else-if="show.isOctahedronGeometry"/>
   <plane-geometry-attribute v-else-if="show.isPlaneGeometry"/>
   <ring-geometry-attribute v-else-if="show.isRingGeometry"/>
-  <shape-geometry-attribute v-else-if="show.isShapeGeometry"/>
 
   <sphere-geometry-attribute v-else-if="show.isSphereGeometry"/>
   <tetrahedron-geometry-attribute v-else-if="show.isTetrahedronGeometry"/>
   <torus-geometry-attribute v-else-if="show.isTorusGeometry"/>
   <torus-knot-geometry-attribute v-else-if="show.isTorusKnotGeometry"/>
-  <tube-geometry-attribute v-else-if="show.isTubeGeometry"/>
   <buffer-geometry-attribute v-else-if="show.isBufferGeometry"/>
 </template>
 <style scoped>

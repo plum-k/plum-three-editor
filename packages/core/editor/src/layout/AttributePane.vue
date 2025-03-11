@@ -23,21 +23,21 @@ const activeName = useProvideRef("tabActiveName", '属性');
         <geometry-attribute tab-name="几何"/>
       </el-scrollbar>
     </el-tab-pane>
-    <el-tab-pane class="e-tabs h-full" label="材质" name="材质">
-      <el-scrollbar class="h-full">
-        <material-attribute tabName="材质"/>
-      </el-scrollbar>
-    </el-tab-pane>
-    <el-tab-pane label="场景" name="场景">
-      <el-scrollbar class="h-full">
-        <scene-attribute tabName="场景"/>
-      </el-scrollbar>
-    </el-tab-pane>
-    <el-tab-pane label="后期" name="后期">
-      <el-scrollbar class="h-full">
-        <post-processing tabName="后期"/>
-      </el-scrollbar>
-    </el-tab-pane>
+<!--    <el-tab-pane class="e-tabs h-full" label="材质" name="材质">-->
+<!--      <el-scrollbar class="h-full">-->
+<!--        <material-attribute tabName="材质"/>-->
+<!--      </el-scrollbar>-->
+<!--    </el-tab-pane>-->
+<!--    <el-tab-pane label="场景" name="场景">-->
+<!--      <el-scrollbar class="h-full">-->
+<!--        <scene-attribute tabName="场景"/>-->
+<!--      </el-scrollbar>-->
+<!--    </el-tab-pane>-->
+<!--    <el-tab-pane label="后期" name="后期">-->
+<!--      <el-scrollbar class="h-full">-->
+<!--        <post-processing tabName="后期"/>-->
+<!--      </el-scrollbar>-->
+<!--    </el-tab-pane>-->
   </el-tabs>
 </template>
 

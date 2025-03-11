@@ -37,9 +37,13 @@ const info = reactive({
   frameTime: 0
 })
 const {setShowSceneStatistics} = useStore();
-const {objectAttributeChangeSubject} = useAttributeProvide()
+const {objectAttributeChangeSubject} = useAttributeProvide({
+  isAutoUpdate: true,
+  getObject: () => {
+    return form
+  }
+})
 objectAttributeChangeSubject.subscribe((object) => {
-
   const {name, value} = object;
   const viewer = bus.viewer;
   if (!viewer) return;
@@ -83,7 +87,7 @@ onMounted(() => {
     <template #reference>
       <el-button class="z-999" text>调试</el-button>
     </template>
-    <el-form :model="form" class="h-full" label-width="auto" size="small">
+    <el-form  class="h-full" label-width="auto" size="small">
       <bool-item label="帧率" name="fps"/>
       <bool-item label="渲染信息" name="statistics"/>
       <bool-item label="网格显示" name="grid"/>

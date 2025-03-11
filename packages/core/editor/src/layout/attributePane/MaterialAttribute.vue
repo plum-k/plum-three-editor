@@ -107,8 +107,12 @@ const sync = () => {
   }
 };
 
-const {bindSubscribe} = useBindSubscribe(sync, false);
-
+const {} = useBindSubscribe({
+  fun: sync,
+  isMounted: false,
+  isViewerInit:true,
+  isBindCallFun: false,
+})
 
 // const materialClasses: Record<string, any> = {
 //   'LineBasicMaterial': THREE.LineBasicMaterial,

@@ -7,7 +7,6 @@ export * from "./isDodecahedronGeometry";
 export * from "./isExtrudeGeometry";
 export * from "./isIcosahedronGeometry";
 export * from "./isLatheGeometry";
-export * from "./isModifiers";
 export * from "./isOctahedronGeometry";
 export * from "./isPlaneGeometry";
 export * from "./isRingGeometry";

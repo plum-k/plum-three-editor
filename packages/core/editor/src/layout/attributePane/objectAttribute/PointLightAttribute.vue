@@ -7,67 +7,26 @@ import {useAttributeProvide, useBus} from "../../../hooks";
 import {set} from "lodash-es";
 import {isPointLight} from "three-is";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
+import UserDataItem from "../../../common-ui/attributeItem/UserDataItem.vue";
 
 const bus = useBus();
-
-const form = reactive({
-  type: "",
-  uuid: "",
-  name: '',
-  position: {x: 11, y: 0, z: 0},
-  intensity: 0,
-  color: "",
-  distance: 0,
-  decay: 0,
-  castShadow: false,
-  shadowIntensity: 0,
-  shadowBias: 0,
-  shadowNormalBias: 0,
-  shadowRadius: 0,
-  visible: false,
-  frustumCulled: false,
-  renderOrder: 0,
-  userData: {},
+const {toggle} = useAttributeProvide({
+  isAutoUpdate: false,
+  getObject: () => {
+    return bus.selectObject
+  }
 })
-
-const threeToUi = () => {
-
-  const object = bus.selectObject;
-  if (!isPointLight(object)) return
-
-  form.type = "点光源"
-  form.uuid = object.uuid
-  form.name = object.name
-
-  form.position.x = object.position.x;
-  form.position.y = object.position.y;
-  form.position.z = object.position.z;
-
-  form.intensity = object.intensity
-  form.color = `#${object.color.getHexString()}`
-
-  form.distance = object.distance
-  form.decay = object.decay
-
-  form.castShadow = object.castShadow
-
-  form.shadowIntensity = object.shadow.intensity
-  form.shadowBias = object.shadow.bias
-  form.shadowNormalBias = object.shadow.normalBias
-  form.shadowRadius = object.shadow.radius
-
-  form.visible = object.visible
-  form.frustumCulled = object.frustumCulled
-  form.renderOrder = object.renderOrder
-  form.userData = JSON.stringify(object.userData, null, '\t')
-}
-const {} = useBindSubscribe(threeToUi);
-const {} = useAttributeProvide()
+const {} = useBindSubscribe({
+  fun: toggle,
+  isMounted: true,
+  isViewerInit: false,
+  isBindCallFun: false,
+})
 
 </script>
 
 <template>
-  <el-form :model="form" label-position="left" label-width="80" size="small">
+  <el-form  label-position="left" label-width="80" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>
@@ -77,15 +36,15 @@ const {} = useAttributeProvide()
     <input-number-item label="距离" name="distance"/>
     <input-number-item label="衰减" name="decay"/>
     <bool-item label="产生阴影" name="castShadow"/>
-    <input-number-item label="阴影偏移" name="shadowIntensity"/>
-    <input-number-item label="阴影偏移" name="shadowBias"/>
-    <input-number-item label="阴影法线偏移" name="shadowNormalBias"/>
-    <input-number-item label="阴影半径" name="shadowRadius"/>
+    <input-number-item label="阴影偏移" :name="['shadow','intensity']"/>
+    <input-number-item label="阴影偏移" :name="['shadow','bias']"/>
+    <input-number-item label="阴影法线偏移" :name="['shadow','normalBias']"/>
+    <input-number-item label="阴影半径" :name="['shadow','radius']"/>
     <bool-item label="可见性" name="visible"/>
     <bool-item label="视锥体裁剪" name="frustumCulled"/>
     <input-number-item label="渲染次序" name="renderOrder"/>
 
-    <input-item :form-props="{type:'textarea'}" label="元数据" name="userData"/>
+    <user-data-item/>
   </el-form>
 </template>
 
