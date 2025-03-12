@@ -31,7 +31,9 @@ const fit = () => {
         effect="dark"
         placement="bottom"
     >
-      <icon icon-name="icon-quxiaoquanping" @click="exit"/>
+      <div>
+        <icon icon-name="icon-quxiaoquanping" @click="exit"/>
+      </div>
     </el-tooltip>
     <el-tooltip v-else
                 class="box-item"
@@ -47,7 +49,9 @@ const fit = () => {
         effect="dark"
         placement="bottom"
     >
-      <icon icon-name="icon-jieping" @click="capture"/>
+      <div>
+        <icon icon-name="icon-jieping" @click="capture"/>
+      </div>
     </el-tooltip>
     <el-tooltip
         class="box-item"
@@ -55,7 +59,9 @@ const fit = () => {
         effect="dark"
         placement="bottom"
     >
-      <icon icon-name="icon-jujiao" @click="fit"/>
+      <div>
+        <icon icon-name="icon-jujiao" @click="fit"/>
+      </div>
     </el-tooltip>
   </div>
 </template>
