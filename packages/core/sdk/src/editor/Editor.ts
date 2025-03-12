@@ -98,7 +98,7 @@ export class Editor extends Component {
         this.execute(new SetMaterialColorCommand(object, attributeName, newValue, materialSlot))
     }
 
-    setMaterialValueExecute(object: THREE.Object3D, attributeName: PropertyPath, newValue: number, materialSlot: number = -1) {
+    setMaterialValueExecute(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, materialSlot: number = -1) {
         this.execute(new SetMaterialValueCommand(object, attributeName, newValue, materialSlot,))
     }
 

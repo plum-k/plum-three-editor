@@ -3,8 +3,6 @@ import {ElEmpty} from "element-plus";
 import {reactive, ref, watch} from "vue";
 import {isArray, isNil} from "lodash-es";
 import {
-  isLineBasicMaterial,
-  isLineDashedMaterial,
   isMesh,
   isMeshBasicMaterial,
   isMeshDepthMaterial,
@@ -22,21 +20,14 @@ import {
   isSpriteMaterial
 } from "three-is";
 import {
-  LineBasicMaterialAttribute,
-  LineDashedMaterialAttribute,
   MeshBasicMaterialAttribute,
   MeshDepthMaterialAttribute,
   MeshLambertMaterialAttribute,
   MeshMatcapMaterialAttribute,
-  MeshNormalMaterialAttribute,
+  MeshNormalMaterialAttribute, MeshPhongMaterialAttribute,
   MeshPhysicalMaterialAttribute,
   MeshStandardMaterialAttribute,
   MeshToonMaterialAttribute,
-  PointsMaterialAttribute,
-  RawShaderMaterialAttribute,
-  ShaderMaterialAttribute,
-  ShadowMaterialAttribute,
-  SpriteMaterialAttribute
 } from "./materialAttribute";
 import {useBus} from "../../hooks";
 import {type AttributePaneNameProps, useAttributePane} from "./useAttributePane.ts";
@@ -54,8 +45,6 @@ watch(isActive, (value) => {
 })
 // 定义材质的显示状态
 const materialShow = reactive({
-  isLineBasicMaterial: false,
-  isLineDashedMaterial: false,
   isMeshBasicMaterial: false,
   isMeshDepthMaterial: false,
   isMeshNormalMaterial: false,
@@ -65,11 +54,6 @@ const materialShow = reactive({
   isMeshToonMaterial: false,
   isMeshStandardMaterial: false,
   isMeshPhysicalMaterial: false,
-  isRawShaderMaterial: false,
-  isShaderMaterial: false,
-  isShadowMaterial: false,
-  isSpriteMaterial: false,
-  isPointsMaterial: false,
 });
 
 // 同步材质状态的函数
@@ -84,8 +68,6 @@ const sync = () => {
     showEmpty.value = false;
     const _material = object.material;
     const material = isArray(_material) ? _material[0] : _material;
-    materialShow.isLineBasicMaterial = isLineBasicMaterial(material);
-    materialShow.isLineDashedMaterial = isLineDashedMaterial(material);
     materialShow.isMeshBasicMaterial = isMeshBasicMaterial(material);
     materialShow.isMeshDepthMaterial = isMeshDepthMaterial(material);
     materialShow.isMeshNormalMaterial = isMeshNormalMaterial(material);
@@ -95,11 +77,6 @@ const sync = () => {
     materialShow.isMeshToonMaterial = isMeshToonMaterial(material);
     materialShow.isMeshStandardMaterial = isMeshStandardMaterial(material);
     materialShow.isMeshPhysicalMaterial = isMeshPhysicalMaterial(material);
-    materialShow.isRawShaderMaterial = isRawShaderMaterial(material);
-    materialShow.isShaderMaterial = isShaderMaterial(material);
-    materialShow.isShadowMaterial = isShadowMaterial(material);
-    materialShow.isSpriteMaterial = isSpriteMaterial(material);
-    materialShow.isPointsMaterial = isPointsMaterial(material);
   } else {
     showEmpty.value = true;
     text.value = "对象没有材质";
@@ -137,22 +114,15 @@ const {} = useBindSubscribe({
   <div v-if="showEmpty" class="h-full flex justify-center items-center">
     <el-empty :description="text"/>
   </div>
-  <line-basic-material-attribute v-else-if="materialShow.isLineBasicMaterial"/>
-  <line-dashed-material-attribute v-else-if="materialShow.isLineDashedMaterial"/>
   <mesh-basic-material-attribute v-else-if="materialShow.isMeshBasicMaterial"/>
   <mesh-depth-material-attribute v-else-if="materialShow.isMeshDepthMaterial"/>
   <mesh-lambert-material-attribute v-else-if="materialShow.isMeshLambertMaterial"/>
   <mesh-matcap-material-attribute v-else-if="materialShow.isMeshMatcapMaterial"/>
   <mesh-normal-material-attribute v-else-if="materialShow.isMeshNormalMaterial"/>
+  <mesh-phong-material-attribute v-else-if="materialShow.isMeshPhongMaterial"/>
   <mesh-physical-material-attribute v-else-if="materialShow.isMeshPhysicalMaterial"/>
   <mesh-standard-material-attribute v-else-if="materialShow.isMeshStandardMaterial"/>
   <mesh-toon-material-attribute v-else-if="materialShow.isMeshToonMaterial"/>
-  <points-material-attribute v-else-if="materialShow.isPointsMaterial"/>
-  <raw-shader-material-attribute v-else-if="materialShow.isRawShaderMaterial"/>
-  <shader-material-attribute v-else-if="materialShow.isShaderMaterial"/>
-  <shadow-material-attribute v-else-if="materialShow.isShadowMaterial"/>
-  <sprite-material-attribute v-else-if="materialShow.isSpriteMaterial"/>
-
 </template>
 
 <style scoped>

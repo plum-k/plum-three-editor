@@ -2,17 +2,19 @@
 import {ElFormItem} from "element-plus";
 import {type IAttributeProps, useAttributeInject} from "../../hooks";
 
-interface Props extends IAttributeProps {
-}
+const modelValue = defineModel<string>({
+  default: ""
+})
+const props = withDefaults(defineProps<IAttributeProps>(), {
 
-const props = defineProps<Props>();
-const {label} = props
-const {modelValue} = useAttributeInject(props);
+})
+const {name, label} = props
+const {change, internalModelValue} = useAttributeInject(props,modelValue)
 </script>
 
 <template>
   <el-form-item :label="label" size="small">
-    {{ modelValue }}
+    {{ internalModelValue }}
   </el-form-item>
 </template>
 

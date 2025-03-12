@@ -43,7 +43,7 @@
     "rollup-plugin-esbuild": "^6.2.1",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
     "@types/geojson": "^7946.0.16",
     "@types/lodash-es": "^4.17.12",
     "@types/stats.js": "^0.17.3",

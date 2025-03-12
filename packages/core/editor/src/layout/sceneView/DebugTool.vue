@@ -88,12 +88,12 @@ onMounted(() => {
       <el-button class="z-999" text>调试</el-button>
     </template>
     <el-form  class="h-full" label-width="auto" size="small">
-      <bool-item label="帧率" name="fps"/>
-      <bool-item label="渲染信息" name="statistics"/>
-      <bool-item label="网格显示" name="grid"/>
-      <input-number-item label="网格大小" name="distance"/>
-      <bool-item label="坐标轴显示" name="axes"/>
-      <input-number-item label="坐标轴大小" name="size"/>
+<!--      <bool-item label="帧率" name="fps"/>-->
+<!--      <bool-item label="渲染信息" name="statistics"/>-->
+<!--      <bool-item label="网格显示" name="grid"/>-->
+<!--      <input-number-item label="网格大小" name="distance"/>-->
+<!--      <bool-item label="坐标轴显示" name="axes"/>-->
+<!--      <input-number-item label="坐标轴大小" name="size"/>-->
     </el-form>
   </el-popover>
 

@@ -2,13 +2,15 @@
 import {ColorItem, InputNumberItem, SelectItem, Vector3Item} from "../../common-ui";
 import {ElForm} from "element-plus";
 import {useAttributeProvide, useBus} from "../../hooks";
-import {reactive, watch} from "vue";
+import {reactive, ref, watch} from "vue";
 import {isColor, isFog, isFogExp2, isMeshBasicMaterial, isMeshNormalMaterial, isTexture} from "three-is";
 import * as THREE from "three";
 import {Viewer} from "@plum-render/three-sdk";
 import {useActiveTab} from "../../hooks/useActiveTab.ts";
 import {isArray, set} from "lodash-es";
 import TextureItem from "../../common-ui/attributeItem/TextureItem.vue";
+import {Texture} from "three/src/textures/Texture";
+import {CubeTexture} from "three/src/textures/CubeTexture";
 
 const overrideMaterialList = [
   {value: "无", label: '无'},
@@ -42,6 +44,7 @@ const {objectAttributeChangeSubject} = useAttributeProvide({
     return bus.scene
   }
 })
+
 objectAttributeChangeSubject.subscribe((editValue) => {
   const {name, value} = editValue;
   const scene = bus.scene;
@@ -264,43 +267,46 @@ const updateFogType = (viewer: Viewer) => {
 }
 
 const getTexture = () => {
-  return bus.viewer?.scene.background as THREE.Texture | undefined;
+  return bus.viewer?.scene.background as Texture | null;
 }
+
+const aa = ref("#ffffff");
 
 </script>
 
 <template>
-<!--  <el-form :label-width="80"  label-position="left" size="small">-->
-<!--    <select-item :options="overrideMaterialList" label="覆盖材质" name="overrideMaterial"/>-->
-<!--    <select-item :options="backgroundTypeList" label="背景类型" name="backgroundType"/>-->
-<!--    <color-item v-if="form.backgroundType === '颜色'" label="背景颜色" name="backgroundColor"/>-->
-<!--    <texture-item v-if="form.backgroundType==='贴图' || form.backgroundType==='全景'" :get-texture="getTexture"-->
-<!--                  label="背景图片"-->
-<!--                  name="backgroundTexture"/>-->
+  <el-form :label-width="80" label-position="left" size="small">
+    <select-item :options="overrideMaterialList" label="覆盖材质" name="overrideMaterial" />
+    <select-item :options="backgroundTypeList" label="背景类型" name="backgroundType"/>
+    <color-item v-if="form.backgroundType === '颜色'" label="背景颜色" name="backgroundColor"/>
+    <color-item v-model="aa"  label="背景颜色" name="backgroundColor"/>
+    <texture-item v-if="form.backgroundType==='贴图' || form.backgroundType==='全景'" :get-texture="getTexture"
+                  label="背景图片"
+                  name="backgroundTexture"/>
 
-<!--    <input-number-item v-if="form.backgroundType ==='全景'" :formProps="{max:1,min:0,step:0.01,precision:2  }"-->
-<!--                       label="背景模糊" name="backgroundBlurriness"/>-->
-<!--    <input-number-item v-if="form.backgroundType === '全景'" :formProps="{max:1,min:0,step:0.01,precision:2  }"-->
-<!--                       label="背景强度" name="backgroundIntensity"/>-->
-<!--    <vector3-item v-if="form.backgroundType === '全景'" :formProps="{step:1,precision:2 }"-->
-<!--                  label="背景旋转"-->
-<!--                  name="backgroundRotation"/>-->
+    <input-number-item v-if="form.backgroundType ==='全景'" :formProps="{max:1,min:0,step:0.01,precision:2  }"
+                       label="背景模糊" name="backgroundBlurriness"/>
+    <input-number-item v-if="form.backgroundType === '全景'" :formProps="{max:1,min:0,step:0.01,precision:2  }"
+                       label="背景强度" name="backgroundIntensity"/>
+    <vector3-item v-if="form.backgroundType === '全景'" :formProps="{step:1,precision:2 }"
+                  label="背景旋转"
+                  name="backgroundRotation"/>
 
-<!--    <select-item :options="envTypeList" label="环境类型" name="environmentType"/>-->
+    <select-item :options="envTypeList" label="环境类型" name="environmentType"/>
 
-<!--    <input-number-item v-if="form.environmentType !== '无'" :formProps="{max:1,min:0,step:0.01,precision:2  }"-->
-<!--                       label="环境强度" name="environmentIntensity"/>-->
-<!--    <vector3-item v-if="form.environmentType !== '无'" :formProps="{step:1,precision:2 }" label="环境旋转"-->
-<!--                  name="environmentRotation"/>-->
+    <input-number-item v-if="form.environmentType !== '无'" :formProps="{max:1,min:0,step:0.01,precision:2  }"
+                       label="环境强度" name="environmentIntensity"/>
+    <vector3-item v-if="form.environmentType !== '无'" :formProps="{step:1,precision:2 }" label="环境旋转"
+                  name="environmentRotation"/>
 
-<!--    <select-item :options="fogList" label="雾" name="fogType"/>-->
+    <select-item :options="fogList" label="雾" name="fogType"/>
 
-<!--    <color-item v-if="form.fogType !== '无'" label="雾颜色" name="fogColor"/>-->
-<!--    <input-number-item v-if="form.fogType === '指数雾'" :formProps="{min:0,step:0.01,precision:5  }" label="雾密度"-->
-<!--                       name="density"/>-->
-<!--    <input-number-item v-if="form.fogType === '雾'" :formProps="{min:0,step:1 }" label="最小距离" name="near"/>-->
-<!--    <input-number-item v-if="form.fogType === '雾'" :formProps="{min:0,step:1  }" label="最大距离" name="far"/>-->
-<!--  </el-form>-->
+    <color-item v-if="form.fogType !== '无'" label="雾颜色" name="fogColor"/>
+    <input-number-item v-if="form.fogType === '指数雾'" :formProps="{min:0,step:0.01,precision:5}" label="雾密度"
+                       name="density"/>
+    <input-number-item v-if="form.fogType === '雾'" :formProps="{min:0,step:1 }" label="最小距离" name="near"/>
+    <input-number-item v-if="form.fogType === '雾'" :formProps="{min:0,step:1  }" label="最大距离" name="far"/>
+  </el-form>
 </template>
 
 <style scoped>

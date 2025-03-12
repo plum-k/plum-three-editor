@@ -5,6 +5,7 @@ import * as THREE from "three";
 import {useBus} from "./useBus.ts";
 import {invoke, isArray, type PropertyPath} from "lodash-es";
 import {useToggle} from "@vueuse/core";
+import {logStack} from "@plum-render/three-sdk";
 
 export interface IObjectAttributeChange {
     name: PropertyPath
@@ -21,7 +22,11 @@ export interface IUseAttributeProvide {
 
 export const useAttributeProvide = (options: IUseAttributeProvide) => {
     const {isAutoUpdate = true, getObject} = options;
+
     console.log("getObject",getObject)
+    if (!getObject) {
+        logStack()
+    }
     const objectAttributeChangeSubject = new Subject<IObjectAttributeChange>();
     const bus = useBus();
     const viewer = bus.viewer;

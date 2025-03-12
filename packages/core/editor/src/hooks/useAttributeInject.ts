@@ -1,4 +1,4 @@
-import {inject, onMounted, ref,type ShallowRef, watch} from "vue";
+import {inject, onMounted, ref,type ShallowRef, watch,defineModel} from "vue";
 import {Subject} from "rxjs";
 import type {IObjectAttributeChange} from "./useAttributeProvide.ts";
 import {get, type PropertyPath} from "lodash-es";
@@ -27,10 +27,14 @@ export interface IAttributeProps {
  * 向上派发属性改变事件
  * @param props
  */
-export const useAttributeInject = (props: IAttributeProps) => {
+export const useAttributeInject = (props: IAttributeProps,modelValue: ShallowRef<any>) => {
     const objectAttributeChangeSubject = inject<Subject<IObjectAttributeChange>>("objectAttributeChangeSubject")!;
     const {name, isMiddle = false, getValue = (value) => value} = props;
+    const isHasInitValue = modelValue.value !== undefined;
+    // console.log("modelValue",modelValue)
+    // const isHasInitValue = false;
     const change = (value: any) => {
+        // if (isHasInitValue) return
         objectAttributeChangeSubject!.next({
             name: name,
             value: value,
@@ -38,6 +42,7 @@ export const useAttributeInject = (props: IAttributeProps) => {
         });
     }
     const activeChange = (value: any) => {
+        if (isHasInitValue) return
         objectAttributeChangeSubject!.next({
             name: name,
             value: value,
@@ -53,32 +58,36 @@ export const useAttributeInject = (props: IAttributeProps) => {
     const updateTrigger = inject<ShallowRef<boolean>>("updateTrigger")!;
 
     watch(updateTrigger, () => {
+        if (isHasInitValue) return
         console.log("updateTrigger", updateTrigger.value)
         seyModelValue()
     })
+
     // const getValue = inject<(value:any) => any>("getValue",(value)=>{
     //     return value
     // })!;
     const seyModelValue = () => {
         const object = getObject();
         let _value = get(object, name)
-        modelValue.value = getValue(_value);
+        internalModelValue.value = getValue(_value);
     }
     const setInitValue = () => {
         const object = getObject();
         let _value = get(object, name)
         initValue.value = getValue(_value);
     }
-    const modelValue = ref();
+    const internalModelValue = ref();
+
     onMounted(() => {
+        if (isHasInitValue) return
         // logStack()
         seyModelValue();
-        initValue.value = modelValue.value;
+        initValue.value = internalModelValue.value;
         // console.log("value", value)
         // console.log("testA.value", testA.value)
     })
     return {
-        objectAttributeChangeSubject, focus, change, activeChange, modelValue
+        objectAttributeChangeSubject, focus, change, activeChange, internalModelValue
     };
 }
 

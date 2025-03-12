@@ -1,18 +1,15 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
 import {reactive} from "vue";
-import {isArray, set} from "lodash-es";
+import {isArray} from "lodash-es";
 import * as THREE from "three";
-import {isMesh} from "three-is";
-import {useAttributeProvide, useBus} from "../../../hooks";
+import {useBus} from "../../../hooks";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, SelectItem, TextItem, Vector2Item} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
 import {blendingOptions, sideOptions} from "./selectOptions.ts";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
-import {getGeometryValue, useGeometryAttributeProvide} from "../../../hooks/useGeometryAttributeProvide.ts";
 import {useMaterialAttributeProvide} from "../../../hooks/useMaterialAttributeProvide.ts";
 
-const bus = useBus();
 
 const form = reactive({
   type: '',
@@ -122,8 +119,9 @@ const threeToUi = (object: THREE.Mesh) => {
 
   form.wireframe = material.wireframe;
 }
+const bus = useBus();
 
-const {objectAttributeChangeSubject, toggle,updateTrigger} = useMaterialAttributeProvide({
+const {objectAttributeChangeSubject, toggle, updateTrigger} = useMaterialAttributeProvide({
   isAutoUpdate: false,
 })
 const {} = useBindSubscribe({
@@ -131,12 +129,10 @@ const {} = useBindSubscribe({
   isMounted: true,
   isBindCallFun: true,
 })
-
-
 </script>
 
 <template>
-  <el-form  label-position="left" label-width="80" size="small">
+  <el-form label-position="left" label-width="80" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>
@@ -183,9 +179,10 @@ const {} = useBindSubscribe({
 
     <bool-item label="α测试" name="alphaTest"/>
     <bool-item label="深度测试" name="depthTest"/>
-    <bool-item label="深度缓写" name="depthWrite"/>
+    <bool-item label="深度缓冲" name="depthWrite"/>
 
-    <bool-item label="线宽" name="wireframe"/>
+    <bool-item label="线框" name="wireframe"/>
+    <user-data-item/>
   </el-form>
 </template>
 

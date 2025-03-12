@@ -57,7 +57,8 @@ export const useMaterialAttributeProvide = (options: IUseMaterialAttributeProvid
                 editor.setMaterialColorExecute(object, name, value, initValue);
                 // invoke(getObject(), [name as string, "setStyle"], value);
             } else if (isTexture(value)) {
-                // editor.setMaterialValueExecute(object, name, value, -1)
+                console.log("aaaa",value)
+                editor.setMaterialValueExecute(object, name, value, -1)
             } else {
                 editor.setMaterialValueExecute(object, name, value)
             }

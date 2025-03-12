@@ -1,3 +1,5 @@
+import * as THREE from "three";
+
 export const blendingOptions = [
     {value: 0, label: '无'},
     {value: 1, label: '正常'},
@@ -12,3 +14,7 @@ export const sideOptions = [{value: 0, label: '正面'}, {value: 1, label: '背�
     label: '双面'
 }]
 
+
+export const materialDepthPackingOptions = [
+    {value: THREE.BasicDepthPacking, label: 'Basic'}, {value: THREE.RGBADepthPacking, label: 'RGBA'},
+]
