@@ -2,17 +2,24 @@
 import {ElFormItem, type InputNumberProps} from "element-plus";
 import {type IAttributeProps, useAttributeInject} from "../../hooks";
 import InputNumberItem from "./InputNumberItem.vue";
+import {defineModel} from "vue";
 
-interface Props extends IAttributeProps {
-  formProps?: Partial<InputNumberProps>;
+interface Props {
+  /**
+   * 属性名
+   */
+  name: string;
+  /**
+   * 显示名
+   */
+  label: string;
   isRotation?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isRotation: false
 })
-const {name, label, isRotation} = props
-const {objectAttributeChangeSubject,} = useAttributeInject(props)
+const {name, label} = props
 </script>
 
 <template>
@@ -21,40 +28,22 @@ const {objectAttributeChangeSubject,} = useAttributeInject(props)
       <div>
         x:
       </div>
-      <input-number-item :isRotatio="isRotation" :name="[name  ,'x']" label=""/>
-      <!--      <el-input-number-->
-      <!--          v-model="formContext!.model![name]['x']"-->
-      <!--          controls-position="right"-->
-      <!--          size="small"-->
-      <!--          v-bind="props.formProps"-->
-      <!--          @change="(value)=>change(value,'x')"-->
-      <!--      />-->
+      <input-number-item  :isRotatio="isRotation" :name="[name,'x']" label=""/>
+
     </div>
     <div class="flex  gap-1.5 mt-1">
       <div>
         y:
       </div>
-      <input-number-item :isRotatio="isRotation" :name="[name as string,'y']" label=""/>
-      <!--      <el-input-number-->
-      <!--          v-model="formContext!.model![name]['y']"-->
-      <!--          controls-position="right"-->
-      <!--          size="small"-->
-      <!--          v-bind="props.formProps"-->
-      <!--          @change="(value)=>change(value,'y')"-->
-      <!--      />-->
+      <input-number-item  :isRotatio="isRotation" :name="[name,'y']" label=""/>
+
     </div>
     <div class="flex  gap-1.5 mt-1">
       <div>
         z:
       </div>
-      <input-number-item :isRotatio="isRotation" :name="[name as string,'z']" label=""/>
-      <!--      <el-input-number-->
-      <!--          v-model="formContext!.model![name]['z']"-->
-      <!--          controls-position="right"-->
-      <!--          size="small"-->
-      <!--          v-bind="props.formProps"-->
-      <!--          @change="(value)=>change(value,'z')"-->
-      <!--      />-->
+      <input-number-item  :isRotatio="isRotation" :name="[name,'z']" label=""/>
+
     </div>
   </el-form-item>
 </template>

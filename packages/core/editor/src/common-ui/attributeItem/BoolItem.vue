@@ -7,17 +7,17 @@ interface Props extends IAttributeProps {
 
 }
 const modelValue = defineModel<boolean>({
-  default: false
+  default: undefined
 })
 const props = withDefaults(defineProps<Props>(), {
 })
 const {name, label} = props
-const {change, internalModelValue} = useAttributeInject(props,modelValue)
+const {change, } = useAttributeInject(props,modelValue)
 </script>
 
 <template>
   <el-form-item :label="label" size="small">
-    <el-switch v-model="internalModelValue" @change="change"/>
+    <el-switch v-model="modelValue" @change="change"/>
   </el-form-item>
 </template>
 

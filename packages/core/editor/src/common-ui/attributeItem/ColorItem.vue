@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<IAttributeProps>(), {
 })
 
 const {name, label} = props
-const {formContext, change, activeChange, focus, internalModelValue} = useAttributeInject(props,modelValue);
+const {formContext, change, activeChange, focus,} = useAttributeInject(props,modelValue);
 </script>
 
 <template>
@@ -29,7 +29,7 @@ const {formContext, change, activeChange, focus, internalModelValue} = useAttrib
         size="small"
         :color-modes="['monochrome']"
     />
-<!--    <el-color-picker v-model="internalModelValue" @change="change" @focus="focus" @active-change="activeChange"/>-->
+<!--    <el-color-picker v-model="modelValue" @change="change" @focus="focus" @active-change="activeChange"/>-->
   </el-form-item>
 </template>
 

@@ -93,16 +93,15 @@ const show = () => {
       <el-button class="z-999 " text>相机设置</el-button>
     </template>
     <el-form  class="h-full" label-width="auto" size="small">
-<!--      <input-number-item label="视野" name="fov"/>-->
-<!--      <input-number-item label="近裁剪平面" name="near"/>-->
-<!--      <input-number-item label="远裁剪平面" name="far"/>-->
-
-<!--      <input-number-item label="最小距离" name="minDistance"/>-->
-<!--      <input-number-item label="最大距离" name="maxDistance"/>-->
-<!--      <input-number-item label="最小旋转" name="minAzimuthAngle"/>-->
-<!--      <input-number-item label="最大旋转" name="maxAzimuthAngle"/>-->
-<!--      <input-number-item label="最小俯仰" name="minPolarAngle"/>-->
-<!--      <input-number-item label="最大俯仰" name="maxPolarAngle"/>-->
+      <input-number-item v-model="form.fov" label="视野" name="fov"/>
+      <input-number-item v-model="form.near" label="近裁剪平面" name="near"/>
+      <input-number-item v-model="form.far" label="远裁剪平面" name="far"/>
+      <input-number-item v-model="form.minDistance" label="最小距离" name="minDistance"/>
+      <input-number-item v-model="form.maxDistance" label="最大距离" name="maxDistance"/>
+      <input-number-item v-model="form.minAzimuthAngle" label="最小旋转" name="minAzimuthAngle"/>
+      <input-number-item v-model="form.maxAzimuthAngle" label="最大旋转" name="maxAzimuthAngle"/>
+      <input-number-item v-model="form.minPolarAngle" label="最小俯仰" name="minPolarAngle"/>
+      <input-number-item v-model="form.maxPolarAngle" label="最大俯仰" name="maxPolarAngle"/>
     </el-form>
   </el-popover>
 </template>

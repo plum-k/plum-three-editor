@@ -2,21 +2,24 @@
 import {ElFormItem, type InputNumberProps} from "element-plus";
 import {type IAttributeProps, useAttributeInject} from "../../hooks";
 import InputNumberItem from "./InputNumberItem.vue";
+import {defineModel} from "vue";
 
-interface Props extends IAttributeProps {
-  formProps?: Partial<InputNumberProps>;
+interface Props {
+  /**
+   * 属性名
+   */
+  name: string;
+  /**
+   * 显示名
+   */
+  label: string;
+  isRotation?: boolean
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  isRotation: false
+})
 const {name, label} = props
-
-const {objectAttributeChangeSubject,} = useAttributeInject(props)
-// const change = (value: number | undefined, key: string) => {
-//   objectAttributeChangeSubject.next({
-//     name: [name, key],
-//     value: value
-//   });
-// }
 </script>
 
 <template>
@@ -25,27 +28,13 @@ const {objectAttributeChangeSubject,} = useAttributeInject(props)
       <div>
         x:
       </div>
-      <input-number-item :name="[name,'x']" label=""/>
-      <!--      <el-input-number-->
-      <!--          v-model="formContext!.model![name]['x']"-->
-      <!--          controls-position="right"-->
-      <!--          size="small"-->
-      <!--          v-bind="props.formProps"-->
-      <!--          @change="(value)=>change(value,'x')"-->
-      <!--      />-->
+      <input-number-item  :isRotatio="isRotation" :name="[name,'x']" label=""/>
     </div>
     <div class="flex  gap-1.5 mt-1">
       <div>
         y:
       </div>
-      <input-number-item :name="[name,'y']" label=""/>
-      <!--      <el-input-number-->
-      <!--          v-model="formContext!.model![name]['y']"-->
-      <!--          controls-position="right"-->
-      <!--          size="small"-->
-      <!--          v-bind="props.formProps"-->
-      <!--          @change="(value)=>change(value,'y')"-->
-      <!--      />-->
+      <input-number-item  :isRotatio="isRotation" :name="[name,'y']" label=""/>
     </div>
   </el-form-item>
 </template>

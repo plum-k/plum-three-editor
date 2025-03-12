@@ -13,11 +13,6 @@ import {
   isMeshPhysicalMaterial,
   isMeshStandardMaterial,
   isMeshToonMaterial,
-  isPointsMaterial,
-  isRawShaderMaterial,
-  isShaderMaterial,
-  isShadowMaterial,
-  isSpriteMaterial
 } from "three-is";
 import {
   MeshBasicMaterialAttribute,

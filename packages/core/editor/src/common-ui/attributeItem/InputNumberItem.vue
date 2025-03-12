@@ -12,7 +12,7 @@ interface Props extends IAttributeProps {
 }
 
 const modelValue = defineModel<number>({
-  default: 0
+  default: undefined
 })
 const props = withDefaults(defineProps<Props>(), {
   isItem: true,
@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
 // const props = defineProps<Props>();
 const {name, label = "", isItem, isRotation} = props;
 const formContext = inject(formContextKey, undefined);
-const {change, activeChange, focus, internalModelValue} = useAttributeInject({
+const {change, activeChange, focus,} = useAttributeInject({
   ...props,
   getValue: (value) => {
     if (isRotation) {
@@ -35,10 +35,10 @@ const {change, activeChange, focus, internalModelValue} = useAttributeInject({
 
 <template>
   <el-form-item v-if="isItem" :label="label" size="small">
-    <el-input-number v-model="internalModelValue" controls-position="right" v-bind="props.formProps"
+    <el-input-number v-model="modelValue" controls-position="right" v-bind="props.formProps"
                      @change="change"/>
   </el-form-item>
-  <el-input-number v-else v-model="internalModelValue" controls-position="right" v-bind="props.formProps"
+  <el-input-number v-else v-model="modelValue" controls-position="right" v-bind="props.formProps"
                    @change="change"/>
 </template>
 

@@ -26,13 +26,13 @@ export interface IAttributeProps {
 /**
  * 向上派发属性改变事件
  * @param props
+ * @param modelValue
  */
 export const useAttributeInject = (props: IAttributeProps,modelValue: ShallowRef<any>) => {
     const objectAttributeChangeSubject = inject<Subject<IObjectAttributeChange>>("objectAttributeChangeSubject")!;
     const {name, isMiddle = false, getValue = (value) => value} = props;
+    // 为 undefined 时，从getObject 中读取值
     const isHasInitValue = modelValue.value !== undefined;
-    // console.log("modelValue",modelValue)
-    // const isHasInitValue = false;
     const change = (value: any) => {
         // if (isHasInitValue) return
         objectAttributeChangeSubject!.next({
@@ -59,35 +59,32 @@ export const useAttributeInject = (props: IAttributeProps,modelValue: ShallowRef
 
     watch(updateTrigger, () => {
         if (isHasInitValue) return
-        console.log("updateTrigger", updateTrigger.value)
+        // console.log("updateTrigger", updateTrigger.value)
         seyModelValue()
     })
 
-    // const getValue = inject<(value:any) => any>("getValue",(value)=>{
-    //     return value
-    // })!;
     const seyModelValue = () => {
         const object = getObject();
         let _value = get(object, name)
-        internalModelValue.value = getValue(_value);
+        modelValue.value = getValue(_value);
     }
     const setInitValue = () => {
         const object = getObject();
         let _value = get(object, name)
         initValue.value = getValue(_value);
     }
-    const internalModelValue = ref();
+    // const modelValue = ref();
 
     onMounted(() => {
         if (isHasInitValue) return
         // logStack()
         seyModelValue();
-        initValue.value = internalModelValue.value;
+        initValue.value = modelValue.value;
         // console.log("value", value)
         // console.log("testA.value", testA.value)
     })
     return {
-        objectAttributeChangeSubject, focus, change, activeChange, internalModelValue
+        objectAttributeChangeSubject, focus, change, activeChange,
     };
 }
 
