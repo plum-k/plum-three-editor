@@ -1,4 +1,4 @@
-import {isString} from "lodash-es"; // 从 lodash-es 导入工具函数
+import {defaults, isString} from "lodash-es"; // 从 lodash-es 导入工具函数
 import * as THREE from 'three'; // 导入 Three.js 库
 import {AxesHelper, Object3D} from 'three'; // 导入深度合并工具
 import {
@@ -14,7 +14,7 @@ import {Editor} from "../editor"; // 导入编辑器类
 import {Pick} from "./Pick"; // 导入拾取类
 import {EnvironmentManage} from "./environment"; // 导入环境类
 import {deepMergeRetain, DownloadTool, ESearchMode, ICondition, Search} from "../tool";
-import {DrawLine, MeasureTool, CameraManager} from "../control";
+import {CameraManager, DrawLine, MeasureTool} from "../control";
 import {CssRenderer} from "./CssRenderer";
 import {IOssApiOptions, OssApi} from "@plum-render/oss-api";
 import {Grid} from "../mesh";
@@ -23,6 +23,8 @@ import {getPackage} from "../serializeManage/PackageFactory";
 import {Package} from "../serializeManage/package";
 import {PScene} from "./PScene";
 import {GizmoManager} from "../manager/GizmoManager";
+import {ISetAxes} from "../interface/viewer/ISetAxes";
+import {ISetGrid} from "../interface/viewer/ISetGrid";
 
 /**
  * 定义场景加载类型的枚举
@@ -163,7 +165,6 @@ export class Viewer {
     sceneSaveProgressSubject = new Subject<ISceneSaveProgressEvent>();
     serializer: Package | undefined;
     #enableGrid = false;
-    #enableAxes = false;
 
     //------------------
     isLoad = false;
@@ -172,7 +173,7 @@ export class Viewer {
         this.options = deepMergeRetain({
             ossBaseUrl: "three",
             isGizmo: false,
-        },options); // 合并选项
+        }, options); // 合并选项
         this.initContainer(container); // 初始化容器
 
         this.clock = new THREE.Clock(); // 创建时钟实例
@@ -219,13 +220,24 @@ export class Viewer {
     }
 
     //------------------------- 添加网格 开始 -------------------
-    get enableGrid() {
-        return this.#enableGrid;
+    gridOptions: ISetGrid | undefined;
+
+    get isEnableGrid() {
+        return this.grid !== undefined;
     }
 
-    set enableGrid(enable: boolean) {
-        if (enable) {
-            this.grid = new Grid({});
+    setGrid(inOptions: ISetGrid) {
+        const options = defaults(inOptions,{
+            visible: true,
+        })
+
+        const {visible} = options;
+        if (visible) {
+            if (this.grid){
+                this.sceneHelpers.remove(this.grid);
+                this.grid.dispose();
+            }
+            this.grid = new Grid(options);
             this.grid.name = "grid";
             this.sceneHelpers.add(this.grid);
             this.loop.addEffect(() => {
@@ -233,28 +245,50 @@ export class Viewer {
             })
         } else {
             if (!this.grid) return;
-            this.grid.geometry.dispose();
-            (this.grid.material as THREE.Material).dispose();
             this.sceneHelpers.remove(this.grid);
+            this.grid.dispose();
         }
-        this.#enableGrid = enable;
+        this.gridOptions = options;
     }
 
-    get enableAxes() {
-        return this.#enableAxes;
-    }
 
-    set enableAxes(enable: boolean) {
-        if (enable) {
-            this.axesHelper = new THREE.AxesHelper(100);
-            this.sceneHelpers.add(this.axesHelper);
+    get isEnableAxes() {
+        return this.axesHelper !== undefined;
+    }
+    axesOptions: ISetAxes | undefined;
+
+    setAxes(inOptions: ISetAxes) {
+        const options = defaults(inOptions,{
+            size: 2000,
+            visible: true,
+            dispose: false
+        } )
+        const {size, visible, dispose} = options;
+        if (this.axesHelper && this.axesOptions) {
+            const isSizeChanged = this.axesOptions.size !== size;
+            const isVisibleChanged = this.axesOptions.visible !== visible;
+            if (isSizeChanged) {
+                const vertices = [
+                    0, 0, 0, size, 0, 0,
+                    0, 0, 0, 0, size, 0,
+                    0, 0, 0, 0, 0, size
+                ];
+                this.axesHelper.geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+                this.axesHelper.geometry.attributes.position.needsUpdate = true;
+            }
+            if (isVisibleChanged) {
+                this.axesHelper.visible = visible;
+            }
+            if (dispose) {
+                this.sceneHelpers.remove(this.axesHelper);
+                this.axesHelper.dispose();
+            }
         } else {
-            if (!this.axesHelper) return;
-            this.axesHelper.geometry.dispose();
-            (this.axesHelper.material as THREE.Material).dispose();
-            this.sceneHelpers.remove(this.axesHelper);
+            this.axesHelper = new THREE.AxesHelper(size);
+            this.sceneHelpers.add(this.axesHelper);
+            this.axesHelper.visible = visible;
         }
-        this.#enableAxes = enable;
+        this.axesOptions = options;
     }
 
     /**
@@ -400,7 +434,7 @@ export class Viewer {
     }
 
     //-------------------
-    toJSON(){
+    toJSON() {
         const sceneJson = this.scene.toJSON();
         const cameraManager = this.cameraManager.toJSON();
         return {

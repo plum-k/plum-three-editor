@@ -146,22 +146,22 @@ export class Grid extends THREE.Mesh {
         Object.assign(material, uniforms1);
         Object.assign(material, uniforms2);
 
-
         super(geometry, material as unknown as THREE.Material);
         this.frustumCulled = false;
     }
 
     // 更新
     tick(camera: Camera) {
-        // 
-
         this.plane.setFromNormalAndCoplanarPoint(this.upVector, this.zeroVector).applyMatrix4(this.matrixWorld)
-        // 
         const gridMaterial = this.material as THREE.ShaderMaterial
         const worldCamProjPosition = gridMaterial.uniforms.worldCamProjPosition as THREE.Uniform<THREE.Vector3>
         const worldPlanePosition = gridMaterial.uniforms.worldPlanePosition as THREE.Uniform<THREE.Vector3>
         // todo 获取相机
         this.plane.projectPoint(camera.position, worldCamProjPosition.value)
         worldPlanePosition.value.set(0, 0, 0).applyMatrix4(this.matrixWorld)
+    }
+    dispose(){
+        this.geometry.dispose();
+        (this.material as THREE.Material).dispose();
     }
 }

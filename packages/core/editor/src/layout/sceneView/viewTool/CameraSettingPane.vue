@@ -98,8 +98,8 @@ const show = () => {
       <input-number-item v-model="form.far" label="远裁剪平面" name="far"/>
       <input-number-item v-model="form.minDistance" label="最小距离" name="minDistance"/>
       <input-number-item v-model="form.maxDistance" label="最大距离" name="maxDistance"/>
-      <input-number-item v-model="form.minAzimuthAngle" label="最小旋转" name="minAzimuthAngle"/>
-      <input-number-item v-model="form.maxAzimuthAngle" label="最大旋转" name="maxAzimuthAngle"/>
+<!--      <input-number-item v-model="form.minAzimuthAngle" label="最小旋转" name="minAzimuthAngle"/>-->
+<!--      <input-number-item v-model="form.maxAzimuthAngle" label="最大旋转" name="maxAzimuthAngle"/>-->
       <input-number-item v-model="form.minPolarAngle" label="最小俯仰" name="minPolarAngle"/>
       <input-number-item v-model="form.maxPolarAngle" label="最大俯仰" name="maxPolarAngle"/>
     </el-form>

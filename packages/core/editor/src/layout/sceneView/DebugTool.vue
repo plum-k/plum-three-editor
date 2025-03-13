@@ -23,11 +23,8 @@ const show = () => {
   const viewer = bus.viewer;
   if (!viewer) return;
   form.fps = viewer.debug.enable;
-
-  form.grid = viewer.enableGrid;
-  // form.distance = viewer.cameraManager.cameraControls.minDistance;
-
-  form.axes = viewer.enableAxes;
+  form.grid = viewer.isEnableGrid;
+  form.axes = viewer.isEnableAxes;
 }
 
 const info = reactive({
@@ -36,6 +33,7 @@ const info = reactive({
   triangles: 0,
   frameTime: 0
 })
+
 const {setShowSceneStatistics} = useStore();
 const {objectAttributeChangeSubject} = useAttributeProvide({
   isAutoUpdate: true,
@@ -52,10 +50,16 @@ objectAttributeChangeSubject.subscribe((object) => {
   } else if (name === "statistics") {
     form.statistics = value;
     setShowSceneStatistics(value)
-  } else if (name === "grid") {
-    viewer.enableGrid = value;
-  } else if (name === "axes") {
-    viewer.enableAxes = value;
+  } else if (["grid","distance"].includes(name as string)) {
+    viewer.setGrid({
+      visible: value,
+      fadeDistance: form.distance,
+    })
+  } else if (["size","axes"].includes(name as string)) {
+    viewer.setAxes({
+      visible: value,
+      size: form.size,
+    })
   }
 })
 
@@ -87,12 +91,12 @@ onMounted(() => {
     <template #reference>
       <el-button class="z-999" text>调试</el-button>
     </template>
-    <el-form  class="h-full" label-width="auto" size="small">
+    <el-form class="h-full" label-width="auto" size="small">
       <bool-item v-model="form.fps" label="帧率" name="fps"/>
       <bool-item v-model="form.statistics" label="渲染信息" name="statistics"/>
       <bool-item v-model="form.grid" label="网格显示" name="grid"/>
       <input-number-item v-model="form.distance" label="网格大小" name="distance"/>
-      <bool-item  v-model="form.axes" label="坐标轴显示" name="axes"/>
+      <bool-item v-model="form.axes" label="坐标轴显示" name="axes"/>
       <input-number-item v-model="form.size" label="坐标轴大小" name="size"/>
     </el-form>
   </el-popover>
