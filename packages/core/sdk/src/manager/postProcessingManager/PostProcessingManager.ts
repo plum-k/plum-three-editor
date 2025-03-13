@@ -20,6 +20,7 @@ import {
     SSAOEffect,
 } from "postprocessing";
 import {HalfFloatType, Object3D} from "three";
+import {deepMergeRetain} from "../../tool";
 
 export interface IPostProcessingOptions extends IComponentOptions {
 }
@@ -50,6 +51,11 @@ export class PostProcessingManager extends Component {
     effectPass!: EffectPass;
 
     effects: Effect[] = [];
+    /**
+     * 是否启用后处理
+     * @private
+     */
+    #enabled: boolean = false
 
     constructor(options: IPostProcessingOptions) {
         super(options);
@@ -57,10 +63,19 @@ export class PostProcessingManager extends Component {
         this.composer = new EffectComposer(renderer, {
             frameBufferType: HalfFloatType
         });
-
         this.eventManager.renderSubject.subscribe(() => {
-            this.composer.render()
+            if (this.#enabled) {
+                this.composer.render()
+            }
         })
+    }
+
+    get enable() {
+        return this.#enabled;
+    }
+
+    set enable(enable: boolean) {
+        this.#enabled = enable;
     }
 
     addRenderPass() {
