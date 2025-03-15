@@ -83,8 +83,18 @@ export class Loop extends Component {
             this.repeat = 0
             this.flushGlobalEffects('before', timestamp)
 
+            const clock = this.viewer.clock;
+            const delta = clock.getDelta();
+            const cameraControls = this.cameraManager.cameraControls;
+            const updated = cameraControls.update(delta);
+            // if (!updated) return
+
             // todo 多屏幕渲染
-            this.renderManager.render()
+            if (this.postProcessingComponent.enable) {
+                this.postProcessingComponent.render(timestamp)
+            } else {
+                this.renderManager.render(timestamp)
+            }
             this.cssRenderer.render();
 
             this.eventManager.renderSubject.next(timestamp)

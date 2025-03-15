@@ -10,6 +10,7 @@ import {
     EffectPass,
     FXAAEffect,
     GridEffect,
+    KawaseBlurPass,
     OutlineEffect,
     PixelationEffect,
     PredicationMode,
@@ -21,11 +22,12 @@ import {
 } from "postprocessing";
 import {HalfFloatType, Object3D} from "three";
 import {deepMergeRetain} from "../../tool";
+import {isGroup, isMesh} from "three-is";
 
 export interface IPostProcessingOptions extends IComponentOptions {
 }
 
-export class PostProcessingManager extends Component {
+export class PostProcessingComponent extends Component {
     // @ts-ignore
     pixelationEffect: PixelationEffect;
 
@@ -36,7 +38,6 @@ export class PostProcessingManager extends Component {
     selectiveBloomEffect!: SelectiveBloomEffect;
     bloomEffect!: BloomEffect;
     gridEffect!: GridEffect;
-    outlineEffect!: OutlineEffect;
     smaaEffect!: SMAAEffect;
     ssaoEffect!: SSAOEffect;
     fxaaEffect!: FXAAEffect;
@@ -63,11 +64,21 @@ export class PostProcessingManager extends Component {
         this.composer = new EffectComposer(renderer, {
             frameBufferType: HalfFloatType
         });
-        this.eventManager.renderSubject.subscribe(() => {
-            if (this.#enabled) {
-                this.composer.render()
-            }
-        })
+        const renderPass = new RenderPass(this.scene, this.camera);
+        this.composer.addPass(renderPass);
+
+        // this.eventManager.renderSubject.subscribe((timestamp) => {
+        //     if (this.#enabled) {
+        //         console.log("`1111111111111111")
+        //         this.composer.render(timestamp)
+        //     }
+        // })
+    }
+
+    render(timestamp: number) {
+        if (this.#enabled) {
+            this.composer.render()
+        }
     }
 
     get enable() {
@@ -117,10 +128,30 @@ export class PostProcessingManager extends Component {
         return this.selectiveBloomEffect.selection.toggle(object);
     }
 
+    //------------------------------
+    kawaseBlurPass: KawaseBlurPass | undefined;
+
+    initBlurEffect(options: any = {}) {
+        this.kawaseBlurPass = new KawaseBlurPass({
+            height: 480
+        });
+        this.composer.addPass(this.kawaseBlurPass);
+    }
+
+    disposeBlurEffect() {
+        if (this.kawaseBlurPass) {
+            this.composer.removePass(this.kawaseBlurPass);
+            this.kawaseBlurPass.dispose();
+        }
+    }
+
     //----------------- outlineEffect -----------------
-    initOutlineEffect(options: any) {
+    outlineEffect: OutlineEffect | undefined;
+    outlinePass: EffectPass | undefined;
+
+    initOutlineEffect(options: any = {}) {
         const renderer = this.composer.getRenderer();
-        this.outlineEffect = new OutlineEffect(this.viewer.scene, this.viewer.cameraManager.camera, {
+        this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
             blendFunction: BlendFunction.SCREEN,
             multisampling: Math.min(4, renderer.capabilities.maxSamples),
             edgeStrength: 2.5,
@@ -132,14 +163,67 @@ export class PostProcessingManager extends Component {
             xRay: true,
             ...options
         });
+        this.outlinePass = new EffectPass(this.camera, this.outlineEffect);
+        this.composer.addPass(this.outlinePass);
     }
 
-    addOutlineEffect() {
-        this.effects.push(this.outlineEffect);
+    disposeOutlineEffect() {
+        if (this.outlinePass) {
+            this.composer.removePass(this.outlinePass);
+            this.outlinePass.dispose();
+        }
+        if (this.outlineEffect) {
+            this.outlineEffect.dispose();
+        }
     }
 
-    outlineEffectObject(object: Object3D) {
-        return this.outlineEffect.selection.toggle(object);
+    /**
+     * 是否包含描边对象
+     * @param object
+     */
+    objectHasOutline(object: Object3D) {
+        if (this.outlineEffect) {
+            return this.outlineEffect.selection.has(object);
+        }
+        return false;
+    }
+
+    /**
+     * 添加描边对象
+     * @param object
+     */
+    addOutlineObject(object: Object3D) {
+        if (this.outlineEffect) {
+            if (isGroup(object)) {
+                this.outlineEffect.selection.add(object);
+                object.traverse((child) => {
+                    if (isMesh(child)) {
+                        this.outlineEffect?.selection.add(child);
+                    }
+                })
+            } else {
+                this.outlineEffect.selection.add(object);
+            }
+        }
+    }
+
+    /**
+     * 移除描边对象
+     * @param object
+     */
+    removeOutlineObject(object: Object3D) {
+        if (this.outlineEffect) {
+            if (isGroup(object)) {
+                this.outlineEffect.selection.delete(object);
+                object.traverse((child) => {
+                    if (isMesh(child)) {
+                        this.outlineEffect?.selection.delete(child);
+                    }
+                })
+            } else {
+                this.outlineEffect.selection.delete(object);
+            }
+        }
     }
 
     //----------------- pixelationEffect -----------------

@@ -30,7 +30,7 @@ export class RenderManager extends Component {
             // alpha: true
 
             powerPreference: "high-performance",
-            antialias: true,
+            antialias: false,
             stencil: false,
             depth: true
         })
@@ -54,7 +54,7 @@ export class RenderManager extends Component {
 
     }
 
-    render() {
+    render(timestamp: number) {
         const scene = this.viewer.scene;
         const eventManager = this.viewer.eventManager;
 
@@ -62,9 +62,9 @@ export class RenderManager extends Component {
         const delta = clock.getDelta();
         // this.defaultWebGLRenderer.autoClear = false;
         // this.defaultWebGLRenderer.setClearColor("red");
-        const cameraControls = this.cameraManager.cameraControls;
-
-        const updated = cameraControls.update(delta);
+        // const cameraControls = this.cameraManager.cameraControls;
+        //
+        // const updated = cameraControls.update(delta);
         // 
 
         this.defaultWebGLRenderer.render(this.scene, this.camera);

@@ -1,2 +1,2 @@
-export * from "./PostProcessingManager";
+export * from "./PostProcessingComponent";
 export * from "./SelectiveBloomEffectOptions";

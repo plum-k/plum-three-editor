@@ -1,15 +1,10 @@
 <script lang="ts" setup>
-import {BoolItem, ColorItem, InputNumberItem, SelectItem, Vector3Item} from "../../common-ui";
+import {BoolItem} from "../../common-ui";
 import {ElForm} from "element-plus";
 import {useAttributeProvide, useBus} from "../../hooks";
 import {reactive, watch} from "vue";
-import {isColor, isFog, isFogExp2, isMeshBasicMaterial, isMeshNormalMaterial, isTexture} from "three-is";
-import * as THREE from "three";
-import {Texture} from "three";
 import {Viewer} from "@plum-render/three-sdk";
 import {useActiveTab} from "../../hooks/useActiveTab.ts";
-import {isArray, set} from "lodash-es";
-import TextureItem from "../../common-ui/attributeItem/TextureItem.vue";
 
 const overrideMaterialList = [
   {value: "无", label: '无'},
@@ -48,8 +43,24 @@ objectAttributeChangeSubject.subscribe((editValue) => {
   const {name, value} = editValue;
   const scene = bus.scene;
   const viewer = bus.viewer;
-  if (!scene) return;
-
+  if (!viewer) return;
+  if (name === "enable") {
+    viewer.postProcessingComponent.enable = value;
+  }
+  if (name === "outlineEnable") {
+    if (value) {
+      viewer.postProcessingComponent.initOutlineEffect();
+    } else {
+      viewer.postProcessingComponent.disposeOutlineEffect();
+    }
+  }
+  if (name === "blurEnable") {
+    if (value) {
+      viewer.postProcessingComponent.initBlurEffect();
+    } else {
+      viewer.postProcessingComponent.disposeBlurEffect();
+    }
+  }
 })
 
 const {isActive} = useActiveTab("后期")
@@ -78,26 +89,26 @@ const sync = () => {
 }
 
 const updateForm = (viewer: Viewer) => {
-  form.enable = viewer.postProcessingManager.enable;
+  form.enable = viewer.postProcessingComponent.enable;
 }
 
 
-
 </script>
-
 <template>
   <el-form :label-width="80" label-position="left" size="small">
     <bool-item label="启用" name="enable"/>
-<!--    <select-item :options="overrideMaterialList" label="覆盖材质" name="overrideMaterial"-->
-<!--                 v-model="form.overrideMaterial"/>-->
-<!--    <color-item v-if="form.backgroundType === '颜色'" label="背景颜色" name="backgroundColor"-->
-<!--                v-model="form.backgroundColor"/>-->
-<!--    <texture-item v-if="form.backgroundType==='贴图' || form.backgroundType==='全景'" :get-texture="getTexture"-->
-<!--                  label="背景图片"-->
-<!--                  name="backgroundTexture" v-model="form.backgroundTexture"/>-->
+    <bool-item label="描边启用" name="outlineEnable"/>
+    <bool-item label="模糊启用" name="blurEnable"/>
+    <!--    <select-item :options="overrideMaterialList" label="覆盖材质" name="overrideMaterial"-->
+    <!--                 v-model="form.overrideMaterial"/>-->
+    <!--    <color-item v-if="form.backgroundType === '颜色'" label="背景颜色" name="backgroundColor"-->
+    <!--                v-model="form.backgroundColor"/>-->
+    <!--    <texture-item v-if="form.backgroundType==='贴图' || form.backgroundType==='全景'" :get-texture="getTexture"-->
+    <!--                  label="背景图片"-->
+    <!--                  name="backgroundTexture" v-model="form.backgroundTexture"/>-->
 
-<!--    <input-number-item v-if="form.backgroundType ==='全景'" :formProps="{max:1,min:0,step:0.01,precision:2  }"-->
-<!--                       label="背景贴图" name="backgroundBlurriness" v-model="form.backgroundBlurriness"/>-->
+    <!--    <input-number-item v-if="form.backgroundType ==='全景'" :formProps="{max:1,min:0,step:0.01,precision:2  }"-->
+    <!--                       label="背景贴图" name="backgroundBlurriness" v-model="form.backgroundBlurriness"/>-->
   </el-form>
 </template>
 

@@ -38,7 +38,9 @@ export class Component<T extends IComponentOptions = IComponentOptions> {
     get renderManager() {
         return this.viewer.renderManager;
     }
-
+    get postProcessingComponent() {
+        return this.viewer.postProcessingComponent;
+    }
     get assetManager() {
         return this.viewer.assetManager;
     }

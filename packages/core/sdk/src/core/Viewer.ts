@@ -7,7 +7,7 @@ import {
     EventManager,
     HelperManager,
     Loop,
-    PostProcessingManager,
+    PostProcessingComponent,
     RenderManager
 } from "../manager"; // 导入渲染管理类
 import {Editor} from "../editor"; // 导入编辑器类
@@ -133,7 +133,7 @@ export class Viewer {
     renderManager: RenderManager; // 渲染管理
     helperManager: HelperManager; // 辅助管理
     gizmoManager: GizmoManager;
-    postProcessingManager: PostProcessingManager; // 后处理管理
+    postProcessingComponent: PostProcessingComponent; // 后处理管理
     debug: DebugManager; // 调试管理
     loop: Loop; // 循环管理
     cssRenderer!: CssRenderer; // CSS 渲染器
@@ -189,8 +189,8 @@ export class Viewer {
         // 初始化各个管理类
         this.eventManager = new EventManager({viewer: this});
         this.renderManager = new RenderManager({viewer: this});
-        this.postProcessingManager = new PostProcessingManager({viewer: this});
         this.cameraManager = new CameraManager({viewer: this});
+        this.postProcessingComponent = new PostProcessingComponent({viewer: this});
         this.helperManager = new HelperManager({viewer: this});
         this.assetManager = new AssetManager({viewer: this});
         this.pick = new Pick({viewer: this});
@@ -399,7 +399,7 @@ export class Viewer {
         this.cameraManager.setSize(width, height); // 设置相机控制器大小
         this.renderManager.setSize(width, height); // 设置渲染器大小
         this.cssRenderer.setSize(width, height); // 设置 CSS 渲染器大小
-        this.postProcessingManager.setSize(width, height); // 设置后处理管理器大小
+        this.postProcessingComponent.setSize(width, height); // 设置后处理管理器大小
         this.renderManager.render(); // 重置后必须重新渲染. 不然会闪烁
     }
 

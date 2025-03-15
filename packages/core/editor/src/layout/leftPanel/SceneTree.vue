@@ -78,6 +78,7 @@ const handleNodeContextmenu = (evt: Event, data: TreeNodeData, node: TreeNode) =
     const object = viewer?.getObjectByUuid(id);
     if (object) {
       const visible = object.visible;
+      const hasOutline = viewer?.postProcessingComponent.objectHasOutline(object);
       ContextMenu.showContextMenu({
         x: (evt as MouseEvent).x,
         y: (evt as MouseEvent).y,
@@ -93,6 +94,12 @@ const handleNodeContextmenu = (evt: Event, data: TreeNodeData, node: TreeNode) =
             label: "删除",
             onClick: () => {
               viewer?.editor.removeObjectExecute(object);
+            }
+          },
+          {
+            label: hasOutline ? "取消描边" : "描边",
+            onClick: () => {
+              hasOutline ? viewer?.postProcessingComponent.removeOutlineObject(object) : viewer?.postProcessingComponent.addOutlineObject(object);
             }
           },
         ]
