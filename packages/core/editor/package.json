@@ -21,7 +21,7 @@
     "lodash-es": "^4.17.21",
     "pinia": "^3.0.1",
     "rxjs": "^7.8.2",
-    "splitpanes": "^4.0.2",
+    "splitpanes": "^4.0.3",
     "three": "^0.174.0",
     "three-is": "workspace:*",
     "three-stdlib": "^2.35.14",

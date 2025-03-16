@@ -44,20 +44,17 @@ const composer = new EffectComposer(renderer);
 const renderPass = new RenderPass(scene, camera);
 composer.addPass(renderPass);
 
-const outlineEffect =  new OutlineEffect(scene, camera, {
-    blendFunction: BlendFunction.SCREEN,
-    multisampling: Math.min(4, renderer.capabilities.maxSamples),
-    edgeStrength: 2.5,
-    pulseSpeed: 0.0,
-    visibleEdgeColor: 0xffffff,
-    hiddenEdgeColor: 0x22090a,
-    height: 480,
-    blur: false,
-    xRay: true,
+const  selectiveBloomEffect = new SelectiveBloomEffect(scene, camera, {
+    blendFunction: BlendFunction.ADD,
+    mipmapBlur: false   ,
+    luminanceThreshold: 0,
+    luminanceSmoothing: 0.2,
+    intensity: 5,
+    radius: 0.34
 });
-const outlinePass = new EffectPass(camera, outlineEffect);
+const outlinePass = new EffectPass(camera, selectiveBloomEffect);
 composer.addPass(outlinePass);
-outlineEffect.selection.add(cube);
+selectiveBloomEffect.selection.add(cube);
 function animate() {
     requestAnimationFrame(animate);
     // cube.rotation.x += 0.01;

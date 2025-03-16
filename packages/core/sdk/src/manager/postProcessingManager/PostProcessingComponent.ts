@@ -35,7 +35,7 @@ export class PostProcessingComponent extends Component {
     renderPass!: RenderPass;
     outputPass!: OutputPass;
 
-    selectiveBloomEffect!: SelectiveBloomEffect;
+
     bloomEffect!: BloomEffect;
     gridEffect!: GridEffect;
     smaaEffect!: SMAAEffect;
@@ -66,13 +66,6 @@ export class PostProcessingComponent extends Component {
         });
         const renderPass = new RenderPass(this.scene, this.camera);
         this.composer.addPass(renderPass);
-
-        // this.eventManager.renderSubject.subscribe((timestamp) => {
-        //     if (this.#enabled) {
-        //         console.log("`1111111111111111")
-        //         this.composer.render(timestamp)
-        //     }
-        // })
     }
 
     render(timestamp: number) {
@@ -95,40 +88,88 @@ export class PostProcessingComponent extends Component {
         this.composer.addPass(this.renderPass);
     }
 
-    //----------------- selectiveBloomEffect -----------------
+    //-------------------- 辉光
+    selectiveBloomEffect: SelectiveBloomEffect | undefined;
+    selectiveBloomEffectPass: EffectPass | undefined;
+
+    /**
+     * 初始化辉光效果
+     * @param options
+     */
     initSelectiveBloomEffect(options?: BloomEffectOptions) {
-        // const init = () => {
-        this.selectiveBloomEffect = new SelectiveBloomEffect(this.viewer.scene, this.viewer.cameraManager.camera, {
+        this.selectiveBloomEffect = new SelectiveBloomEffect(this.scene, this.camera, {
             blendFunction: BlendFunction.ADD,
-            mipmapBlur: true,
-            luminanceThreshold: 0,
+            mipmapBlur: false,
+            luminanceThreshold: 0.4,
             luminanceSmoothing: 0.2,
-            intensity: 10,
-            radius: 0.34
+            intensity: 5,
         });
+        this.selectiveBloomEffect.ignoreBackground = true;
         // this.selectiveBloomEffect.inverted = true;
-        // }
-        // if (isNil(this.selectiveBloomEffect)) {
-        //     init()
-        // } else {
-        //     const isUpdate = compareObjects(options, this.selectiveBloomEffectOptions, []);
-        //     if (isUpdate) {
-        //         init()
-        //     } else {
-        //
-        //     }
-        // }
+        this.selectiveBloomEffectPass = new EffectPass(this.camera, this.selectiveBloomEffect);
+        this.composer.addPass(this.selectiveBloomEffectPass);
     }
 
-    addSelectiveBloomEffect() {
-        this.effects.push(this.selectiveBloomEffect);
+    /**
+     * 销毁辉光效果
+     */
+    disposeSelectiveBloomEffect() {
+        if (this.selectiveBloomEffectPass) {
+            this.composer.removePass(this.selectiveBloomEffectPass);
+            this.selectiveBloomEffectPass.dispose();
+        }
+        if (this.selectiveBloomEffect) {
+            this.selectiveBloomEffect.dispose();
+        }
     }
 
-    addSelectiveBloomEffectObject(object: any) {
-        return this.selectiveBloomEffect.selection.toggle(object);
+    /**
+     * 添加辉光对象
+     * @param object
+     */
+    addSelectiveBloomEffectObject(object: Object3D) {
+        if (this.selectiveBloomEffect) {
+            if (isGroup(object)) {
+                this.selectiveBloomEffect.selection.add(object);
+                object.traverse((child) => {
+                    if (isMesh(child)) {
+                        this.selectiveBloomEffect?.selection.add(child);
+                    }
+                })
+            } else {
+                this.selectiveBloomEffect.selection.add(object);
+            }
+        }
     }
 
-    //------------------------------
+    /**
+     * 移除辉光对象
+     * @param object
+     */
+    removeSelectiveBloomEffectObject(object: Object3D) {
+        if (this.selectiveBloomEffect) {
+            if (isGroup(object)) {
+                this.selectiveBloomEffect.selection.delete(object);
+                object.traverse((child) => {
+                    if (isMesh(child)) {
+                        this.selectiveBloomEffect?.selection.delete(child);
+                    }
+                })
+            } else {
+                this.selectiveBloomEffect.selection.delete(object);
+            }
+        }
+    }
+
+    /**
+     * 检查辉光对象是否存在
+     * @param object
+     */
+    hasSelectiveBloomEffectObject(object: Object3D) {
+        return this.selectiveBloomEffect?.selection.has(object);
+    }
+
+    //------------------------------ 模糊
     kawaseBlurPass: KawaseBlurPass | undefined;
 
     initBlurEffect(options: any = {}) {
@@ -145,7 +186,7 @@ export class PostProcessingComponent extends Component {
         }
     }
 
-    //----------------- outlineEffect -----------------
+    //------------------------------ 描边
     outlineEffect: OutlineEffect | undefined;
     outlinePass: EffectPass | undefined;
 

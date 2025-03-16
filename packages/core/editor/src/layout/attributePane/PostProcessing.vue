@@ -46,19 +46,23 @@ objectAttributeChangeSubject.subscribe((editValue) => {
   if (!viewer) return;
   if (name === "enable") {
     viewer.postProcessingComponent.enable = value;
-  }
-  if (name === "outlineEnable") {
+  } else if (name === "outlineEnable") {
     if (value) {
       viewer.postProcessingComponent.initOutlineEffect();
     } else {
       viewer.postProcessingComponent.disposeOutlineEffect();
     }
-  }
-  if (name === "blurEnable") {
+  } else if (name === "blurEnable") {
     if (value) {
       viewer.postProcessingComponent.initBlurEffect();
     } else {
       viewer.postProcessingComponent.disposeBlurEffect();
+    }
+  } else if (name === "selectiveBloomEnable") {
+    if (value) {
+      viewer.postProcessingComponent.initSelectiveBloomEffect();
+    } else {
+      viewer.postProcessingComponent.disposeSelectiveBloomEffect();
     }
   }
 })
@@ -97,8 +101,9 @@ const updateForm = (viewer: Viewer) => {
 <template>
   <el-form :label-width="80" label-position="left" size="small">
     <bool-item label="启用" name="enable"/>
-    <bool-item label="描边启用" name="outlineEnable"/>
-    <bool-item label="模糊启用" name="blurEnable"/>
+    <bool-item label="启用描边" name="outlineEnable"/>
+    <bool-item label="启用辉光" name="selectiveBloomEnable"/>
+    <bool-item label="启用模糊" name="blurEnable"/>
     <!--    <select-item :options="overrideMaterialList" label="覆盖材质" name="overrideMaterial"-->
     <!--                 v-model="form.overrideMaterial"/>-->
     <!--    <color-item v-if="form.backgroundType === '颜色'" label="背景颜色" name="backgroundColor"-->

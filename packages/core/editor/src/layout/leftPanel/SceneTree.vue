@@ -79,6 +79,7 @@ const handleNodeContextmenu = (evt: Event, data: TreeNodeData, node: TreeNode) =
     if (object) {
       const visible = object.visible;
       const hasOutline = viewer?.postProcessingComponent.objectHasOutline(object);
+      const hasSelectiveBloomEffectObject = viewer?.postProcessingComponent.hasSelectiveBloomEffectObject(object);
       ContextMenu.showContextMenu({
         x: (evt as MouseEvent).x,
         y: (evt as MouseEvent).y,
@@ -100,6 +101,12 @@ const handleNodeContextmenu = (evt: Event, data: TreeNodeData, node: TreeNode) =
             label: hasOutline ? "取消描边" : "描边",
             onClick: () => {
               hasOutline ? viewer?.postProcessingComponent.removeOutlineObject(object) : viewer?.postProcessingComponent.addOutlineObject(object);
+            }
+          },
+          {
+            label: hasSelectiveBloomEffectObject ? "取消辉光" : "辉光",
+            onClick: () => {
+              hasSelectiveBloomEffectObject ? viewer?.postProcessingComponent.removeSelectiveBloomEffectObject(object) : viewer?.postProcessingComponent.addSelectiveBloomEffectObject(object);
             }
           },
         ]
