@@ -2,6 +2,7 @@ import * as THREE from "three";
 import {SpriteMaterial} from "three";
 
 import html2canvas from "html2canvas";
+import {deepMergeRetain} from "../tool";
 
 export interface ISpriteOptions {
     material?: SpriteMaterial

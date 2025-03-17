@@ -1,6 +1,6 @@
 import {Component, IComponentOptions} from "./Component";
-import {CSS3DRenderer} from "three/examples/jsm/renderers/CSS3DRenderer";
-import {CSS2DRenderer} from "three-stdlib";
+import {CSS3DRenderer} from "three/examples/jsm/renderers/CSS3DRenderer.js";
+import {CSS2DRenderer} from "three/examples/jsm/renderers/CSS2DRenderer";
 
 export interface ICssRendererOptions extends IComponentOptions {
 }

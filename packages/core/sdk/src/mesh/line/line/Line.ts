@@ -1,141 +1,157 @@
 import * as THREE from "three";
-import {LineDashedMaterialParameters} from "three";
-import {isNil} from "lodash-es";
-import {isColor} from "three-is";
-import {deepMergeRetain, Tool} from "../../../tool";
+import { LineDashedMaterialParameters } from "three";
+import { isNil } from "lodash-es";
+import { isColor } from "three-is";
+import { deepMergeRetain, Tool } from "../../../tool";
 
+// 定义线条类型的枚举
 export enum LineType {
-    Line = "Line",
-    LineLoop = "LineLoop",
-    LineSegments = "LineSegments"
+    Line = "Line",            // 普通线
+    LineLoop = "LineLoop",    // 闭合线
+    LineSegments = "LineSegments" // 线段
 }
 
+// 定义线材质类型的枚举
 export enum LineMaterialType {
-    LineBasicMaterial = "LineBasicMaterial",
-    LineDashedMaterial = "LineDashedMaterial",
+    LineBasicMaterial = "LineBasicMaterial",  // 基础材质
+    LineDashedMaterial = "LineDashedMaterial", // 虚线材质
 }
 
+// 定义线条选项接口
 export interface ILineOptions {
-    points?: Array<THREE.Vector3> | Array<[number, number, number]>;
-    vertexColors?: Array<THREE.Color | [number, number, number] | [number, number, number, number]>
-    lineType?: LineType;
-    materialType?: LineMaterialType;
-    materialParams?: LineDashedMaterialParameters,
-    // 避免子类的属性没有初始化
-    isDelayInit?: boolean
+    points?: Array<THREE.Vector3> | Array<[number, number, number]>; // 线条控制点
+    vertexColors?: Array<THREE.Color | [number, number, number] | [number, number, number, number]>; // 顶点颜色
+    lineType?: LineType; // 线条类型
+    materialType?: LineMaterialType; // 材质类型
+    materialParams?: LineDashedMaterialParameters; // 材质参数
+    isDelayInit?: boolean; // 是否延迟初始化
 }
 
+// 线条的默认选项
 export const LineDefaultsOptions: ILineOptions = {
-    points: [],
-    vertexColors: [],
-    lineType: LineType.Line,
-    materialType: LineMaterialType.LineBasicMaterial,
+    points: [], // 默认控制点为空
+    vertexColors: [], // 默认顶点颜色为空
+    lineType: LineType.Line, // 默认使用普通线
+    materialType: LineMaterialType.LineBasicMaterial, // 默认使用基础材质
     materialParams: {
-        color: 0xffffff,
-        scale: 1,
-        dashSize: 3,
-        gapSize: 1,
+        color: 0xffffff, // 默认颜色为白色
+        scale: 1, // 默认比例为 1
+        dashSize: 3, // 默认虚线大小
+        gapSize: 1, // 默认虚线间隔
     },
-    isDelayInit: false
+    isDelayInit: false // 默认不延迟初始化
 }
 
+// Line 类，继承自 THREE.Object3D
 export class Line extends THREE.Object3D {
-    line!: THREE.Line | THREE.LineLoop | THREE.LineSegments;
-    material!: THREE.LineDashedMaterial | THREE.LineBasicMaterial;
-    options: Required<ILineOptions> = LineDefaultsOptions as Required<ILineOptions>;
-    isPlumLine = true
-    points: Array<THREE.Vector3> = []
+    line!: THREE.Line | THREE.LineLoop | THREE.LineSegments; // 线条对象
+    material!: THREE.LineDashedMaterial | THREE.LineBasicMaterial; // 材质对象
+    options: Required<ILineOptions> = LineDefaultsOptions as Required<ILineOptions>; // 选项
+    isPlumLine = true; // 是否为梅花线
+    points: Array<THREE.Vector3> = []; // 控制点数组
 
-
+    // 构造函数
     constructor(_options: ILineOptions) {
-        super()
-        this.options = deepMergeRetain(this.options, _options);
-        this.init()
+        super(); // 调用父类构造函数
+        this.options = deepMergeRetain(this.options, _options); // 合并默认选项和传入选项
+        this.init(); // 初始化
         if (!this.options.isDelayInit) {
-            this.update(this.options);
+            this.update(this.options); // 如果没有延迟初始化，则更新
         }
     }
 
+    // 更新方法
     update(_options: ILineOptions) {
-        const {lineType, materialType, points, materialParams} = _options;
+        const { lineType, materialType, points, materialParams } = _options;
 
+        // 检查线条类型是否变化，如果变化则重建线条
         if (isNil(this.line) || lineType !== this.options.lineType) {
-            this.clear();
-            Reflect.set(this, "line", null)
-            this.createLine(_options);
-            this.add(this.line)
+            this.clear(); // 清除现有对象
+            Reflect.set(this, "line", null); // 重置线条
+            this.createLine(_options); // 创建新线条
+            this.add(this.line); // 将新线条添加到场景中
         }
 
+        // 检查材质类型是否变化，如果变化则重建材质
         if (materialType !== this.options.materialType || isNil(this.material)) {
-            this.createMaterial(_options);
+            this.createMaterial(_options); // 创建新材质
         } else {
+            // 更新材质参数
             !isNil(materialParams) && this.material.setValues(materialParams);
         }
+
+        // 更新选项和控制点
         this.options = deepMergeRetain(this.options, _options);
         this.points = Tool.v3ArrayToVector3Array(this.options.points);
 
-        this.setPoints();
-        this.setColors();
-        this.line.material = this.material;
+        this.setPoints(); // 设置控制点
+        this.setColors(); // 设置颜色
+        this.line.material = this.material; // 应用材质
     }
 
     updateAfter() {
-
+        // 后续更新逻辑（可根据需要实现）
     }
 
+    // 添加控制点
     addPoint(point: THREE.Vector3) {
-        this.points.push(point);
-        this.setPoints(this.points)
+        this.points.push(point); // 将新点添加到控制点数组
+        this.setPoints(this.points); // 更新控制点
     }
 
+    // 设置控制点
     setPoints(points: Array<THREE.Vector3> = this.getLinePoints()) {
-        this.line.geometry.setFromPoints(points)
+        this.line.geometry.setFromPoints(points); // 设置几何体的控制点
         if (this.options.materialType === LineMaterialType.LineDashedMaterial) {
-            this.line.computeLineDistances();
+            this.line.computeLineDistances(); // 计算虚线距离
         }
     }
 
+    // 设置线条颜色
     setColors() {
         let colors = this.options.vertexColors.map(color => {
-            return isColor(color) ? color.toArray() : color
-        })
-        const itemSize = (this.options.vertexColors?.[0] as number[] | undefined)?.length === 4 ? 4 : 3
-        this.line.geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors.flat(), itemSize))
+            return isColor(color) ? color.toArray() : color; // 将颜色转换为数组
+        });
+        const itemSize = (this.options.vertexColors?.[0] as number[] | undefined)?.length === 4 ? 4 : 3; // 判断颜色数组的大小
+        this.line.geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors.flat(), itemSize)); // 设置颜色属性
     }
 
+    // 初始化方法
     protected init() {
+        // 初始化逻辑（可根据需要实现）
     }
 
+    // 获取控制点
     protected getLinePoints() {
-        return this.points;
+        return this.points; // 返回控制点
     }
 
+    // 创建线条
     private createLine(_options: ILineOptions) {
-        const {lineType, materialType, points, materialParams} = _options;
+        const { lineType } = _options;
         switch (lineType) {
             case LineType.Line:
-                this.line = new THREE.Line();
-                break
-            case LineType.LineLoop:
-                this.line = new THREE.LineLoop();
+                this.line = new THREE.Line(); // 创建普通线
                 break;
-
+            case LineType.LineLoop:
+                this.line = new THREE.LineLoop(); // 创建闭合线
+                break;
             case LineType.LineSegments:
-                this.line = new THREE.LineSegments();
+                this.line = new THREE.LineSegments(); // 创建线段
                 break;
         }
     }
 
+    // 创建材质
     private createMaterial(_options: ILineOptions) {
-        const {lineType, materialType, points, materialParams} = _options;
+        const { materialType, materialParams } = _options;
         switch (materialType) {
             case LineMaterialType.LineBasicMaterial:
-                this.material = new THREE.LineBasicMaterial(materialParams);
-                break
+                this.material = new THREE.LineBasicMaterial(materialParams); // 创建基础材质
+                break;
             case LineMaterialType.LineDashedMaterial:
-                this.material = new THREE.LineDashedMaterial(materialParams);
-                break
+                this.material = new THREE.LineDashedMaterial(materialParams); // 创建虚线材质
+                break;
         }
     }
-
 }

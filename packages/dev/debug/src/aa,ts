@@ -1,14 +1,16 @@
-
-
-import {CatmullRomLine, CurveType, LineMaterialType, LineType, Viewer} from "@plum-render/three-sdk";
-
 import {Pane} from 'tweakpane';
 import {clone} from "lodash-es";
-import {CatmullRomLine} from
 import {CatmullRomLine, CurveType, LineMaterialType, LineType, Viewer} from "@plum-render/three-sdk";
 
+const _viewer = new Viewer(document.getElementById('app'), {
+    isCreateDefaultLight: true,
+    isCreateDefaultEnvironment: true
+})
 
-export default function useCatmullRomLine2(_viewer: Viewer) {
+_viewer.initSubject.subscribe(() => {
+    useCatmullRomLine(_viewer)
+})
+function useCatmullRomLine(_viewer: Viewer) {
 
     const subdivisions = 6;
     const recursion = 1;
@@ -40,7 +42,7 @@ export default function useCatmullRomLine2(_viewer: Viewer) {
     _viewer.scene.add(line)
 
     let PARAMS = clone(line.options)
-    // 
+    //
     const pane = new Pane({
         container: _viewer.container
     });
@@ -73,9 +75,9 @@ export default function useCatmullRomLine2(_viewer: Viewer) {
     pane.addBinding(PARAMS, 'segments');
 
     pane.on('change', (ev) => {
-        // 
+        //
 
-        // 
+        //
         line.update(PARAMS)
     });
 

@@ -1,6 +1,5 @@
 import * as THREE from "three";
 
-import {CSS2DObject, CSS3DObject, CSS3DSprite} from "three-stdlib";
 
 export enum HtmlMeshType {
     CSS2DObject,

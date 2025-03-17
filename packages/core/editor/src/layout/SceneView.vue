@@ -12,6 +12,7 @@ import {type Id, toast} from "vue3-toastify";
 import ViewTool from "./sceneView/ViewTool.vue";
 import SceneStatistics from "./sceneView/SceneStatistics.vue";
 import {uniqueId} from "lodash-es";
+import useCatmullRomLine from "../testCore/line/line/useCatmullRomLine.ts";
 
 const canvasContainer = ref<HTMLDivElement>();
 
@@ -51,6 +52,9 @@ onMounted(() => {
   _viewer.initSubject.subscribe(() => {
     bus.setViewer(_viewer)
     bus.viewerInitSubject.next(true);
+    console.log(_viewer)
+    //-------- 测试
+    useCatmullRomLine(_viewer)
   })
   // 场景加载进度条
   _viewer.sceneLoadProgressSubject.subscribe((event) => {
@@ -139,10 +143,6 @@ onMounted(() => {
   })
 
   // useLightTest(_viewer)
-
-  _viewer.cameraManager.cameraControls.setPosition(5, 5, 5);
-  _viewer.cameraManager.cameraControls.setTarget(0, 0, 0);
-
 
   setTimeout(() => {
     _viewer.setSize()

@@ -9,22 +9,25 @@ import {
     ObjectLoader,
     TextureLoader
 } from "three";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader";
-import {MMDLoader, RGBELoader, TGALoader} from "three-stdlib";
-import {EXRLoader} from "three/examples/jsm/loaders/EXRLoader";
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
+import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader.js";
+import {EXRLoader} from "three/examples/jsm/loaders/EXRLoader.js";
 import {GainMapLoader, HDRJPGLoader} from "@monogrid/gainmap-js";
 import {buildGraph} from "../tool";
 import {Subject} from "rxjs";
-import {KTX2Loader} from "three/examples/jsm/loaders/KTX2Loader";
+import {KTX2Loader} from "three/examples/jsm/loaders/KTX2Loader.js";
 import {Asset, Component, IComponentOptions} from "../core";
-import {PDBLoader} from "three/examples/jsm/loaders/PDBLoader";
-import {PCDLoader} from "three/examples/jsm/loaders/PCDLoader";
-import {LUTCubeLoader} from "three/examples/jsm/loaders/LUTCubeLoader";
-import {LUT3dlLoader} from "three/examples/jsm/loaders/LUT3dlLoader";
-import {LDrawLoader} from "three/examples/jsm/loaders/LDrawLoader";
-import {Rhino3dmLoader} from "three/examples/jsm/loaders/3DMLoader";
-import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader";
+import {PDBLoader} from "three/examples/jsm/loaders/PDBLoader.js";
+import {PCDLoader} from "three/examples/jsm/loaders/PCDLoader.js";
+import {LUTCubeLoader} from "three/examples/jsm/loaders/LUTCubeLoader.js";
+import {LUT3dlLoader} from "three/examples/jsm/loaders/LUT3dlLoader.js";
+import {LDrawLoader} from "three/examples/jsm/loaders/LDrawLoader.js";
+import {Rhino3dmLoader} from "three/examples/jsm/loaders/3DMLoader.js";
+import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader.js";
+import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader";
+import {TGALoader} from "three/examples/jsm/loaders/TGALoader";
+import {MDDLoader} from "three/examples/jsm/loaders/MDDLoader";
+
 
 export interface IResourceManagers extends IComponentOptions {
     sdkUrl?: string;
@@ -149,7 +152,7 @@ export class AssetManager extends Component {
 
         this.pDBLoader = new PDBLoader(this.loadingManager);
         this.pCDLoader = new PCDLoader(this.loadingManager);
-        this.mMDLoader = new MMDLoader(this.loadingManager);
+        this.mMDLoader = new MDDLoader(this.loadingManager);
         this.lUTCubeLoader = new LUTCubeLoader(this.loadingManager);
         this.lUT3dlLoader = new LUT3dlLoader(this.loadingManager);
         this.lDrawLoader = new LDrawLoader(this.loadingManager);

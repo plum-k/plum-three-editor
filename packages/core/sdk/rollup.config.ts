@@ -50,6 +50,7 @@ export default defineConfig({
         //     ]
         // }
     ],
+    external: ['three',"axios"],
     plugins: [
         commonjs(),
         json(),

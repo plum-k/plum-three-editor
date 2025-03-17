@@ -1,8 +1,13 @@
-import {Line2Type, QuadraticBezierLine2, Viewer} from
 
-@plum
--render / three - sdk
-";
+import {
+    CatmullRomLine,
+    CurveType, Line2Type,
+    LineMaterialType,
+    LineType,
+    QuadraticBezierLine2,
+    Viewer
+} from "@plum-render/three-sdk";
+
 import * as THREE from "three";
 import {GeometryUtils} from "three-stdlib";
 import {Pane} from 'tweakpane';

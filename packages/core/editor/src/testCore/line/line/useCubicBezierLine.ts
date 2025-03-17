@@ -1,18 +1,6 @@
-import {LineMaterialType, LineType, Viewer} from
-
-@plum
--render / three - sdk
-";
-import * as THREE from "three";
-import {GeometryUtils} from "three-stdlib";
 import {Pane} from 'tweakpane';
 import {clone} from "lodash-es";
-import {CubicBezierLine} from
-
-@plum
--render / three - sdk
-";
-
+import {CatmullRomLine, CurveType, LineMaterialType, LineType, Viewer} from "@plum-render/three-sdk";
 export default function useCubicBezierLine(_viewer: Viewer) {
 
     const subdivisions = 6;

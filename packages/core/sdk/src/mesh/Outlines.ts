@@ -1,5 +1,5 @@
 import * as  THREE from "three";
-import {toCreasedNormals} from "three/examples/jsm/utils/BufferGeometryUtils";
+import {toCreasedNormals} from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import {shaderMaterial, version} from "../tool";
 
 const material = /* @__PURE__ */ shaderMaterial(

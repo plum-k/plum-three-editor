@@ -1,6 +1,7 @@
 import {SRGBColorSpace, WebGLRenderer} from "three";
 import {Component, IComponentOptions} from "../core/Component";
 import {IResourceManagers} from "./AssetManager";
+import {logStack} from "../tool";
 
 export interface IRenderManagerOptions extends IComponentOptions {
 }
@@ -23,19 +24,27 @@ export class RenderManager extends Component {
 // @param {string} options.powerPreference - 指定GPU的性能偏好，'high-performance' 表示优先考虑性能
 // @param {boolean} options.antialias - 是否启用抗锯齿，用于提高图形边缘的平滑度
 // @param {boolean} options.alpha - 是否启用alpha通道，用于支持透明度
-
         const webGLRenderer = new WebGLRenderer({
-            // powerPreference: 'high-performance',
-            // antialias: true,
-            // alpha: true
-
             powerPreference: "high-performance",
-            antialias: false,
+            // alpha: true,
+            antialias: true,
             stencil: false,
             depth: true
         })
+        // Object.defineProperty(webGLRenderer, "autoClear", {
+        //     get: ()=> {
+        //         return false
+        //     },
+        //     set: (newContext) =>{
+        //         logStack("111",newContext)
+        //     },
+        //     configurable: true, // 允许后续修改该属性的描述符
+        //     enumerable: true // 使该属性可枚举
+        // });
+
         webGLRenderer.outputColorSpace = SRGBColorSpace;
         webGLRenderer.debug.checkShaderErrors = true;
+        console.log(webGLRenderer)
         return webGLRenderer;
     }
 
@@ -47,11 +56,6 @@ export class RenderManager extends Component {
         // 
         const clock = this.viewer.clock;
         const delta = clock.getDelta();
-        // this.eventManager.animateSubject.next(delta);
-        // if ( this.view3DHelper.animating) {
-        //     this.view3DHelper.update( delta );
-        // }
-
     }
 
     render(timestamp: number) {
@@ -69,32 +73,9 @@ export class RenderManager extends Component {
 
         this.defaultWebGLRenderer.render(this.scene, this.camera);
 
-        // 
-
-        // if (this.editor.view3DHelper.animating) {
-        // cameraControls.enabled = false;
-        // this.editor.view3DHelper.update(1);
-        // } else {
-        // cameraControls.enabled = true;
-        // }
-
-        // todo
         if (this.sceneHelpers.visible) {
             this.defaultWebGLRenderer.render(this.sceneHelpers, this.camera);
         }
-        // todo 和相机的默认 控制冲突
-        // if (this.editor.view3DHelper.animating) {
-        //     this.editor.view3DHelper.update(delta);
-        // }else {
-        //
-        // }
-        // this.editor.view3DHelper.render(this.defaultWebGLRenderer);
-
-        // eventManager.renderSubject.next(delta);
-        // todo
-        // this.defaultWebGLRenderer.setAnimationLoop()
-        // this.defaultWebGLRenderer.autoClear = true;
-        // }
     }
 }
 

@@ -18,9 +18,8 @@ import {CameraManager, DrawLine, MeasureTool} from "../control";
 import {CssRenderer} from "./CssRenderer";
 import {IOssApiOptions, OssApi} from "@plum-render/oss-api";
 import {Grid} from "../mesh";
-import {Subject} from "rxjs";
-import {getPackage} from "../serializeManage";
-import {Package} from "../serializeManage";
+import {BehaviorSubject, Subject} from "rxjs";
+import {getPackage, Package} from "../serializeManage";
 import {PScene} from "./PScene";
 import {GizmoManager} from "../manager/GizmoManager";
 import {ISetAxes} from "../interface/viewer/ISetAxes";
@@ -118,6 +117,10 @@ export interface IViewerOptions {
      */
     isCubeGizmo?: boolean;
     isSphereGizmo?: boolean;
+
+    scene?: {
+        background?: THREE.Color
+    }
 }
 
 export class Viewer {
@@ -155,9 +158,9 @@ export class Viewer {
     grid: Grid | undefined = undefined;
     axesHelper: AxesHelper | undefined = undefined;
     // 初始化组件完成
-    initComponentSubject = new Subject();
+    initComponentSubject = new BehaviorSubject(true);
     // 场景初始化完成
-    initSubject = new Subject();
+    initSubject = new BehaviorSubject(true);
     //---------- 事件
     // 场景加载进度
     sceneLoadProgressSubject = new Subject<ISceneLoadProgressEvent>();
@@ -173,6 +176,9 @@ export class Viewer {
         this.options = deepMergeRetain({
             ossBaseUrl: "three",
             isGizmo: false,
+            scene: {
+                background: new THREE.Color("black")
+            }
         }, options); // 合并选项
         this.initContainer(container); // 初始化容器
 
@@ -181,6 +187,9 @@ export class Viewer {
         // 初始化场景
         this.scene = new PScene();
         this.scene.name = "scene"; // 设置场景名称
+        if(this.options?.scene?.background) {
+            this.scene.background = this.options.scene.background;
+        }
 
         // 初始化场景辅助
         this.sceneHelpers = new PScene();
@@ -227,13 +236,13 @@ export class Viewer {
     }
 
     setGrid(inOptions: ISetGrid) {
-        const options = defaults(inOptions,{
+        const options = defaults(inOptions, {
             visible: true,
         })
 
         const {visible} = options;
         if (visible) {
-            if (this.grid){
+            if (this.grid) {
                 this.sceneHelpers.remove(this.grid);
                 this.grid.dispose();
             }
@@ -255,14 +264,15 @@ export class Viewer {
     get isEnableAxes() {
         return this.axesHelper !== undefined;
     }
+
     axesOptions: ISetAxes | undefined;
 
     setAxes(inOptions: ISetAxes) {
-        const options = defaults(inOptions,{
+        const options = defaults(inOptions, {
             size: 2000,
             visible: true,
             dispose: false
-        } )
+        })
         const {size, visible, dispose} = options;
         if (this.axesHelper && this.axesOptions) {
             const isSizeChanged = this.axesOptions.size !== size;
@@ -326,6 +336,7 @@ export class Viewer {
             loaded: 1,
         })
         this.isLoad = true;
+        console.log("派发")
         this.initSubject.next(true);
     }
 

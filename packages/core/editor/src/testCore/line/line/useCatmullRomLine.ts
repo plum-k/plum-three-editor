@@ -1,15 +1,7 @@
-import {CurveType, LineMaterialType, LineType, Viewer} from
-
-@plum
--render / three - sdk
-";
 import {Pane} from 'tweakpane';
 import {clone} from "lodash-es";
-import {CatmullRomLine} from
+import {CatmullRomLine, CurveType, LineMaterialType, LineType, Viewer} from "@plum-render/three-sdk";
 
-@plum
--render / three - sdk
-";
 
 export default function useCatmullRomLine(_viewer: Viewer) {
 

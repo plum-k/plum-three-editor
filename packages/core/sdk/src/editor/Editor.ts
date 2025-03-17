@@ -23,7 +23,6 @@ import {
     isSkinnedMesh,
     isSpotLight
 } from "three-is";
-import {VertexNormalsHelper} from "three-stdlib";
 import {Tool} from "../tool";
 import {EditorEventManager} from "./EditorEventManager";
 import {Selector} from "./Selector";

@@ -2,11 +2,9 @@ import * as THREE from "three"
 import {presetsObj, PresetsType} from "./environmentAssets";
 import {isArray, isNil} from "lodash-es";
 import {Component, IComponentOptions} from "../Component";
-import {TextureEncoding} from "three-stdlib/types/shared";
 import {Asset} from "../../manager/asset/Asset";
 import {deepMergeRetain} from "../../tool";
 import {isDirectionalLight} from "three-is";
-
 export interface IEnvironment extends IComponentOptions {
     frames?: number
     near?: number
@@ -52,7 +50,6 @@ export interface ISetEnvironmentOptions extends ISetEnvOption {
     path?: string
     preset?: PresetsType
     // extensions?: (loader: Loader) => void
-    encoding?: TextureEncoding;
 }
 
 export class EnvironmentManage extends Component {

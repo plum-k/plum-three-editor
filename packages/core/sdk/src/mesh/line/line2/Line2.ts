@@ -1,14 +1,13 @@
 import * as THREE from "three";
 import {Object3D} from "three";
-import {LineMaterial, LineMaterialParameters} from "three/examples/jsm/lines/LineMaterial";
-import {Line2 as THREELine2} from "three/examples/jsm/lines/Line2";
-import {LineSegments2} from "three/examples/jsm/lines/LineSegments2";
-import {Wireframe} from "three-stdlib";
+import {LineMaterial, LineMaterialParameters} from "three/examples/jsm/lines/LineMaterial.js";
+import {Line2 as THREELine2} from "three/examples/jsm/lines/Line2.js";
+import {LineSegments2} from "three/examples/jsm/lines/LineSegments2.js";
 import {isNil} from "lodash-es";
 import {isColor} from "three-is";
 import {deepMergeRetain, Tool} from "../../../tool";
-import {LineGeometry} from "three/examples/jsm/lines/LineGeometry";
-import {LineSegmentsGeometry} from "three/examples/jsm/lines/LineSegmentsGeometry";
+import {LineGeometry} from "three/examples/jsm/lines/LineGeometry.js";
+import {LineSegmentsGeometry} from "three/examples/jsm/lines/LineSegmentsGeometry.js";
 
 // jsm
 export enum Line2Type {

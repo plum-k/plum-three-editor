@@ -83,6 +83,9 @@ export class CameraManager {
         window.test11 = () => {
             this.toJSON();
         }
+        // 避免相机位置 和 目标位置 重合
+        this.cameraControls.setPosition(5, 5, 5).then();
+        this.cameraControls.setTarget(0, 0, 0).then();
     }
 
     toJSON() {

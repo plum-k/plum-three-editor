@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Vite App</title>
+    <style>
+        html, body, #app {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+</div>
+<script type="importmap">
+    {
+      "imports": {
+        "tweakpane": "./tweakpane.min.js",
+        "@plum-render/three-sdk": "./plum-render-three-sdk.js",
+      }
+    }
+</script>
+<script async type="module">
+    import {CatmullRomLine, CurveType, LineMaterialType, LineType, Viewer} from "@plum-render/three-sdk";
+    import {Pane} from "tweakpane";
+    import {clone} from "lodash-es";
+    const _viewer = await Viewer.create(document.getElementById('app'), {
+        isCreateDefaultLight: true,
+        isCreateDefaultEnvironment: true
+    })
+    console.log(_viewer)
+    _viewer.initSubject.subscribe(() => {
+
+    })
+
+    const subdivisions = 6;
+    const recursion = 1;
+
+    const catPoints = [
+        [0, 0, 0] ,
+        [-8, 6, -5] ,
+        [-2, 3, 7] ,
+        [6, 4.5, 3] ,
+        [0.5, 8, -1] ,
+    ]
+
+    const line = new CatmullRomLine(
+        {
+            points: catPoints,
+            materialType: LineMaterialType.LineDashedMaterial,
+            materialParams: {
+                // vertexColors:true,
+                linewidth: 4,
+                color: "red",
+                // dashSize: 1,
+                // gapSize: 0.5
+            }
+        }
+    )
+    line.name = "adad";
+
+
+    _viewer.scene.add(line)
+
+    let PARAMS = clone(line.options)
+    //
+    const pane = new Pane({
+        container: _viewer.container
+    });
+    pane.element.style.position = "absolute";
+    pane.element.style.right = "0";
+    pane.element.style.top = "0";
+
+    pane.addBinding(PARAMS, 'lineType', {
+        options: LineType
+    });
+    pane.addBinding(PARAMS, 'materialType', {
+        options: LineMaterialType
+    });
+
+
+    const f2 = pane.addFolder({
+        title: 'LineBasicMaterial',
+        expanded: false,   // optional
+    });
+    f2.addBinding(PARAMS.materialParams, 'color');
+    f2.addBinding(PARAMS.materialParams, 'scale');
+    f2.addBinding(PARAMS.materialParams, 'dashSize');
+    f2.addBinding(PARAMS.materialParams, 'gapSize');
+
+    pane.addBinding(PARAMS, 'curveType', {
+        options: CurveType
+    });
+    pane.addBinding(PARAMS, 'closed');
+    pane.addBinding(PARAMS, 'tension');
+    pane.addBinding(PARAMS, 'segments');
+
+    pane.on('change', (ev) => {
+        //
+
+        //
+        line.update(PARAMS)
+    });
+
+    // 创建立方体
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+    const cube = new THREE.Mesh(geometry, material);
+    _viewer.scene.add(cube);
+    window.test = () => {
+        console.log(_viewer.cameraManager.camera)
+    }
+
+</script>
+</body>
+</html>

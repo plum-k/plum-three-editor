@@ -1,4 +1,4 @@
-import {OutputPass} from "three/examples/jsm/postprocessing/OutputPass";
+import {OutputPass} from "three/examples/jsm/postprocessing/OutputPass.js";
 import {Component, IComponentOptions} from "../../core";
 import {
     BlendFunction,

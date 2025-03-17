@@ -1,11 +1,12 @@
-import {DRACOExporter, GLTFExporter, USDZExporter,} from "three-stdlib";
 import {AnimationClip, Mesh, Object3D, Points, Scene} from "three";
-import {STLExporter, STLExporterOptions} from "three/examples/jsm/exporters/STLExporter";
-import {PLYExporter, PLYExporterOptions} from "three/examples/jsm/exporters/PLYExporter";
-import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter";
-import {GLTFExporterOptions} from "three-stdlib/exporters/GLTFExporter";
+import {STLExporter, STLExporterOptions} from "three/examples/jsm/exporters/STLExporter.js";
+import {PLYExporter, PLYExporterOptions} from "three/examples/jsm/exporters/PLYExporter.js";
+import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter.js";
 import {isString} from "lodash-es";
 import {DownloadTool} from "./DownloadTool";
+import {GLTFExporter, GLTFExporterOptions} from "three/examples/jsm/exporters/GLTFExporter";
+import {DRACOExporter} from "three/examples/jsm/exporters/DRACOExporter";
+import {USDZExporter} from "three/examples/jsm/exporters/USDZExporter";
 
 export class ExporterTool {
     static instance: ExporterTool;

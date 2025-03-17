@@ -1,7 +1,6 @@
 export * from "./Edges";
 export * from "./Grid";
 export * from "./Outlines";
-export * from "./Path";
 export * from "./PathTube";
 export * from "./Sprite";
 export * from "./Wall";

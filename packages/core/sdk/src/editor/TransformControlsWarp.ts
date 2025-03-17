@@ -1,5 +1,5 @@
 import {Component, IComponentOptions} from "../core/Component";
-import {TransformControls} from "three/examples/jsm/controls/TransformControls";
+import {TransformControls} from "three/examples/jsm/controls/TransformControls.js";
 import * as  THREE from "three";
 
 export interface IControlsManagerOptions extends IComponentOptions {
