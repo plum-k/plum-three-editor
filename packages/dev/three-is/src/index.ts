@@ -1,7 +1,6 @@
 export * from "./bufferGeometry";
 export * from "./cameras";
 export * from './helpers';
-export * from './index';
 export * from './lights';
 export * from './materials';
 export * from './math';

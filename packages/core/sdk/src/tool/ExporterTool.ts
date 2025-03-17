@@ -4,9 +4,9 @@ import {PLYExporter, PLYExporterOptions} from "three/examples/jsm/exporters/PLYE
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter.js";
 import {isString} from "lodash-es";
 import {DownloadTool} from "./DownloadTool";
-import {GLTFExporter, GLTFExporterOptions} from "three/examples/jsm/exporters/GLTFExporter";
-import {DRACOExporter} from "three/examples/jsm/exporters/DRACOExporter";
-import {USDZExporter} from "three/examples/jsm/exporters/USDZExporter";
+import {GLTFExporter, GLTFExporterOptions} from "three/examples/jsm/exporters/GLTFExporter.js";
+import {DRACOExporter} from "three/examples/jsm/exporters/DRACOExporter.js";
+import {USDZExporter} from "three/examples/jsm/exporters/USDZExporter.js";
 
 export class ExporterTool {
     static instance: ExporterTool;

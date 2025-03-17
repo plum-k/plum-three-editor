@@ -1,5 +1,5 @@
 import {OutputPass} from "three/examples/jsm/postprocessing/OutputPass.js";
-import {Component, IComponentOptions} from "../../core";
+import {IComponentOptions,Component} from "../../core/Component";
 import {
     BlendFunction,
     BloomEffect,

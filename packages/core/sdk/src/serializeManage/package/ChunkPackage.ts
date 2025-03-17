@@ -1,11 +1,12 @@
 import {IPackageOptions, Package} from "./Package";
 import {chunk, isNil, split} from "lodash-es";
 import {Serialize} from "../SerializeInterface";
-import {Asset, ESceneLoadType, ESceneSaveType} from "../../core";
+import {ESceneLoadType, ESceneSaveType} from "../../core";
 import * as THREE from "three";
 import {BlobReader, BlobWriter, Entry, Uint8ArrayWriter, ZipReader, ZipWriter} from "@zip.js/zip.js";
 import {SerializerTool} from "../SerializerTool";
 import axios, {AxiosProgressEvent} from "axios";
+import {Asset} from "../../manager";
 
 export interface IChunkSerializeOptions extends IPackageOptions {
 }

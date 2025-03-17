@@ -1,5 +1,5 @@
 import {GizmoOptions, ViewportGizmo} from "three-viewport-gizmo";
-import {Component, IComponentOptions} from "../core";
+import {Component, IComponentOptions} from "../core/Component";
 
 export interface IGizmoOptions extends IComponentOptions {
 }

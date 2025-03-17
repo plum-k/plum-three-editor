@@ -16,7 +16,6 @@ import {GainMapLoader, HDRJPGLoader} from "@monogrid/gainmap-js";
 import {buildGraph} from "../tool";
 import {Subject} from "rxjs";
 import {KTX2Loader} from "three/examples/jsm/loaders/KTX2Loader.js";
-import {Asset, Component, IComponentOptions} from "../core";
 import {PDBLoader} from "three/examples/jsm/loaders/PDBLoader.js";
 import {PCDLoader} from "three/examples/jsm/loaders/PCDLoader.js";
 import {LUTCubeLoader} from "three/examples/jsm/loaders/LUTCubeLoader.js";
@@ -24,10 +23,11 @@ import {LUT3dlLoader} from "three/examples/jsm/loaders/LUT3dlLoader.js";
 import {LDrawLoader} from "three/examples/jsm/loaders/LDrawLoader.js";
 import {Rhino3dmLoader} from "three/examples/jsm/loaders/3DMLoader.js";
 import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader.js";
-import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader";
-import {TGALoader} from "three/examples/jsm/loaders/TGALoader";
-import {MDDLoader} from "three/examples/jsm/loaders/MDDLoader";
-
+import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader.js";
+import {TGALoader} from "three/examples/jsm/loaders/TGALoader.js";
+import {MDDLoader} from "three/examples/jsm/loaders/MDDLoader.js";
+import {Asset} from "./asset";
+import {IComponentOptions,Component} from "../core/Component";
 
 export interface IResourceManagers extends IComponentOptions {
     sdkUrl?: string;
@@ -96,7 +96,7 @@ export class AssetManager extends Component {
     tGALoader: TGALoader;
     pDBLoader: PDBLoader;
     pCDLoader: PCDLoader;
-    mMDLoader: MMDLoader;
+    mMDLoader: MDDLoader;
     lUTCubeLoader: LUTCubeLoader;
     lUT3dlLoader: LUT3dlLoader;
     lDrawLoader: LDrawLoader;
