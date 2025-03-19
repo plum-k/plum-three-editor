@@ -32,7 +32,7 @@ const change = (val: string) => {
 </script>
 
 <template>
-  <div class="absolute top-[20px] left-[10px] z-999">
+  <div class="absolute top-[50px] left-[10px] z-999">
     <el-segmented v-model="value" :options="options" direction="vertical" size="small" @change="change">
       <template #default="scope">
         <icon :icon-name="scope.item.icon"/>

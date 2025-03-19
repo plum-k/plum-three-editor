@@ -12,7 +12,7 @@ const cameraViewArray = [
   {label: "透视相机", value: ECameraType.PerspectiveCamera},
   {label: "正交相机", value: ECameraType.OrthographicCamera},
 ];
-const change = (val: ECameraType | ECameraViewType) => {
+const change = (val: ECameraType) => {
   const viewer = bus.viewer;
   if (viewer) {
     viewer.cameraManager.setCameraType(val);

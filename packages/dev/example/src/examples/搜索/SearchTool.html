@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Vite App</title>
+    <style>
+        html, body, #app {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+</div>
+<script type="importmap">
+    {
+      "imports": {
+        "tweakpane": "./tweakpane.min.js",
+        "@plum-render/three-sdk": "./plum-render-three-sdk.js",
+      }
+    }
+</script>
+<script async type="module">
+    import {CatmullRomLine, CurveType, SearchOperator, Tool, Viewer} from "@plum-render/three-sdk";
+    import {Pane} from "tweakpane";
+    import {clone} from "lodash-es";
+    const _viewer = await Viewer.create(document.getElementById('app'), {
+        isCreateDefaultLight: true,
+        isCreateDefaultEnvironment: true
+    })
+    console.log(_viewer)
+    _viewer.initSubject.subscribe(() => {
+
+    })
+
+    const aaa = new Tool.search(viewer.scene, [
+        {
+            propertyPath: ['material', 'type'],
+            operator: SearchOperator.Equal,
+            value: 'MeshStandardMaterial'
+        }
+    ])
+
+</script>
+</body>
+</html>

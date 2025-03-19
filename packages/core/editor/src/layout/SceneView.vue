@@ -12,7 +12,6 @@ import {type Id, toast} from "vue3-toastify";
 import ViewTool from "./sceneView/ViewTool.vue";
 import SceneStatistics from "./sceneView/SceneStatistics.vue";
 import {uniqueId} from "lodash-es";
-import useCatmullRomLine from "../testCore/line/line/useCatmullRomLine.ts";
 
 const canvasContainer = ref<HTMLDivElement>();
 
@@ -53,8 +52,6 @@ onMounted(() => {
     bus.setViewer(_viewer)
     bus.viewerInitSubject.next(true);
     console.log(_viewer)
-    //-------- 测试
-    useCatmullRomLine(_viewer)
   })
   // 场景加载进度条
   _viewer.sceneLoadProgressSubject.subscribe((event) => {
@@ -313,9 +310,9 @@ function createLight(info: IDragInfo) {
     <view-tool/>
     <div id="canvasContainer" ref="canvasContainer" class="container w-full relative h-[calc(100%-62px)]"
          @drop="onDrop">
-      <control/>
       <scene-statistics/>
     </div>
+    <control/>
     <camera-info/>
   </div>
 </template>

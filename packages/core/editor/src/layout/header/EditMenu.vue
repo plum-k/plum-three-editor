@@ -17,9 +17,7 @@ const options: DropdownProps['options'] = [
 ]
 
 const clickHandler: DropdownProps['onClick'] = (data) => {
-  (data)
   MessagePlugin.success(`选中【${data.content}】`);
-
 };
 
 </script>

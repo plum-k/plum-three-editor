@@ -1,18 +1,48 @@
-import {Pane} from 'tweakpane';
-import {clone} from "lodash-es";
-import {CatmullRomLine, CurveType, LineMaterialType, LineType, Viewer} from "@plum-render/three-sdk";
-export default function useCubicBezierLine(_viewer: Viewer) {
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Vite App</title>
+    <style>
+        html, body, #app {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+</div>
+<script type="importmap">
+    {
+      "imports": {
+        "tweakpane": "./tweakpane.min.js",
+        "@plum-render/three-sdk": "./plum-render-three-sdk.js",
+      }
+    }
+</script>
+<script async type="module">
+    import {CatmullRomLine, CurveType, LineMaterialType, LineType, Viewer} from "@plum-render/three-sdk";
+    import {CatmullRomLine, CubicBezierLine, CurveType, LineMaterialType, LineType, Viewer} from "@plum-render/three-sdk";
+    import {Pane} from "tweakpane";
+    import {clone} from "lodash-es";
+    const _viewer = await Viewer.create(document.getElementById('app'), {
+        isCreateDefaultLight: true,
+        isCreateDefaultEnvironment: true
+    })
+    console.log(_viewer)
+    _viewer.initSubject.subscribe(() => {
 
+    })
     const subdivisions = 6;
     const recursion = 1;
 
-    const points = GeometryUtils.hilbert3D(new THREE.Vector3(0, 0, 0), 25.0, recursion, 0, 1, 2, 3, 4, 5, 6, 7);
+    const points = hilbert3D(new Vector3(0, 0, 0), 25.0, recursion, 0, 1, 2, 3, 4, 5, 6, 7);
 
-    const colors = new Array(points.length).fill(0).map(() => [Math.random(), Math.random(), Math.random()]) as [
-        number,
-        number,
-        number
-    ][]
+    const colors = new Array(points.length).fill(0).map(() => [Math.random(), Math.random(), Math.random()])
 
     const line = new CubicBezierLine(
         {
@@ -36,7 +66,7 @@ export default function useCubicBezierLine(_viewer: Viewer) {
     _viewer.scene.add(line)
 
     let PARAMS = clone(line.options)
-    // 
+    //
     const pane = new Pane({
         container: _viewer.container
     });
@@ -65,11 +95,12 @@ export default function useCubicBezierLine(_viewer: Viewer) {
 
 
     pane.on('change', (ev) => {
-        // 
+        //
 
-        // 
+        //
         line.update(PARAMS)
     });
 
-
-}
+</script>
+</body>
+</html>

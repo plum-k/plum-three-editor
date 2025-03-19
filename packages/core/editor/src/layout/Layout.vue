@@ -13,7 +13,6 @@ const resize = () => {
     viewer.eventManager.resizeSubject.next(true);
   }
 }
-
 </script>
 
 <template>
