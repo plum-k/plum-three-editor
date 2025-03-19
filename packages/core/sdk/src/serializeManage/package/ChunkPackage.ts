@@ -85,10 +85,10 @@ export class ChunkSerialize extends Package {
         let viewerJson = this.viewer.toJSON() as unknown as Serialize.ViewerJson;
         const sceneJson = viewerJson.scene;
         const {geometries, materials} = sceneJson;
-        
+        console.log("viewerJson",this.viewer.toJSON())
+
         const geometriesBlob = await this.packMaterialsOrVertexData(geometries, "geometries", 100);
         const materialsBlob = await this.packMaterialsOrVertexData(materials, "materials", 300);
-        console.log("viewerJson",viewerJson)
         const zipWriter = new ZipWriter(new BlobWriter());
 
         const viewerInfo = this.packSceneInfo(viewerJson);

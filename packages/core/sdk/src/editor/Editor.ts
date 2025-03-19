@@ -15,6 +15,7 @@ import {
     SetValueCommand
 } from "./commands";
 import {
+    isBone,
     isCamera,
     isDirectionalLight,
     isHemisphereLight,
@@ -129,7 +130,6 @@ export class Editor extends Component {
     }
 
     //------------------ 回退 结束-----------------
-
     addObject(object: THREE.Object3D, parent: THREE.Object3D | undefined = undefined, index: number = 0) {
         object.traverse((child) => {
             if (isMesh(child)) {
@@ -258,10 +258,9 @@ export class Editor extends Component {
                 helper = new THREE.HemisphereLightHelper(object, 1);
             } else if (isSkinnedMesh(object)) {
                 helper = new THREE.SkeletonHelper(object.skeleton.bones[0]);
-            } else if (object.isBone === true && object.parent && object.parent.isBone !== true) {
+            } else if (isBone(object) === true && object.parent && isBone(object.parent) !== true) {
                 helper = new THREE.SkeletonHelper(object);
             } else {
-                // no helper for this object type
                 return;
             }
             const picker = new THREE.Mesh(geometry, material);
