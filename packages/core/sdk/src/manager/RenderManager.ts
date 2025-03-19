@@ -44,7 +44,6 @@ export class RenderManager extends Component {
 
         webGLRenderer.outputColorSpace = SRGBColorSpace;
         webGLRenderer.debug.checkShaderErrors = true;
-        console.log(webGLRenderer)
         return webGLRenderer;
     }
 
@@ -58,7 +57,7 @@ export class RenderManager extends Component {
         const delta = clock.getDelta();
     }
 
-    render(timestamp: number) {
+    render(timestamp?: number) {
         const scene = this.viewer.scene;
         const eventManager = this.viewer.eventManager;
 

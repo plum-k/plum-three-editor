@@ -1,3 +1,3 @@
-export * from "./EnvironmentManage";
+export * from "./EnvironmentComponent";
 export * from "./environmentAssets";
 export * from "./PlumSky";

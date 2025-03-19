@@ -1,4 +1,5 @@
 export const presetsObj = {
+    default:"/hdr/kloppenheim_06_puresky_1k.hdr",
     apartment: '/hdr/lebombo_1k.hdr',
     city: '/hdr/potsdamer_platz_1k.hdr',
     dawn: '/hdr/kiara_1_dawn_1k.hdr',

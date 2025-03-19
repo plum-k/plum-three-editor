@@ -29,27 +29,27 @@ export interface IPostProcessingOptions extends IComponentOptions {
 
 export class PostProcessingComponent extends Component {
     // @ts-ignore
-    pixelationEffect: PixelationEffect;
+    pixelationEffect: PixelationEffect|undefined = undefined
 
-    composer: EffectComposer;
-    renderPass!: RenderPass;
-    outputPass!: OutputPass;
+    composer: EffectComposer|undefined = undefined
+    renderPass: RenderPass|undefined = undefined
+    outputPass: OutputPass|undefined = undefined
 
 
-    bloomEffect!: BloomEffect;
-    gridEffect!: GridEffect;
-    smaaEffect!: SMAAEffect;
-    ssaoEffect!: SSAOEffect;
-    fxaaEffect!: FXAAEffect;
+    bloomEffect: BloomEffect|undefined = undefined
+    gridEffect: GridEffect|undefined = undefined
+    smaaEffect: SMAAEffect|undefined = undefined
+    ssaoEffect: SSAOEffect|undefined = undefined
+    fxaaEffect: FXAAEffect|undefined = undefined
 
-    selectiveBloomEffectOptions!: BloomEffectOptions;
-    bloomEffectOptions!: BloomEffectOptions;
+    selectiveBloomEffectOptions: BloomEffectOptions|undefined = undefined
+    bloomEffectOptions: BloomEffectOptions|undefined = undefined
     // gridEffectOptions!: GridEffectOptions;
     // outlineEffectOptions!: OutlineEffectOptions;
     // smaaEffectOptions!: SMAAEffectOptions;
     // ssaoEffectOptions!: SSAOEffectOptions;
     // fxaaEffectOptions!: FXAAEffectOptions;
-    effectPass!: EffectPass;
+    effectPass: EffectPass|undefined = undefined
 
     effects: Effect[] = [];
     /**
@@ -65,12 +65,12 @@ export class PostProcessingComponent extends Component {
             frameBufferType: HalfFloatType
         });
         const renderPass = new RenderPass(this.scene, this.camera);
-        this.composer.addPass(renderPass);
+        this.composer?.addPass(renderPass);
     }
 
     render(timestamp: number) {
         if (this.#enabled) {
-            this.composer.render()
+            this.composer?.render()
         }
     }
 
@@ -85,7 +85,7 @@ export class PostProcessingComponent extends Component {
     addRenderPass() {
         const scene = this.viewer.scene;
         this.renderPass = new RenderPass(scene, this.viewer.cameraManager.camera);
-        this.composer.addPass(this.renderPass);
+        this.composer?.addPass(this.renderPass);
     }
 
     //-------------------- 辉光
@@ -107,7 +107,7 @@ export class PostProcessingComponent extends Component {
         this.selectiveBloomEffect.ignoreBackground = true;
         // this.selectiveBloomEffect.inverted = true;
         this.selectiveBloomEffectPass = new EffectPass(this.camera, this.selectiveBloomEffect);
-        this.composer.addPass(this.selectiveBloomEffectPass);
+        this.composer?.addPass(this.selectiveBloomEffectPass);
     }
 
     /**
@@ -115,7 +115,7 @@ export class PostProcessingComponent extends Component {
      */
     disposeSelectiveBloomEffect() {
         if (this.selectiveBloomEffectPass) {
-            this.composer.removePass(this.selectiveBloomEffectPass);
+            this.composer?.removePass(this.selectiveBloomEffectPass);
             this.selectiveBloomEffectPass.dispose();
         }
         if (this.selectiveBloomEffect) {
@@ -176,12 +176,12 @@ export class PostProcessingComponent extends Component {
         this.kawaseBlurPass = new KawaseBlurPass({
             height: 480
         });
-        this.composer.addPass(this.kawaseBlurPass);
+        this.composer?.addPass(this.kawaseBlurPass);
     }
 
     disposeBlurEffect() {
         if (this.kawaseBlurPass) {
-            this.composer.removePass(this.kawaseBlurPass);
+            this.composer?.removePass(this.kawaseBlurPass);
             this.kawaseBlurPass.dispose();
         }
     }
@@ -191,7 +191,8 @@ export class PostProcessingComponent extends Component {
     outlinePass: EffectPass | undefined;
 
     initOutlineEffect(options: any = {}) {
-        const renderer = this.composer.getRenderer();
+        const renderer = this.composer?.getRenderer();
+        if (!renderer) return;
         this.outlineEffect = new OutlineEffect(this.scene, this.camera, {
             blendFunction: BlendFunction.SCREEN,
             multisampling: Math.min(4, renderer.capabilities.maxSamples),
@@ -205,12 +206,12 @@ export class PostProcessingComponent extends Component {
             ...options
         });
         this.outlinePass = new EffectPass(this.camera, this.outlineEffect);
-        this.composer.addPass(this.outlinePass);
+        this.composer?.addPass(this.outlinePass);
     }
 
     disposeOutlineEffect() {
         if (this.outlinePass) {
-            this.composer.removePass(this.outlinePass);
+            this.composer?.removePass(this.outlinePass);
             this.outlinePass.dispose();
         }
         if (this.outlineEffect) {
@@ -275,7 +276,9 @@ export class PostProcessingComponent extends Component {
     }
 
     addPixelationEffect() {
-        this.effects.push(this.pixelationEffect);
+        if (this.pixelationEffect){
+            this.effects.push(this.pixelationEffect);
+        }
     }
 
     //----------------- smaaEffect -----------------
@@ -294,7 +297,9 @@ export class PostProcessingComponent extends Component {
     }
 
     addBloomEffect() {
-        this.effects.push(this.bloomEffect);
+        if (this.bloomEffect){
+            this.effects.push(this.bloomEffect);
+        }
     }
 
     //----------------- gridEffect -----------------
@@ -316,7 +321,9 @@ export class PostProcessingComponent extends Component {
     }
 
     addSMAAEffect() {
-        this.effects.push(this.smaaEffect);
+        if (this.smaaEffect){
+            this.effects.push(this.smaaEffect);
+        }
     }
 
     //----------------- ssaoEffect -----------------
@@ -325,7 +332,9 @@ export class PostProcessingComponent extends Component {
     }
 
     addSSAOEffect() {
-        this.effects.push(this.ssaoEffect);
+        if (this.ssaoEffect){
+            this.effects.push(this.ssaoEffect);
+        }
     }
 
     //----------------- fxaaEffect -----------------
@@ -336,7 +345,9 @@ export class PostProcessingComponent extends Component {
     }
 
     addFXAAEffect() {
-        this.effects.push(this.fxaaEffect);
+        if (this.fxaaEffect){
+            this.effects.push(this.fxaaEffect);
+        }
     }
 
     //----------------- effectPass -----------------
@@ -347,13 +358,13 @@ export class PostProcessingComponent extends Component {
 
     addEffectPass() {
         if (this.effectPass) {
-            this.composer.addPass(this.effectPass);
+            this.composer?.addPass(this.effectPass);
         }
     }
 
     //----------------- setSize -----------------
     setSize(width: number, height: number) {
-        this.composer.setSize(width, height);
+        this.composer?.setSize(width, height);
         // this.selectiveBloomEffect?.setSize(width, height);
         // 
     }

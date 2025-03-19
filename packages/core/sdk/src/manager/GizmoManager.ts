@@ -7,11 +7,14 @@ export interface IGizmoOptions extends IComponentOptions {
 
 export class GizmoManager extends Component {
 
-    cubeGizmo: ViewportGizmo | undefined;
-    sphereGizmo: ViewportGizmo | undefined;
+    cubeGizmo: ViewportGizmo | undefined = undefined;
+    sphereGizmo: ViewportGizmo | undefined = undefined;
 
     constructor(options: IGizmoOptions) {
         super(options);
+        this.eventManager.renderSubject.subscribe(() => {
+            this.render();
+        })
     }
 
     initSphereGizmo() {
@@ -43,14 +46,16 @@ export class GizmoManager extends Component {
             cameraControls.getTarget(this.sphereGizmo!.target);
             this.sphereGizmo!.update();
         });
+    }
 
-        this.eventManager.renderSubject.subscribe(() => {
-            this.sphereGizmo!.render();
-        })
+    update() {
+        this.sphereGizmo?.update();
+        this.cubeGizmo?.update();
+    }
 
-        this.eventManager.resizeSubject.subscribe(() => {
-            this.sphereGizmo!.update();
-        })
+    render() {
+        this.sphereGizmo?.render();
+        this.cubeGizmo?.render();
     }
 
     initCubeGizmo() {
@@ -97,8 +102,6 @@ export class GizmoManager extends Component {
                 label: "背面",
             },
         };
-
-
         this.cubeGizmo = new ViewportGizmo(this.camera, this.renderer, darkCubeConfig);
         const cameraControls = this.cameraControls;
         const camera = this.camera;
@@ -118,13 +121,5 @@ export class GizmoManager extends Component {
             cameraControls.getTarget(this.cubeGizmo!.target);
             this.cubeGizmo!.update();
         });
-
-        this.eventManager.renderSubject.subscribe(() => {
-            this.cubeGizmo!.render();
-        })
-
-        this.eventManager.resizeSubject.subscribe(() => {
-            this.cubeGizmo!.update();
-        })
     }
 }

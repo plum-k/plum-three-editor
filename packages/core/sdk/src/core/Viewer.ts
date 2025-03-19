@@ -12,7 +12,7 @@ import {
 } from "../manager"; // 导入渲染管理类
 import {Editor} from "../editor"; // 导入编辑器类
 import {Pick} from "./Pick"; // 导入拾取类
-import {EnvironmentManage} from "./environment"; // 导入环境类
+import {EnvironmentComponent, ISetEnvironmentOptions} from "./environment"; // 导入环境类
 import {deepMergeRetain, DownloadTool, ESearchMode, ICondition, Search} from "../tool";
 import {CameraManager, DrawLine, MeasureTool} from "../control";
 import {CssRenderer} from "./CssRenderer";
@@ -117,10 +117,9 @@ export interface IViewerOptions {
      */
     isCubeGizmo?: boolean;
     isSphereGizmo?: boolean;
-
     scene?: {
         background?: THREE.Color
-    }
+    },
 }
 
 export class Viewer {
@@ -145,7 +144,7 @@ export class Viewer {
     cameraManager: CameraManager; // 相机控制
     sceneHelpers: THREE.Scene; // 场景辅助
     pick: Pick; // 拾取
-    environmentManage: EnvironmentManage; // 环境
+    environmentManage: EnvironmentComponent; // 环境
     // @ts-ignore
     drawLine!: DrawLine; // 绘制直线
     measureTool: MeasureTool; // 测量工具
@@ -158,9 +157,9 @@ export class Viewer {
     grid: Grid | undefined = undefined;
     axesHelper: AxesHelper | undefined = undefined;
     // 初始化组件完成
-    initComponentSubject = new BehaviorSubject(true);
+    initComponentSubject = new BehaviorSubject(false);
     // 场景初始化完成
-    initSubject = new BehaviorSubject(true);
+    initSubject = new BehaviorSubject(false);
     //---------- 事件
     // 场景加载进度
     sceneLoadProgressSubject = new Subject<ISceneLoadProgressEvent>();
@@ -204,7 +203,7 @@ export class Viewer {
         this.assetManager = new AssetManager({viewer: this});
         this.pick = new Pick({viewer: this});
         this.cssRenderer = new CssRenderer({viewer: this});
-        this.environmentManage = new EnvironmentManage({viewer: this});
+        this.environmentManage = new EnvironmentComponent({viewer: this});
         this.drawLine = new DrawLine({viewer: this});
         this.measureTool = new MeasureTool({viewer: this});
         this.gizmoManager = new GizmoManager({viewer: this});
@@ -345,19 +344,18 @@ export class Viewer {
             this.ossApi = await OssApi.create(this.options.ossApiOptions);
             this.initComponentSubject.next(true);
         }
-
         if (this.options.isCubeGizmo) {
             this.gizmoManager.initCubeGizmo();
         }
         if (this.options.isSphereGizmo) {
             this.gizmoManager.initSphereGizmo();
         }
-
-        this.initSubject.subscribe(() => {
+        // todo 监听时机不对 等待修改
+        this.initSubject.subscribe((value) => {
+            if (!value) return;
             if (this.options.isCreateDefaultLight) {
                 this.environmentManage.createDefaultLight();
             }
-
             if (this.options.isCreateDefaultEnvironment) {
                 this.environmentManage.createDefaultEnvironment();
             }
@@ -412,6 +410,8 @@ export class Viewer {
         this.cssRenderer.setSize(width, height); // 设置 CSS 渲染器大小
         this.postProcessingComponent.setSize(width, height); // 设置后处理管理器大小
         this.renderManager.render(); // 重置后必须重新渲染. 不然会闪烁
+        this.gizmoManager.update();
+        this.gizmoManager.render();
     }
 
     //--------------------- 截屏

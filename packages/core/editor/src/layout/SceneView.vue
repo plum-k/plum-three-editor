@@ -42,6 +42,7 @@ onMounted(() => {
     isCreateDefaultLight: true,
     isCubeGizmo: true,
     isSphereGizmo: true,
+    isCreateDefaultEnvironment: true,
     ossApiOptions: {
       server: import.meta.env.VITE_SERVER,
       bucket: import.meta.env.VITE_BUCKET,
@@ -170,7 +171,6 @@ onMounted(() => {
 
 
 const onDrop = (event: DragEvent) => {
-
   if (!event.dataTransfer) return
   const files = event.dataTransfer.files;
   if (files.length > 0) {

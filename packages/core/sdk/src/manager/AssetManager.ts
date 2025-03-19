@@ -27,7 +27,7 @@ import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader.js";
 import {TGALoader} from "three/examples/jsm/loaders/TGALoader.js";
 import {MDDLoader} from "three/examples/jsm/loaders/MDDLoader.js";
 import {Asset} from "./asset";
-import {IComponentOptions,Component} from "../core/Component";
+import {Component, IComponentOptions} from "../core/Component";
 
 export interface IResourceManagers extends IComponentOptions {
     sdkUrl?: string;
@@ -186,15 +186,11 @@ export class AssetManager extends Component {
     }
 
     loadRGBE(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        return new Promise<any>((resolve, reject) => {
+        return this.buildPromise(asset, () => {
             let loader = this.rGBELoader
             const {before, after, tail,} = option
             if (loader) {
-                let {
-                    url, result, name, file
-                    , fileReader, loadSubject, progressSubject, onLoad
-                    , onProgress, onError, loadFile
-                } = asset;
+                let {url, file, onLoad, onProgress, onError, loadFile} = asset;
                 before && before(loader)
                 if (!isNil(url)) {
                     loader.load(url, onLoad, onProgress, onError);
@@ -276,11 +272,7 @@ export class AssetManager extends Component {
         return this.buildPromise(asset, () => {
             let loader = this.textureLoader;
             const {before, after, tail} = option;
-            let {
-                url, file
-                , onLoad
-                , onProgress, onError, loadFile
-            } = asset;
+            let {url, file, onLoad, onProgress, onError, loadFile} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -299,11 +291,7 @@ export class AssetManager extends Component {
         return this.buildPromise(asset, () => {
             let loader = this.gLTFLoader;
             const {before, after, tail} = option;
-            let {
-                url, name, file, loadSubject
-                , onProgress, onError, loadFile
-            } = asset;
-
+            let {url, name, file, loadSubject, onProgress, onError, loadFile} = asset;
             const loadFun = (data: any) => {
                 if (data.scene) {
                     // 修改下模型名称
@@ -330,8 +318,6 @@ export class AssetManager extends Component {
     }
 
     loadObject(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-
-
         return this.buildPromise(asset, () => {
             let loader = this.objectLoader;
             const {before, after, tail} = option
@@ -350,14 +336,10 @@ export class AssetManager extends Component {
     }
 
     loadPDB(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-
         return this.buildPromise(asset, () => {
             let loader = this.pDBLoader;
             const {before, after, tail} = option
-            let {
-                url, result,
-                onLoad, onProgress, onError, loadFile
-            } = asset;
+            let {url, result, onLoad, onProgress, onError, loadFile} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress,
@@ -369,14 +351,10 @@ export class AssetManager extends Component {
     }
 
     loadPCD(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-
         return this.buildPromise(asset, () => {
             let loader = this.pCDLoader;
             const {before, after, tail} = option
-            let {
-                url, result,
-                onLoad, onProgress, onError,
-            } = asset;
+            let {url, result, onLoad, onProgress, onError,} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -387,15 +365,10 @@ export class AssetManager extends Component {
     }
 
     loadMMD(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-
         return this.buildPromise(asset, () => {
             let loader = this.mMDLoader;
             const {before, after, tail} = option
-            let {
-                url, result, name, file, fileReader
-                , loadSubject, progressSubject,
-                onLoad, onProgress, onError, loadFile
-            } = asset;
+            let {url, result, name, file, fileReader, loadSubject, progressSubject, onLoad, onProgress, onError, loadFile} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -408,11 +381,7 @@ export class AssetManager extends Component {
         return this.buildPromise(asset, () => {
             let loader = this.lUTCubeLoader;
             const {before, after, tail} = option
-            let {
-                url, result, name, file, fileReader
-                , loadSubject, progressSubject,
-                onLoad, onProgress, onError, loadFile
-            } = asset;
+            let {url, result, name, file, fileReader, loadSubject, progressSubject, onLoad, onProgress, onError, loadFile} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -425,12 +394,7 @@ export class AssetManager extends Component {
         return this.buildPromise(asset, () => {
             let loader = this.lUT3dlLoader;
             const {before, after, tail} = option
-
-            let {
-                url, result, name, file, fileReader
-                , loadSubject, progressSubject,
-                onLoad, onProgress, onError, loadFile
-            } = asset;
+            let {url, result, onLoad, onProgress, onError,} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -444,10 +408,7 @@ export class AssetManager extends Component {
         return this.buildPromise(asset, () => {
             let loader = this.lDrawLoader;
             const {before, after, tail} = option
-            let {
-                url, result,
-                onLoad, onProgress, onError, loadFile
-            } = asset;
+            let {url, result, onLoad, onProgress, onError} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -460,10 +421,7 @@ export class AssetManager extends Component {
         return this.buildPromise(asset, () => {
             let loader = this.rhino3dmLoader;
             const {before, after, tail} = option
-            let {
-                url, result,
-                onLoad, onProgress, onError, loadFile
-            } = asset;
+            let {url, result, onLoad, onProgress, onError} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -473,15 +431,10 @@ export class AssetManager extends Component {
     }
 
     loadOBJ(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-
         return this.buildPromise(asset, () => {
             let loader = this.oBJLoader;
             const {before, after, tail} = option
-            let {
-                url, result, name, file, fileReader
-                , loadSubject, progressSubject,
-                onLoad, onProgress, onError, loadFile
-            } = asset;
+            let {url, result, onLoad, onProgress, onError,} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -491,14 +444,10 @@ export class AssetManager extends Component {
     }
 
     loadAudio(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-
         return this.buildPromise(asset, () => {
             let loader = this.audioLoader;
             const {before, after, tail} = option
-            let {
-                url, result,
-                onLoad, onProgress, onError,
-            } = asset;
+            let {url, result, onLoad, onProgress, onError,} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -512,10 +461,7 @@ export class AssetManager extends Component {
         return this.buildPromise(asset, () => {
             let loader = this.cubeTextureLoader;
             const {before, after, tail} = option
-            let {
-                url, result,
-                onLoad, onProgress, onError,
-            } = asset;
+            let {url, result, onLoad, onProgress, onError,} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 // todo 没用
@@ -531,10 +477,7 @@ export class AssetManager extends Component {
         return this.buildPromise(asset, () => {
             let loader = this.eXRLoader;
             const {before, after, tail} = option
-            let {
-                url, result,
-                onLoad, onProgress, onError,
-            } = asset;
+            let {url, result, onLoad, onProgress, onError,} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -547,10 +490,7 @@ export class AssetManager extends Component {
         return this.buildPromise(asset, () => {
             let loader = this.eXRLoader;
             const {before, after, tail} = option
-            let {
-                url, result,
-                onLoad, onProgress, onError,
-            } = asset;
+            let {url, result, onLoad, onProgress, onError,} = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -561,6 +501,7 @@ export class AssetManager extends Component {
 
     loadAsset(asset: Asset, option: ILoadFun = DefaultLoadFun): Promise<any> {
         const extension = asset.extension;
+
         switch (extension) {
             case "object":
                 return this.loadObject(asset, option)
