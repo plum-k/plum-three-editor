@@ -17,6 +17,7 @@ import {
 } from "./commands";
 import {
     isBone,
+    isBoxHelper,
     isCamera,
     isDirectionalLight,
     isHemisphereLight,
@@ -366,8 +367,8 @@ export class Editor extends Component {
      */
     helperUpdate(object: THREE.Object3D) {
         let helper = this.helpers.get(object.uuid)
-        if (helper) {
-            Reflect.apply(Reflect.get(helper, "update"), helper, [])
+        if (isBoxHelper(helper)) {
+            helper.update()
         }
     }
 

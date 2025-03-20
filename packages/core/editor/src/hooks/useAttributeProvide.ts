@@ -23,7 +23,7 @@ export interface IUseAttributeProvide {
 export const useAttributeProvide = (options: IUseAttributeProvide) => {
     const {isAutoUpdate = true, getObject} = options;
 
-    console.log("getObject",getObject)
+    // console.log("getObject",getObject)
     if (!getObject) {
         logStack()
     }
@@ -37,7 +37,7 @@ export const useAttributeProvide = (options: IUseAttributeProvide) => {
     if (isAutoUpdate) {
         objectAttributeChangeSubject.subscribe((editValue) => {
             const {name, value, initValue} = editValue;
-            console.log("name", name, value)
+            // console.log("name", name, value)
             const object = bus.selectObject;
             const editor = bus.editor!;
             if (!isObject3D(object)) return;

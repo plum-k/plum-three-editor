@@ -1,3 +1,6 @@
+import {IOssApiOptions} from "@plum-render/oss-api";
+import {Color} from "three";
+
 export interface IViewerOptions {
     /**
      * 应用程序的唯一标识符。
@@ -40,6 +43,6 @@ export interface IViewerOptions {
     isCubeGizmo?: boolean;
     isSphereGizmo?: boolean;
     scene?: {
-        background?: THREE.Color
+        background?: Color
     },
 }

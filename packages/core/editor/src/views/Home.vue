@@ -19,7 +19,7 @@ const getFolders = (appInfo: null | IApplication) => {
   ApplicationApi.getAll(appInfo?.id).then(res => {
     if (res.code === 1) {
       folders.value = res.data;
-      console.log("获取到的文件夹", folders.value)
+      // console.log("获取到的文件夹", folders.value)
     }
   })
 }

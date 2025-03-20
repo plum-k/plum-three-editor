@@ -95,7 +95,6 @@ export class EnvironmentComponent extends Component {
     }
 
     setEnvironment(options: Partial<ISetEnvironmentOptions> = {}) {
-        logStack("111")
         const _options = deepMergeRetain({
             files: ['/px.png', '/nx.png', '/py.png', '/ny.png', '/pz.png', '/nz.png'],
             path: '',

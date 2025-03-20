@@ -34,7 +34,7 @@ const getObject = inject<() => object>("getObject")!;
 const updateTrigger = inject<ShallowRef<boolean>>("updateTrigger")!;
 
 watch(updateTrigger, () => {
-  console.log("updateTrigger", updateTrigger.value)
+  // console.log("updateTrigger", updateTrigger.value)
 })
 
 function loadFile(file: File) {

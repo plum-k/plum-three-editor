@@ -21,7 +21,6 @@ const props = withDefaults(defineProps<Props>(), {
   isRotation: false
 })
 const {name, label, isRotation} = props
-console.log("isRotation",isRotation)
 
 </script>
 

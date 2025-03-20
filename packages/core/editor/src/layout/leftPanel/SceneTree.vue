@@ -57,6 +57,13 @@ bus.viewerInitSubject.subscribe(() => {
     data.value = getSceneTree(viewer!);
     setHeight();
   })
+
+  viewer?.editor.editorEventManager.objectChanged.subscribe((value) => {
+    const {name} = value
+    if (name === "name") {
+      data.value = getSceneTree(viewer!);
+    }
+  })
 })
 
 const data = ref<Array<any>>([]);

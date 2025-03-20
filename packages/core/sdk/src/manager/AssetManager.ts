@@ -295,8 +295,9 @@ export class AssetManager extends Component {
                 if (data.scene) {
                     // 修改下模型名称
                     data.scene.name = name;
-                    // data.scene.animations.push(...data.animations);
-                    Object.assign(data, buildGraph(data.scene))
+                    data.scene.animations.push(...data.animations);
+                    // todo 通过名称快速查找对象
+                    // Object.assign(data, buildGraph(data.scene))
                 }
                 loadSubject.next(data.scene);
             }

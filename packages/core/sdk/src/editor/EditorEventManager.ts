@@ -1,6 +1,8 @@
 import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {Component, IComponentOptions} from "../core/Component";
 import * as THREE from 'three';
+import {Object3D} from 'three';
+import {PropertyPath} from "lodash-es";
 
 export interface IEditorEventManagerOptions extends IComponentOptions {
 }
@@ -8,6 +10,11 @@ export interface IEditorEventManagerOptions extends IComponentOptions {
 export interface IPick {
     intersects: THREE.Intersection<THREE.Object3D<THREE.Object3DEventMap>>[];
     position: THREE.Vector3
+}
+
+export interface IObjectChangedValue {
+    name: PropertyPath;
+    object: Object3D
 }
 
 export class EditorEventManager extends Component {
@@ -42,6 +49,8 @@ export class EditorEventManager extends Component {
 
     // 场景变化事件
     sceneGraphChanged = new BehaviorSubject(false);
+    // 选择对象名称变化
+    selectNameChanged = new Subject<any>();
 
     cameraChanged = new Subject<any>();
     cameraResetted = new Subject<any>();
@@ -51,14 +60,12 @@ export class EditorEventManager extends Component {
     // 在三维中选择物体
     objectSelected = new Subject<THREE.Object3D | undefined>();
 
-    // 定义一个名为objectFocused的Subject，用于处理对象被聚焦相关的事件或操作
-    // 当场景中的某个对象被聚焦（可能是视觉上的突出显示等）时，可通过这个Subject传播相关信息
     objectFocused = new Subject<any>();
 
     // 对象天加事件
     objectAdded = new Subject<any>();
     // 对象属性改变事件
-    objectChanged = new Subject<any>();
+    objectChanged = new Subject<IObjectChangedValue>();
     // 对象移除事件
     objectRemoved = new Subject<any>();
 

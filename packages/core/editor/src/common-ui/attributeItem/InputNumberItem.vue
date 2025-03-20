@@ -4,6 +4,7 @@ import {ElFormItem, ElInputNumber, formContextKey} from "element-plus";
 import {defineModel, inject} from "vue";
 import {type IAttributeProps, useAttributeInject} from "../../hooks";
 import * as THREE from "three";
+import {round} from "lodash-es";
 
 interface Props extends IAttributeProps {
   isItem?: boolean;
@@ -20,15 +21,12 @@ const props = withDefaults(defineProps<Props>(), {
 })
 // const props = defineProps<Props>();
 const {name, label = "", isItem, isRotation} = props;
-console.log("isRotation1111",isRotation)
 const formContext = inject(formContextKey, undefined);
 const {change, activeChange, focus,} = useAttributeInject({
   ...props,
   getValue: (value) => {
-    console.log(isRotation)
     if (isRotation) {
-      console.log("qqq",value)
-      return THREE.MathUtils.radToDeg(value);
+      return round( THREE.MathUtils.radToDeg(value),1)
     } else {
       return value
     }

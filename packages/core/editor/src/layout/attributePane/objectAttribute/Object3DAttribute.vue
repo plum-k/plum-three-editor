@@ -19,10 +19,13 @@ const {toggle} = useAttributeProvide({
 
 
 const {} = useBindSubscribe({
-  fun: toggle,
+  fun: () => {
+    toggle();
+    animationsToList();
+  },
   isMounted: true,
-  isViewerInit: false,
-  isBindCallFun: false,
+  isViewerInit: true,
+  isBindCallFun: true,
 })
 
 const {} = useObjectChangedBind({
@@ -30,16 +33,17 @@ const {} = useObjectChangedBind({
 })
 
 const animationsList = ref<{ name: string }[]>([])
-const animationsToList = (object: Object3D) => {
-  const animations = object.animations;
-  const list = []
+const animationsToList = () => {
+  if (!bus.selectObject) return;
+  console.log(bus.selectObject)
+  const animations = bus.selectObject.animations;
   for (let i = 0; i < animations.length; i++) {
     const animation = animations[i];
-    list.push({
+    animationsList.value.push({
       name: animation.name,
     })
   }
-  return list
+  console.log(animationsList.value)
 }
 
 const play = (item: string) => {
@@ -68,7 +72,7 @@ const play = (item: string) => {
     <input-number-item label="渲染次序" name="renderOrder"/>
     <user-data-item/>
 
-    <el-row v-for="(item, index) in animationsList" :key="index">
+    <el-row v-for="(item, index) in animationsList" :key="index" class="mt-1">
       <el-col :span="12">{{ item.name }}</el-col>
       <el-col :span="12">
         <el-button @click="play(item.name)">播放</el-button>

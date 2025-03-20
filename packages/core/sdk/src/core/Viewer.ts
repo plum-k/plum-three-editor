@@ -22,7 +22,7 @@ import {BehaviorSubject, Subject} from "rxjs";
 import {getPackage, Package} from "../serializeManage";
 import {PScene} from "./PScene";
 import {GizmoManager} from "../manager/GizmoManager";
-import {ISetAxes} from "../interface";
+import {ESceneLoadType, ISceneLoadProgressEvent, ISceneSaveProgressEvent, ISetAxes} from "../interface";
 import {ISetGrid} from "../interface";
 import {IViewerOptions} from "../interface";
 

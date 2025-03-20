@@ -40,13 +40,22 @@ export class SetValueCommand extends Command<any> {
         if (isArray(this.attributeName) && this.attributeName.length > 0) {
             set(this.object, this.attributeName, value);
             if (["position", "rotation", "scale"].includes(this.attributeName[0])) {
-                this.editor.editorEventManager.objectChanged.next(this.object)
+                this.editor.editorEventManager.objectChanged.next({
+                    name: this.attributeName,
+                    object: this.object
+                })
             }
-        }else {
-            // 当属性为显示隐藏时，触发场景图更新
+        } else {
             set(this.object, this.attributeName, value);
+            // 当属性为显示隐藏时，触发场景图更新
             if (this.attributeName === "visible") {
-                this.editor.editorEventManager.sceneGraphChanged.next(null);
+                this.editor.editorEventManager.sceneGraphChanged.next(true);
+            } else if (this.attributeName === "name") {
+                // 当属性为名称时，更新下场景树
+                this.editor.editorEventManager.objectChanged.next({
+                    name: this.attributeName,
+                    object: this.object
+                })
             }
         }
     }

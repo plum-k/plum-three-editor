@@ -264,7 +264,7 @@ const updateFogType = (viewer: Viewer) => {
   } else {
     form.fogType = "无"
   }
-  console.log("form", form)
+  // console.log("form", form)
 }
 
 const getTexture = () => {

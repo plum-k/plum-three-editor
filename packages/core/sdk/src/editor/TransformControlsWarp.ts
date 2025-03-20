@@ -17,7 +17,7 @@ export class TransformControlsWarp extends Component {
         this.initTransformControls()
     }
 
-    setSpace(space: "world" | "local"){
+    setSpace(space: "world" | "local") {
         this.transformControls.setSpace(space);
     }
 
@@ -27,9 +27,12 @@ export class TransformControlsWarp extends Component {
         this.transformControls.addEventListener('axis-changed', () => {
 
         });
-        this.transformControls.addEventListener('objectChange', () => {
+        this.transformControls.addEventListener('objectChange', (value) => {
             if (this.transformControls.object) {
-                this.editor.editorEventManager.objectChanged.next(this.transformControls.object);
+                this.editor.editorEventManager.objectChanged.next({
+                    name: "objectChange",
+                    object:this.transformControls.object
+                });
             }
         });
         this.transformControls.addEventListener('mouseDown', () => {
@@ -57,7 +60,7 @@ export class TransformControlsWarp extends Component {
                         break;
                     case 'scale':
                         if (!this.objectScaleOnDown.equals(object.scale)) {
-                            this.editor.setValueExecute(object, "scale", object.rotation, this.objectScaleOnDown)
+                            this.editor.setValueExecute(object, "scale", object.scale, this.objectScaleOnDown)
                         }
                         break;
                 }

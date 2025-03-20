@@ -52,7 +52,7 @@ onMounted(() => {
   _viewer.initSubject.subscribe(() => {
     bus.setViewer(_viewer)
     bus.viewerInitSubject.next(true);
-    console.log(_viewer)
+    // console.log(_viewer)
   })
   // 场景加载进度条
   _viewer.sceneLoadProgressSubject.subscribe((event) => {
@@ -95,7 +95,7 @@ onMounted(() => {
     const {type, name, total, loaded} = event;
     const _progress = loaded / total;
     const id = saveIdMao.get(name);
-    console.log(event)
+    // console.log(event)
     if (id === undefined) {
       if (type === ESceneSaveType.Save) {
         const newId = toast.loading(name, {
