@@ -7,19 +7,26 @@ import {find} from "lodash-es";
 import {BoolItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
 import UserDataItem from "../../../common-ui/attributeItem/UserDataItem.vue";
+import {useObjectChangedBind} from "../../../hooks/useObjectChangedBind.ts";
 
 const bus = useBus();
 const {toggle} = useAttributeProvide({
-  isAutoUpdate: false,
+  isAutoUpdate: true,
   getObject: () => {
     return bus.selectObject
   }
 })
+
+
 const {} = useBindSubscribe({
   fun: toggle,
   isMounted: true,
   isViewerInit: false,
   isBindCallFun: false,
+})
+
+const {} = useObjectChangedBind({
+  fun: toggle,
 })
 
 const animationsList = ref<{ name: string }[]>([])

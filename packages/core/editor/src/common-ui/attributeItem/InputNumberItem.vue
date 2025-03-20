@@ -20,12 +20,15 @@ const props = withDefaults(defineProps<Props>(), {
 })
 // const props = defineProps<Props>();
 const {name, label = "", isItem, isRotation} = props;
+console.log("isRotation1111",isRotation)
 const formContext = inject(formContextKey, undefined);
 const {change, activeChange, focus,} = useAttributeInject({
   ...props,
   getValue: (value) => {
+    console.log(isRotation)
     if (isRotation) {
-      return THREE.MathUtils.degToRad(value);
+      console.log("qqq",value)
+      return THREE.MathUtils.radToDeg(value);
     } else {
       return value
     }

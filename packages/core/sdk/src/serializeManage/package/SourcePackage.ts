@@ -1,10 +1,10 @@
 import {IPackageOptions, Package} from "./Package";
-import { ESceneLoadType, ESceneSaveType} from "../../core/Viewer";
 import * as THREE from "three";
 import {DownloadTool} from "../../tool";
 import {isNil} from "lodash-es";
 import axios, {AxiosProgressEvent} from "axios";
 import {Asset} from "../../manager";
+import {ESceneLoadType, ESceneSaveType} from "../../interface";
 
 
 export interface ISourcePackageOptions extends IPackageOptions {

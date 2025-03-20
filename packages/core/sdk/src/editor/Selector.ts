@@ -67,7 +67,7 @@ export class Selector extends Component {
         })
         // 选择对象属性改变时, 更新包围盒 和 辅助对象
         this.editor.editorEventManager.objectChanged.subscribe((object) => {
-            console.log('object',object)
+            // console.log('object',object)
             this.selectionBox.setFromObject(object);
             this.editor.helperUpdate(object)
         })

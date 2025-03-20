@@ -28,13 +28,13 @@ const {name, label} = props
       <div>
         x:
       </div>
-      <input-number-item  :isRotatio="isRotation" :name="[name,'x']" label=""/>
+      <input-number-item  :isRotation="isRotation" :name="[name,'x']" label=""/>
     </div>
     <div class="flex  gap-1.5 mt-1">
       <div>
         y:
       </div>
-      <input-number-item  :isRotatio="isRotation" :name="[name,'y']" label=""/>
+      <input-number-item  :isRotation="isRotation" :name="[name,'y']" label=""/>
     </div>
   </el-form-item>
 </template>

@@ -1,4 +1,4 @@
-import {Component, IComponentOptions} from "../../core";
+import {Component, IComponentOptions} from "../../core/Component";
 
 export interface IPackageOptions extends IComponentOptions {
 }

@@ -15,7 +15,7 @@
     "@imengyu/vue3-context-menu": "^1.4.5",
     "@plum-render/three-sdk": "workspace:*",
     "@vueuse/core": "^13.0.0",
-    "axios": "^1.8.3",
+    "axios": "^1.8.4",
     "dayjs": "^1.11.13",
     "element-plus": "^2.9.6",
     "lodash-es": "^4.17.21",

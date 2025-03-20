@@ -44,14 +44,6 @@ export class Pick extends Component {
 
     pick(scene: THREE.Scene, camera: THREE.Camera, event) {
         this.raycaster.setFromCamera(this.pointer, camera);
-        // 计算物体和射线的焦点
-        // const intersects = this.raycaster.intersectObject(scene);
-        //
-        // let obj = {
-        //     position: intersects.length > 0 ? intersects[0].point : this.screenToWorld(),
-        //     intersects
-        // }
-        // return obj
 
         const objects: Array<Object3D> = [];
         // 只选择可见的对象
@@ -65,12 +57,12 @@ export class Pick extends Component {
             }
         });
 
-        const intersectObject = this.raycaster.intersectObjects(objects, false);
+        const intersects = this.raycaster.intersectObjects(objects, false);
         let obj = {
             position: intersects.length > 0 ? intersects[0].point : this.screenToWorld(),
             intersects
         }
-        return intersectObject;
+        return obj;
     }
 
     /**

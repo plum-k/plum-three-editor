@@ -29,7 +29,7 @@ import {Tool} from "../tool";
 import {EditorEventManager} from "./EditorEventManager";
 import {Selector} from "./Selector";
 import {TransformControlsWarp} from "./TransformControlsWarp";
-import {VertexNormalsHelper} from "three/examples/jsm/helpers/VertexNormalsHelper";
+import {VertexNormalsHelper} from "three/examples/jsm/helpers/VertexNormalsHelper.js";
 
 export interface IAppearanceStates {
     cameraHelpers: boolean;

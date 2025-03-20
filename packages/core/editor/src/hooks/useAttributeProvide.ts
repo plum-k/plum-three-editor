@@ -34,7 +34,6 @@ export const useAttributeProvide = (options: IUseAttributeProvide) => {
     provide("objectAttributeChangeSubject", objectAttributeChangeSubject)
     provide("updateTrigger", updateTrigger)
     provide("getObject", getObject)
-
     if (isAutoUpdate) {
         objectAttributeChangeSubject.subscribe((editValue) => {
             const {name, value, initValue} = editValue;

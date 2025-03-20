@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-import {ElFormItem, type InputNumberProps} from "element-plus";
-import {type IAttributeProps, useAttributeInject} from "../../hooks";
+import {ElFormItem} from "element-plus";
 import InputNumberItem from "./InputNumberItem.vue";
-import {defineModel} from "vue";
 
 interface Props {
   /**
@@ -13,13 +11,18 @@ interface Props {
    * 显示名
    */
   label: string;
+  /**
+   * 是否是旋转属性
+   */
   isRotation?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isRotation: false
 })
-const {name, label} = props
+const {name, label, isRotation} = props
+console.log("isRotation",isRotation)
+
 </script>
 
 <template>
@@ -28,22 +31,19 @@ const {name, label} = props
       <div>
         x:
       </div>
-      <input-number-item  :isRotatio="isRotation" :name="[name,'x']" label=""/>
-
+      <input-number-item :isRotation="isRotation" :name="[name,'x']" label=""/>
     </div>
     <div class="flex  gap-1.5 mt-1">
       <div>
         y:
       </div>
-      <input-number-item  :isRotatio="isRotation" :name="[name,'y']" label=""/>
-
+      <input-number-item :isRotation="isRotation" :name="[name,'y']" label=""/>
     </div>
     <div class="flex  gap-1.5 mt-1">
       <div>
         z:
       </div>
-      <input-number-item  :isRotatio="isRotation" :name="[name,'z']" label=""/>
-
+      <input-number-item :isRotation="isRotation" :name="[name,'z']" label=""/>
     </div>
   </el-form-item>
 </template>
