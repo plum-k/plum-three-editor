@@ -162,7 +162,9 @@ export class ChunkSerialize extends Package {
             extension: "object"
         })
         const scene = await this.assetManager.loadObject(asset) as THREE.Scene;
-        this.viewer.scene.copy(scene);
+
+        this.viewer.syncScene(scene);
+
         await this.viewer.cameraManager.fromJSON(viewerInfo.cameraManager);
         this.viewer.setInitState()
     }

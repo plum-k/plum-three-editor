@@ -43,7 +43,6 @@ export class EditorEventManager extends Component {
     // 场景变化事件
     sceneGraphChanged = new BehaviorSubject(false);
 
-
     cameraChanged = new Subject<any>();
     cameraResetted = new Subject<any>();
 

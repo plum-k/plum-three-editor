@@ -5,7 +5,7 @@ import {
     FileLoader,
     Group,
     Loader,
-    LoadingManager,
+    LoadingManager, Object3D,
     ObjectLoader,
     TextureLoader
 } from "three";
@@ -215,7 +215,6 @@ export class AssetManager extends Component {
             errorSubject.subscribe((error) => {
                 reject(error);
             })
-
             fun && fun();
         })
     }
@@ -288,7 +287,7 @@ export class AssetManager extends Component {
     }
 
     loadGltf(asset: Asset, option: ILoadFun = DefaultLoadFun) {
-        return this.buildPromise(asset, () => {
+        return this.buildPromise<Object3D>(asset, () => {
             let loader = this.gLTFLoader;
             const {before, after, tail} = option;
             let {url, name, file, loadSubject, onProgress, onError, loadFile} = asset;
@@ -695,6 +694,11 @@ export class AssetManager extends Component {
         return new Intl.NumberFormat('en-us', {useGrouping: true}).format(number);
     }
 
+    /**
+     * 加载拖放的文件
+     * @param file 文件
+     * @param manager
+     */
     loadDragFile(file: File, manager?: any) {
         const filename = file.name;
         const splitArray = filename.split('.')
@@ -709,10 +713,8 @@ export class AssetManager extends Component {
                     file: file,
                     extension: extension
                 })
-                // todo
                 this.loadGltf(asset).then(gltf => {
-                    this.scene.add(gltf as unknown as Group)
-                    this.editor.editorEventManager.sceneGraphChanged.next(true);
+                    this.editor.addObjectExecute(gltf);
                 })
                 break;
         }

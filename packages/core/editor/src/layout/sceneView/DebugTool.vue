@@ -17,6 +17,9 @@ const form = reactive({
 
   axes: false,
   size: 100,
+
+  lightHelpers: true,
+  skeletonHelpers: true,
 })
 
 const show = () => {
@@ -25,6 +28,8 @@ const show = () => {
   form.fps = viewer.debug.enable;
   form.grid = viewer.isEnableGrid;
   form.axes = viewer.isEnableAxes;
+  form.lightHelpers = viewer.editor.appearanceStates.lightHelpers;
+  form.skeletonHelpers = viewer.editor.appearanceStates.skeletonHelpers;
 }
 
 const info = reactive({
@@ -50,15 +55,21 @@ objectAttributeChangeSubject.subscribe((object) => {
   } else if (name === "statistics") {
     form.statistics = value;
     setShowSceneStatistics(value)
-  } else if (["grid","distance"].includes(name as string)) {
+  } else if (["grid", "distance"].includes(name as string)) {
     viewer.setGrid({
       visible: value,
       fadeDistance: form.distance,
     })
-  } else if (["size","axes"].includes(name as string)) {
+  } else if (["size", "axes"].includes(name as string)) {
     viewer.setAxes({
       visible: value,
       size: form.size,
+    })
+  } else if (["lightHelpers", "skeletonHelpers"].includes(name as string)) {
+    viewer.editor.showHelper({
+      cameraHelpers: false,
+      lightHelpers: form.lightHelpers,
+      skeletonHelpers: form.skeletonHelpers,
     })
   }
 })
@@ -98,6 +109,9 @@ onMounted(() => {
       <input-number-item v-model="form.distance" label="网格大小" name="distance"/>
       <bool-item v-model="form.axes" label="坐标轴显示" name="axes"/>
       <input-number-item v-model="form.size" label="坐标轴大小" name="size"/>
+
+      <bool-item v-model="form.lightHelpers" label="灯光帮助显示" name="lightHelpers"/>
+      <bool-item v-model="form.skeletonHelpers" label="骨骼帮助显示" name="skeletonHelpers"/>
     </el-form>
   </el-popover>
 

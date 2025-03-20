@@ -63,7 +63,6 @@ export class DrawLine<T extends abstract new (...args: any) => any> extends Comp
         //     
         //     
         // })
-
     }
 
     onStopEvent(value: IPick) {

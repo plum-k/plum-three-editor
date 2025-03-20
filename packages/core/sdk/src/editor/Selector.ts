@@ -1,6 +1,7 @@
 import {isArray, isNil} from "lodash-es";
 import {Component, IComponentOptions} from "../core/Component";
 import * as  THREE from "three";
+import {isObject3D} from "three-is";
 
 export interface ISelectorOptions extends IComponentOptions {
 }
@@ -39,9 +40,15 @@ export class Selector extends Component {
         // 监听点击事件, 选择物体
         this.eventManager.leftClickPickSubject.subscribe((value) => {
             const {intersects,} = value;
+            console.log("intersects",intersects)
             if (intersects.length > 0) {
                 const object = intersects[0].object;
-                this.select(object);
+                // 如果是帮助对象, 则选择对应的对象
+                if (isObject3D(object.userData.object)) {
+                    this.select(object.userData.object);
+                }else {
+                    this.select(object);
+                }
             } else {
                 this.select(undefined);
             }
@@ -58,7 +65,6 @@ export class Selector extends Component {
                 this.editor.transformControlsWarp.transformControls.attach(object);
             }
         })
-        console.log("111111111111111111")
         // 选择对象属性改变时, 更新包围盒 和 辅助对象
         this.editor.editorEventManager.objectChanged.subscribe((object) => {
             console.log('object',object)

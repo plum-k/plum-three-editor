@@ -1,6 +1,6 @@
 import {defaults, isString} from "lodash-es"; // 从 lodash-es 导入工具函数
 import * as THREE from 'three'; // 导入 Three.js 库
-import {AxesHelper, Object3D} from 'three'; // 导入深度合并工具
+import {AxesHelper, Object3D, Scene} from 'three'; // 导入深度合并工具
 import {
     AssetManager,
     DebugManager,
@@ -12,7 +12,7 @@ import {
 } from "../manager"; // 导入渲染管理类
 import {Editor} from "../editor"; // 导入编辑器类
 import {Pick} from "./Pick"; // 导入拾取类
-import {EnvironmentComponent, ISetEnvironmentOptions} from "./environment"; // 导入环境类
+import {EnvironmentComponent} from "./environment"; // 导入环境类
 import {deepMergeRetain, DownloadTool, ESearchMode, ICondition, Search} from "../tool";
 import {CameraManager, DrawLine, MeasureTool} from "../control";
 import {CssRenderer} from "./CssRenderer";
@@ -186,7 +186,7 @@ export class Viewer {
         // 初始化场景
         this.scene = new PScene();
         this.scene.name = "scene"; // 设置场景名称
-        if(this.options?.scene?.background) {
+        if (this.options?.scene?.background) {
             this.scene.background = this.options.scene.background;
         }
 
@@ -453,5 +453,27 @@ export class Viewer {
             cameraManager
         }
     }
+
+    //-----------------
+    /**
+     * 同步场景
+     * @param scene
+     */
+    syncScene(scene: Scene) {
+        // 如果启用了编辑器模式, 做额外处理
+        // todo
+        if (this.editor) {
+            // 同步场景时, 只派发一次场景图变化信号
+            this.editor.isAddObjectSceneGraphChangedNext = false;
+            while (scene.children.length > 0) {
+                this.editor.addObject(scene.children[0]);
+            }
+            this.editor.isAddObjectSceneGraphChangedNext = true;
+            this.editor.editorEventManager.sceneGraphChanged.next(true);
+        } else {
+            this.scene = scene;
+        }
+    }
+
 
 }

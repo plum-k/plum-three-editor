@@ -7,7 +7,8 @@ import {
     AddObjectCommand,
     Command,
     MoveObjectCommand,
-    RemoveObjectCommand, SetColorCommand,
+    RemoveObjectCommand,
+    SetColorCommand,
     SetMaterialColorCommand,
     SetMaterialCommand,
     SetMaterialMapCommand,
@@ -28,6 +29,13 @@ import {Tool} from "../tool";
 import {EditorEventManager} from "./EditorEventManager";
 import {Selector} from "./Selector";
 import {TransformControlsWarp} from "./TransformControlsWarp";
+import {VertexNormalsHelper} from "three/examples/jsm/helpers/VertexNormalsHelper";
+
+export interface IAppearanceStates {
+    cameraHelpers: boolean;
+    lightHelpers: boolean;
+    skeletonHelpers: boolean
+}
 
 export interface IEditorOptions extends IComponentOptions {
 }
@@ -87,9 +95,11 @@ export class Editor extends Component {
     setValueExecute(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, oldValue: any = undefined) {
         this.execute(new SetValueCommand(object, attributeName, newValue, oldValue))
     }
+
     setColorValueCommand(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, oldValue: any = undefined) {
         this.execute(new SetColorCommand(object, attributeName, newValue, oldValue))
     }
+
     setMaterialExecute(object: THREE.Object3D, newValue: THREE.Material, materialSlot: number = -1) {
         this.execute(new SetMaterialCommand(object, newValue, materialSlot,))
     }
@@ -126,10 +136,19 @@ export class Editor extends Component {
         const object = Tool.getObjectByUuid(this.scene, objectUUid)!;
         const newParent = Tool.getObjectByUuid(this.scene, newParentUUid)!;
         // 
-        this.execute(new MoveObjectCommand(object, newParent, newBefore,))
+        this.execute(new MoveObjectCommand(object, newParent, newBefore))
     }
 
     //------------------ 回退 结束-----------------
+    // 是否添加对象时, 派发了场景图变化信号
+    isAddObjectSceneGraphChangedNext: boolean = false;
+
+    /**
+     * 添加对象
+     * @param object
+     * @param parent
+     * @param index
+     */
     addObject(object: THREE.Object3D, parent: THREE.Object3D | undefined = undefined, index: number = 0) {
         object.traverse((child) => {
             if (isMesh(child)) {
@@ -150,7 +169,9 @@ export class Editor extends Component {
             object.parent = parent;
         }
         this.editorEventManager.objectAdded.next(object);
-        // this.signals.sceneGraphChanged.dispatch();
+        if (this.isAddObjectSceneGraphChangedNext) {
+            this.editorEventManager.sceneGraphChanged.next(true);
+        }
     }
 
     addGeometry(geometry: THREE.BufferGeometry) {
@@ -242,6 +263,11 @@ export class Editor extends Component {
     }
 
     //-------------------- 帮助对象相关 开始-------------------
+    /**
+     * 添加帮助对象
+     * @param object
+     * @param helper
+     */
     addHelper(object: THREE.Object3D, helper: THREE.Object3D | undefined = undefined) {
         let geometry = new THREE.SphereGeometry(2, 4, 2);
         let material = new THREE.MeshBasicMaterial({color: 0xff0000, visible: false});
@@ -273,6 +299,42 @@ export class Editor extends Component {
         this.editorEventManager.helperAdded.next(helper);
     }
 
+    appearanceStates: IAppearanceStates = {
+        cameraHelpers: false,
+        lightHelpers: true,
+        skeletonHelpers: true
+    }
+
+    showHelper(inAppearanceStates: IAppearanceStates) {
+        this.appearanceStates = inAppearanceStates;
+        this.sceneHelpers.traverse((object) => {
+            switch (object.type) {
+                case 'CameraHelper': {
+                    object.visible = this.appearanceStates.cameraHelpers;
+                    break;
+                }
+                case 'PointLightHelper':
+                case 'DirectionalLightHelper':
+                case 'SpotLightHelper':
+                case 'HemisphereLightHelper': {
+                    object.visible = this.appearanceStates.lightHelpers;
+                    break;
+                }
+                case 'SkeletonHelper': {
+                    object.visible = this.appearanceStates.skeletonHelpers;
+                    break;
+                }
+                default: {
+                    // not a helper, skip.
+                }
+            }
+        });
+    }
+
+    /**
+     * 移除帮助对象
+     * @param object
+     */
     removeHelper(object: THREE.Object3D) {
         if (this.helpers.get(object.uuid) !== undefined) {
             let helper = this.helpers.get(object.uuid);
@@ -286,6 +348,10 @@ export class Editor extends Component {
         }
     }
 
+    /**
+     * 显示法线
+     * @param object
+     */
     showNormals(object: THREE.Object3D) {
         if (this.helpers.get(object.uuid) === undefined) {
             this.addHelper(object, new VertexNormalsHelper(object));
@@ -294,6 +360,10 @@ export class Editor extends Component {
         }
     }
 
+    /**
+     * 更新帮助对象
+     * @param object
+     */
     helperUpdate(object: THREE.Object3D) {
         let helper = this.helpers.get(object.uuid)
         if (helper) {
@@ -301,6 +371,10 @@ export class Editor extends Component {
         }
     }
 
+    /**
+     * 设置控制器的变化空间
+     * @param space
+     */
     setSpace(space: "world" | "local") {
         this.transformControlsWarp.setSpace(space);
     }

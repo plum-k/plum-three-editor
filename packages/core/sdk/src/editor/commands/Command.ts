@@ -1,6 +1,6 @@
-import Editor from "../Editor";
 import * as THREE from "three";
 import {PropertyPath, toPath} from "lodash-es";
+import {Editor} from "../Editor";
 
 export interface CommandJson {
     id: number;

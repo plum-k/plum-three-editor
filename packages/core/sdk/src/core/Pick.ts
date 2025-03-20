@@ -45,30 +45,39 @@ export class Pick extends Component {
     pick(scene: THREE.Scene, camera: THREE.Camera, event) {
         this.raycaster.setFromCamera(this.pointer, camera);
         // 计算物体和射线的焦点
-        const intersects = this.raycaster.intersectObject(scene);
-
-        let obj = {
-            position: intersects.length > 0 ? intersects[0].point : this.ScreenToWorld(),
-            intersects
-        }
-        return obj
-        // if (intersects.length > 0) {
-        // 
-        // 
-        // 
+        // const intersects = this.raycaster.intersectObject(scene);
+        //
+        // let obj = {
+        //     position: intersects.length > 0 ? intersects[0].point : this.screenToWorld(),
+        //     intersects
         // }
+        // return obj
 
         const objects: Array<Object3D> = [];
+        // 只选择可见的对象
         this.scene.traverseVisible((child) => {
             objects.push(child);
         });
+        // todo 编辑器启用时, 可选择帮助对象
+        this.sceneHelpers.traverseVisible((child) => {
+            if ( child.name === 'picker' ) {
+                objects.push( child );
+            }
+        });
 
         const intersectObject = this.raycaster.intersectObjects(objects, false);
-        // 
+        let obj = {
+            position: intersects.length > 0 ? intersects[0].point : this.screenToWorld(),
+            intersects
+        }
         return intersectObject;
     }
 
-    ScreenToWorld(height?: number) {
+    /**
+     * 屏幕空间转世界空间
+     * @param height
+     */
+    screenToWorld(height?: number) {
         let [x, y] = [this.pointer.x, this.pointer.y]
         const camera = this.camera;
         let screenPosition = new THREE.Vector3(x, y, 0);
