@@ -1,6 +1,6 @@
 import * as  THREE from "three";
 import {LineSegments2} from "three/examples/jsm/lines/LineSegments2.js";
-
+import {Vector3,Mesh,BufferGeometry,EdgesGeometry,BufferAttribute} from "three";
 export class Edges {
 
     constructor({
@@ -8,10 +8,10 @@ export class Edges {
                 }) {
         let threshold = 15
         let tmpPoints = [0, 0, 0, 1, 0, 0]
-        let memoizedGeometry: THREE.BufferGeometry | undefined = undefined
+        let memoizedGeometry: BufferGeometry | undefined = undefined
         let memoizedThreshold = 0
 
-        let parent!: THREE.Mesh;
+        let parent!: Mesh;
         let geometry = explicitGeometry ?? parent?.geometry
         if (!geometry) return
 
@@ -21,7 +21,7 @@ export class Edges {
         memoizedGeometry = geometry
         memoizedThreshold = threshold
 
-        let points = (new THREE.EdgesGeometry(geometry, threshold).attributes.position as THREE.BufferAttribute)
+        let points = (new EdgesGeometry(geometry, threshold).attributes.position as BufferAttribute)
             .array as Float32Array
 
         let lineSegments2 = new LineSegments2()

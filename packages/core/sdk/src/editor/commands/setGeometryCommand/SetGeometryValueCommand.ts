@@ -3,7 +3,7 @@ import * as THREE from 'three';
 
 /**
  * @param editor Editor
- * @param object THREE.Object3D
+ * @param object Object3D
  * @param attributeName string
  * @param newValue number, string, boolean or object
  * @constructor
@@ -12,7 +12,7 @@ export class SetGeometryValueCommand extends Command {
     type: string = 'SetGeometryValueCommand';
     attributeName: string;
 
-    constructor(object: THREE.Object3D, attributeName: string = '', newValue: any = null) {
+    constructor(object: Object3D, attributeName: string = '', newValue: any = null) {
         super();
 
         this.name = 'command/SetGeometryValue' + ': ' + attributeName;

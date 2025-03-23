@@ -9,7 +9,7 @@ export class RemoveObjectCommand extends Command {
     parent: Object3D | undefined;
     index: number = -1;
 
-    constructor(object: THREE.Object3D) {
+    constructor(object: Object3D) {
         super();
 
         this.type = 'RemoveObjectCommand';

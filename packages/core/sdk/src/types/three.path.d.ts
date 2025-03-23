@@ -1,15 +1,14 @@
 declare module 'three.path' {
-    import * as THREE from "three";
-    import {BufferGeometry, Usage} from "three";
+    import {BufferGeometry, Usage,Vector3} from "three";
 
     /**
      * PathPoint
      */
     export declare class PathPoint {
-        pos: THREE.Vector3;
-        dir: THREE.Vector3;
-        right: THREE.Vector3;
-        up: THREE.Vector3; // normal
+        pos: Vector3;
+        dir: Vector3;
+        right: Vector3;
+        up: Vector3; // normal
         dist: number; // distance from start
         widthScale: number; // for corner
         sharp: boolean; // marks as sharp corner
@@ -33,13 +32,13 @@ declare module 'three.path' {
 
         /**
          * Set points
-         * @param {THREE.Vector3[]} points - Key points array
+         * @param {Vector3[]} points - Key points array
          * @param {number} [cornerRadius=0.1] - The corner radius. Set 0 to disable round corners.
          * @param {number} [cornerSplit=10] - The corner split.
-         * @param {THREE.Vector3 | null} [up=null] - Force up direction.
+         * @param {Vector3 | null} [up=null] - Force up direction.
          * @param {boolean} [close=false] - Close path.
          */
-        set(points: THREE.Vector3[], cornerRadius?: number, cornerSplit?: number, up?: THREE.Vector3 | null, close?: boolean): void;
+        set(points: Vector3[], cornerRadius?: number, cornerSplit?: number, up?: Vector3 | null, close?: boolean): void;
 
         /**
          * Get distance of this path
@@ -49,13 +48,13 @@ declare module 'three.path' {
 
         private _getByIndex(index: number): PathPoint;
 
-        private _start(current: THREE.Vector3, next: THREE.Vector3, up: THREE.Vector3 | null): void;
+        private _start(current: Vector3, next: Vector3, up: Vector3 | null): void;
 
-        private _end(current: THREE.Vector3): void;
+        private _end(current: Vector3): void;
 
-        private _corner(current: THREE.Vector3, next: THREE.Vector3, cornerRadius: number, cornerSplit: number, up: THREE.Vector3 | null): void;
+        private _corner(current: Vector3, next: Vector3, cornerRadius: number, cornerSplit: number, up: Vector3 | null): void;
 
-        private _sharpCorner(current: THREE.Vector3, next: THREE.Vector3, up: THREE.Vector3 | null, dirType?: number, sharp?: boolean): void;
+        private _sharpCorner(current: Vector3, next: Vector3, up: Vector3 | null, dirType?: number, sharp?: boolean): void;
     }
 
     /**
@@ -129,8 +128,8 @@ declare module 'three.path' {
         update(pathPointList: PathPointList, options?: PathTubeGeometryOptions): void;
 
         private _initByData(pathPointList: PathPointList, options?: {
-            usage?: THREE.DrawUsage
-        }, usage?: THREE.DrawUsage, generateUv2?: boolean): void;
+            usage?: DrawUsage
+        }, usage?: DrawUsage, generateUv2?: boolean): void;
     }
 
     /**

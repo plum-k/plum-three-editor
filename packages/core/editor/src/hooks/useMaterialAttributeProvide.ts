@@ -1,7 +1,7 @@
 import {provide} from "vue";
 import {Subject} from "rxjs";
 import {isMesh, isTexture} from "three-is";
-import * as THREE from "three";
+
 import {useBus} from "./useBus.ts";
 import {isArray, type PropertyPath} from "lodash-es";
 import {useToggle} from "@vueuse/core";
@@ -40,7 +40,7 @@ export const useMaterialAttributeProvide = (options: IUseMaterialAttributeProvid
     const getObject = () => {
         if (isMesh(bus.selectObject)) {
             const _material = bus.selectObject.material;
-            return isArray(_material) ? _material[0] as THREE.MeshStandardMaterial : _material
+            return isArray(_material) ? _material[0] as MeshStandardMaterial : _material
         }
     }
 

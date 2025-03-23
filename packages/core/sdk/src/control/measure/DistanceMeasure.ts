@@ -1,5 +1,5 @@
 import {IMeasureOptions, Measure} from "./Measure";
-import * as THREE from "three";
+
 import {Vector3} from "three";
 import {IPick} from "../../manager/EventManager";
 import {Line2} from "../../mesh/line/line2/Line2";
@@ -25,11 +25,11 @@ export interface IDistanceMeasureOptions extends IMeasureOptions {
 }
 
 export class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
-    pointGroup = new THREE.Group();
-    lineGroup = new THREE.Group();
-    textSprite = new THREE.Group();
+    pointGroup = new Group();
+    lineGroup = new Group();
+    textSprite = new Group();
 
-    points: Array<THREE.Vector3> = [];
+    points: Array<Vector3> = [];
     lines = []
     line: Line2 | undefined;
     isEnd = false;
@@ -59,9 +59,9 @@ export class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
     }
 
     createSphereMaterial() {
-        let meshLambertMaterial = new THREE.MeshLambertMaterial({
-                //shading: THREE.SmoothShading,
-                color: new THREE.Color("#ff0000"),
+        let meshLambertMaterial = new MeshLambertMaterial({
+                //shading: SmoothShading,
+                color: new Color("#ff0000"),
                 depthTest: false,
                 depthWrite: false
             }
@@ -83,8 +83,8 @@ export class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
 
     addPoint(position: Vector3) {
         // todo 动态计算模型大小
-        const sphereGeometry = new THREE.SphereGeometry(0.4, 10, 10);
-        let sphere = new THREE.Mesh(sphereGeometry, this.createSphereMaterial());
+        const sphereGeometry = new SphereGeometry(0.4, 10, 10);
+        let sphere = new Mesh(sphereGeometry, this.createSphereMaterial());
         sphere.position.copy(position);
         this.pointGroup.add(sphere);
     }
@@ -156,7 +156,7 @@ export class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
 
     getLabelTotalInfo() {
         const distance = Tool.calculateTotalLength(this.points)
-        const center = Tool.getBox3ByV3Array(this.points).getCenter(new THREE.Vector3());
+        const center = Tool.getBox3ByV3Array(this.points).getCenter(new Vector3());
         const text = `${round(distance, 2)} 米`;
         return {
             text: text,

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import * as THREE from "three";
+
 import {useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
@@ -13,7 +13,7 @@ const bus = useBus();
 const {objectAttributeChangeSubject, toggle} = useGeometryAttributeProvide({
   isAutoUpdate: false,
   getNewGeometry: (geometry, name, value) => {
-    return new THREE.DodecahedronGeometry(
+    return new DodecahedronGeometry(
         getGeometryValue(geometry, "radius", name, value),
         getGeometryValue(geometry, "detail", name, value),
     );

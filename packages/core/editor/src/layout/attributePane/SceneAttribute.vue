@@ -4,13 +4,16 @@ import {ElForm} from "element-plus";
 import {useAttributeProvide, useBus} from "../../hooks";
 import {reactive, watch} from "vue";
 import {isColor, isFog, isFogExp2, isMeshBasicMaterial, isMeshNormalMaterial, isTexture} from "three-is";
-import * as THREE from "three";
+
 import {Texture} from "three";
 import {Viewer} from "@plum-render/three-sdk";
 import {useActiveTab} from "../../hooks/useActiveTab.ts";
 import {isArray, set} from "lodash-es";
 import TextureItem from "../../common-ui/attributeItem/TextureItem.vue";
+import {Vector3,EquirectangularReflectionMapping,MathUtils,MeshNormalMaterial,
+  MeshBasicMaterial,Color,UVMapping
 
+} from "three";
 const overrideMaterialList = [
   {value: "无", label: '无'},
   {value: "法线", label: '法线'},
@@ -55,10 +58,10 @@ objectAttributeChangeSubject.subscribe((editValue) => {
         scene.overrideMaterial = null;
         break
       case "法线":
-        scene.overrideMaterial = new THREE.MeshNormalMaterial();
+        scene.overrideMaterial = new MeshNormalMaterial();
         break
       case "描边":
-        scene.overrideMaterial = new THREE.MeshBasicMaterial({
+        scene.overrideMaterial = new MeshBasicMaterial({
           color: 0x000000,
           wireframe: true
         });
@@ -70,40 +73,40 @@ objectAttributeChangeSubject.subscribe((editValue) => {
         scene.background = null;
         break
       case "颜色":
-        scene.background = new THREE.Color(form.backgroundColor);
+        scene.background = new Color(form.backgroundColor);
         break
       case "贴图":
         if (isTexture(scene.background)) {
-          scene.background.mapping = THREE.UVMapping;
+          scene.background.mapping = UVMapping;
         } else {
-          scene.background = new THREE.Texture();
+          scene.background = new Texture();
         }
         break;
       case "全景":
         if (isTexture(scene.background)) {
-          scene.background.mapping = THREE.EquirectangularReflectionMapping;
+          scene.background.mapping = EquirectangularReflectionMapping;
         } else {
-          scene.background = new THREE.Texture();
+          scene.background = new Texture();
         }
         break;
     }
   } else if (name === "backgroundColor") {
-    (scene.background as THREE.Color).setStyle(value);
+    (scene.background as Color).setStyle(value);
   } else if (name === "backgroundTexture") {
     if (value === "") {
       scene.background = null;
     } else {
-      scene.background = value as THREE.Texture;
+      scene.background = value as Texture;
       if (form.backgroundType === "全景") {
-        scene.background.mapping = THREE.EquirectangularReflectionMapping;
+        scene.background.mapping = EquirectangularReflectionMapping;
       }
     }
   } else if (name === "environmentImage") {
     if (value === "") {
       scene.environment = null;
     } else {
-      scene.environment = value as THREE.Texture;
-      scene.environment.mapping = THREE.EquirectangularReflectionMapping;
+      scene.environment = value as Texture;
+      scene.environment.mapping = EquirectangularReflectionMapping;
     }
   } else if (name === "fogType") {
     switch (value) {
@@ -111,10 +114,10 @@ objectAttributeChangeSubject.subscribe((editValue) => {
         scene.fog = null;
         break;
       case "雾":
-        scene.fog = new THREE.Fog(form.fogColor, form.near, form.far);
+        scene.fog = new Fog(form.fogColor, form.near, form.far);
         break;
       case "指数雾":
-        scene.fog = new THREE.FogExp2(form.fogColor, form.density);
+        scene.fog = new FogExp2(form.fogColor, form.density);
         break;
     }
   } else if (name === "environmentType") {
@@ -122,18 +125,18 @@ objectAttributeChangeSubject.subscribe((editValue) => {
       scene.environment = null
     } else if (value === "同步背景" && isTexture(scene.background)) {
       scene.environment = scene.background;
-      scene.environment.mapping = THREE.EquirectangularReflectionMapping;
+      scene.environment.mapping = EquirectangularReflectionMapping;
       scene.environmentRotation.x = scene.backgroundRotation.x;
       scene.environmentRotation.y = scene.backgroundRotation.y;
       scene.environmentRotation.z = scene.backgroundRotation.z;
     } else if (value === "贴图") {
-      scene.environment = new THREE.Texture();
+      scene.environment = new Texture();
     }
   } else if (isArray(name)) {
     if (name[0] === "backgroundRotation") {
-      set(scene, ['backgroundRotation', name[1]], THREE.MathUtils.degToRad(value));
+      set(scene, ['backgroundRotation', name[1]], MathUtils.degToRad(value));
     } else if (name[0] === "environmentRotation") {
-      set(scene, ['environmentRotation', name[1]], THREE.MathUtils.degToRad(value));
+      set(scene, ['environmentRotation', name[1]], MathUtils.degToRad(value));
     }
   } else if (["fogColor", "far", "density"].includes(name)) {
     const fog = scene.fog;
@@ -215,7 +218,7 @@ const updateBackgroundType = (viewer: Viewer) => {
   if (isColor(background)) {
     form.backgroundType = "颜色";
   } else if (isTexture(background)) {
-    if (background.mapping === THREE.EquirectangularReflectionMapping) {
+    if (background.mapping === EquirectangularReflectionMapping) {
       form.backgroundType = "全景";
     } else {
       form.backgroundType = "贴图";
@@ -223,9 +226,9 @@ const updateBackgroundType = (viewer: Viewer) => {
   } else {
     form.backgroundType = "无";
   }
-  form.backgroundRotation.x = THREE.MathUtils.radToDeg(scene.backgroundRotation.x);
-  form.backgroundRotation.y = THREE.MathUtils.radToDeg(scene.backgroundRotation.y);
-  form.backgroundRotation.z = THREE.MathUtils.radToDeg(scene.backgroundRotation.z);
+  form.backgroundRotation.x = MathUtils.radToDeg(scene.backgroundRotation.x);
+  form.backgroundRotation.y = MathUtils.radToDeg(scene.backgroundRotation.y);
+  form.backgroundRotation.z = MathUtils.radToDeg(scene.backgroundRotation.z);
   form.backgroundBlurriness = scene.backgroundBlurriness;
   form.backgroundIntensity = scene.backgroundIntensity;
 }
@@ -235,7 +238,7 @@ const updateEnvironmentType = (viewer: Viewer) => {
   if (isTexture(environment)) {
     if (environment === scene.background) {
       form.environmentType = "同步背景";
-    } else if (environment.mapping === THREE.EquirectangularReflectionMapping) {
+    } else if (environment.mapping === EquirectangularReflectionMapping) {
       form.environmentType = "全景";
     } else {
       form.environmentType = "贴图";
@@ -243,9 +246,9 @@ const updateEnvironmentType = (viewer: Viewer) => {
   } else {
     form.environmentType = "无";
   }
-  form.environmentRotation.x = THREE.MathUtils.radToDeg(scene.environmentRotation.x);
-  form.environmentRotation.y = THREE.MathUtils.radToDeg(scene.environmentRotation.y);
-  form.environmentRotation.z = THREE.MathUtils.radToDeg(scene.environmentRotation.z);
+  form.environmentRotation.x = MathUtils.radToDeg(scene.environmentRotation.x);
+  form.environmentRotation.y = MathUtils.radToDeg(scene.environmentRotation.y);
+  form.environmentRotation.z = MathUtils.radToDeg(scene.environmentRotation.z);
   form.environmentIntensity = scene.environmentIntensity;
 }
 const updateFogType = (viewer: Viewer) => {

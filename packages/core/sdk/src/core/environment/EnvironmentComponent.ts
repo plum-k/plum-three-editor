@@ -5,6 +5,7 @@ import {Component, IComponentOptions} from "../Component";
 import {Asset} from "../../manager/asset/Asset";
 import {deepMergeRetain, logStack} from "../../tool";
 import {isDirectionalLight} from "three-is";
+import {Texture, Scene, EquirectangularReflectionMapping, DirectionalLight, Euler, Color} from "three";
 
 export interface IEnvironment extends IComponentOptions {
     frames?: number
@@ -12,9 +13,9 @@ export interface IEnvironment extends IComponentOptions {
     far?: number
     resolution?: number
 
-    map?: THREE.Texture
+    map?: Texture
     preset?: PresetsType
-    scene?: THREE.Scene
+    scene?: Scene
     ground?:
         | boolean
         | {
@@ -34,15 +35,15 @@ export enum EnvironmentMode {
 export interface ISceneEnvAttribute {
     backgroundBlurriness?: number
     backgroundIntensity?: number
-    backgroundRotation?: THREE.Euler
+    backgroundRotation?: Euler
     environmentIntensity?: number
-    environmentRotation?: THREE.Euler
+    environmentRotation?: Euler
 }
 
 interface ISetEnvOption {
     mode: EnvironmentMode,
-    texture: THREE.Texture,
-    color: THREE.Color
+    texture: Texture,
+    color: Color
     sceneEnvAttribute?: ISceneEnvAttribute,
 
 }
@@ -78,7 +79,7 @@ export class EnvironmentComponent extends Component {
             set(this.scene, key, value)
         }
         // 设置全景
-        texture.mapping = THREE.EquirectangularReflectionMapping;
+        texture.mapping = EquirectangularReflectionMapping;
         switch (mode) {
             case EnvironmentMode.ENVIRONMENT:
                 this.scene.environment = texture
@@ -153,7 +154,7 @@ export class EnvironmentComponent extends Component {
         // debugger
         this.assetManager.loadAsset(asset).then((result) => {
             this.setEnv({
-                texture: result as THREE.Texture,
+                texture: result as Texture,
                 ..._options
             })
         })
@@ -167,7 +168,7 @@ export class EnvironmentComponent extends Component {
             }
         })
         if (!isHasDirectionalLight) {
-            const light = new THREE.DirectionalLight(0xffffff, 2);
+            const light = new DirectionalLight(0xffffff, 2);
             light.name = 'DefaultDirectionalLight';
             light.position.set(5, 10, 7.5);
             this.scene.add(light);

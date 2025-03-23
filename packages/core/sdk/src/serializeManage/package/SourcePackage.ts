@@ -1,5 +1,5 @@
 import {IPackageOptions, Package} from "./Package";
-import * as THREE from "three";
+
 import {DownloadTool} from "../../tool";
 import {isNil} from "lodash-es";
 import axios, {AxiosProgressEvent} from "axios";
@@ -136,7 +136,7 @@ export class SourcePackage extends Package {
                 extension: "object"
             })
             this.assetManager.loadAsset(asset).then((scene) => {
-                let _scene = scene as THREE.Scene;
+                let _scene = scene as Scene;
                 this.viewer.scene.copy(_scene);
                 _scene = null;
             })

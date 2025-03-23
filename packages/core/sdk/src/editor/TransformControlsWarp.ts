@@ -1,16 +1,16 @@
 import {Component, IComponentOptions} from "../core/Component";
 import {TransformControls} from "three/examples/jsm/controls/TransformControls.js";
 import * as  THREE from "three";
-
+import {Euler, Vector3} from "three";
 export interface IControlsManagerOptions extends IComponentOptions {
 }
 
 
 export class TransformControlsWarp extends Component {
     transformControls!: TransformControls;
-    objectPositionOnDown = new THREE.Vector3;
-    objectRotationOnDown = new THREE.Euler;
-    objectScaleOnDown = new THREE.Vector3;
+    objectPositionOnDown = new Vector3;
+    objectRotationOnDown = new Euler;
+    objectScaleOnDown = new Vector3;
 
     constructor(options: IControlsManagerOptions) {
         super(options);

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {ElButton, ElDescriptions, ElDescriptionsItem, ElForm} from "element-plus";
 import {ref} from "vue";
-import * as THREE from "three";
+
 import {useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
@@ -14,7 +14,7 @@ const bus = useBus();
 const {objectAttributeChangeSubject, toggle,updateTrigger} = useGeometryAttributeProvide({
   isAutoUpdate: false,
   getNewGeometry: (geometry, name, value) => {
-    return new THREE.BoxGeometry(
+    return new BoxGeometry(
         getGeometryValue(geometry, "width", name, value),
         getGeometryValue(geometry, "height", name, value),
         getGeometryValue(geometry, "depth", name, value),

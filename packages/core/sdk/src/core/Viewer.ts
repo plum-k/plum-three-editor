@@ -1,11 +1,22 @@
 import {defaults, isString} from "lodash-es"; // 从 lodash-es 导入工具函数
-import * as THREE from 'three'; // 导入 Three.js 库
-import {AxesHelper, Object3D, Scene} from 'three'; // 导入深度合并工具
+import {
+    AnimationAction,
+    AnimationClip,
+    AnimationMixer,
+    AxesHelper,
+    Clock,
+    Color,
+    Float32BufferAttribute,
+    Object3D,
+    Scene,
+    Vector2
+} from 'three'; // 导入深度合并工具
 import {
     AssetManager,
     DebugManager,
     EventManager,
     HelperManager,
+    IRenderSubjectValue,
     Loop,
     PostProcessingComponent,
     RenderManager
@@ -16,22 +27,27 @@ import {EnvironmentComponent} from "./environment"; // 导入环境类
 import {deepMergeRetain, DownloadTool, ESearchMode, ICondition, Search} from "../tool";
 import {CameraManager, DrawLine, MeasureTool} from "../control";
 import {CssRenderer} from "./CssRenderer";
-import {IOssApiOptions, OssApi} from "@plum-render/oss-api";
+import {OssApi} from "@plum-render/oss-api";
 import {Grid} from "../mesh";
 import {BehaviorSubject, Subject} from "rxjs";
 import {getPackage, Package} from "../serializeManage";
 import {PScene} from "./PScene";
 import {GizmoManager} from "../manager/GizmoManager";
-import {ESceneLoadType, ISceneLoadProgressEvent, ISceneSaveProgressEvent, ISetAxes} from "../interface";
-import {ISetGrid} from "../interface";
-import {IViewerOptions} from "../interface";
+import {
+    ESceneLoadType,
+    ISceneLoadProgressEvent,
+    ISceneSaveProgressEvent,
+    ISetAxes,
+    ISetGrid,
+    IViewerOptions
+} from "../interface";
 
 export class Viewer {
     options: IViewerOptions; // 存储选项
     container!: HTMLElement; // 容器元素
-    clock: THREE.Clock; // 定时器
-    animationMixer: THREE.AnimationMixer; // 动画混合器
-    scene: THREE.Scene; // 主场景
+    clock: Clock; // 定时器
+    animationMixer: AnimationMixer; // 动画混合器
+    scene: Scene; // 主场景
 
     // 各种管理类
     eventManager: EventManager; // 事件管理
@@ -46,7 +62,7 @@ export class Viewer {
     //-----------------
 
     cameraManager: CameraManager; // 相机控制
-    sceneHelpers: THREE.Scene; // 场景辅助
+    sceneHelpers: Scene; // 场景辅助
     pick: Pick; // 拾取
     environmentManage: EnvironmentComponent; // 环境
     // @ts-ignore
@@ -72,20 +88,20 @@ export class Viewer {
     serializer: Package | undefined;
     #enableGrid = false;
 
-    //------------------
     isLoad = false;
+
 
     constructor(container: string | HTMLDivElement, options: IViewerOptions = {}) {
         this.options = deepMergeRetain({
             ossBaseUrl: "three",
             isGizmo: false,
             scene: {
-                background: new THREE.Color("black")
+                background: new Color("black")
             }
         }, options); // 合并选项
         this.initContainer(container); // 初始化容器
 
-        this.clock = new THREE.Clock(); // 创建时钟实例
+        this.clock = new Clock(); // 创建时钟实例
 
         // 初始化场景
         this.scene = new PScene();
@@ -111,7 +127,7 @@ export class Viewer {
         this.drawLine = new DrawLine({viewer: this});
         this.measureTool = new MeasureTool({viewer: this});
         this.gizmoManager = new GizmoManager({viewer: this});
-        this.animationMixer = new THREE.AnimationMixer(this.scene); // 创建动画混合器实例
+        this.animationMixer = new AnimationMixer(this.scene);
 
         this.addCanvasToContainer(); // 将画布添加到容器
         this.setSize(); // 设置初始大小
@@ -129,7 +145,24 @@ export class Viewer {
 
         this.loop.startLoop(); // 启动循环
         this.initComponent().then();
+
+        // 更新动画混合器
+        this.eventManager.renderSubject.subscribe(value => {
+            this.animationMixerUpdate(value)
+        })
     }
+
+    animationMixerUpdate(value: IRenderSubjectValue) {
+        if (this.animationMixer) {
+            // const actions = this.animationMixer.stats.actions;
+            //
+            // if ( actions.inUse > 0 || prevActionsInUse > 0 ) {
+            //
+            // }
+            this.animationMixer.update(value.delta);
+        }
+    }
+
 
     //------------------------- 添加网格 开始 -------------------
     gridOptions: ISetGrid | undefined;
@@ -186,7 +219,7 @@ export class Viewer {
                     0, 0, 0, 0, size, 0,
                     0, 0, 0, 0, 0, size
                 ];
-                this.axesHelper.geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+                this.axesHelper.geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
                 this.axesHelper.geometry.attributes.position.needsUpdate = true;
             }
             if (isVisibleChanged) {
@@ -197,7 +230,7 @@ export class Viewer {
                 this.axesHelper.dispose();
             }
         } else {
-            this.axesHelper = new THREE.AxesHelper(size);
+            this.axesHelper = new AxesHelper(size);
             this.sceneHelpers.add(this.axesHelper);
             this.axesHelper.visible = visible;
         }
@@ -211,7 +244,7 @@ export class Viewer {
      */
     static async create(container: string | HTMLDivElement, options ?: IViewerOptions): Promise<Viewer> {
         return new Promise<Viewer>((resolve) => {
-            const viewer = new Viewer(container, options); // 创建 Viewer 实例
+            const viewer = new Viewer(container, options);
             viewer.initComponentSubject.subscribe(() => {
                 resolve(viewer);
             });
@@ -303,7 +336,7 @@ export class Viewer {
     // 获取大小的 Vector2 对象
     getSizeVector2() {
         const {width, height} = this.getSize(); // 获取大小
-        return new THREE.Vector2(width, height); // 返回 Vector2 对象
+        return new Vector2(width, height); // 返回 Vector2 对象
     }
 
     // 设置渲染器和控制器的大小
@@ -379,5 +412,43 @@ export class Viewer {
         }
     }
 
+    //----------------------------------
+    actionMap = new Map<Object3D, AnimationAction[]>();
+
+    getAction(object: Object3D, animation: AnimationClip) {
+        const animationActionArray = this.actionMap.get(object);
+        if (animationActionArray) {
+            for (const animationAction of animationActionArray) {
+                const clip = animationAction.getClip();
+                if (clip === animation) {
+                    return animationAction;
+                }
+            }
+            const action = this.animationMixer.clipAction(animation, object);
+            animationActionArray.push(action);
+            this.actionMap.set(object, animationActionArray);
+            return action;
+        } else {
+            const action = this.animationMixer.clipAction(animation, object);
+            this.actionMap.set(object, [action]);
+            return action;
+        }
+    }
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

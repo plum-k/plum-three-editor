@@ -2,8 +2,8 @@
 import {ElFormItem} from "element-plus";
 import {inject, onMounted, ref, type ShallowRef, watch} from "vue";
 import {type IAttributeProps, type IObjectAttributeChange, useAttributeInject, useBus} from "../../hooks";
-import * as THREE from "three";
-import {Texture, WebGLRenderer} from "three";
+
+import { MeshBasicMaterial, Texture, WebGLRenderer,Mesh} from "three";
 import {get, isArray} from "lodash-es";
 import {isCompressedTexture, isDataTexture} from "three-is";
 import {FullScreenQuad} from "three-stdlib";
@@ -11,7 +11,7 @@ import {Asset} from "@plum-render/three-sdk";
 import type {Subject} from "rxjs";
 
 interface Props extends IAttributeProps {
-  getTexture?: () => THREE.Texture | null;
+  getTexture?: () => Texture | null;
 }
 
 const props = defineProps<Props>();
@@ -57,14 +57,14 @@ function loadFile(file: File) {
 const canvasRef = ref<HTMLCanvasElement>()
 
 let renderer: WebGLRenderer
-let fsQuad: FullScreenQuad<THREE.MeshBasicMaterial>;
+let fsQuad: FullScreenQuad<MeshBasicMaterial>;
 
-function renderToCanvas(texture: THREE.Texture) {
+function renderToCanvas(texture: Texture) {
   if (renderer === undefined) {
-    renderer = new THREE.WebGLRenderer();
+    renderer = new WebGLRenderer();
   }
   if (fsQuad === undefined) {
-    fsQuad = new FullScreenQuad(new THREE.MeshBasicMaterial());
+    fsQuad = new FullScreenQuad(new MeshBasicMaterial());
   }
   const image = texture.image;
   renderer.setSize(image.width, image.height, false);
@@ -77,16 +77,16 @@ onMounted(() => {
   renderTexture();
 })
 
-const renderTexture = (inTexture?: THREE.Texture) => {
-  let texture: THREE.Texture | null = null;
+const renderTexture = (inTexture?: Texture) => {
+  let texture: Texture | null = null;
 
   if (getTexture) {
     texture = getTexture();
   } else {
-    const object = bus.selectObject as THREE.Mesh;
+    const object = bus.selectObject as Mesh;
     const _material = object.material;
     const material = isArray(_material) ? _material[0] : _material
-    texture = get(material, name) as THREE.Texture;
+    texture = get(material, name) as Texture;
   }
   if (inTexture) {
     texture = inTexture;

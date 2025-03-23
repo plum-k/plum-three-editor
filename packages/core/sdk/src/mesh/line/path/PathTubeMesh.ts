@@ -14,7 +14,7 @@ export interface IPathTubeMeshOptions {
     meshBasicMaterialParams?: MeshBasicMaterialParameters; // 材质参数
 }
 
-// PathTubeMesh 类，继承自 THREE.Mesh
+// PathTubeMesh 类，继承自 Mesh
 export class PathTubeMesh extends Mesh<PathTubeGeometry> {
 
     pathPointList: PathPointList = new PathPointList(); // 路径点列表实例

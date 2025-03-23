@@ -4,11 +4,11 @@ import {Material, ObjectLoader} from 'three';
 import {isMesh} from "three-is";
 import {Tool} from "../../../tool";
 
-export class SetMaterialCommand extends Command<THREE.Material | null> {
+export class SetMaterialCommand extends Command<Material | null> {
     type: string = 'SetMaterialCommand';
     materialSlot: number;
 
-    constructor(object: THREE.Object3D, newValue: THREE.Material, materialSlot: number = -1) {
+    constructor(object: Object3D, newValue: Material, materialSlot: number = -1) {
         super();
 
         this.name = 'command/SetMaterial';
@@ -21,12 +21,12 @@ export class SetMaterialCommand extends Command<THREE.Material | null> {
     }
 
     execute(): void {
-        Tool.setObjectMaterial(this.object as THREE.Mesh, this.materialSlot, this.newValue as THREE.Material);
+        Tool.setObjectMaterial(this.object as Mesh, this.materialSlot, this.newValue as Material);
         // this.editor.signals.materialChanged.dispatch(this.object, this.materialSlot);
     }
 
     undo(): void {
-        Tool.setObjectMaterial(this.object as THREE.Mesh, this.materialSlot, this.oldValue as THREE.Material);
+        Tool.setObjectMaterial(this.object as Mesh, this.materialSlot, this.oldValue as Material);
         // this.editor.signals.materialChanged.dispatch(this.object, this.materialSlot);
     }
 

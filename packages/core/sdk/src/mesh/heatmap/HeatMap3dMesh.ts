@@ -1,4 +1,4 @@
-import * as THREE from "three";
+
 import {Object3D} from "three";
 import Heatmap from "heatmap";
 import HeatmapInstance, {DataPoint, HeatmapConfig} from "heatmap";
@@ -46,7 +46,7 @@ export class HeatMap3dMesh extends Object3D {
         let {radius} = style;
         radius = radius ?? 40;
         const v3Array = data.map(d => {
-            return new THREE.Vector3(d.x, 0, d.y)
+            return new Vector3(d.x, 0, d.y)
         });
 
         const box3 = Tool.getBox3ByV3Array(v3Array);
@@ -85,9 +85,9 @@ export class HeatMap3dMesh extends Object3D {
         this.buildMesh(box3, radius);
     }
 
-    buildMesh(box3: THREE.Box3, radius: number) {
-        const size = box3.getSize(new THREE.Vector3());
-        const center = box3.getCenter(new THREE.Vector3());
+    buildMesh(box3: Box3, radius: number) {
+        const size = box3.getSize(new Vector3());
+        const center = box3.getCenter(new Vector3());
 
         let _width = size.x + radius * 2;
         let _height = size.z + radius * 2;
@@ -95,29 +95,29 @@ export class HeatMap3dMesh extends Object3D {
 
         // @ts-ignore
         let canvas = this.heatmap._renderer.canvas
-        const geometry = THREE.PlaneGeometry.fromJSON({
+        const geometry = PlaneGeometry.fromJSON({
             width: _width,
             height: _height,
             widthSegments: this.options.widthSegments,
             heightSegments: this.options.heightSegments,
         });
-        const material = new THREE.MeshBasicMaterial();
-        material.map = canvas ? new THREE.CanvasTexture(canvas) : null;
-        const plane = new THREE.Mesh(geometry, material);
+        const material = new MeshBasicMaterial();
+        material.map = canvas ? new CanvasTexture(canvas) : null;
+        const plane = new Mesh(geometry, material);
         this.add(plane);
         this.position.copy(center)
     }
 
     setHeatmapMaterial() {
-        const material = new THREE.MeshBasicMaterial();
+        const material = new MeshBasicMaterial();
         const heatmap = this.heatmap;
         // @ts-ignore
 
         // @ts-ignore
-        const texture = new THREE.CanvasTexture(heatmap._renderer.canvas)
+        const texture = new CanvasTexture(heatmap._renderer.canvas)
 
         material.map = texture;
-        material.side = THREE.DoubleSide;
+        material.side = DoubleSide;
         material.transparent = true;
         material.onBeforeCompile = (shader) => {
 

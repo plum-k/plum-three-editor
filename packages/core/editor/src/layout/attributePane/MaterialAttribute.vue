@@ -86,22 +86,22 @@ const {} = useBindSubscribe({
 })
 
 // const materialClasses: Record<string, any> = {
-//   'LineBasicMaterial': THREE.LineBasicMaterial,
-//   'LineDashedMaterial': THREE.LineDashedMaterial,
-//   'MeshBasicMaterial': THREE.MeshBasicMaterial,
-//   'MeshDepthMaterial': THREE.MeshDepthMaterial,
-//   'MeshNormalMaterial': THREE.MeshNormalMaterial,
-//   'MeshLambertMaterial': THREE.MeshLambertMaterial,
-//   'MeshMatcapMaterial': THREE.MeshMatcapMaterial,
-//   'MeshPhongMaterial': THREE.MeshPhongMaterial,
-//   'MeshToonMaterial': THREE.MeshToonMaterial,
-//   'MeshStandardMaterial': THREE.MeshStandardMaterial,
-//   'MeshPhysicalMaterial': THREE.MeshPhysicalMaterial,
-//   'RawShaderMaterial': THREE.RawShaderMaterial,
-//   'ShaderMaterial': THREE.ShaderMaterial,
-//   'ShadowMaterial': THREE.ShadowMaterial,
-//   'SpriteMaterial': THREE.SpriteMaterial,
-//   'PointsMaterial': THREE.PointsMaterial
+//   'LineBasicMaterial': LineBasicMaterial,
+//   'LineDashedMaterial': LineDashedMaterial,
+//   'MeshBasicMaterial': MeshBasicMaterial,
+//   'MeshDepthMaterial': MeshDepthMaterial,
+//   'MeshNormalMaterial': MeshNormalMaterial,
+//   'MeshLambertMaterial': MeshLambertMaterial,
+//   'MeshMatcapMaterial': MeshMatcapMaterial,
+//   'MeshPhongMaterial': MeshPhongMaterial,
+//   'MeshToonMaterial': MeshToonMaterial,
+//   'MeshStandardMaterial': MeshStandardMaterial,
+//   'MeshPhysicalMaterial': MeshPhysicalMaterial,
+//   'RawShaderMaterial': RawShaderMaterial,
+//   'ShaderMaterial': ShaderMaterial,
+//   'ShadowMaterial': ShadowMaterial,
+//   'SpriteMaterial': SpriteMaterial,
+//   'PointsMaterial': PointsMaterial
 // };
 </script>
 

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import {useBus} from "../../hooks";
-import * as THREE from "three";
+
 import {reactive} from "vue";
 import {round} from "lodash-es";
-
+import {Vector3} from "three";
 const bus = useBus();
 
 bus.viewerInitSubject.subscribe((value) => {
@@ -12,8 +12,8 @@ bus.viewerInitSubject.subscribe((value) => {
   if (!viewer) return
   const cameraControl = viewer.cameraManager.cameraControls;
 
-  let position = new THREE.Vector3();
-  let target = new THREE.Vector3();
+  let position = new Vector3();
+  let target = new Vector3();
   cameraControl.addEventListener("control", () => {
     cameraControl.getPosition(position);
     cameraControl.getTarget(target);

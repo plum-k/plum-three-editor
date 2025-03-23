@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import {invoke, isArray, PropertyPath} from "lodash-es";
 import {SetValueCommand} from "../SetValueCommand";
-
-const color = new THREE.Color();
+import {Color, Object3D} from "three";
+const color = new Color();
 
 export class SetColorCommand extends SetValueCommand {
     type = 'SetColorCommand';
 
-    constructor(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, oldValue: any) {
+    constructor(object: Object3D, attributeName: PropertyPath, newValue: any, oldValue: any) {
         super(object, attributeName, newValue, oldValue);
         this.attributeName = attributeName;
         this.name = 'command/SetColorCommand' + ': ' + this.getAttributeName();

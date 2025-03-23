@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import * as THREE from "three";
+
 import {isCapsuleGeometry, isMesh} from "three-is";
 import {useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
@@ -16,7 +16,7 @@ const bus = useBus();
 const {objectAttributeChangeSubject, toggle} = useGeometryAttributeProvide({
   isAutoUpdate: false,
   getNewGeometry: (geometry, name, value) => {
-    return new THREE.CapsuleGeometry(
+    return new CapsuleGeometry(
         getGeometryValue(geometry, "radius", name, value),
         getGeometryValue(geometry, "length", name, value),
         getGeometryValue(geometry, "capSegments", name, value),

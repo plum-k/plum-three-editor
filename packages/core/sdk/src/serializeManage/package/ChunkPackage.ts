@@ -1,7 +1,7 @@
 import {IPackageOptions, Package} from "./Package";
 import {chunk, isNil, split} from "lodash-es";
 import {Serialize} from "../SerializeInterface";
-import * as THREE from "three";
+
 import {BlobReader, BlobWriter, Entry, Uint8ArrayWriter, ZipReader, ZipWriter} from "@zip.js/zip.js";
 import {SerializerTool} from "../SerializerTool";
 import axios, {AxiosProgressEvent} from "axios";
@@ -161,7 +161,7 @@ export class ChunkSerialize extends Package {
             result: viewerInfo.scene,
             extension: "object"
         })
-        const scene = await this.assetManager.loadObject(asset) as THREE.Scene;
+        const scene = await this.assetManager.loadObject(asset) as Scene;
 
         this.viewer.syncScene(scene);
 

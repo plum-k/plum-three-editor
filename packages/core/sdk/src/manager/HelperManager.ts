@@ -11,22 +11,22 @@ export class HelperManager extends Component {
     }
 
     addGridHelper(size: number, divisions: number) {
-        const gridHelper = new THREE.GridHelper(size, divisions);
+        const gridHelper = new GridHelper(size, divisions);
         this.viewer.scene.add(gridHelper);
     }
 
     addAxesHelper(size: number) {
-        const axesHelper = new THREE.AxesHelper(size);
+        const axesHelper = new AxesHelper(size);
         this.viewer.scene.add(axesHelper);
     }
 
-    addCameraHelper(camera: THREE.Camera = this.viewer.cameraManager.perspectiveCamera) {
-        const cameraHelper = new THREE.CameraHelper(camera);
+    addCameraHelper(camera: Camera = this.viewer.cameraManager.perspectiveCamera) {
+        const cameraHelper = new CameraHelper(camera);
         this.viewer.scene.add(cameraHelper);
     }
 
-    addSkeletonHelper(object: THREE.Object3D) {
-        const skeletonHelper = new THREE.SkeletonHelper(object);
+    addSkeletonHelper(object: Object3D) {
+        const skeletonHelper = new SkeletonHelper(object);
         this.viewer.scene.add(skeletonHelper)
     }
 

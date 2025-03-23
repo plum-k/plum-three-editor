@@ -1,11 +1,11 @@
 import *  as THREE from "three";
 
 export type ObjectMap = {
-    nodes: { [name: string]: THREE.Object3D }
-    materials: { [name: string]: THREE.Material }
+    nodes: { [name: string]: Object3D }
+    materials: { [name: string]: Material }
 }
 
-export function buildGraph(object: THREE.Object3D) {
+export function buildGraph(object: Object3D) {
     const data: ObjectMap = {nodes: {}, materials: {}}
     if (object) {
         object.traverse((obj: any) => {

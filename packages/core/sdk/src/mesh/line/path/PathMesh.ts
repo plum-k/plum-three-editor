@@ -23,7 +23,7 @@ export interface IPathMeshOptions {
     meshBasicMaterialParams?: MeshBasicMaterialParameters; // 材质参数
 }
 
-// PathMesh 类，继承自 THREE.Mesh
+// PathMesh 类，继承自 Mesh
 export class PathMesh extends Mesh<PathGeometry> {
 
     pathPointList: PathPointList = new PathPointList(); // 路径点列表实例

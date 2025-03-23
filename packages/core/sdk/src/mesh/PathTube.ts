@@ -1,23 +1,23 @@
 import { PathPointList, PathTubeGeometry, PathTubeGeometryOptions } from "three.path";
-import * as THREE from "three";
+
 import { LineDashedMaterialParameters } from "three";
 import { deepMergeRetain } from "../tool";
 import { PathPointListOptions } from "./line/path/Path";
-
+import {Vector3,Mesh,MeshBasicMaterial} from "three";
 // 路径管道选项接口
 export interface IPathTubeOptions {
-    points?: Array<THREE.Vector3>; // 路径点数组
+    points?: Array<Vector3>; // 路径点数组
     materialParams?: LineDashedMaterialParameters; // 材质参数
     pathPointListOptions?: PathPointListOptions; // 路径点列表选项
     pathTubeGeometryOptions?: PathTubeGeometryOptions; // 路径管道几何体选项
 }
 
-// PathTube 类，继承自 THREE.Mesh
-export class PathTube extends THREE.Mesh {
+// PathTube 类，继承自 Mesh
+export class PathTube extends Mesh {
     declare geometry: PathTubeGeometry; // 声明几何体类型
-    declare material: THREE.MeshBasicMaterial; // 声明材质类型
+    declare material: MeshBasicMaterial; // 声明材质类型
     options: Required<IPathTubeOptions>; // 选项
-    points: Array<THREE.Vector3> = []; // 路径点数组
+    points: Array<Vector3> = []; // 路径点数组
     pathPointList: PathPointList; // 路径点列表实例
 
     // 构造函数
@@ -35,7 +35,7 @@ export class PathTube extends THREE.Mesh {
 
         const { points, materialParams } = this.options; // 解构选项
         this.points = points; // 设置路径点
-        const up = new THREE.Vector3(0, 1, 0); // 定义上方向向量
+        const up = new Vector3(0, 1, 0); // 定义上方向向量
 
         // 创建路径点列表
         this.pathPointList = new PathPointList();
@@ -52,11 +52,11 @@ export class PathTube extends THREE.Mesh {
         );
 
         // 创建材质
-        this.material = new THREE.MeshBasicMaterial(materialParams); // 创建材质实例
+        this.material = new MeshBasicMaterial(materialParams); // 创建材质实例
     }
 
     // 添加路径点
-    addPoint(point: THREE.Vector3) {
+    addPoint(point: Vector3) {
         this.points.push(point); // 将新点添加到路径点数组
         this.setPoints(this.points); // 更新几何体的路径点
     }
@@ -73,7 +73,7 @@ export class PathTube extends THREE.Mesh {
     }
 
     // 设置路径点
-    setPoints(points: Array<THREE.Vector3>) {
+    setPoints(points: Array<Vector3>) {
         // 更新几何体
         this.geometry.update(this.pathPointList, this.options.pathTubeGeometryOptions);
     }

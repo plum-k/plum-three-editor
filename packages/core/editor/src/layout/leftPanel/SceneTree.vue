@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import * as THREE from "three";
+
 import {Viewer} from "@plum-render/three-sdk";
 import {ElTreeV2, type TreeNode, type TreeNodeData} from "element-plus";
 import {ref} from "vue";
@@ -12,7 +12,7 @@ import {isDirectionalLight} from "three-is";
 const bus = useBus();
 
 // 将 THREE 对象转换为树节点
-const getTree = (objects: Array<THREE.Object3D>) => {
+const getTree = (objects: Array<Object3D>) => {
   const nodes: Array<any> = [];
   for (let i = 0, l = objects.length; i < l; i++) {
     const object = objects[i];

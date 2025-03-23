@@ -2,7 +2,7 @@
 import {ElForm} from "element-plus";
 import {reactive} from "vue";
 import {isArray} from "lodash-es";
-import * as THREE from "three";
+
 import {useBus} from "../../../hooks";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, SelectItem, TextItem, Vector2Item} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";

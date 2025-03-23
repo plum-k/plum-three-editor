@@ -9,7 +9,7 @@ export class SetMaterialValueCommand extends Command {
     materialSlot: number;
     attributeName: string;
 
-    constructor(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, materialSlot = -1) {
+    constructor(object: Object3D, attributeName: PropertyPath, newValue: any, materialSlot = -1) {
         super();
         this.updatable = true;
         this.name = 'command/SetMaterialValue' + ': ' + attributeName;
@@ -17,7 +17,7 @@ export class SetMaterialValueCommand extends Command {
         this.object = object;
         this.materialSlot = materialSlot;
 
-        const material = Tool.getObjectMaterial(object as THREE.Mesh, materialSlot)
+        const material = Tool.getObjectMaterial(object as Mesh, materialSlot)
 
         this.oldValue = get(material, attributeName);
         this.newValue = newValue;
@@ -29,7 +29,7 @@ export class SetMaterialValueCommand extends Command {
      * @param isExecute 是否执行命令，true为执行，false为撤销
      */
     setValue(isExecute: boolean) {
-        const material = Tool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
+        const material = Tool.getObjectMaterial(this.object as Mesh, this.materialSlot);
         const value = isExecute ? this.newValue : this.oldValue;
         set(material, this.attributeName, value);
         material.needsUpdate = true;

@@ -41,18 +41,25 @@ const animationsToList = () => {
     const animation = animations[i];
     animationsList.value.push({
       name: animation.name,
+      isRunning: false
     })
   }
   console.log(animationsList.value)
 }
 
-const play = (item: string) => {
+const play = (index: number) => {
   const viewer = bus.viewer;
   const selectObject3D = bus.selectObject;
   if (viewer && selectObject3D) {
-    const animation = find(selectObject3D.animations, {name: item})!;
-    const action = viewer.animationMixer.clipAction(animation, selectObject3D);
-    action.isRunning() ? action.stop() : action.play();
+    const animation = selectObject3D.animations[index]!
+    const action = viewer.getAction(bus.selectObject, animation);
+    if (action.isRunning()) {
+      action.stop();
+      animationsList.value[index].isRunning = false;
+    } else {
+      action.play();
+      animationsList.value[index].isRunning = true;
+    }
   }
 }
 </script>
@@ -75,7 +82,7 @@ const play = (item: string) => {
     <el-row v-for="(item, index) in animationsList" :key="index" class="mt-1">
       <el-col :span="12">{{ item.name }}</el-col>
       <el-col :span="12">
-        <el-button @click="play(item.name)">播放</el-button>
+        <el-button @click="play(index)">播放</el-button>
       </el-col>
     </el-row>
   </el-form>

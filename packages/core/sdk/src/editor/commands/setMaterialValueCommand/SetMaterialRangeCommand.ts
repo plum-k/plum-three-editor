@@ -8,7 +8,7 @@ export class SetMaterialRangeCommand extends Command<Array<number>> {
     attributeName: string;
 
     constructor(
-        object: THREE.Object3D,
+        object: Object3D,
         attributeName: string = '',
         newMinValue: number = -Infinity,
         newMaxValue: number = Infinity,

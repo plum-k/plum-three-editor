@@ -2,7 +2,7 @@
 import {provide, reactive} from "vue";
 import {ElButton, ElForm, ElPopover} from "element-plus";
 import {useAttributeProvide, useBus} from "../../../hooks";
-import * as THREE from "three";
+
 import {set} from "lodash-es";
 import {InputNumberItem} from "../../../common-ui";
 
@@ -27,7 +27,7 @@ const threeToUi = () => {
   const viewer = bus.viewer;
   if (!viewer) return
   const cameraControls = viewer.cameraManager.cameraControls;
-  const camera = viewer.cameraManager.cameraControls.camera as THREE.PerspectiveCamera;
+  const camera = viewer.cameraManager.cameraControls.camera as PerspectiveCamera;
 
   form.fov = camera.fov;
   form.near = camera.near;
@@ -64,7 +64,7 @@ objectAttributeChangeSubject.subscribe((editValue) => {
   const viewer = bus.viewer;
   if (!viewer) return
   const cameraControls = viewer.cameraManager.cameraControls;
-  const camera = viewer.cameraManager.cameraControls.camera as THREE.PerspectiveCamera;
+  const camera = viewer.cameraManager.cameraControls.camera as PerspectiveCamera;
 
   const isCamera = ["fov", "near", "far"].includes(name as string)
   if (isCamera) {

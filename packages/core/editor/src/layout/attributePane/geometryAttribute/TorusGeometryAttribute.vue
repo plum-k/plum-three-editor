@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import * as THREE from "three";
+
 import {useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
@@ -12,12 +12,12 @@ const bus = useBus();
 const {objectAttributeChangeSubject, toggle} = useGeometryAttributeProvide({
   isAutoUpdate: false,
   getNewGeometry: (geometry, name, value) => {
-    return new THREE.TorusGeometry(
+    return new TorusGeometry(
         getGeometryValue(geometry, "radius", name, value),
         getGeometryValue(geometry, "tube", name, value),
         getGeometryValue(geometry, "radialSegments", name, value),
         getGeometryValue(geometry, "tubularSegments", name, value),
-        getGeometryValue(geometry, "arc", name, value) * THREE.MathUtils.DEG2RAD
+        getGeometryValue(geometry, "arc", name, value) * MathUtils.DEG2RAD
     );
   }
 })

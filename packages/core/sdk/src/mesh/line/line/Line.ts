@@ -1,9 +1,8 @@
-import * as THREE from "three";
-import { LineDashedMaterialParameters } from "three";
+
 import { isNil } from "lodash-es";
 import { isColor } from "three-is";
 import { deepMergeRetain, Tool } from "../../../tool";
-
+import {LineDashedMaterialParameters,Vector3,Color,Object3D,LineDashedMaterial,LineBasicMaterial,LineLoop,LineSegments,Float32BufferAttribute} from "three";
 // 定义线条类型的枚举
 export enum LineType {
     Line = "Line",            // 普通线
@@ -19,8 +18,8 @@ export enum LineMaterialType {
 
 // 定义线条选项接口
 export interface ILineOptions {
-    points?: Array<THREE.Vector3> | Array<[number, number, number]>; // 线条控制点
-    vertexColors?: Array<THREE.Color | [number, number, number] | [number, number, number, number]>; // 顶点颜色
+    points?: Array<Vector3> | Array<[number, number, number]>; // 线条控制点
+    vertexColors?: Array<Color | [number, number, number] | [number, number, number, number]>; // 顶点颜色
     lineType?: LineType; // 线条类型
     materialType?: LineMaterialType; // 材质类型
     materialParams?: LineDashedMaterialParameters; // 材质参数
@@ -42,13 +41,13 @@ export const LineDefaultsOptions: ILineOptions = {
     isDelayInit: false // 默认不延迟初始化
 }
 
-// Line 类，继承自 THREE.Object3D
-export class Line extends THREE.Object3D {
-    line!: THREE.Line | THREE.LineLoop | THREE.LineSegments; // 线条对象
-    material!: THREE.LineDashedMaterial | THREE.LineBasicMaterial; // 材质对象
+// Line 类，继承自 Object3D
+export class Line extends Object3D {
+    line!: Line | LineLoop | LineSegments; // 线条对象
+    material!: LineDashedMaterial | LineBasicMaterial; // 材质对象
     options: Required<ILineOptions> = LineDefaultsOptions as Required<ILineOptions>; // 选项
     isPlumLine = true; // 是否为梅花线
-    points: Array<THREE.Vector3> = []; // 控制点数组
+    points: Array<Vector3> = []; // 控制点数组
 
     // 构造函数
     constructor(_options: ILineOptions) {
@@ -94,13 +93,13 @@ export class Line extends THREE.Object3D {
     }
 
     // 添加控制点
-    addPoint(point: THREE.Vector3) {
+    addPoint(point: Vector3) {
         this.points.push(point); // 将新点添加到控制点数组
         this.setPoints(this.points); // 更新控制点
     }
 
     // 设置控制点
-    setPoints(points: Array<THREE.Vector3> = this.getLinePoints()) {
+    setPoints(points: Array<Vector3> = this.getLinePoints()) {
         this.line.geometry.setFromPoints(points); // 设置几何体的控制点
         if (this.options.materialType === LineMaterialType.LineDashedMaterial) {
             this.line.computeLineDistances(); // 计算虚线距离
@@ -113,7 +112,7 @@ export class Line extends THREE.Object3D {
             return isColor(color) ? color.toArray() : color; // 将颜色转换为数组
         });
         const itemSize = (this.options.vertexColors?.[0] as number[] | undefined)?.length === 4 ? 4 : 3; // 判断颜色数组的大小
-        this.line.geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors.flat(), itemSize)); // 设置颜色属性
+        this.line.geometry.setAttribute("color", new Float32BufferAttribute(colors.flat(), itemSize)); // 设置颜色属性
     }
 
     // 初始化方法
@@ -131,13 +130,13 @@ export class Line extends THREE.Object3D {
         const { lineType } = _options;
         switch (lineType) {
             case LineType.Line:
-                this.line = new THREE.Line(); // 创建普通线
+                this.line = new Line(); // 创建普通线
                 break;
             case LineType.LineLoop:
-                this.line = new THREE.LineLoop(); // 创建闭合线
+                this.line = new LineLoop(); // 创建闭合线
                 break;
             case LineType.LineSegments:
-                this.line = new THREE.LineSegments(); // 创建线段
+                this.line = new LineSegments(); // 创建线段
                 break;
         }
     }
@@ -147,10 +146,10 @@ export class Line extends THREE.Object3D {
         const { materialType, materialParams } = _options;
         switch (materialType) {
             case LineMaterialType.LineBasicMaterial:
-                this.material = new THREE.LineBasicMaterial(materialParams); // 创建基础材质
+                this.material = new LineBasicMaterial(materialParams); // 创建基础材质
                 break;
             case LineMaterialType.LineDashedMaterial:
-                this.material = new THREE.LineDashedMaterial(materialParams); // 创建虚线材质
+                this.material = new LineDashedMaterial(materialParams); // 创建虚线材质
                 break;
         }
     }

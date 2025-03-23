@@ -1,14 +1,19 @@
 import {fromEvent, Subject} from 'rxjs';
 import {Component, IComponentOptions} from "../core/Component";
-import * as THREE from 'three';
+import {Intersection, Object3D, Object3DEventMap, Vector2, Vector3} from 'three';
 import {Tool} from "../tool/Tool";
 
 export interface IEventManagerOptions extends IComponentOptions {
 }
 
 export interface IPick {
-    intersects: THREE.Intersection<THREE.Object3D<THREE.Object3DEventMap>>[];
-    position: THREE.Vector3
+    intersects: Intersection<Object3D<Object3DEventMap>>[];
+    position: Vector3
+}
+
+export interface IRenderSubjectValue {
+    timestamp: number;
+    delta: number;
 }
 
 export class EventManager extends Component {
@@ -17,10 +22,10 @@ export class EventManager extends Component {
     // 容器重置
     resizeSubject = new Subject<boolean>();
     // 每次渲染更新时候触发
-    renderSubject = new Subject<number>();
+    renderSubject = new Subject<IRenderSubjectValue>();
 
     // 对外暴露的点击事件
-    clickSubject = new Subject<THREE.Intersection<THREE.Object3D<THREE.Object3DEventMap>>[]>();
+    clickSubject = new Subject<Intersection<Object3D<Object3DEventMap>>[]>();
 
     // div 原生的点击事件
     domClickSubject = new Subject<MouseEvent>();
@@ -29,11 +34,11 @@ export class EventManager extends Component {
     dropSubject = new Subject<DragEvent>();
 
     // 记录 点击事件的位置
-    onLeftDownPosition = new THREE.Vector2();
-    onLeftUpPosition = new THREE.Vector2();
+    onLeftDownPosition = new Vector2();
+    onLeftUpPosition = new Vector2();
 
-    onRightDownPosition = new THREE.Vector2();
-    onRightUpPosition = new THREE.Vector2();
+    onRightDownPosition = new Vector2();
+    onRightUpPosition = new Vector2();
 
     // 排除拖动的点击事件
     leftClickSubject = new Subject<MouseEvent>();

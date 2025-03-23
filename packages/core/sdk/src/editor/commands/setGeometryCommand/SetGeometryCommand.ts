@@ -4,15 +4,15 @@ import {Geometry, ObjectLoader} from 'three';
 
 /**
  * @param editor Editor
- * @param object THREE.Object3D
- * @param newValue THREE.Geometry
+ * @param object Object3D
+ * @param newValue Geometry
  * @constructor
  */
 export class SetGeometryCommand extends Command {
     type: string = 'SetGeometryCommand';
     updatable: boolean = true;
 
-    constructor(object: THREE.Mesh, newValue: THREE.BufferGeometry) {
+    constructor(object: Mesh, newValue: BufferGeometry) {
         super();
 
         this.name = 'command/SetGeometry';

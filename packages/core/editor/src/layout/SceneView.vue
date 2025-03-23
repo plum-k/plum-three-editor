@@ -2,7 +2,7 @@
 import {onMounted, ref} from "vue";
 import {ESceneLoadType, ESceneSaveType, Viewer} from "@plum-render/three-sdk";
 import {useRoute} from "vue-router";
-import * as THREE from "three";
+
 import {BoxGeometry, Mesh, MeshStandardMaterial} from "three";
 import {useBus,} from "../hooks";
 import {Control} from "./sceneView";
@@ -206,89 +206,89 @@ const panelDrop = (info: IDragInfo) => {
 }
 
 function createMesh(info: IDragInfo) {
-  let geometry: THREE.BufferGeometry | null = null;
+  let geometry: BufferGeometry | null = null;
   switch (info.type) {
     case 'BoxGeometry':
-      geometry = new THREE.BoxGeometry(1, 1, 1);
+      geometry = new BoxGeometry(1, 1, 1);
       break;
     case 'CapsuleGeometry':
-      geometry = new THREE.CapsuleGeometry(1, 1, 4, 8);
+      geometry = new CapsuleGeometry(1, 1, 4, 8);
       break;
     case 'CircleGeometry':
-      geometry = new THREE.CircleGeometry(1, 32);
+      geometry = new CircleGeometry(1, 32);
       break;
     case 'CylinderGeometry':
-      geometry = new THREE.CylinderGeometry(1, 1, 1, 32);
+      geometry = new CylinderGeometry(1, 1, 1, 32);
       break;
     case 'DodecahedronGeometry':
-      geometry = new THREE.DodecahedronGeometry(1);
+      geometry = new DodecahedronGeometry(1);
       break;
     case 'IcosahedronGeometry':
-      geometry = new THREE.IcosahedronGeometry(1);
+      geometry = new IcosahedronGeometry(1);
       break;
     case 'LatheGeometry':
-      geometry = new THREE.LatheGeometry();
+      geometry = new LatheGeometry();
       break;
     case 'OctahedronGeometry':
-      geometry = new THREE.OctahedronGeometry(1);
+      geometry = new OctahedronGeometry(1);
       break;
     case 'PlaneGeometry':
-      geometry = new THREE.PlaneGeometry(1, 1);
+      geometry = new PlaneGeometry(1, 1);
       break;
     case 'RingGeometry':
-      geometry = new THREE.RingGeometry(0.5, 1, 32);
+      geometry = new RingGeometry(0.5, 1, 32);
       break;
     case 'SphereGeometry':
-      geometry = new THREE.SphereGeometry(1, 32, 16);
+      geometry = new SphereGeometry(1, 32, 16);
       break;
     case 'TetrahedronGeometry':
-      geometry = new THREE.TetrahedronGeometry(1);
+      geometry = new TetrahedronGeometry(1);
       break;
     case 'TorusGeometry':
-      geometry = new THREE.TorusGeometry(1, 0.4, 12, 48);
+      geometry = new TorusGeometry(1, 0.4, 12, 48);
       break;
     case 'TorusKnotGeometry':
-      geometry = new THREE.TorusKnotGeometry(1, 0.4, 64, 8);
+      geometry = new TorusKnotGeometry(1, 0.4, 64, 8);
       break;
     case 'TubeGeometry':
-      const path = new THREE.CatmullRomCurve3([
-        new THREE.Vector3(2, 2, -2),
-        new THREE.Vector3(2, -2, -0.67),
-        new THREE.Vector3(-2, -2, 0.67),
-        new THREE.Vector3(-2, 2, 2)
+      const path = new CatmullRomCurve3([
+        new Vector3(2, 2, -2),
+        new Vector3(2, -2, -0.67),
+        new Vector3(-2, -2, 0.67),
+        new Vector3(-2, 2, 2)
       ]);
-      geometry = new THREE.TubeGeometry(path, 64, 1, 8);
+      geometry = new TubeGeometry(path, 64, 1, 8);
       break;
     default:
       console.warn(`Unknown mesh type: ${info.type}`);
       return null;
   }
   if (!geometry) return null;
-  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+  const mesh = new Mesh(geometry, new MeshStandardMaterial());
   mesh.name = `${uniqueId(info.type)}`;
   mesh.geometry.name = mesh.name
   return mesh;
 }
 
 function createLight(info: IDragInfo) {
-  let light: THREE.Light | null = null;
+  let light: Light | null = null;
   switch (info.type) {
     case 'AmbientLight':
-      light = new THREE.AmbientLight(0x222222);
+      light = new AmbientLight(0x222222);
       break;
     case 'DirectionalLight':
-      light = new THREE.DirectionalLight(0xffffff, 1);
+      light = new DirectionalLight(0xffffff, 1);
       light.position.set(5, 10, 7.5);
       break;
     case 'HemisphereLight':
-      light = new THREE.HemisphereLight(0x00aaff, 0xffaa00, 1);
+      light = new HemisphereLight(0x00aaff, 0xffaa00, 1);
       light.position.set(0, 10, 0);
       break;
     case 'PointLight':
-      light = new THREE.PointLight(0xffffff, 1);
+      light = new PointLight(0xffffff, 1);
       break;
     case 'SpotLight':
-      light = new THREE.SpotLight(0xffffff, 1);
+      light = new SpotLight(0xffffff, 1);
       light.position.set(5, 10, 7.5);
       break;
     default:

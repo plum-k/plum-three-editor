@@ -8,8 +8,8 @@ export interface IEditorEventManagerOptions extends IComponentOptions {
 }
 
 export interface IPick {
-    intersects: THREE.Intersection<THREE.Object3D<THREE.Object3DEventMap>>[];
-    position: THREE.Vector3
+    intersects: Intersection<Object3D<Object3DEventMap>>[];
+    position: Vector3
 }
 
 export interface IObjectChangedValue {
@@ -58,7 +58,7 @@ export class EditorEventManager extends Component {
     geometryChanged = new Subject<any>();
 
     // 在三维中选择物体
-    objectSelected = new Subject<THREE.Object3D | undefined>();
+    objectSelected = new Subject<Object3D | undefined>();
 
     objectFocused = new Subject<any>();
 

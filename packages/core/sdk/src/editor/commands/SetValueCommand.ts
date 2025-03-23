@@ -16,7 +16,7 @@ export class SetValueCommand extends Command<any> {
      * @param newValue 新的属性值
      * @param oldValue 旧的属性值，如果未提供，则从对象中获取
      */
-    constructor(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, oldValue: any) {
+    constructor(object: Object3D, attributeName: PropertyPath, newValue: any, oldValue: any) {
         super();
         this.attributeName = attributeName;
 

@@ -10,7 +10,7 @@ import {Asset} from "../manager/asset";
 CameraControls.install({THREE: THREE});
 
 /**
- * 交互控制类，用于管理Three.js场景中的摄像机控制。
+ * 交互控制类，用于管理js场景中的摄像机控制。
  */
 export interface IcameraManager {
     viewer: Viewer;
@@ -35,7 +35,7 @@ const DEG90 = Math.PI * 0.5;
 const DEG180 = Math.PI;
 
 /**
- * cameraManager类负责初始化和管理Three.js的摄像机控制。
+ * cameraManager类负责初始化和管理js的摄像机控制。
  * 它通过与viewer实例配合，提供交互式摄像机控制功能。
  */
 export class CameraManager {
@@ -64,7 +64,7 @@ export class CameraManager {
         this.width = width;
         this.height = height;
 
-        this.perspectiveCamera = new THREE.PerspectiveCamera(60, width / height, 0.01, 18000);
+        this.perspectiveCamera = new PerspectiveCamera(60, width / height, 0.01, 18000);
         this.perspectiveCameraControls = new CameraControls(this.perspectiveCamera, defaultWebGLRenderer.domElement);
 
         this.orthographicCamera = new OrthographicCamera(
@@ -108,15 +108,15 @@ export class CameraManager {
             result: json.perspectiveCamera,
             extension: "object"
         })
-        const object = await this.viewer.assetManager.loadObject(asset) as THREE.PerspectiveCamera;
+        const object = await this.viewer.assetManager.loadObject(asset) as PerspectiveCamera;
         this.perspectiveCameraControls.camera.copy(object);
         this.perspectiveCameraControls.fromJSON(JSON.stringify(json.perspectiveCameraControls),false);
     }
 
     test() {
         console.log(JSON.parse(this.cameraControls.toJSON()));
-        console.log("azimuthAngle", THREE.MathUtils.radToDeg(this.cameraControls.azimuthAngle));
-        console.log("polarAngle", THREE.MathUtils.radToDeg(this.cameraControls.polarAngle));
+        console.log("azimuthAngle", MathUtils.radToDeg(this.cameraControls.azimuthAngle));
+        console.log("polarAngle", MathUtils.radToDeg(this.cameraControls.polarAngle));
     }
 
     get cameraControls() {
@@ -124,11 +124,11 @@ export class CameraManager {
     }
 
     get target() {
-        return this.cameraControls.getTarget(new THREE.Vector3());
+        return this.cameraControls.getTarget(new Vector3());
     }
 
     get position() {
-        return this.cameraControls.getPosition(new THREE.Vector3());
+        return this.cameraControls.getPosition(new Vector3());
     }
 
     get camera() {
@@ -344,7 +344,7 @@ export class CameraManager {
         await this.cameraControls.fitToBox(box3, enableTransition);
     }
 
-    async fitToMeshByBox(box3OrObject: THREE.Box3 | THREE.Object3D,
+    async fitToMeshByBox(box3OrObject: Box3 | Object3D,
                          enableTransition: boolean) {
         await this.cameraControls.fitToBox(box3OrObject, enableTransition);
     }

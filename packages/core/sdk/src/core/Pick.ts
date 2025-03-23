@@ -4,17 +4,17 @@ import {Component, IComponentOptions} from "./Component";
 import {isPerspectiveCamera} from "three-is";
 import {isNil} from "lodash-es";
 import {Tool} from "../tool/Tool";
-
+import {Camera, Raycaster, Scene, Vector2, Vector3} from "three";
 export interface IPickOptions extends IComponentOptions {
 }
 
 export class Pick extends Component {
-    raycaster: THREE.Raycaster;
-    pointer: THREE.Vector2 = new THREE.Vector2();
+    raycaster: Raycaster;
+    pointer: Vector2 = new Vector2();
 
     constructor(options: IPickOptions) {
         super(options);
-        this.raycaster = new THREE.Raycaster();
+        this.raycaster = new Raycaster();
 
         this.eventManager.leftClickSubject.subscribe((event) => {
             this.pointer.fromArray(Tool.getNFC(event, this.container))
@@ -42,7 +42,7 @@ export class Pick extends Component {
         })
     }
 
-    pick(scene: THREE.Scene, camera: THREE.Camera, event) {
+    pick(scene: Scene, camera: Camera, event) {
         this.raycaster.setFromCamera(this.pointer, camera);
 
         const objects: Array<Object3D> = [];
@@ -72,8 +72,8 @@ export class Pick extends Component {
     screenToWorld(height?: number) {
         let [x, y] = [this.pointer.x, this.pointer.y]
         const camera = this.camera;
-        let screenPosition = new THREE.Vector3(x, y, 0);
-        const cameraPosition = new THREE.Vector3();
+        let screenPosition = new Vector3(x, y, 0);
+        const cameraPosition = new Vector3();
         camera.updateProjectionMatrix();
         if (isPerspectiveCamera(camera)) {
             cameraPosition.setFromMatrixPosition(camera.matrixWorld);
@@ -87,13 +87,13 @@ export class Pick extends Component {
         //     screenPosition.set(0, 0, -1).transformDirection(camera.matrixWorld);
         // }
         const min = 1e-4;
-        const normalY = new THREE.Vector3(0, 1, 0)
+        const normalY = new Vector3(0, 1, 0)
         const dotNormalY = normalY.dot(screenPosition);
-        const center = this.cameraManager.cameraControls.getTarget(new THREE.Vector3());
+        const center = this.cameraManager.cameraControls.getTarget(new Vector3());
         if (!(Math.abs(dotNormalY) < min)) {
             // 计算距离
             const distance = (-cameraPosition.y + (height || 0) + center.y) / screenPosition.y; // center.y
-            let position = (new THREE.Vector3).copy(cameraPosition).add((new THREE.Vector3).copy(screenPosition).multiplyScalar(distance));
+            let position = (new Vector3).copy(cameraPosition).add((new Vector3).copy(screenPosition).multiplyScalar(distance));
             if (!isNil(height)) {
                 position.y = height;
             }

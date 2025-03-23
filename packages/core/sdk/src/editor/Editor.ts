@@ -1,5 +1,5 @@
 import {Component, IComponentOptions} from "../core/Component";
-import * as THREE from "three";
+
 import {Texture} from "three";
 import {PropertyPath} from "lodash-es";
 import {History} from "./History"
@@ -31,6 +31,9 @@ import {EditorEventManager} from "./EditorEventManager";
 import {Selector} from "./Selector";
 import {TransformControlsWarp} from "./TransformControlsWarp";
 import {VertexNormalsHelper} from "three/examples/jsm/helpers/VertexNormalsHelper.js";
+import {CameraHelper, Object3D,PointLightHelper,SphereGeometry,
+    BufferGeometry,Camera,Material,Mesh,
+    MeshBasicMaterial, DirectionalLightHelper, SpotLightHelper, HemisphereLightHelper, SkeletonHelper} from "three";
 
 export interface IAppearanceStates {
     cameraHelpers: boolean;
@@ -48,14 +51,14 @@ export class Editor extends Component {
     transformControlsWarp!: TransformControlsWarp;
     //------------
 
-    geometries = new Map<string, THREE.BufferGeometry>();
-    cameras = new Map<string, THREE.Camera>();
-    helpers = new Map<string, THREE.Object3D>();
-    materials = new Map<string, THREE.Material>();
+    geometries = new Map<string, BufferGeometry>();
+    cameras = new Map<string, Camera>();
+    helpers = new Map<string, Object3D>();
+    materials = new Map<string, Material>();
 
 
     // 材质引用计数
-    materialsRefCounter = new Map<THREE.Material, number>();
+    materialsRefCounter = new Map<Material, number>();
 
 
     constructor(options: IEditorOptions) {
@@ -93,40 +96,40 @@ export class Editor extends Component {
         this.history.redo();
     }
 
-    setValueExecute(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, oldValue: any = undefined) {
+    setValueExecute(object: Object3D, attributeName: PropertyPath, newValue: any, oldValue: any = undefined) {
         this.execute(new SetValueCommand(object, attributeName, newValue, oldValue))
     }
 
-    setColorValueCommand(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, oldValue: any = undefined) {
+    setColorValueCommand(object: Object3D, attributeName: PropertyPath, newValue: any, oldValue: any = undefined) {
         this.execute(new SetColorCommand(object, attributeName, newValue, oldValue))
     }
 
-    setMaterialExecute(object: THREE.Object3D, newValue: THREE.Material, materialSlot: number = -1) {
+    setMaterialExecute(object: Object3D, newValue: Material, materialSlot: number = -1) {
         this.execute(new SetMaterialCommand(object, newValue, materialSlot,))
     }
 
-    setMaterialColorExecute(object: THREE.Object3D, attributeName: PropertyPath, newValue: number, materialSlot: number = -1) {
+    setMaterialColorExecute(object: Object3D, attributeName: PropertyPath, newValue: number, materialSlot: number = -1) {
         this.execute(new SetMaterialColorCommand(object, attributeName, newValue, materialSlot))
     }
 
-    setMaterialValueExecute(object: THREE.Object3D, attributeName: PropertyPath, newValue: any, materialSlot: number = -1) {
+    setMaterialValueExecute(object: Object3D, attributeName: PropertyPath, newValue: any, materialSlot: number = -1) {
         this.execute(new SetMaterialValueCommand(object, attributeName, newValue, materialSlot,))
     }
 
-    // setMaterialMapExecute(object: THREE.Object3D, attributeName: string = '', newValue: TexImageSource | OffscreenCanvas, materialSlot: number = -1) {
+    // setMaterialMapExecute(object: Object3D, attributeName: string = '', newValue: TexImageSource | OffscreenCanvas, materialSlot: number = -1) {
     //     // 
-    //     const texture = new THREE.Texture(newValue)
+    //     const texture = new Texture(newValue)
     //     this.command(new SetMaterialMapCommand(object, attributeName, texture, materialSlot,))
     // }
-    setMaterialMapExecute(object: THREE.Object3D, attributeName: string = '', newValue: Texture | null, materialSlot: number = -1) {
+    setMaterialMapExecute(object: Object3D, attributeName: string = '', newValue: Texture | null, materialSlot: number = -1) {
         this.execute(new SetMaterialMapCommand(object, attributeName, newValue, materialSlot,))
     }
 
-    removeObjectExecute(object: THREE.Object3D) {
+    removeObjectExecute(object: Object3D) {
         this.execute(new RemoveObjectCommand(object))
     }
 
-    addObjectExecute(object: THREE.Object3D) {
+    addObjectExecute(object: Object3D) {
         this.execute(new AddObjectCommand(object));
     }
 
@@ -150,7 +153,7 @@ export class Editor extends Component {
      * @param parent
      * @param index
      */
-    addObject(object: THREE.Object3D, parent: THREE.Object3D | undefined = undefined, index: number = 0) {
+    addObject(object: Object3D, parent: Object3D | undefined = undefined, index: number = 0) {
         object.traverse((child) => {
             if (isMesh(child)) {
                 if (child.geometry !== undefined) {
@@ -175,11 +178,11 @@ export class Editor extends Component {
         }
     }
 
-    addGeometry(geometry: THREE.BufferGeometry) {
+    addGeometry(geometry: BufferGeometry) {
         this.geometries.set(geometry.uuid, geometry);
     }
 
-    addMaterial(material: THREE.Material | Array<THREE.Material>) {
+    addMaterial(material: Material | Array<Material>) {
         if (Array.isArray(material)) {
             for (let i = 0, l = material.length; i < l; i++) {
                 this.addMaterialToRefCounter(material[i]);
@@ -190,7 +193,7 @@ export class Editor extends Component {
         this.editorEventManager.materialAdded.next(null);
     }
 
-    addMaterialToRefCounter(material: THREE.Material) {
+    addMaterialToRefCounter(material: Material) {
 
         let materialsRefCounter = this.materialsRefCounter;
 
@@ -205,7 +208,7 @@ export class Editor extends Component {
         }
     }
 
-    addCamera(camera: THREE.Object3D) {
+    addCamera(camera: Object3D) {
         if (isCamera(camera)) {
             this.cameras.set(camera.uuid, camera);
             // this.signals.cameraAdded.dispatch(camera);
@@ -213,13 +216,13 @@ export class Editor extends Component {
     }
 
 
-    nameObject(object: THREE.Object3D, name: string) {
+    nameObject(object: Object3D, name: string) {
         object.name = name;
         // this.signals.sceneGraphChanged.dispatch();
         this.editorEventManager.sceneGraphChanged.next(null);
     }
 
-    removeObject(object: THREE.Object3D) {
+    removeObject(object: Object3D) {
         if (object.parent === null) return; // avoid deleting the camera or scene
         object.traverse((child) => {
             this.removeCamera(child);
@@ -232,7 +235,7 @@ export class Editor extends Component {
         this.editor.editorEventManager.objectRemoved.next(object);
     }
 
-    removeMaterial(material: THREE.Material | THREE.Material[]) {
+    removeMaterial(material: Material | Material[]) {
         if (Array.isArray(material)) {
             for (let i = 0, l = material.length; i < l; i++) {
                 this.removeMaterialFromRefCounter(material[i]);
@@ -243,7 +246,7 @@ export class Editor extends Component {
         this.editor.editorEventManager.materialRemoved.next(null);
     }
 
-    removeMaterialFromRefCounter(material: THREE.Material) {
+    removeMaterialFromRefCounter(material: Material) {
         let count = this.materialsRefCounter.get(material)!;
         count--;
         if (count === 0) {
@@ -255,7 +258,7 @@ export class Editor extends Component {
         }
     }
 
-    removeCamera(camera: THREE.Object3D) {
+    removeCamera(camera: Object3D) {
         if (this.cameras.get(camera.uuid) !== undefined) {
             this.cameras.delete(camera.uuid);
             // @ts-ignore
@@ -269,28 +272,28 @@ export class Editor extends Component {
      * @param object
      * @param helper
      */
-    addHelper(object: THREE.Object3D, helper: THREE.Object3D | undefined = undefined) {
-        let geometry = new THREE.SphereGeometry(2, 4, 2);
-        let material = new THREE.MeshBasicMaterial({color: 0xff0000, visible: false});
+    addHelper(object: Object3D, helper: Object3D | undefined = undefined) {
+        let geometry = new SphereGeometry(2, 4, 2);
+        let material = new MeshBasicMaterial({color: 0xff0000, visible: false});
         if (helper === undefined) {
             if (isCamera(object)) {
-                helper = new THREE.CameraHelper(object);
+                helper = new CameraHelper(object);
             } else if (isPointLight(object)) {
-                helper = new THREE.PointLightHelper(object, 1);
+                helper = new PointLightHelper(object, 1);
             } else if (isDirectionalLight(object)) {
-                helper = new THREE.DirectionalLightHelper(object, 1);
+                helper = new DirectionalLightHelper(object, 1);
             } else if (isSpotLight(object)) {
-                helper = new THREE.SpotLightHelper(object);
+                helper = new SpotLightHelper(object);
             } else if (isHemisphereLight(object)) {
-                helper = new THREE.HemisphereLightHelper(object, 1);
+                helper = new HemisphereLightHelper(object, 1);
             } else if (isSkinnedMesh(object)) {
-                helper = new THREE.SkeletonHelper(object.skeleton.bones[0]);
+                helper = new SkeletonHelper(object.skeleton.bones[0]);
             } else if (isBone(object) === true && object.parent && isBone(object.parent) !== true) {
-                helper = new THREE.SkeletonHelper(object);
+                helper = new SkeletonHelper(object);
             } else {
                 return;
             }
-            const picker = new THREE.Mesh(geometry, material);
+            const picker = new Mesh(geometry, material);
             picker.name = 'picker';
             picker.userData.object = object;
             helper.add(picker);
@@ -336,7 +339,7 @@ export class Editor extends Component {
      * 移除帮助对象
      * @param object
      */
-    removeHelper(object: THREE.Object3D) {
+    removeHelper(object: Object3D) {
         if (this.helpers.get(object.uuid) !== undefined) {
             let helper = this.helpers.get(object.uuid);
             if (helper) {
@@ -353,7 +356,7 @@ export class Editor extends Component {
      * 显示法线
      * @param object
      */
-    showNormals(object: THREE.Object3D) {
+    showNormals(object: Object3D) {
         if (this.helpers.get(object.uuid) === undefined) {
             this.addHelper(object, new VertexNormalsHelper(object));
         } else {
@@ -365,7 +368,7 @@ export class Editor extends Component {
      * 更新帮助对象
      * @param object
      */
-    helperUpdate(object: THREE.Object3D) {
+    helperUpdate(object: Object3D) {
         let helper = this.helpers.get(object.uuid)
         if (isBoxHelper(helper)) {
             helper.update()

@@ -1,4 +1,4 @@
-import * as THREE from "three";
+
 import {Object3D} from "three";
 import Heatmap from "heatmap";
 import HeatmapInstance, {DataPoint, HeatmapConfig} from "heatmap";
@@ -39,7 +39,7 @@ export class HeatMap2dMesh extends Object3D {
         let {radius} = style;
         radius = radius ?? 40;
         const v3Array = data.map(d => {
-            return new THREE.Vector3(d.x, 0, d.y)
+            return new Vector3(d.x, 0, d.y)
         });
 
         const box3 = Tool.getBox3ByV3Array(v3Array);
@@ -78,9 +78,9 @@ export class HeatMap2dMesh extends Object3D {
         this.buildMesh(box3, radius);
     }
 
-    buildMesh(box3: THREE.Box3, radius: number) {
-        const size = box3.getSize(new THREE.Vector3());
-        const center = box3.getCenter(new THREE.Vector3());
+    buildMesh(box3: Box3, radius: number) {
+        const size = box3.getSize(new Vector3());
+        const center = box3.getCenter(new Vector3());
 
         let _width = size.x + radius * 2;
         let _height = size.z + radius * 2;
@@ -88,10 +88,10 @@ export class HeatMap2dMesh extends Object3D {
 
         // @ts-ignore
         let canvas = this.heatmap._renderer.canvas
-        const geometry = new THREE.PlaneGeometry(_width, _height);
-        const material = new THREE.MeshBasicMaterial();
-        material.map = canvas ? new THREE.CanvasTexture(canvas) : null;
-        const plane = new THREE.Mesh(geometry, material);
+        const geometry = new PlaneGeometry(_width, _height);
+        const material = new MeshBasicMaterial();
+        material.map = canvas ? new CanvasTexture(canvas) : null;
+        const plane = new Mesh(geometry, material);
         this.add(plane);
         this.position.copy(center)
     }

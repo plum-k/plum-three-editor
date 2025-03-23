@@ -25,7 +25,7 @@ export interface IWallOption {
     extrudeGeometryOptions?: ExtrudeGeometryOptions; // 拉伸几何体选项
 }
 
-// Wall 类，继承自 THREE.Object3D
+// Wall 类，继承自 Object3D
 export class Wall extends Object3D {
     points: Array<Vector3>; // 存储路径点
     geometry: ExtrudeGeometry; // 拉伸几何体

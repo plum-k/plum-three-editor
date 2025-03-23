@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import * as THREE from "three";
+
 import {isMesh, isTetrahedronGeometry} from "three-is";
 import {useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
@@ -12,7 +12,7 @@ const bus = useBus();
 const {objectAttributeChangeSubject, toggle} = useGeometryAttributeProvide({
   isAutoUpdate: false,
   getNewGeometry: (geometry, name, value) => {
-    return new THREE.TetrahedronGeometry(
+    return new TetrahedronGeometry(
         getGeometryValue(geometry, "radius", name, value),
         getGeometryValue(geometry, "detail", name, value),
     );

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
 import {reactive} from "vue";
-import * as THREE from "three";
+
 import {isMesh} from "three-is";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import {InputItem, TextItem} from "../../../common-ui";

@@ -1,8 +1,9 @@
 import {Component, IComponentOptions} from "../core/Component";
-import * as THREE from "three";
+
 import {isNil} from "lodash-es";
 import {IPick} from "../manager/EventManager";
 import {Subscription} from "rxjs";
+import {Vector3,Mesh,Group,BoxGeometry,MeshBasicMaterial,LineLoop,LineSegments,Float32BufferAttribute} from "three";
 
 export interface IDrawLine extends IComponentOptions {
 }
@@ -14,8 +15,8 @@ export enum DrawType {
 
 export class DrawLine<T extends abstract new (...args: any) => any> extends Component {
 
-    pointGroup = new THREE.Group();
-    points: Array<THREE.Vector3> = [];
+    pointGroup = new Group();
+    points: Array<Vector3> = [];
     line!: InstanceType<T>;
 
     drawType = DrawType.Line
@@ -23,7 +24,7 @@ export class DrawLine<T extends abstract new (...args: any) => any> extends Comp
     DrawLineType!: T
     DrawLineParams!: ConstructorParameters<T>[0]
 
-    DrawControlPointType: typeof THREE.BoxGeometry | undefined = THREE.BoxGeometry;
+    DrawControlPointType: typeof BoxGeometry | undefined = BoxGeometry;
     onAddPointSubscription: Subscription | undefined
     onStopSubscription: Subscription | undefined
 
@@ -92,8 +93,8 @@ export class DrawLine<T extends abstract new (...args: any) => any> extends Comp
         const {position, intersects} = value;
         if (this.DrawControlPointType) {
             const boxGeometry = new this.DrawControlPointType(1, 1, 1);
-            const boxMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
-            const box = new THREE.Mesh(boxGeometry, boxMaterial);
+            const boxMaterial = new MeshBasicMaterial({color: 0xffffff});
+            const box = new Mesh(boxGeometry, boxMaterial);
             box.position.copy(position);
             this.pointGroup.add(box)
         }

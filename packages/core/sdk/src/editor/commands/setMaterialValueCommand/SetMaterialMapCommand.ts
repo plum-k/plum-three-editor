@@ -3,13 +3,13 @@ import * as THREE from 'three';
 import {Texture} from 'three';
 import {get, set} from "lodash-es";
 
-export class SetMaterialMapCommand extends Command<THREE.Texture | null> {
+export class SetMaterialMapCommand extends Command<Texture | null> {
 
     materialSlot: number;
     mapName: string;
 
     constructor(
-        object: THREE.Object3D,
+        object: Object3D,
         mapName: string = '',
         newValue: Texture | null,
         materialSlot: number = -1
@@ -22,7 +22,7 @@ export class SetMaterialMapCommand extends Command<THREE.Texture | null> {
         this.object = object;
         this.materialSlot = materialSlot;
 
-        const material = (object !== null) ? Tool.getObjectMaterial(object as THREE.Mesh, materialSlot) : null;
+        const material = (object !== null) ? Tool.getObjectMaterial(object as Mesh, materialSlot) : null;
 
         this.oldValue = (material !== null) ? get(material, mapName) : undefined;
         this.newValue = newValue;
@@ -32,7 +32,7 @@ export class SetMaterialMapCommand extends Command<THREE.Texture | null> {
 
     execute(): void {
         if (this.oldValue !== null && this.oldValue !== undefined) this.oldValue.dispose();
-        const material = Tool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
+        const material = Tool.getObjectMaterial(this.object as Mesh, this.materialSlot);
         set(material, this.mapName, this.newValue)
         material.needsUpdate = true;
 
@@ -40,7 +40,7 @@ export class SetMaterialMapCommand extends Command<THREE.Texture | null> {
     }
 
     undo(): void {
-        const material = Tool.getObjectMaterial(this.object as THREE.Mesh, this.materialSlot);
+        const material = Tool.getObjectMaterial(this.object as Mesh, this.materialSlot);
         set(material, this.mapName, this.oldValue)
         material.needsUpdate = true;
 
@@ -61,7 +61,7 @@ export class SetMaterialMapCommand extends Command<THREE.Texture | null> {
         //
         // return output;
         //
-        // // serializes a map (THREE.Texture)
+        // // serializes a map (Texture)
         // function serializeMap(map: Texture | null | undefined): any {
         //     if (map === null || map === undefined) return null;
         //

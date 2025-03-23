@@ -1,20 +1,22 @@
 import * as THREE from 'three'
 import {MeshBVHUniformStruct} from 'three-mesh-bvh'
-
+import {ShaderMaterial} from 'three'
+import {Color, CubeTexture, Int32Array, Matrix3, Matrix4, Quaternion, Texture, Vector2, Vector3, Vector4} from 'three'
+import {UniformsUtils} from 'three'
 export function shaderMaterial(
     uniforms: {
         [name: string]:
-            | THREE.CubeTexture
-            | THREE.Texture
+            | CubeTexture
+            | Texture
             | Int32Array
             | Float32Array
-            | THREE.Matrix4
-            | THREE.Matrix3
-            | THREE.Quaternion
-            | THREE.Vector4
-            | THREE.Vector3
-            | THREE.Vector2
-            | THREE.Color
+            | Matrix4
+            | Matrix3
+            | Quaternion
+            | Vector4
+            | Vector3
+            | Vector2
+            | Color
             | MeshBVHUniformStruct
             | number
             | boolean
@@ -23,9 +25,9 @@ export function shaderMaterial(
     },
     vertexShader: string,
     fragmentShader: string,
-    onInit?: (material?: THREE.ShaderMaterial) => void
+    onInit?: (material?: ShaderMaterial) => void
 ): typeof material {
-    const material = class extends THREE.ShaderMaterial {
+    const material = class extends ShaderMaterial {
         public key: string = ''
 
         constructor(parameters = {}) {
@@ -33,7 +35,7 @@ export function shaderMaterial(
             // Create unforms and shaders
             super({
                 uniforms: entries.reduce((acc, [name, value]) => {
-                    const uniform = THREE.UniformsUtils.clone({[name]: {value}})
+                    const uniform = UniformsUtils.clone({[name]: {value}})
                     return {
                         ...acc,
                         ...uniform,
@@ -56,9 +58,9 @@ export function shaderMaterial(
             if (onInit) onInit(this)
         }
 
-        // } as unknown as typeof THREE.ShaderMaterial & { key: string }
-    } as unknown as THREE.ShaderMaterial
+        // } as unknown as typeof ShaderMaterial & { key: string }
+    } as unknown as ShaderMaterial
 
-    // material.key = THREE.MathUtils.generateUUID()
+    // material.key = MathUtils.generateUUID()
     return material
 }

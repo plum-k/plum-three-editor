@@ -1,20 +1,22 @@
 import * as  THREE from "three";
 import {Camera} from "three";
 import {shaderMaterial, version} from "../tool";
-
+import {ColorRepresentation,Side,PlaneGeometry,Vector3,Color,BackSide,ShaderMaterial,Uniform
+,Material,Mesh,Plane
+} from "three";
 export type GridMaterialType = {
     /** Cell size, default: 0.5 */
     cellSize?: number
     /** Cell thickness, default: 0.5 */
     cellThickness?: number
     /** Cell color, default: black */
-    cellColor?: THREE.ColorRepresentation
+    cellColor?: ColorRepresentation
     /** Section size, default: 1 */
     sectionSize?: number
     /** Section thickness, default: 1 */
     sectionThickness?: number
     /** Section color, default: #2080ff */
-    sectionColor?: THREE.ColorRepresentation
+    sectionColor?: ColorRepresentation
     /** Follow camera, default: false */
     followCamera?: boolean
     /** Display the grid infinitely, default: false */
@@ -25,11 +27,11 @@ export type GridMaterialType = {
     fadeStrength?: number
     /** Fade from camera (1) or origin (0), or somewhere in between, default: camera */
     fadeFrom?: number;
-    /** Material side, default: THREE.BackSide */
-    side?: THREE.Side
+    /** Material side, default: BackSide */
+    side?: Side
 }
 export type GridProps = GridMaterialType & {
-    args?: ConstructorParameters<typeof THREE.PlaneGeometry>
+    args?: ConstructorParameters<typeof PlaneGeometry>
 }
 const GridMaterial = shaderMaterial(
     {
@@ -40,12 +42,12 @@ const GridMaterial = shaderMaterial(
         fadeFrom: 1,
         cellThickness: 0.5,
         sectionThickness: 1,
-        cellColor: /* @__PURE__ */ new THREE.Color(),
-        sectionColor: /* @__PURE__ */ new THREE.Color(),
+        cellColor: /* @__PURE__ */ new Color(),
+        sectionColor: /* @__PURE__ */ new Color(),
         infiniteGrid: false,
         followCamera: false,
-        worldCamProjPosition: /* @__PURE__ */ new THREE.Vector3(),
-        worldPlanePosition: /* @__PURE__ */ new THREE.Vector3(),
+        worldCamProjPosition: /* @__PURE__ */ new Vector3(),
+        worldPlanePosition: /* @__PURE__ */ new Vector3(),
     },
     /* glsl */ `
     varying vec3 localPosition;
@@ -111,15 +113,15 @@ const GridMaterial = shaderMaterial(
   `
 )
 
-export class Grid extends THREE.Mesh {
-    plane = new THREE.Plane()
-    upVector = new THREE.Vector3(0, 1, 0)
-    zeroVector = new THREE.Vector3(0, 0, 0)
+export class Grid extends Mesh {
+    plane = new Plane()
+    upVector = new Vector3(0, 1, 0)
+    zeroVector = new Vector3(0, 0, 0)
 
     constructor({
                     args,
-                    cellColor = new THREE.Color('#6f6f6f'),
-                    sectionColor = new THREE.Color('#9d4b4b'),
+                    cellColor = new Color('#6f6f6f'),
+                    sectionColor = new Color('#9d4b4b'),
                     cellSize = 0.5,
                     sectionSize = 1,
                     followCamera = false,
@@ -129,13 +131,13 @@ export class Grid extends THREE.Mesh {
                     fadeFrom = 1,
                     cellThickness = 0.5,
                     sectionThickness = 1,
-                    side = THREE.BackSide,
+                    side = BackSide,
                 }: GridProps) {
         const uniforms1 = {cellSize, sectionSize, cellColor, sectionColor, cellThickness, sectionThickness}
         const uniforms2 = {fadeDistance, fadeStrength, fadeFrom, infiniteGrid, followCamera}
 
         // todo 对外暴露
-        const geometry = new THREE.PlaneGeometry(100, 100, 1, 1);
+        const geometry = new PlaneGeometry(100, 100, 1, 1);
 
         // @ts-ignore
         const material = new GridMaterial();
@@ -146,22 +148,22 @@ export class Grid extends THREE.Mesh {
         Object.assign(material, uniforms1);
         Object.assign(material, uniforms2);
 
-        super(geometry, material as unknown as THREE.Material);
+        super(geometry, material as unknown as Material);
         this.frustumCulled = false;
     }
 
     // 更新
     tick(camera: Camera) {
         this.plane.setFromNormalAndCoplanarPoint(this.upVector, this.zeroVector).applyMatrix4(this.matrixWorld)
-        const gridMaterial = this.material as THREE.ShaderMaterial
-        const worldCamProjPosition = gridMaterial.uniforms.worldCamProjPosition as THREE.Uniform<THREE.Vector3>
-        const worldPlanePosition = gridMaterial.uniforms.worldPlanePosition as THREE.Uniform<THREE.Vector3>
+        const gridMaterial = this.material as ShaderMaterial
+        const worldCamProjPosition = gridMaterial.uniforms.worldCamProjPosition as Uniform<Vector3>
+        const worldPlanePosition = gridMaterial.uniforms.worldPlanePosition as Uniform<Vector3>
         // todo 获取相机
         this.plane.projectPoint(camera.position, worldCamProjPosition.value)
         worldPlanePosition.value.set(0, 0, 0).applyMatrix4(this.matrixWorld)
     }
     dispose(){
         this.geometry.dispose();
-        (this.material as THREE.Material).dispose();
+        (this.material as Material).dispose();
     }
 }

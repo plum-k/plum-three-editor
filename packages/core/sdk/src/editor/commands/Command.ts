@@ -1,4 +1,4 @@
-import * as THREE from "three";
+
 import {PropertyPath, toPath} from "lodash-es";
 import {Editor} from "../Editor";
 
@@ -19,7 +19,7 @@ export abstract class Command<T = any> {
     editor!: Editor;
     attributeName: PropertyPath = []
 
-    object!: THREE.Object3D;
+    object!: Object3D;
     oldValue!: T;
     newValue!: T;
 

@@ -1,7 +1,7 @@
 import {provide} from "vue";
 import {Subject} from "rxjs";
 import {isMesh} from "three-is";
-import * as THREE from "three";
+
 import {useBus} from "./useBus.ts";
 import {isArray, type PropertyPath} from "lodash-es";
 import {useToggle} from "@vueuse/core";
@@ -51,7 +51,7 @@ export const useGeometryAttributeProvide = (options: IUseGeometryAttributeProvid
         if (!isArray(name)) {
             editor.setValueExecute(object, ["geometry", name], value);
         } else {
-            const geometry = object.geometry as THREE.BoxGeometry;
+            const geometry = object.geometry as BoxGeometry;
             const _newGeometry = getNewGeometry(geometry, name, value);
             // object.geometry.dispose();
             geometry.copy(_newGeometry);

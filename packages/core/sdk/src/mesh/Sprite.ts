@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import {Sprite as THREESprite} from "three";
 import {SpriteMaterial} from "three";
 
 import html2canvas from "html2canvas";
@@ -10,7 +10,7 @@ export interface ISpriteOptions {
 
 }
 
-export class Sprite extends THREE.Sprite {
+export class Sprite extends THREESprite {
     options: Required<ISpriteOptions>;
 
     constructor(_options: ISpriteOptions) {
@@ -18,8 +18,8 @@ export class Sprite extends THREE.Sprite {
         super(_options.material);
         this.options = deepMergeRetain(_options, {});
 
-        // const map = new THREE.TextureLoader().load("sprite.png");
-        // const material = new THREE.SpriteMaterial({map: map});
+        // const map = new TextureLoader().load("sprite.png");
+        // const material = new SpriteMaterial({map: map});
         html2canvas(this.options.element).then(canvas => {
 
         })

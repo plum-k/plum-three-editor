@@ -1,11 +1,11 @@
-import * as THREE from "three";
+
 import {isMesh, isPoints} from "three-is";
 
 /**
  * 获取场景统计信息
  * @param scene
  */
-export function getStatistics(scene: THREE.Object3D) {
+export function getStatistics(scene: Object3D) {
     let objects = 0, vertices = 0, triangles = 0;
     for (let i = 0, l = scene.children.length; i < l; i++) {
         const object = scene.children[i];

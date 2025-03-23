@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import * as THREE from "three";
+
 import {useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
@@ -12,14 +12,14 @@ const bus = useBus();
 const {objectAttributeChangeSubject, toggle} = useGeometryAttributeProvide({
   isAutoUpdate: false,
   getNewGeometry: (geometry, name, value) => {
-    return new THREE.SphereGeometry(
+    return new SphereGeometry(
         getGeometryValue(geometry, "radius", name, value),
         getGeometryValue(geometry, "widthSegments", name, value),
         getGeometryValue(geometry, "heightSegments", name, value),
-        getGeometryValue(geometry, "phiStart", name, value) * THREE.MathUtils.DEG2RAD,
-        getGeometryValue(geometry, "phiLength", name, value) * THREE.MathUtils.DEG2RAD,
-        getGeometryValue(geometry, "thetaStart", name, value) * THREE.MathUtils.DEG2RAD,
-        getGeometryValue(geometry, "thetaLength", name, value) * THREE.MathUtils.DEG2RAD
+        getGeometryValue(geometry, "phiStart", name, value) * MathUtils.DEG2RAD,
+        getGeometryValue(geometry, "phiLength", name, value) * MathUtils.DEG2RAD,
+        getGeometryValue(geometry, "thetaStart", name, value) * MathUtils.DEG2RAD,
+        getGeometryValue(geometry, "thetaLength", name, value) * MathUtils.DEG2RAD
     );
   }
 })

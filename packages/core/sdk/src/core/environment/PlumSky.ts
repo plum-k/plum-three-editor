@@ -3,7 +3,7 @@ import {Sky} from "three/examples/jsm/objects/Sky.js";
 
 export interface IPlumSkyProps {
     distance?: number
-    sunPosition?: THREE.Vector3
+    sunPosition?: Vector3
     inclination?: number
     azimuth?: number
     mieCoefficient?: number
@@ -13,7 +13,7 @@ export interface IPlumSkyProps {
 }
 
 // 计算太阳位置
-export function calcPosFromAngles(inclination: number, azimuth: number, vector: THREE.Vector3 = new THREE.Vector3()) {
+export function calcPosFromAngles(inclination: number, azimuth: number, vector: Vector3 = new Vector3()) {
     const theta = Math.PI * (inclination - 0.5)
     const phi = 2 * Math.PI * (azimuth - 0.5)
 
@@ -35,7 +35,7 @@ export class PlumSky extends Sky {
                      turbidity = 10,
                      sunPosition = calcPosFromAngles(inclination, azimuth),
                  }: IPlumSkyProps) {
-        const scale = new THREE.Vector3().setScalar(distance)
+        const scale = new Vector3().setScalar(distance)
 
         this.material.uniforms.turbidity.value = turbidity
         this.material.uniforms.mieCoefficient.value = mieCoefficient

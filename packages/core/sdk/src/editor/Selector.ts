@@ -2,14 +2,14 @@ import {isArray, isNil} from "lodash-es";
 import {Component, IComponentOptions} from "../core/Component";
 import * as  THREE from "three";
 import {isObject3D} from "three-is";
-
+import {BoxHelper, Object3D} from "three";
 export interface ISelectorOptions extends IComponentOptions {
 }
 
 // 对象选择相关封装
 export class Selector extends Component {
-    selectObject: THREE.Object3D | undefined = undefined
-    selectionBox: THREE.BoxHelper = new THREE.BoxHelper(new THREE.Object3D())
+    selectObject: Object3D | undefined = undefined
+    selectionBox: BoxHelper = new BoxHelper(new Object3D())
 
     constructor(options: ISelectorOptions) {
         super(options);
@@ -85,7 +85,7 @@ export class Selector extends Component {
      * 选择对象
      * @param object
      */
-    select(object: THREE.Object3D | undefined) {
+    select(object: Object3D | undefined) {
         if (!isNil(object) && this.selectObject != object) {
             this.selectObject = object;
             this.editor.editorEventManager.objectSelected.next(object);

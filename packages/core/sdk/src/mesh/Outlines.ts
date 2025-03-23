@@ -1,14 +1,14 @@
 import * as  THREE from "three";
 import {toCreasedNormals} from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import {shaderMaterial, version} from "../tool";
-
+import {BufferGeometry, Color, Group, InstancedMesh, Material, Mesh, SkinnedMesh, Vector2} from "three";
 const material = /* @__PURE__ */ shaderMaterial(
     {
         screenspace: false,
-        color: /* @__PURE__ */ new THREE.Color('black'),
+        color: /* @__PURE__ */ new Color('black'),
         opacity: 1,
         thickness: 0.05,
-        size: /* @__PURE__ */ new THREE.Vector2(),
+        size: /* @__PURE__ */ new Vector2(),
     },
     `#include <common>
    #include <morphtarget_pars_vertex>
@@ -55,7 +55,7 @@ const material = /* @__PURE__ */ shaderMaterial(
 )
 type OutlinesProps = {
     /** Outline color, default: black */
-    color?: THREE.Color
+    color?: Color
     /** Line thickness is independent of zoom, default: false */
     screenspace?: boolean
     /** Outline opacity, default: 1 */
@@ -70,19 +70,19 @@ type OutlinesProps = {
     polygonOffset?: boolean
     polygonOffsetFactor?: number
     renderOrder?: number,
-    size: THREE.Vector2
+    size: Vector2
 }
 
-export class Outlines extends THREE.Group {
+export class Outlines extends Group {
     oldAngle = 0;
-    oldGeometry: THREE.BufferGeometry | undefined = undefined
+    oldGeometry: BufferGeometry | undefined = undefined
 
     constructor() {
         super();
     }
 
     init({
-             color = new THREE.Color("skyblue"),
+             color = new Color("skyblue"),
              opacity = 1,
              transparent = false,
              screenspace = false,
@@ -94,7 +94,7 @@ export class Outlines extends THREE.Group {
              angle = Math.PI,
              ...props
          }: OutlinesProps) {
-        const parent = this.parent as THREE.Mesh & THREE.SkinnedMesh & THREE.InstancedMesh
+        const parent = this.parent as Mesh & SkinnedMesh & InstancedMesh
         if (parent && parent.geometry) {
             if (this.oldAngle !== angle || this.oldGeometry !== parent.geometry) {
                 this.oldAngle = angle
@@ -110,16 +110,16 @@ export class Outlines extends THREE.Group {
                 }
 
                 if (parent.skeleton) {
-                    mesh = new THREE.SkinnedMesh()
+                    mesh = new SkinnedMesh()
                     mesh.material = material
                     mesh.bind(parent.skeleton, parent.bindMatrix)
                     this.add(mesh)
                 } else if (parent.isInstancedMesh) {
-                    mesh = new THREE.InstancedMesh(parent.geometry, material, parent.count)
+                    mesh = new InstancedMesh(parent.geometry, material, parent.count)
                     mesh.instanceMatrix = parent.instanceMatrix
                     this.add(mesh)
                 } else {
-                    mesh = new THREE.Mesh()
+                    mesh = new Mesh()
                     mesh.material = material
                     this.add(mesh)
                 }
@@ -129,7 +129,7 @@ export class Outlines extends THREE.Group {
     }
 
     update({
-               color = new THREE.Color("skyblue"),
+               color = new Color("skyblue"),
                opacity = 1,
                transparent = false,
                screenspace = false,
@@ -139,9 +139,9 @@ export class Outlines extends THREE.Group {
                renderOrder = 0,
                thickness = 0.05,
                angle = Math.PI,
-               size = new THREE.Vector2()
+               size = new Vector2()
            }: OutlinesProps) {
-        const mesh = this.children[0] as THREE.Mesh<THREE.BufferGeometry, THREE.Material>
+        const mesh = this.children[0] as Mesh<BufferGeometry, Material>
         if (mesh) {
             mesh.renderOrder = renderOrder;
 

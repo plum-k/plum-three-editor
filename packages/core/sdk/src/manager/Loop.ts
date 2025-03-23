@@ -97,7 +97,9 @@ export class Loop extends Component {
             }
             this.cssRenderer.render();
 
-            this.eventManager.renderSubject.next(timestamp)
+            this.eventManager.renderSubject.next({
+                timestamp, delta
+            })
 
             this.flushGlobalEffects('after', timestamp)
             this.endTime = performance.now();

@@ -1,25 +1,25 @@
-import * as THREE from "three";
-import {CubicBezierCurve3, QuadraticBezierCurve3} from "three";
+
+import {CubicBezierCurve3, QuadraticBezierCurve3, Vector3} from "three";
 import {isVector3} from "three-is";
 
 export interface IGetQuadraticBezierCurve3PointsOptions {
     quadraticBezierCurve3: QuadraticBezierCurve3;
-    start: THREE.Vector3 | [number, number, number]
-    end: THREE.Vector3 | [number, number, number]
-    mid?: THREE.Vector3 | [number, number, number];
+    start: Vector3 | [number, number, number]
+    end: Vector3 | [number, number, number]
+    mid?: Vector3 | [number, number, number];
     segments?: number;
 }
 
 export interface IGetCubicBezierCurve3PointsOptions {
     cubicBezierCurve3: CubicBezierCurve3;
-    start: THREE.Vector3 | [number, number, number]
-    end: THREE.Vector3 | [number, number, number]
-    midA: THREE.Vector3 | [number, number, number]
-    midB: THREE.Vector3 | [number, number, number]
+    start: Vector3 | [number, number, number]
+    end: Vector3 | [number, number, number]
+    midA: Vector3 | [number, number, number]
+    midB: Vector3 | [number, number, number]
     segments?: number
 }
 
-const v = new THREE.Vector3()
+const v = new Vector3()
 
 export class LineTool {
     static getQuadraticBezierCurve3Points(options: IGetQuadraticBezierCurve3PointsOptions) {

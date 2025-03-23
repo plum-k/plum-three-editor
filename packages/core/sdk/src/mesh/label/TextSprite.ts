@@ -1,5 +1,5 @@
-import * as THREE from "three";
 
+import {Object3D, Sprite, SpriteMaterial, Texture, LinearFilter} from "three";
 interface Color {
     r: number;
     g: number;
@@ -7,10 +7,10 @@ interface Color {
     a: number;
 }
 
-export class TextSprite extends THREE.Object3D {
-    texture: THREE.Texture;
-    material: THREE.SpriteMaterial;
-    sprite: THREE.Sprite;
+export class TextSprite extends Object3D {
+    texture: Texture;
+    material: SpriteMaterial;
+    sprite: Sprite;
     borderThickness: number = 4;
     fontface: string = 'Arial';
     fontsize: number = 28;
@@ -22,18 +22,18 @@ export class TextSprite extends THREE.Object3D {
     constructor(text: string) {
         super();
 
-        const texture = new THREE.Texture();
-        texture.minFilter = THREE.LinearFilter;
-        texture.magFilter = THREE.LinearFilter;
+        const texture = new Texture();
+        texture.minFilter = LinearFilter;
+        texture.magFilter = LinearFilter;
 
-        this.material = new THREE.SpriteMaterial({
+        this.material = new SpriteMaterial({
             map: texture,
             depthTest: false,
             depthWrite: false
         });
 
         this.texture = texture;
-        this.sprite = new THREE.Sprite(this.material);
+        this.sprite = new Sprite(this.material);
         this.add(this.sprite);
 
         this.setText(text);
@@ -95,9 +95,9 @@ export class TextSprite extends THREE.Object3D {
         context.fillStyle = `rgba(${this.textColor.r}, ${this.textColor.g}, ${this.textColor.b}, ${this.textColor.a})`;
         context.fillText(this.text, this.borderThickness + margin, this.fontsize + this.borderThickness);
 
-        const texture = new THREE.Texture(canvas);
-        texture.minFilter = THREE.LinearFilter;
-        texture.magFilter = THREE.LinearFilter;
+        const texture = new Texture(canvas);
+        texture.minFilter = LinearFilter;
+        texture.magFilter = LinearFilter;
         texture.needsUpdate = true;
 
         this.sprite.material.map = texture;

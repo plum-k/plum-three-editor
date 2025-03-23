@@ -4,23 +4,23 @@ import {isNumber} from "lodash-es";
 
 /**
  * @param editor Editor
- * @param object THREE.Object3D
- * @param newParent THREE.Object3D
- * @param newBefore THREE.Object3D
+ * @param object Object3D
+ * @param newParent Object3D
+ * @param newBefore Object3D
  * @constructor
  */
 export class MoveObjectCommand extends Command {
     type: string = 'MoveObjectCommand';
-    oldParent: THREE.Object3D | null;
+    oldParent: Object3D | null;
     oldIndex: number | null;
-    newParent: THREE.Object3D | null;
+    newParent: Object3D | null;
     newIndex: number | null;
-    newBefore: THREE.Object3D
+    newBefore: Object3D
 
     constructor(
-        object: THREE.Object3D,
-        newParent: THREE.Object3D,
-        newBefore: THREE.Object3D
+        object: Object3D,
+        newParent: Object3D,
+        newBefore: Object3D
     ) {
         super();
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ElButton, ElFormItem} from "element-plus";
-import * as THREE from "three";
+
 import {inject, ref, type ShallowRef, watch} from "vue";
 import {useBus} from "../../../hooks";
 import UserDataItem from "../../../common-ui/attributeItem/UserDataItem.vue";
@@ -30,7 +30,7 @@ const attributesObject = {
   "uv": "uv",
 }
 
-const getGeometry = (geometry: THREE.BufferGeometry) => {
+const getGeometry = (geometry: BufferGeometry) => {
   if (geometry.index !== null) {
     list.value.push({
       label: '索引',

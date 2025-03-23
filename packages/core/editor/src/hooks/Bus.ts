@@ -3,7 +3,6 @@ import {Subject} from "rxjs";
 import {isMesh} from "three-is";
 import {isArray} from "lodash-es";
 
-
 export class Bus {
 
     // 视图

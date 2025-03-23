@@ -1,4 +1,4 @@
-import * as THREE from "three";
+
 import {Object3D} from "three";
 import {LineMaterial, LineMaterialParameters} from "three/examples/jsm/lines/LineMaterial.js";
 import {Line2 as THREELine2} from "three/examples/jsm/lines/Line2.js";
@@ -17,8 +17,8 @@ export enum Line2Type {
 }
 
 export interface ILine2Options {
-    points?: Array<THREE.Vector3> | Array<[number, number, number]>;
-    vertexColors?: Array<THREE.Color | [number, number, number] | [number, number, number, number]>
+    points?: Array<Vector3> | Array<[number, number, number]>;
+    vertexColors?: Array<Color | [number, number, number] | [number, number, number, number]>
     lineType?: Line2Type;
     materialParams?: LineMaterialParameters;
     // 避免子类的属性没有初始化
@@ -35,7 +35,7 @@ export const Line2DefaultsOptions: ILine2Options = {
         // dashed: false,
         // worldUnits: false,
         // linewidth: 1,
-        // resolution: new THREE.Vector2(1, 1),
+        // resolution: new Vector2(1, 1),
         // dashOffset: 0,
         // dashScale: 1,
         // dashSize: 1,
@@ -53,7 +53,7 @@ export class Line2 extends Object3D {
     line!: THREELine2 | LineSegments2 | Wireframe
     material!: LineMaterial;
     options: Required<ILine2Options> = Line2DefaultsOptions as Required<ILine2Options>;
-    points: Array<THREE.Vector3> = [];
+    points: Array<Vector3> = [];
 
     constructor(_options: ILine2Options) {
         super()
@@ -109,7 +109,7 @@ export class Line2 extends Object3D {
         this.line.geometry = geo;
     }
 
-    addPoint(point: THREE.Vector3) {
+    addPoint(point: Vector3) {
         this.points.push(point);
         this.setPoints(this.points)
     }
@@ -117,7 +117,7 @@ export class Line2 extends Object3D {
     init() {
     }
 
-    setPoints(points: Array<THREE.Vector3> = this.getLinePoints()) {
+    setPoints(points: Array<Vector3> = this.getLinePoints()) {
         this.updateGeometry();
         let pointArray = Tool.v3ArrayToNum3Array(points).flat();
         this.line.geometry?.setPositions(pointArray);
@@ -132,7 +132,7 @@ export class Line2 extends Object3D {
         if (colors.length > 2) {
             this.line.geometry.setColors(colors.flat())
         }
-        // this.line.geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors.flat(), itemSize))
+        // this.line.geometry.setAttribute("color", new Float32BufferAttribute(colors.flat(), itemSize))
     }
 
     protected getLinePoints() {

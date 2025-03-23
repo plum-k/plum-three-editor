@@ -1,8 +1,8 @@
 import {Command} from "../Command";
-import * as THREE from "three";
+
 import {Tool} from "../../../tool";
 
-export class SetMaterialVectorCommand extends Command<THREE.Vector3> {
+export class SetMaterialVectorCommand extends Command<Vector3> {
     type: string = 'SetMaterialVectorCommand';
     object: any;
     materialSlot: number;
@@ -11,7 +11,7 @@ export class SetMaterialVectorCommand extends Command<THREE.Vector3> {
     attributeName: string;
 
     constructor(
-        object: THREE.Object3D,
+        object: Object3D,
         attributeName: string,
         newValue: number[] | null = null,
         materialSlot: number = -1

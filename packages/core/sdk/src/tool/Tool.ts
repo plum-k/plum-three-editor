@@ -1,22 +1,23 @@
-import * as THREE from "three";
-import {Object3D, Sphere} from "three";
+
+import {Object3D, Sphere,Mesh,Material} from "three";
 import {isDataTexture, isGroup, isMesh, isVector3} from "three-is";
 import {ESearchMode, ICondition, normalize, Search} from "./core";
+import {Vector3} from "three";
 
-export type Vector3Array = Array<THREE.Vector3>
+export type Vector3Array = Array<Vector3>
 export type Num3Array = Array<[number, number, number]>
 export type V3Array = Num3Array | Vector3Array
 
 export class Tool {
-    static getObjectMaterial(object: THREE.Mesh, slot?: number): THREE.Material {
+    static getObjectMaterial(object: Mesh, slot?: number): Material {
         let material = object.material;
         if (Array.isArray(material) && slot !== undefined) {
             material = material[slot];
         }
-        return material as THREE.Material;
+        return material as Material;
     }
 
-    static setObjectMaterial(object: THREE.Mesh, slot: number, newMaterial: THREE.Material) {
+    static setObjectMaterial(object: Mesh, slot: number, newMaterial: Material) {
         if (Array.isArray(object.material) && slot !== undefined) {
             object.material[slot] = newMaterial;
         } else {
@@ -36,13 +37,13 @@ export class Tool {
         return result;
     }
 
-    static calculateCenter(pointA: THREE.Vector3, pointB: THREE.Vector3) {
-        return new THREE.Vector3()
+    static calculateCenter(pointA: Vector3, pointB: Vector3) {
+        return new Vector3()
             .addVectors(pointA, pointB)
             .multiplyScalar(0.5);
     }
 
-    static calculateTotalLength(points: Array<THREE.Vector3>) {
+    static calculateTotalLength(points: Array<Vector3>) {
         let totalLength = 0;
 
         for (let i = 0; i < points.length - 1; i++) {
@@ -56,7 +57,7 @@ export class Tool {
         return totalLength;
     }
 
-    static v3ArrayToVector3Array(array: V3Array): Array<THREE.Vector3> {
+    static v3ArrayToVector3Array(array: V3Array): Array<Vector3> {
         if (array.length === 0) {
             return array as Vector3Array
         }
@@ -64,7 +65,7 @@ export class Tool {
             return array as Vector3Array
         } else {
             return (array as Num3Array).map(v => {
-                return new THREE.Vector3(v[0], v[1], v[2])
+                return new Vector3(v[0], v[1], v[2])
             })
         }
     }
@@ -99,14 +100,14 @@ export class Tool {
      */
     static getBox3ByV3Array(array: V3Array) {
         const v3Array = Tool.v3ArrayToVector3Array(array);
-        return new THREE.Box3().setFromPoints(v3Array);
+        return new Box3().setFromPoints(v3Array);
     }
 
     /**
      * 从Texture创建base64字符串
      * @param texture
      */
-    static getBase64FromTexture(texture: THREE.Texture) {
+    static getBase64FromTexture(texture: Texture) {
         if (isDataTexture(texture)) {
             return undefined;
         } else {
@@ -125,7 +126,7 @@ export class Tool {
      * @param base64
      */
     static getTextureFromBase64(base64: string) {
-        const texture = new THREE.Texture();
+        const texture = new Texture();
         const image = new Image();
         image.src = base64;
         image.onload = () => {
@@ -135,7 +136,7 @@ export class Tool {
         return texture;
     }
 
-    static getObjectByUuid(object: THREE.Object3D, uuid: string) {
+    static getObjectByUuid(object: Object3D, uuid: string) {
         return object.getObjectByProperty('uuid', uuid);
     }
 
@@ -161,7 +162,7 @@ export class Tool {
      * @param objects
      */
     static   getBox3ByObject3ds(objects: Object3D[]) {
-        const box3 = new THREE.Box3();
+        const box3 = new Box3();
         for (let i = 0; i < objects.length; i++) {
             const object = objects[i];
             if (isMesh(object)) {
@@ -170,7 +171,7 @@ export class Tool {
                 }
                 box3.union(object.geometry.boundingBox!.clone().applyMatrix4(object.matrixWorld));
             } else if (isGroup(object)) {
-                const box = new THREE.Box3();
+                const box = new Box3();
                 box.setFromObject(object);
                 box3.union(box)
             }
@@ -182,7 +183,7 @@ export class Tool {
      * @param objects
      */
     static   getSphereByObject3ds(objects: Object3D[]) {
-        const sphere = new THREE.Sphere();
+        const sphere = new Sphere();
         for (let i = 0; i < objects.length; i++) {
             const object = objects[i];
             if (isMesh(object)) {
@@ -191,7 +192,7 @@ export class Tool {
                 }
                 sphere.union(object.geometry.boundingSphere!.clone().applyMatrix4(object.matrixWorld));
             } else if (isGroup(object)) {
-                const box = new THREE.Box3();
+                const box = new Box3();
                 box.setFromObject(object);
                 sphere.union(box.getBoundingSphere(new Sphere()))
             }
@@ -203,8 +204,8 @@ export class Tool {
      * 获取场景的包围盒
      * @param scene
      */
-    static getSceneBox(scene: THREE.Scene) {
-        const box3 = new THREE.Box3();
+    static getSceneBox(scene: Scene) {
+        const box3 = new Box3();
        scene.traverse((mesh) => {
             if (isMesh(mesh)) {
                 mesh.geometry.computeBoundingBox();
@@ -219,8 +220,8 @@ export class Tool {
      * 获取场景的包围球
      * @param scene
      */
-    static  getSceneSphere(scene: THREE.Scene) {
-        const sphere = new THREE.Sphere();
+    static  getSceneSphere(scene: Scene) {
+        const sphere = new Sphere();
        scene.traverse((mesh) => {
             if (isMesh(mesh)) {
                 mesh.geometry.computeBoundingSphere()
