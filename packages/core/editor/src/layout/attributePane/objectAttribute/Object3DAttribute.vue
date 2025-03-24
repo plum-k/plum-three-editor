@@ -1,9 +1,7 @@
 <script lang="ts" setup xmlns="">
-import {ElButton, ElCol, ElForm, ElRow} from "element-plus";
+import {ElButton, ElCol, ElForm, ElFormItem, ElRow, ElSwitch} from "element-plus";
 import {ref} from "vue";
-import {Object3D} from "three";
 import {useAttributeProvide, useBus} from "../../../hooks";
-import {find} from "lodash-es";
 import {BoolItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
 import UserDataItem from "../../../common-ui/attributeItem/UserDataItem.vue";
@@ -16,7 +14,6 @@ const {toggle} = useAttributeProvide({
     return bus.selectObject
   }
 })
-
 
 const {} = useBindSubscribe({
   fun: () => {
@@ -32,19 +29,21 @@ const {} = useObjectChangedBind({
   fun: toggle,
 })
 
-const animationsList = ref<{ name: string }[]>([])
+const animationsList = ref<{ name: string,isRunning:boolean }[]>([])
 const animationsToList = () => {
   if (!bus.selectObject) return;
-  console.log(bus.selectObject)
   const animations = bus.selectObject.animations;
+  const viewer = bus.viewer;
   for (let i = 0; i < animations.length; i++) {
     const animation = animations[i];
-    animationsList.value.push({
-      name: animation.name,
-      isRunning: false
-    })
+    const action = viewer?.getAction(bus.selectObject, animation);
+    if (action){
+      animationsList.value.push({
+        name: animation.name,
+        isRunning: action.isRunning()
+      })
+    }
   }
-  console.log(animationsList.value)
 }
 
 const play = (index: number) => {
@@ -79,14 +78,15 @@ const play = (index: number) => {
     <input-number-item label="渲染次序" name="renderOrder"/>
     <user-data-item/>
 
-    <el-row v-for="(item, index) in animationsList" :key="index" class="mt-1">
-      <el-col :span="12">{{ item.name }}</el-col>
-      <el-col :span="12">
-        <el-button @click="play(index)">播放</el-button>
-      </el-col>
-    </el-row>
+    <el-form-item v-if="animationsList.length > 0" label="动画" size="small">
+    </el-form-item>
+      <el-row v-for="(item, index) in animationsList" :key="index" class="mt-1">
+        <el-col :span="12">{{ item.name }}</el-col>
+        <el-col :span="12">
+          <el-button @click="play(index)">{{item.isRunning?"停止":"运行"}}</el-button>
+        </el-col>
+      </el-row>
   </el-form>
-
 </template>
 
 <style scoped>

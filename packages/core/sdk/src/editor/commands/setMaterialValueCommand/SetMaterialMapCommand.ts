@@ -1,5 +1,5 @@
 import {Command} from "../Command";
-import * as THREE from 'three';
+
 import {Texture} from 'three';
 import {get, set} from "lodash-es";
 

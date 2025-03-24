@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 import {Viewer} from "@plum-render/three-sdk";
 import {ElTreeV2, type TreeNode, type TreeNodeData} from "element-plus";
 import {ref} from "vue";
@@ -8,6 +7,7 @@ import ContextMenu from '@imengyu/vue3-context-menu'
 import Icon from "../../components/Icon.vue";
 import {isNil} from "lodash-es";
 import {isDirectionalLight} from "three-is";
+import {Object3D} from "three";
 
 const bus = useBus();
 
@@ -96,6 +96,7 @@ const handleNodeContextmenu = (evt: Event, data: TreeNodeData, node: TreeNode) =
             onClick: () => {
               // todo 记录历史
               object.visible = !visible;
+              data.value = getSceneTree(viewer!);
             }
           },
           {

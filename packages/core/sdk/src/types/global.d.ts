@@ -1,6 +1,16 @@
+
 interface Window {
 }
 
-declare module 'three/addons/helpers/ViewHelper' {
-
+declare module 'three' {
+    interface   AnimationMixer {
+        stats: {
+            actions: {
+                inUse: number;
+                total: number;
+            }
+        }
+    }
 }
+
+export {}

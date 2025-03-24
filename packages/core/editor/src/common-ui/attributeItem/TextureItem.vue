@@ -2,12 +2,13 @@
 import {ElFormItem} from "element-plus";
 import {inject, onMounted, ref, type ShallowRef, watch} from "vue";
 import {type IAttributeProps, type IObjectAttributeChange, useAttributeInject, useBus} from "../../hooks";
-
 import { MeshBasicMaterial, Texture, WebGLRenderer,Mesh} from "three";
 import {get, isArray} from "lodash-es";
 import {isCompressedTexture, isDataTexture} from "three-is";
 import {FullScreenQuad} from "three-stdlib";
 import {Asset} from "@plum-render/three-sdk";
+import {ElCheckbox} from "element-plus";
+
 import type {Subject} from "rxjs";
 
 interface Props extends IAttributeProps {
@@ -114,16 +115,19 @@ const renderTexture = (inTexture?: Texture) => {
         }
       } else {
       }
+      checked.value = true;
     } else {
       canvas.title = 'empty';
+      checked.value = false;
     }
   }
 }
-
+const checked = ref(false)
 </script>
 
 <template>
   <el-form-item :label="label" size="small">
+    <el-checkbox v-model="checked" class="!mr-1.5" />
     <canvas ref="canvasRef" @click="click"/>
   </el-form-item>
 </template>

@@ -1,6 +1,6 @@
 import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {Component, IComponentOptions} from "../core/Component";
-import * as THREE from 'three';
+
 import {Object3D} from 'three';
 import {PropertyPath} from "lodash-es";
 
@@ -49,6 +49,9 @@ export class EditorEventManager extends Component {
 
     // 场景变化事件
     sceneGraphChanged = new BehaviorSubject(false);
+    // 相机属性变化
+    cameraAttributeChanged = new Subject<any>();
+
     // 选择对象名称变化
     selectNameChanged = new Subject<any>();
 
@@ -68,7 +71,6 @@ export class EditorEventManager extends Component {
     objectChanged = new Subject<IObjectChangedValue>();
     // 对象移除事件
     objectRemoved = new Subject<any>();
-
 
     cameraAdded = new Subject<any>();
     cameraRemoved = new Subject<any>();

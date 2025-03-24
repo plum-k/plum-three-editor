@@ -151,15 +151,20 @@ export class Viewer {
             this.animationMixerUpdate(value)
         })
     }
-
+    prevActionsInUse = 0;
     animationMixerUpdate(value: IRenderSubjectValue) {
         if (this.animationMixer) {
-            // const actions = this.animationMixer.stats.actions;
-            //
-            // if ( actions.inUse > 0 || prevActionsInUse > 0 ) {
-            //
-            // }
-            this.animationMixer.update(value.delta);
+            const actions = this.animationMixer.stats.actions;
+            if ( actions.inUse > 0 || this.prevActionsInUse > 0 ) {
+                this.prevActionsInUse = actions.inUse;
+                this.animationMixer.update(value.delta);
+                const selectObject =  this.editor.selector.selectObject;
+                // 骨骼运动时, 实时更新下包围盒
+                if (selectObject) {
+                    selectObject.updateWorldMatrix( false, true );
+                    this.editor.selector.selectionBox.box.setFromObject( selectObject, true );
+                }
+            }
         }
     }
 
@@ -413,8 +418,14 @@ export class Viewer {
     }
 
     //----------------------------------
+    // 动画运动状态管理
     actionMap = new Map<Object3D, AnimationAction[]>();
 
+    /**
+     * 获取动画运动状态
+     * @param object
+     * @param animation
+     */
     getAction(object: Object3D, animation: AnimationClip) {
         const animationActionArray = this.actionMap.get(object);
         if (animationActionArray) {
@@ -434,21 +445,4 @@ export class Viewer {
             return action;
         }
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

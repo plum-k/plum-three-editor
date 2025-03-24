@@ -1,5 +1,5 @@
 import {Command} from "../Command";
-import * as THREE from 'three';
+
 import {Object3D, ObjectLoader} from 'three';
 import undefined from "../../../interface/Undefined";
 import {isNil} from "lodash-es";

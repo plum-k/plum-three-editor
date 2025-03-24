@@ -1,19 +1,21 @@
 import {isArray, isNil} from "lodash-es";
 import {Component, IComponentOptions} from "../core/Component";
-import * as  THREE from "three";
+import {Box3, Box3Helper, Object3D} from "three";
 import {isObject3D} from "three-is";
-import {BoxHelper, Object3D} from "three";
+
 export interface ISelectorOptions extends IComponentOptions {
 }
 
 // 对象选择相关封装
 export class Selector extends Component {
-    selectObject: Object3D | undefined = undefined
-    selectionBox: BoxHelper = new BoxHelper(new Object3D())
+    selectObject: Object3D | undefined = undefined;
+    selectionBox: Box3Helper
+    box: Box3;
 
     constructor(options: ISelectorOptions) {
         super(options);
-        
+        this.box = new Box3();
+        this.selectionBox = new Box3Helper(this.box);
         this.initSelectionBox();
         this.initEvent();
     }
@@ -40,13 +42,13 @@ export class Selector extends Component {
         // 监听点击事件, 选择物体
         this.eventManager.leftClickPickSubject.subscribe((value) => {
             const {intersects,} = value;
-            console.log("intersects",intersects)
+            console.log("intersects", intersects)
             if (intersects.length > 0) {
                 const object = intersects[0].object;
                 // 如果是帮助对象, 则选择对应的对象
                 if (isObject3D(object.userData.object)) {
                     this.select(object.userData.object);
-                }else {
+                } else {
                     this.select(object);
                 }
             } else {
@@ -60,21 +62,21 @@ export class Selector extends Component {
             if (isNil(object)) {
                 this.editor.transformControlsWarp.transformControls.detach();
             } else {
-                this.selectionBox.setFromObject(object);
+                this.box.setFromObject(object);
                 this.selectionBox.visible = true;
                 this.editor.transformControlsWarp.transformControls.attach(object);
             }
         })
         // 选择对象属性改变时, 更新包围盒 和 辅助对象
         this.editor.editorEventManager.objectChanged.subscribe((value) => {
-            const {name,object} = value;
-            if (isArray(name)&&name.length>1){
-                if (["position","rotation","scale"].includes(name[0])) {
-                    this.selectionBox.setFromObject(object);
+            const {name, object} = value;
+            if (isArray(name) && name.length > 1) {
+                if (["position", "rotation", "scale"].includes(name[0])) {
+                    this.box.setFromObject(object);
                     this.editor.helperUpdate(object)
                 }
-            }else if (name==="objectChange") {
-                this.selectionBox.setFromObject(object);
+            } else if (name === "objectChange") {
+                this.box.setFromObject(object);
                 this.editor.helperUpdate(object)
             }
         })

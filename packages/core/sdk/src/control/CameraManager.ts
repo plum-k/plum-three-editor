@@ -1,13 +1,32 @@
-import * as THREE from 'three';
-import {Object3D, OrthographicCamera, PerspectiveCamera} from 'three';
 import CameraControls from "camera-controls";
 import {Viewer} from "../core/Viewer";
 import {deepMergeRetain, Tool} from "../tool";
 import {Serialize} from "../serializeManage";
 import {Asset} from "../manager/asset";
+import {
+    MathUtils, Object3D, OrthographicCamera, PerspectiveCamera, Vector3,
+    Vector2,
+    Vector4,
+    Quaternion,
+    Matrix4,
+    Spherical,
+    Box3,
+    Sphere,
+    Raycaster,
+} from 'three';
 
-// 安装camera-controls扩展，使其支持THREE库
-CameraControls.install({THREE: THREE});
+const subsetOfTHREE = {
+    Vector2   : Vector2,
+    Vector3   : Vector3,
+    Vector4   : Vector4,
+    Quaternion: Quaternion,
+    Matrix4   : Matrix4,
+    Spherical : Spherical,
+    Box3      : Box3,
+    Sphere    : Sphere,
+    Raycaster : Raycaster,
+};
+CameraControls.install({THREE: subsetOfTHREE});
 
 /**
  * 交互控制类，用于管理js场景中的摄像机控制。
@@ -110,7 +129,7 @@ export class CameraManager {
         })
         const object = await this.viewer.assetManager.loadObject(asset) as PerspectiveCamera;
         this.perspectiveCameraControls.camera.copy(object);
-        this.perspectiveCameraControls.fromJSON(JSON.stringify(json.perspectiveCameraControls),false);
+        this.perspectiveCameraControls.fromJSON(JSON.stringify(json.perspectiveCameraControls), false);
     }
 
     test() {
@@ -162,30 +181,37 @@ export class CameraManager {
         switch (cameraViewType) {
             case ECameraViewType.PerspectiveView:
                 this.setPerspectiveView();
+                this.viewer.editor.editorEventManager.cameraAttributeChanged.next(cameraViewType);
                 break;
             case ECameraViewType.Top:
                 this.resetViewLimits();
                 this.setTopView();
+                this.viewer.editor.editorEventManager.cameraAttributeChanged.next(cameraViewType);
                 break;
             case ECameraViewType.Bottom:
                 this.resetViewLimits();
                 this.setBottomView();
+                this.viewer.editor.editorEventManager.cameraAttributeChanged.next(cameraViewType);
                 break;
             case ECameraViewType.Left:
                 this.resetViewLimits();
                 this.setLeftView();
+                this.viewer.editor.editorEventManager.cameraAttributeChanged.next(cameraViewType);
                 break;
             case ECameraViewType.Right:
                 this.resetViewLimits();
                 this.setRightView();
+                this.viewer.editor.editorEventManager.cameraAttributeChanged.next(cameraViewType);
                 break;
             case ECameraViewType.Back:
                 this.resetViewLimits();
                 this.setBackView();
+                this.viewer.editor.editorEventManager.cameraAttributeChanged.next(cameraViewType);
                 break;
             case ECameraViewType.Front:
                 this.resetViewLimits();
                 this.setFrontView();
+                this.viewer.editor.editorEventManager.cameraAttributeChanged.next(cameraViewType);
                 break;
             default:
                 throw new Error(`未知的视图类型: ${cameraViewType}`);

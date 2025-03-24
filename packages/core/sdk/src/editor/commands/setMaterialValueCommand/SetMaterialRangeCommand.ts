@@ -1,5 +1,5 @@
 import {Command} from "../Command";
-import * as THREE from 'three';
+
 
 
 export class SetMaterialRangeCommand extends Command<Array<number>> {

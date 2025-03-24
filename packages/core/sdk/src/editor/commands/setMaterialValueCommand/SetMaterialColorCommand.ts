@@ -1,5 +1,5 @@
 import {Command} from "../Command";
-import * as THREE from 'three';
+
 import {Tool} from "../../../tool";
 import {invoke, isArray, PropertyPath} from "lodash-es";
 import {Color, Object3D} from "three";

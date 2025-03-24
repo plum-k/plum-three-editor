@@ -1,5 +1,5 @@
 import {Command} from "../Command";
-import * as THREE from 'three';
+
 import {get, isArray, PropertyPath, set} from "lodash-es";
 import {Tool} from "../../../tool";
 import json from "@rollup/plugin-json";

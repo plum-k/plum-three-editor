@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+
 import {invoke, isArray, PropertyPath} from "lodash-es";
 import {SetValueCommand} from "../SetValueCommand";
 import {Color, Object3D} from "three";
