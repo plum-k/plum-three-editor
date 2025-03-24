@@ -21,7 +21,7 @@ export interface IAsset {
 /**
  * 资产类，用于管理单个资产的加载和存储。
  */
-export class Asset{
+export class Asset {
     options: IAsset; // 资产选项，包含了初始化时的所有可能属性
     url: string | undefined; // 资源的URL
     result: ArrayBuffer | undefined; // 加载完成的资源数据

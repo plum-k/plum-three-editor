@@ -51,22 +51,22 @@ const setHeight = () => {
 
 bus.viewerInitSubject.subscribe(() => {
   const viewer = bus.viewer;
-  data.value = getSceneTree(viewer!);
+  treeData.value = getSceneTree(viewer!);
   setHeight();
   viewer?.editor.editorEventManager.sceneGraphChanged.subscribe(() => {
-    data.value = getSceneTree(viewer!);
+    treeData.value = getSceneTree(viewer!);
     setHeight();
   })
 
   viewer?.editor.editorEventManager.objectChanged.subscribe((value) => {
     const {name} = value
     if (name === "name") {
-      data.value = getSceneTree(viewer!);
+      treeData.value = getSceneTree(viewer!);
     }
   })
 })
 
-const data = ref<Array<any>>([]);
+const treeData = ref<Array<any>>([]);
 
 const handleNodeClick = (data: TreeNodeData, node: TreeNode, e: MouseEvent) => {
   const viewer = bus.viewer;
@@ -94,9 +94,9 @@ const handleNodeContextmenu = (evt: Event, data: TreeNodeData, node: TreeNode) =
           {
             label: visible ? "隐藏" : "显示",
             onClick: () => {
-              // todo 记录历史
-              object.visible = !visible;
-              data.value = getSceneTree(viewer!);
+              viewer?.editor.setValueExecute(object, "visible", !visible);
+              treeData.value = getSceneTree(viewer);
+              console.log(treeData.value)
             }
           },
           {
@@ -136,14 +136,17 @@ const fitMesh = (data: any) => {
     }
   }
 }
+const aa = (ccc) => {
+  console.log("111", ccc)
 
+}
 </script>
 
 <template>
   <el-tree-v2
       id="sceneTree"
       ref="treeRef"
-      :data="data"
+      :data="treeData"
       :height="height"
       :highlight-current="true"
       class="h-full"
@@ -151,8 +154,8 @@ const fitMesh = (data: any) => {
       @node-contextmenu="handleNodeContextmenu"
   >
     <template #default="{ node }">
-      <icon v-if="node.data.visible" icon-name="icon-show"/>
-      <icon v-else icon-name="icon-hide"/>
+      <icon v-if="node.data.visible" icon-name="icon-show" @click="aa(node.data)"/>
+      <icon v-else icon-name="icon-hide" @click="aa(node.data)"/>
       <span class="m-1 select-none" @dblclick="fitMesh(node.data)">{{ node.label }}</span>
     </template>
   </el-tree-v2>

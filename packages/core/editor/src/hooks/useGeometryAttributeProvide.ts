@@ -59,6 +59,6 @@ export const useGeometryAttributeProvide = (options: IUseGeometryAttributeProvid
     })
 
     return {
-        objectAttributeChangeSubject, toggle, getGeometryValue,updateTrigger
+        objectAttributeChangeSubject, toggle, getGeometryValue, updateTrigger
     }
 }

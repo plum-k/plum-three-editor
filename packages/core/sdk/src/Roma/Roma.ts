@@ -7,21 +7,11 @@ export class Roma {
 
     }
 
-    initLine(points?: Vector3[]){
-       const  pathCurve = new CatmullRomCurve3(points, false, 'catmullrom', 0);
-
-
+    initLine(points?: Vector3[]) {
+        const pathCurve = new CatmullRomCurve3(points, false, 'catmullrom', 0);
 
 
     }
-
-
-
-
-
-
-
-
 
 
 }

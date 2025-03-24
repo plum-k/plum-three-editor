@@ -19,7 +19,8 @@ import {
   MeshDepthMaterialAttribute,
   MeshLambertMaterialAttribute,
   MeshMatcapMaterialAttribute,
-  MeshNormalMaterialAttribute, MeshPhongMaterialAttribute,
+  MeshNormalMaterialAttribute,
+  MeshPhongMaterialAttribute,
   MeshPhysicalMaterialAttribute,
   MeshStandardMaterialAttribute,
   MeshToonMaterialAttribute,
@@ -81,7 +82,7 @@ const sync = () => {
 const {} = useBindSubscribe({
   fun: sync,
   isMounted: false,
-  isViewerInit:true,
+  isViewerInit: true,
   isBindCallFun: false,
 })
 

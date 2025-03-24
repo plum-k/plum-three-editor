@@ -1,6 +1,6 @@
-import { Mesh, MeshBasicMaterial, MeshBasicMaterialParameters } from "three";
-import { PathPointList, PathTubeGeometry, PathTubeGeometryOptions } from "three.path";
-import { ISetPathPointListOptions } from "./PathMesh";
+import {Mesh, MeshBasicMaterial, MeshBasicMaterialParameters} from "three";
+import {PathPointList, PathTubeGeometry, PathTubeGeometryOptions} from "three.path";
+import {ISetPathPointListOptions} from "./PathMesh";
 
 // 路径管道点列表选项接口，继承自 PathTubeGeometryOptions
 export interface IPathTubePointListOptions extends PathTubeGeometryOptions {
@@ -22,7 +22,7 @@ export class PathTubeMesh extends Mesh<PathTubeGeometry> {
     // 构造函数
     constructor(_options: IPathTubeMeshOptions) {
         super(); // 调用父类构造函数
-        const { pathPointListParams, pathTubeGeometryParams, meshBasicMaterialParams } = _options; // 解构选项
+        const {pathPointListParams, pathTubeGeometryParams, meshBasicMaterialParams} = _options; // 解构选项
 
         // 设置路径点列表
         this.setPathPointList(pathPointListParams);

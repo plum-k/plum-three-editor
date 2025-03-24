@@ -1,5 +1,4 @@
-import {Sprite as THREESprite} from "three";
-import {SpriteMaterial} from "three";
+import {Sprite as THREESprite, SpriteMaterial} from "three";
 
 import html2canvas from "html2canvas";
 import {deepMergeRetain} from "../tool";

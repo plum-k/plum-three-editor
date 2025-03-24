@@ -1,4 +1,3 @@
-
 import {Object3D} from "three";
 import Heatmap from "heatmap";
 import HeatmapInstance, {DataPoint, HeatmapConfig} from "heatmap";

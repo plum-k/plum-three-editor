@@ -3,7 +3,7 @@ import {computed, onMounted, ref, watch} from "vue";
 import Card from "../components/home/Card.vue";
 import type {IApplication} from "../interface";
 import {ApplicationApi} from "../api";
-import {ElBreadcrumb, ElBreadcrumbItem, ElButton, ElIcon} from "element-plus";
+import {ElBreadcrumb, ElBreadcrumbItem, ElButton} from "element-plus";
 import {findIndex} from "lodash-es";
 import AddAppModalForm from "../components/home/AddAppModalForm.vue";
 import EditAppModalForm from "../components/home/EditAppModalForm.vue";
@@ -13,7 +13,7 @@ const folders = ref<IApplication[]>([]);
 
 const dirList = ref<IApplication[]>([]);
 const appInfo = ref<IApplication | null>(null);
-const editAppInfo = ref<IApplication| null>(null);
+const editAppInfo = ref<IApplication | null>(null);
 
 const getFolders = (appInfo: null | IApplication) => {
   ApplicationApi.getAll(appInfo?.id).then(res => {
@@ -27,7 +27,6 @@ const getFolders = (appInfo: null | IApplication) => {
 onMounted(() => {
   getFolders(null)
 })
-
 
 const example = () => {
   window.open(import.meta.env.VITE_EXAMPLE, '_blank');
@@ -94,15 +93,15 @@ const reset = () => {
       <div class="border-b p-2">
         <div class="flex justify-center items-center">
           <el-button class="mr-2" @click="dialogFormVisible = true">新建</el-button>
-          <add-app-modal-form :appInfo="appInfo" v-model:visible="dialogFormVisible"/>
-          <edit-app-modal-form :appInfo="editAppInfo" v-model:visible="dialogEditVisible"/>
+          <add-app-modal-form v-model:visible="dialogFormVisible" :appInfo="appInfo"/>
+          <edit-app-modal-form v-model:visible="dialogEditVisible" :appInfo="editAppInfo"/>
           <el-breadcrumb separator="/" @click="editPath">
             <el-breadcrumb-item>
               <icon icon-name="icon-home"/>
             </el-breadcrumb-item>
             <el-breadcrumb-item v-for="(item,index) in items" :key="index" @click="editPath(item)">
               <div class="flex items-center cursor-pointer">
-                {{item.name }}
+                {{ item.name }}
               </div>
             </el-breadcrumb-item>
           </el-breadcrumb>

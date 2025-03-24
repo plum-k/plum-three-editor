@@ -1,7 +1,7 @@
 import {Component, IComponentOptions} from "../core/Component";
 import {TransformControls} from "three/examples/jsm/controls/TransformControls.js";
-import * as  THREE from "three";
 import {Euler, Vector3} from "three";
+
 export interface IControlsManagerOptions extends IComponentOptions {
 }
 
@@ -31,7 +31,7 @@ export class TransformControlsWarp extends Component {
             if (this.transformControls.object) {
                 this.editor.editorEventManager.objectChanged.next({
                     name: "objectChange",
-                    object:this.transformControls.object
+                    object: this.transformControls.object
                 });
             }
         });

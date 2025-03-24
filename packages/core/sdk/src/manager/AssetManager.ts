@@ -3,9 +3,9 @@ import {
     AudioLoader,
     CubeTextureLoader,
     FileLoader,
-    Group,
     Loader,
-    LoadingManager, Object3D,
+    LoadingManager,
+    Object3D,
     ObjectLoader,
     TextureLoader
 } from "three";
@@ -13,7 +13,6 @@ import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
 import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader.js";
 import {EXRLoader} from "three/examples/jsm/loaders/EXRLoader.js";
 import {GainMapLoader, HDRJPGLoader} from "@monogrid/gainmap-js";
-import {buildGraph} from "../tool";
 import {Subject} from "rxjs";
 import {KTX2Loader} from "three/examples/jsm/loaders/KTX2Loader.js";
 import {PDBLoader} from "three/examples/jsm/loaders/PDBLoader.js";
@@ -368,7 +367,19 @@ export class AssetManager extends Component {
         return this.buildPromise(asset, () => {
             let loader = this.mMDLoader;
             const {before, after, tail} = option
-            let {url, result, name, file, fileReader, loadSubject, progressSubject, onLoad, onProgress, onError, loadFile} = asset;
+            let {
+                url,
+                result,
+                name,
+                file,
+                fileReader,
+                loadSubject,
+                progressSubject,
+                onLoad,
+                onProgress,
+                onError,
+                loadFile
+            } = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);
@@ -381,7 +392,19 @@ export class AssetManager extends Component {
         return this.buildPromise(asset, () => {
             let loader = this.lUTCubeLoader;
             const {before, after, tail} = option
-            let {url, result, name, file, fileReader, loadSubject, progressSubject, onLoad, onProgress, onError, loadFile} = asset;
+            let {
+                url,
+                result,
+                name,
+                file,
+                fileReader,
+                loadSubject,
+                progressSubject,
+                onLoad,
+                onProgress,
+                onError,
+                loadFile
+            } = asset;
             before && before(loader)
             if (!isNil(url)) {
                 loader.load(url, onLoad, onProgress, onError);

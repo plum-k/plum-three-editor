@@ -1,9 +1,9 @@
-import { PathPointList, PathTubeGeometry, PathTubeGeometryOptions } from "three.path";
+import {PathPointList, PathTubeGeometry, PathTubeGeometryOptions} from "three.path";
 
-import { LineDashedMaterialParameters } from "three";
-import { deepMergeRetain } from "../tool";
-import { PathPointListOptions } from "./line/path/Path";
-import {Vector3,Mesh,MeshBasicMaterial} from "three";
+import {LineDashedMaterialParameters, Mesh, MeshBasicMaterial, Vector3} from "three";
+import {deepMergeRetain} from "../tool";
+import {PathPointListOptions} from "./line/path/Path";
+
 // 路径管道选项接口
 export interface IPathTubeOptions {
     points?: Array<Vector3>; // 路径点数组
@@ -33,7 +33,7 @@ export class PathTube extends Mesh {
             }
         });
 
-        const { points, materialParams } = this.options; // 解构选项
+        const {points, materialParams} = this.options; // 解构选项
         this.points = points; // 设置路径点
         const up = new Vector3(0, 1, 0); // 定义上方向向量
 
@@ -67,7 +67,7 @@ export class PathTube extends Mesh {
             this.options.pathPointListOptions = pathPointListOptions; // 更新路径点列表选项
         }
 
-        const { cornerRadius, cornerSplit, close, up } = this.options.pathPointListOptions; // 解构选项
+        const {cornerRadius, cornerSplit, close, up} = this.options.pathPointListOptions; // 解构选项
         // 更新路径点列表
         this.pathPointList.set(this.points, cornerRadius, cornerSplit, up, close);
     }

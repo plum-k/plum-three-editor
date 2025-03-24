@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type {ISelectProps} from "element-plus";
 import {ElFormItem, ElOption, ElSelect,} from "element-plus";
-import {type IAttributeProps, useAttributeInject, useBus} from "../../hooks";
+import {type IAttributeProps, useAttributeInject} from "../../hooks";
 
 interface Props extends IAttributeProps {
   formProps?: Partial<ISelectProps>;
@@ -11,11 +11,9 @@ interface Props extends IAttributeProps {
 const modelValue = defineModel<string>({
   default: undefined
 })
-const props = withDefaults(defineProps<Props>(), {
-
-})
+const props = withDefaults(defineProps<Props>(), {})
 const {name, label} = props
-const {change, } = useAttributeInject(props,modelValue)
+const {change,} = useAttributeInject(props, modelValue)
 </script>
 
 <template>

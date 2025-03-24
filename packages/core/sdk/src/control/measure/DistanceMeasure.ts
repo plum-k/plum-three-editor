@@ -1,7 +1,7 @@
 import {IMeasureOptions, Measure} from "./Measure";
 
 import {Vector3} from "three";
-import {IPick} from "../../manager/EventManager";
+import {IPickInfo} from "../../manager/EventManager";
 import {Line2} from "../../mesh/line/line2/Line2";
 import {isNil, round} from "lodash-es";
 import {TextSprite} from "../../mesh/label/TextSprite";
@@ -70,7 +70,7 @@ export class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
         return meshLambertMaterial;
     };
 
-    onAddPointEvent(value: IPick) {
+    onAddPointEvent(value: IPickInfo) {
         const {position} = value;
         if (this.isFinish()) {
             return;
@@ -89,7 +89,7 @@ export class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
         this.pointGroup.add(sphere);
     }
 
-    onMoveEvent(value: IPick) {
+    onMoveEvent(value: IPickInfo) {
         const {position} = value;
         if (isNil(this.line)) return;
         if (this.isFinish()) {
@@ -165,7 +165,7 @@ export class DistanceMeasure extends Measure<IDistanceMeasureOptions> {
         }
     }
 
-    onEndEvent(value: IPick) {
+    onEndEvent(value: IPickInfo) {
         this.isEnd = true;
     }
 }

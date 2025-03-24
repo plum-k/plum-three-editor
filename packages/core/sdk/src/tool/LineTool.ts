@@ -1,4 +1,3 @@
-
 import {CubicBezierCurve3, QuadraticBezierCurve3, Vector3} from "three";
 import {isVector3} from "three-is";
 

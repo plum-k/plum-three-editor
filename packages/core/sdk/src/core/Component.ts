@@ -29,18 +29,23 @@ export class Component<T extends IComponentOptions = IComponentOptions> {
     get cameraManager() {
         return this.viewer.cameraManager;
     }
+
     get cameraControls() {
         return this.viewer.cameraManager.cameraControls;
     }
+
     get renderer() {
         return this.viewer.renderManager.defaultWebGLRenderer;
     }
+
     get renderManager() {
         return this.viewer.renderManager;
     }
+
     get postProcessingComponent() {
         return this.viewer.postProcessingComponent;
     }
+
     get assetManager() {
         return this.viewer.assetManager;
     }

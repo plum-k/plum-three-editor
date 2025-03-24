@@ -10,7 +10,7 @@ import {
     Vector2,
     Vector3
 } from "three";
-import { Tool, V3Array } from "../tool";
+import {Tool, V3Array} from "../tool";
 
 // 定义墙体选项接口
 export interface IWallOption {
@@ -35,8 +35,8 @@ export class Wall extends Object3D {
     // 构造函数
     constructor(options: IWallOption) {
         super(); // 调用父类构造函数
-        const { width, height, path, extrudeGeometryOptions } = options; // 解构选项
-        const { closed, curveType, tension, points } = path; // 解构路径选项
+        const {width, height, path, extrudeGeometryOptions} = options; // 解构选项
+        const {closed, curveType, tension, points} = path; // 解构路径选项
 
         // 创建墙体的形状
         const pts2 = [];

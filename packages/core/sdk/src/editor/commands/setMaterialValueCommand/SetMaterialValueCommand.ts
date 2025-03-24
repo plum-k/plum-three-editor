@@ -1,8 +1,7 @@
 import {Command} from "../Command";
 
-import {get, isArray, PropertyPath, set} from "lodash-es";
+import {get, PropertyPath, set} from "lodash-es";
 import {Tool} from "../../../tool";
-import json from "@rollup/plugin-json";
 
 export class SetMaterialValueCommand extends Command {
     type: string = 'SetMaterialValueCommand';
@@ -24,6 +23,7 @@ export class SetMaterialValueCommand extends Command {
 
         this.attributeName = attributeName;
     }
+
     /**
      * 设置对象的属性值
      * @param isExecute 是否执行命令，true为执行，false为撤销

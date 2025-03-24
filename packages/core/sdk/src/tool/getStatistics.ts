@@ -1,4 +1,3 @@
-
 import {isMesh, isPoints} from "three-is";
 
 /**

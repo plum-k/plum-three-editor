@@ -1,11 +1,10 @@
-import * as THREE from "three"
+import {Color, DirectionalLight, EquirectangularReflectionMapping, Euler, Scene, Texture} from "three"
 import {presetsObj, PresetsType} from "./environmentAssets";
 import {isArray, isNil, set} from "lodash-es";
 import {Component, IComponentOptions} from "../Component";
 import {Asset} from "../../manager/asset/Asset";
-import {deepMergeRetain, logStack} from "../../tool";
+import {deepMergeRetain} from "../../tool";
 import {isDirectionalLight} from "three-is";
-import {Texture, Scene, EquirectangularReflectionMapping, DirectionalLight, Euler, Color} from "three";
 
 export interface IEnvironment extends IComponentOptions {
     frames?: number

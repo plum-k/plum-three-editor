@@ -1,5 +1,5 @@
-import { CatmullRomCurve3 } from "three";
-import { ILineOptions, Line } from "./Line";
+import {CatmullRomCurve3} from "three";
+import {ILineOptions, Line} from "./Line";
 
 // 定义曲线类型的枚举
 export enum CurveType {
@@ -46,7 +46,7 @@ export class CatmullRomLine extends Line {
 
     // 获取曲线点
     getLinePoints() {
-        const { points, closed, curveType, tension, segments } = this.options;
+        const {points, closed, curveType, tension, segments} = this.options;
         this.catmullRomCurve3.points = this.points; // 设置曲线的控制点
         this.catmullRomCurve3.closed = closed;       // 设置是否闭合
         this.catmullRomCurve3.curveType = curveType; // 设置曲线类型

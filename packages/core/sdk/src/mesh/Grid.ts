@@ -1,9 +1,19 @@
-import * as  THREE from "three";
-import {Camera} from "three";
-import {shaderMaterial, version} from "../tool";
-import {ColorRepresentation,Side,PlaneGeometry,Vector3,Color,BackSide,ShaderMaterial,Uniform
-,Material,Mesh,Plane
+import {
+    BackSide,
+    Camera,
+    Color,
+    ColorRepresentation,
+    Material,
+    Mesh,
+    Plane,
+    PlaneGeometry,
+    ShaderMaterial,
+    Side,
+    Uniform,
+    Vector3
 } from "three";
+import {shaderMaterial, version} from "../tool";
+
 export type GridMaterialType = {
     /** Cell size, default: 0.5 */
     cellSize?: number
@@ -162,7 +172,8 @@ export class Grid extends Mesh {
         this.plane.projectPoint(camera.position, worldCamProjPosition.value)
         worldPlanePosition.value.set(0, 0, 0).applyMatrix4(this.matrixWorld)
     }
-    dispose(){
+
+    dispose() {
         this.geometry.dispose();
         (this.material as Material).dispose();
     }

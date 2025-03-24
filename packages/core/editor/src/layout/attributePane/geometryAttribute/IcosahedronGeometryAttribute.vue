@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import {reactive} from "vue";
-
-import {isIcosahedronGeometry, isMesh} from "three-is";
-import {useAttributeProvide, useBus} from "../../../hooks";
+import {useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
 import {getGeometryValue, useGeometryAttributeProvide} from "../../../hooks/useGeometryAttributeProvide.ts";
@@ -12,7 +9,7 @@ import BaseGeometryAttribute from "./BaseGeometryAttribute.vue";
 const bus = useBus();
 
 // ui -> three
-const {objectAttributeChangeSubject, toggle,updateTrigger} = useGeometryAttributeProvide({
+const {objectAttributeChangeSubject, toggle, updateTrigger} = useGeometryAttributeProvide({
   isAutoUpdate: false,
   getNewGeometry: (geometry, name, value) => {
     return new IcosahedronGeometry(

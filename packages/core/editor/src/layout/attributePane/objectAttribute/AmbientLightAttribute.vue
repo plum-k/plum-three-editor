@@ -4,6 +4,7 @@ import {ElForm} from "element-plus";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
 import UserDataItem from "../../../common-ui/attributeItem/UserDataItem.vue";
+
 const bus = useBus();
 const {toggle} = useAttributeProvide({
   isAutoUpdate: false,

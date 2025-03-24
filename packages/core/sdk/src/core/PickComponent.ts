@@ -1,18 +1,18 @@
-import * as  THREE from "three";
-import {Object3D} from "three";
+import {Camera, Object3D, Raycaster, Scene, Vector2, Vector3} from "three";
 import {Component, IComponentOptions} from "./Component";
 import {isPerspectiveCamera} from "three-is";
 import {isNil} from "lodash-es";
 import {Tool} from "../tool/Tool";
-import {Camera, Raycaster, Scene, Vector2, Vector3} from "three";
-export interface IPickOptions extends IComponentOptions {
+import {IPickInfo} from "../interface/pick/IPickInfo";
+
+export interface IPickComponentOptions extends IComponentOptions {
 }
 
-export class Pick extends Component {
+export class PickComponent extends Component {
     raycaster: Raycaster;
     pointer: Vector2 = new Vector2();
 
-    constructor(options: IPickOptions) {
+    constructor(options: IPickComponentOptions) {
         super(options);
         this.raycaster = new Raycaster();
 
@@ -42,27 +42,24 @@ export class Pick extends Component {
         })
     }
 
-    pick(scene: Scene, camera: Camera, event) {
+    pick(scene: Scene, camera: Camera, event):IPickInfo {
         this.raycaster.setFromCamera(this.pointer, camera);
-
         const objects: Array<Object3D> = [];
         // 只选择可见的对象
         this.scene.traverseVisible((child) => {
             objects.push(child);
         });
-        // todo 编辑器启用时, 可选择帮助对象
+        //  编辑器启用时, 可选择帮助对象
         this.sceneHelpers.traverseVisible((child) => {
-            if ( child.name === 'picker' ) {
-                objects.push( child );
+            if (child.name === 'picker') {
+                objects.push(child);
             }
         });
-
         const intersects = this.raycaster.intersectObjects(objects, false);
-        let obj = {
-            position: intersects.length > 0 ? intersects[0].point : this.screenToWorld(),
+        return {
+            position: intersects.length > 0 ? intersects[0].point : this.screenToWorld()!,
             intersects
-        }
-        return obj;
+        };
     }
 
     /**

@@ -1,8 +1,18 @@
+import {isNil} from "lodash-es";
+import {isColor} from "three-is";
+import {deepMergeRetain, Tool} from "../../../tool";
+import {
+    Color,
+    Float32BufferAttribute,
+    LineBasicMaterial,
+    LineDashedMaterial,
+    LineDashedMaterialParameters,
+    LineLoop,
+    LineSegments,
+    Object3D,
+    Vector3
+} from "three";
 
-import { isNil } from "lodash-es";
-import { isColor } from "three-is";
-import { deepMergeRetain, Tool } from "../../../tool";
-import {LineDashedMaterialParameters,Vector3,Color,Object3D,LineDashedMaterial,LineBasicMaterial,LineLoop,LineSegments,Float32BufferAttribute} from "three";
 // 定义线条类型的枚举
 export enum LineType {
     Line = "Line",            // 普通线
@@ -61,7 +71,7 @@ export class Line extends Object3D {
 
     // 更新方法
     update(_options: ILineOptions) {
-        const { lineType, materialType, points, materialParams } = _options;
+        const {lineType, materialType, points, materialParams} = _options;
 
         // 检查线条类型是否变化，如果变化则重建线条
         if (isNil(this.line) || lineType !== this.options.lineType) {
@@ -127,7 +137,7 @@ export class Line extends Object3D {
 
     // 创建线条
     private createLine(_options: ILineOptions) {
-        const { lineType } = _options;
+        const {lineType} = _options;
         switch (lineType) {
             case LineType.Line:
                 this.line = new Line(); // 创建普通线
@@ -143,7 +153,7 @@ export class Line extends Object3D {
 
     // 创建材质
     private createMaterial(_options: ILineOptions) {
-        const { materialType, materialParams } = _options;
+        const {materialType, materialParams} = _options;
         switch (materialType) {
             case LineMaterialType.LineBasicMaterial:
                 this.material = new LineBasicMaterial(materialParams); // 创建基础材质

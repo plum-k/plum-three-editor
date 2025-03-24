@@ -27,7 +27,7 @@ const {change, activeChange, focus,} = useAttributeInject({
   ...props,
   getValue: (value) => {
     if (isRotation) {
-      return round( MathUtils.radToDeg(value),1)
+      return round(MathUtils.radToDeg(value), 1)
     } else {
       return value
     }

@@ -4,27 +4,31 @@ import {deepMergeRetain, Tool} from "../tool";
 import {Serialize} from "../serializeManage";
 import {Asset} from "../manager/asset";
 import {
-    MathUtils, Object3D, OrthographicCamera, PerspectiveCamera, Vector3,
-    Vector2,
-    Vector4,
-    Quaternion,
-    Matrix4,
-    Spherical,
     Box3,
-    Sphere,
+    MathUtils,
+    Matrix4,
+    Object3D,
+    OrthographicCamera,
+    PerspectiveCamera,
+    Quaternion,
     Raycaster,
+    Sphere,
+    Spherical,
+    Vector2,
+    Vector3,
+    Vector4,
 } from 'three';
 
 const subsetOfTHREE = {
-    Vector2   : Vector2,
-    Vector3   : Vector3,
-    Vector4   : Vector4,
+    Vector2: Vector2,
+    Vector3: Vector3,
+    Vector4: Vector4,
     Quaternion: Quaternion,
-    Matrix4   : Matrix4,
-    Spherical : Spherical,
-    Box3      : Box3,
-    Sphere    : Sphere,
-    Raycaster : Raycaster,
+    Matrix4: Matrix4,
+    Spherical: Spherical,
+    Box3: Box3,
+    Sphere: Sphere,
+    Raycaster: Raycaster,
 };
 CameraControls.install({THREE: subsetOfTHREE});
 
@@ -107,6 +111,22 @@ export class CameraManager {
         this.cameraControls.setTarget(0, 0, 0).then();
     }
 
+    get cameraControls() {
+        return this.cameraType === ECameraType.PerspectiveCamera ? this.perspectiveCameraControls : this.orthographicCameraControls;
+    }
+
+    get target() {
+        return this.cameraControls.getTarget(new Vector3());
+    }
+
+    get position() {
+        return this.cameraControls.getPosition(new Vector3());
+    }
+
+    get camera() {
+        return this.cameraType === ECameraType.PerspectiveCamera ? this.perspectiveCamera : this.orthographicCamera;
+    }
+
     toJSON() {
         const perspectiveCameraControlsJson = JSON.parse(this.perspectiveCameraControls.toJSON());
         const perspectiveCameraJson = this.perspectiveCamera.toJSON();
@@ -136,22 +156,6 @@ export class CameraManager {
         console.log(JSON.parse(this.cameraControls.toJSON()));
         console.log("azimuthAngle", MathUtils.radToDeg(this.cameraControls.azimuthAngle));
         console.log("polarAngle", MathUtils.radToDeg(this.cameraControls.polarAngle));
-    }
-
-    get cameraControls() {
-        return this.cameraType === ECameraType.PerspectiveCamera ? this.perspectiveCameraControls : this.orthographicCameraControls;
-    }
-
-    get target() {
-        return this.cameraControls.getTarget(new Vector3());
-    }
-
-    get position() {
-        return this.cameraControls.getPosition(new Vector3());
-    }
-
-    get camera() {
-        return this.cameraType === ECameraType.PerspectiveCamera ? this.perspectiveCamera : this.orthographicCamera;
     }
 
     /**

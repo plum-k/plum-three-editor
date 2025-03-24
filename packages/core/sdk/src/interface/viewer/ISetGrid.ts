@@ -1,5 +1,5 @@
 import {GridProps} from "../../mesh";
 
-export interface ISetGrid extends GridProps{
+export interface ISetGrid extends GridProps {
     visible?: boolean;
 }

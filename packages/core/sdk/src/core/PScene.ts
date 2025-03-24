@@ -13,8 +13,8 @@ export class PScene extends Scene {
 
     add(...object: Object3D[]): this {
         // todo
-        if (this.name ==="sceneHelpers"){
-        }else {
+        if (this.name === "sceneHelpers") {
+        } else {
             console.log(new Error('添加物体').stack)
         }
         return super.add(...object);

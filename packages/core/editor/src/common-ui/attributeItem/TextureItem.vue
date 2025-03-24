@@ -1,22 +1,28 @@
 <script lang="ts" setup>
-import {ElFormItem} from "element-plus";
+import {ElCheckbox, ElFormItem} from "element-plus";
 import {inject, onMounted, ref, type ShallowRef, watch} from "vue";
-import {type IAttributeProps, type IObjectAttributeChange, useAttributeInject, useBus} from "../../hooks";
-import { MeshBasicMaterial, Texture, WebGLRenderer,Mesh} from "three";
+import {type IAttributeProps, type IObjectAttributeChange, useBus} from "../../hooks";
+import {Mesh, MeshBasicMaterial, Texture, WebGLRenderer} from "three";
 import {get, isArray} from "lodash-es";
 import {isCompressedTexture, isDataTexture} from "three-is";
 import {FullScreenQuad} from "three-stdlib";
 import {Asset} from "@plum-render/three-sdk";
-import {ElCheckbox} from "element-plus";
 
 import type {Subject} from "rxjs";
 
 interface Props extends IAttributeProps {
   getTexture?: () => Texture | null;
+  checkbox?: boolean
 }
 
-const props = defineProps<Props>();
-const {name, label,getTexture} = props
+const props = withDefaults(defineProps<Props>(), {
+  checkbox: true,
+  getTexture: () => {
+    return null
+  }
+})
+
+const {name, label, getTexture,checkbox} = props
 const bus = useBus();
 
 const input = document.createElement('input');
@@ -127,7 +133,7 @@ const checked = ref(false)
 
 <template>
   <el-form-item :label="label" size="small">
-    <el-checkbox v-model="checked" class="!mr-1.5" />
+    <el-checkbox v-if="checkbox" v-model="checked" class="!mr-1.5"/>
     <canvas ref="canvasRef" @click="click"/>
   </el-form-item>
 </template>

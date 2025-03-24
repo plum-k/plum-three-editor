@@ -1,4 +1,3 @@
-
 import {BasicDepthPacking, RGBADepthPacking} from "three";
 
 export const blendingOptions = [

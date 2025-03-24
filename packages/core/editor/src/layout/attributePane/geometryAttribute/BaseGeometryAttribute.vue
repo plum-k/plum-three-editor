@@ -1,5 +1,5 @@
-<script setup lang="ts">
-import {ElButton, ElFormItem,ElRow,ElCol} from "element-plus";
+<script lang="ts" setup>
+import {ElButton, ElCol, ElFormItem, ElRow} from "element-plus";
 import {inject, ref, type ShallowRef, watch} from "vue";
 import {useBus} from "../../../hooks";
 import UserDataItem from "../../../common-ui/attributeItem/UserDataItem.vue";
@@ -100,7 +100,7 @@ const showVertexNormals = () => {
           计算切线
         </el-button>
       </div>
-      <div >
+      <div>
         <el-button @click="showVertexNormals">
           显示顶点法线
         </el-button>

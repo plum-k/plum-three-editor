@@ -1,7 +1,7 @@
-import { PathGeometry, PathGeometryOptions, PathPointList } from "three.path";
+import {PathGeometry, PathGeometryOptions, PathPointList} from "three.path";
 
-import { LineDashedMaterialParameters,Vector3,Mesh,MeshBasicMaterial,LineDashedMaterial,LineBasicMaterial,LineLoop,LineSegments,Float32BufferAttribute} from "three";
-import { deepMergeRetain } from "../../../tool";
+import {LineDashedMaterialParameters, Mesh, MeshBasicMaterial, Vector3} from "three";
+import {deepMergeRetain} from "../../../tool";
 
 // 路径点列表选项接口
 export interface PathPointListOptions {
@@ -40,7 +40,7 @@ export class Path extends Mesh {
             }
         });
 
-        const { points, materialParams } = this.options; // 解构选项
+        const {points, materialParams} = this.options; // 解构选项
         this.points = points; // 设置路径点
         const up = new Vector3(0, 1, 0); // 定义上方向向量
 
@@ -61,7 +61,7 @@ export class Path extends Mesh {
     // 设置路径点列表
     setPathPointList(pathPointListOptions?: PathPointListOptions) {
         this.options.pathPointListOptions = pathPointListOptions; // 更新路径点列表选项
-        const { cornerRadius, cornerSplit, close, up } = this.options.pathPointListOptions; // 解构选项
+        const {cornerRadius, cornerSplit, close, up} = this.options.pathPointListOptions; // 解构选项
         this.pathPointList.set(this.points, cornerRadius, cornerSplit, up, close); // 更新路径点列表
     }
 

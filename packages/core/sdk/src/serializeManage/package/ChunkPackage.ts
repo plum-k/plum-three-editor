@@ -85,7 +85,7 @@ export class ChunkSerialize extends Package {
         let viewerJson = this.viewer.toJSON() as unknown as Serialize.ViewerJson;
         const sceneJson = viewerJson.scene;
         const {geometries, materials} = sceneJson;
-        console.log("viewerJson",this.viewer.toJSON())
+        console.log("viewerJson", this.viewer.toJSON())
 
         const geometriesBlob = await this.packMaterialsOrVertexData(geometries, "geometries", 100);
         const materialsBlob = await this.packMaterialsOrVertexData(materials, "materials", 300);
@@ -139,7 +139,7 @@ export class ChunkSerialize extends Package {
 
         let materials: Array<any> = []
         let geometries: Array<any> = []
-        
+
         for (let i = 0; i < entries.length; i++) {
             let entry = entries[i];
             if (entry.filename === "viewerInfo.bin" && entry.getData) {

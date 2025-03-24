@@ -1,7 +1,6 @@
 import {SRGBColorSpace, WebGLRenderer} from "three";
 import {Component, IComponentOptions} from "../core/Component";
 import {IResourceManagers} from "./AssetManager";
-import {logStack} from "../tool";
 
 export interface IRenderManagerOptions extends IComponentOptions {
 }

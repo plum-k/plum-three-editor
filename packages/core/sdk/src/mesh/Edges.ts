@@ -1,6 +1,6 @@
-import * as  THREE from "three";
+import {BufferAttribute, BufferGeometry, EdgesGeometry, Mesh} from "three";
 import {LineSegments2} from "three/examples/jsm/lines/LineSegments2.js";
-import {Vector3,Mesh,BufferGeometry,EdgesGeometry,BufferAttribute} from "three";
+
 export class Edges {
 
     constructor({

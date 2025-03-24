@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import {ElButton, ElDescriptions, ElDescriptionsItem, ElForm} from "element-plus";
-import {ref} from "vue";
+import {ElForm} from "element-plus";
 
 import {useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
@@ -11,7 +10,7 @@ import BaseGeometryAttribute from "./BaseGeometryAttribute.vue";
 const bus = useBus();
 
 // ui -> three
-const {objectAttributeChangeSubject, toggle,updateTrigger} = useGeometryAttributeProvide({
+const {objectAttributeChangeSubject, toggle, updateTrigger} = useGeometryAttributeProvide({
   isAutoUpdate: false,
   getNewGeometry: (geometry, name, value) => {
     return new BoxGeometry(

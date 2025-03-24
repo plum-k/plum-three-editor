@@ -1,9 +1,5 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-import {reactive} from "vue";
-import {isArray} from "lodash-es";
-
-import {useBus} from "../../../hooks";
 import {BoolItem, ColorItem, InputItem, InputNumberItem, SelectItem, TextItem, Vector2Item} from "../../../common-ui";
 import TextureItem from "../../../common-ui/attributeItem/TextureItem.vue";
 import {blendingOptions, sideOptions} from "./selectOptions.ts";

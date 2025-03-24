@@ -1,6 +1,21 @@
 import {Component, IComponentOptions} from "../core/Component";
 
-import {Texture} from "three";
+import {
+    BufferGeometry,
+    Camera,
+    CameraHelper,
+    DirectionalLightHelper,
+    HemisphereLightHelper,
+    Material,
+    Mesh,
+    MeshBasicMaterial,
+    Object3D,
+    PointLightHelper,
+    SkeletonHelper,
+    SphereGeometry,
+    SpotLightHelper,
+    Texture
+} from "three";
 import {PropertyPath} from "lodash-es";
 import {History} from "./History"
 import {
@@ -31,9 +46,6 @@ import {EditorEventManager} from "./EditorEventManager";
 import {Selector} from "./Selector";
 import {TransformControlsWarp} from "./TransformControlsWarp";
 import {VertexNormalsHelper} from "three/examples/jsm/helpers/VertexNormalsHelper.js";
-import {CameraHelper, Object3D,PointLightHelper,SphereGeometry,
-    BufferGeometry,Camera,Material,Mesh,
-    MeshBasicMaterial, DirectionalLightHelper, SpotLightHelper, HemisphereLightHelper, SkeletonHelper} from "three";
 
 export interface IAppearanceStates {
     cameraHelpers: boolean;
@@ -59,7 +71,13 @@ export class Editor extends Component {
 
     // 材质引用计数
     materialsRefCounter = new Map<Material, number>();
-
+    // 是否添加对象时, 派发了场景图变化信号
+    isAddObjectSceneGraphChangedNext: boolean = false;
+    appearanceStates: IAppearanceStates = {
+        cameraHelpers: false,
+        lightHelpers: true,
+        skeletonHelpers: true
+    }
 
     constructor(options: IEditorOptions) {
         super(options);
@@ -108,6 +126,11 @@ export class Editor extends Component {
         this.execute(new SetMaterialCommand(object, newValue, materialSlot,))
     }
 
+    // setMaterialMapExecute(object: Object3D, attributeName: string = '', newValue: TexImageSource | OffscreenCanvas, materialSlot: number = -1) {
+    //     // 
+    //     const texture = new Texture(newValue)
+    //     this.command(new SetMaterialMapCommand(object, attributeName, texture, materialSlot,))
+
     setMaterialColorExecute(object: Object3D, attributeName: PropertyPath, newValue: number, materialSlot: number = -1) {
         this.execute(new SetMaterialColorCommand(object, attributeName, newValue, materialSlot))
     }
@@ -116,10 +139,6 @@ export class Editor extends Component {
         this.execute(new SetMaterialValueCommand(object, attributeName, newValue, materialSlot,))
     }
 
-    // setMaterialMapExecute(object: Object3D, attributeName: string = '', newValue: TexImageSource | OffscreenCanvas, materialSlot: number = -1) {
-    //     // 
-    //     const texture = new Texture(newValue)
-    //     this.command(new SetMaterialMapCommand(object, attributeName, texture, materialSlot,))
     // }
     setMaterialMapExecute(object: Object3D, attributeName: string = '', newValue: Texture | null, materialSlot: number = -1) {
         this.execute(new SetMaterialMapCommand(object, attributeName, newValue, materialSlot,))
@@ -128,6 +147,8 @@ export class Editor extends Component {
     removeObjectExecute(object: Object3D) {
         this.execute(new RemoveObjectCommand(object))
     }
+
+    //------------------ 回退 结束-----------------
 
     addObjectExecute(object: Object3D) {
         this.execute(new AddObjectCommand(object));
@@ -139,13 +160,9 @@ export class Editor extends Component {
         // todo
         const object = Tool.getObjectByUuid(this.scene, objectUUid)!;
         const newParent = Tool.getObjectByUuid(this.scene, newParentUUid)!;
-        // 
+        //
         this.execute(new MoveObjectCommand(object, newParent, newBefore))
     }
-
-    //------------------ 回退 结束-----------------
-    // 是否添加对象时, 派发了场景图变化信号
-    isAddObjectSceneGraphChangedNext: boolean = false;
 
     /**
      * 添加对象
@@ -214,7 +231,6 @@ export class Editor extends Component {
             // this.signals.cameraAdded.dispatch(camera);
         }
     }
-
 
     nameObject(object: Object3D, name: string) {
         object.name = name;
@@ -301,12 +317,6 @@ export class Editor extends Component {
         this.sceneHelpers.add(helper);
         this.helpers.set(object.uuid, helper);
         this.editorEventManager.helperAdded.next(helper);
-    }
-
-    appearanceStates: IAppearanceStates = {
-        cameraHelpers: false,
-        lightHelpers: true,
-        skeletonHelpers: true
     }
 
     showHelper(inAppearanceStates: IAppearanceStates) {

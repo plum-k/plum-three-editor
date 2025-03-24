@@ -2,19 +2,12 @@ import {fromEvent, Subject} from 'rxjs';
 import {Component, IComponentOptions} from "../core/Component";
 import {Intersection, Object3D, Object3DEventMap, Vector2, Vector3} from 'three';
 import {Tool} from "../tool/Tool";
+import {IPickInfo} from "../interface/pick/IPickInfo";
+import {IRenderSubjectValue} from "../interface/EventManager/IRenderSubjectValue";
 
 export interface IEventManagerOptions extends IComponentOptions {
 }
 
-export interface IPick {
-    intersects: Intersection<Object3D<Object3DEventMap>>[];
-    position: Vector3
-}
-
-export interface IRenderSubjectValue {
-    timestamp: number;
-    delta: number;
-}
 
 export class EventManager extends Component {
 
@@ -45,11 +38,11 @@ export class EventManager extends Component {
     rightClickSubject = new Subject<MouseEvent>();
     pointerMoveSubject = new Subject<MouseEvent>();
     // 射线检测后点击事件
-    leftClickPickSubject = new Subject<IPick>();
-    rightClickPickSubject = new Subject<IPick>();
-    dblClickPickSubject = new Subject<IPick>();
+    leftClickPickSubject = new Subject<IPickInfo>();
+    rightClickPickSubject = new Subject<IPickInfo>();
+    dblClickPickSubject = new Subject<IPickInfo>();
     // 鼠标移动事件, 经过射线检测
-    pointerMovePickSubject = new Subject<IPick>();
+    pointerMovePickSubject = new Subject<IPickInfo>();
 
 
     constructor(options: IEventManagerOptions) {

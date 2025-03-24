@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {defineModel, reactive} from "vue";
 import {ElButton, ElDialog, ElForm, ElFormItem, ElInput, ElSegmented} from "element-plus";
 import {ApplicationApi} from "../../api";
@@ -33,7 +33,7 @@ const onFinish = async () => {
 
 <template>
   <el-dialog v-model="dialogFormVisible" title="新建" width="350">
-    <el-form >
+    <el-form>
       <el-form-item label="名称">
         <el-input v-model="form.name"/>
       </el-form-item>

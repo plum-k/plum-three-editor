@@ -4,6 +4,7 @@ import {ElForm} from "element-plus";
 import {useAttributeProvide, useBus} from "../../../hooks";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
 import UserDataItem from "../../../common-ui/attributeItem/UserDataItem.vue";
+
 const bus = useBus();
 const {toggle} = useAttributeProvide({
   isAutoUpdate: false,
@@ -29,10 +30,10 @@ const {} = useBindSubscribe({
     <color-item label="颜色" name="color"/>
 
     <bool-item label="产生阴影" name="castShadow"/>
-    <input-number-item label="阴影偏移" :name="['shadow','intensity']"/>
-    <input-number-item label="阴影偏移" :name="['shadow','bias']"/>
-    <input-number-item label="阴影法线偏移" :name="['shadow','normalBias']"/>
-    <input-number-item label="阴影半径" :name="['shadow','radius']"/>
+    <input-number-item :name="['shadow','intensity']" label="阴影偏移"/>
+    <input-number-item :name="['shadow','bias']" label="阴影偏移"/>
+    <input-number-item :name="['shadow','normalBias']" label="阴影法线偏移"/>
+    <input-number-item :name="['shadow','radius']" label="阴影半径"/>
 
     <bool-item label="可见性" name="visible"/>
     <bool-item label="视锥体裁剪" name="frustumCulled"/>

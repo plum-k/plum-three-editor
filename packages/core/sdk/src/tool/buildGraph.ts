@@ -1,5 +1,3 @@
-import *  as THREE from "three";
-
 export type ObjectMap = {
     nodes: { [name: string]: Object3D }
     materials: { [name: string]: Material }

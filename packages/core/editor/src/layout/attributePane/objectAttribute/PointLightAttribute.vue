@@ -1,11 +1,7 @@
 <script lang="ts" setup>
-import {reactive} from "vue";
-
 import {BoolItem, ColorItem, InputItem, InputNumberItem, TextItem, Vector3Item} from "../../../common-ui";
 import {ElForm} from "element-plus";
 import {useAttributeProvide, useBus} from "../../../hooks";
-import {set} from "lodash-es";
-import {isPointLight} from "three-is";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
 import UserDataItem from "../../../common-ui/attributeItem/UserDataItem.vue";
 
@@ -26,7 +22,7 @@ const {} = useBindSubscribe({
 </script>
 
 <template>
-  <el-form  label-position="left" label-width="80" size="small">
+  <el-form label-position="left" label-width="80" size="small">
     <text-item label="类型" name="type"/>
     <text-item label="uuid" name="uuid"/>
     <input-item label="名称" name="name"/>
@@ -36,10 +32,10 @@ const {} = useBindSubscribe({
     <input-number-item label="距离" name="distance"/>
     <input-number-item label="衰减" name="decay"/>
     <bool-item label="产生阴影" name="castShadow"/>
-    <input-number-item label="阴影偏移" :name="['shadow','intensity']"/>
-    <input-number-item label="阴影偏移" :name="['shadow','bias']"/>
-    <input-number-item label="阴影法线偏移" :name="['shadow','normalBias']"/>
-    <input-number-item label="阴影半径" :name="['shadow','radius']"/>
+    <input-number-item :name="['shadow','intensity']" label="阴影偏移"/>
+    <input-number-item :name="['shadow','bias']" label="阴影偏移"/>
+    <input-number-item :name="['shadow','normalBias']" label="阴影法线偏移"/>
+    <input-number-item :name="['shadow','radius']" label="阴影半径"/>
     <bool-item label="可见性" name="visible"/>
     <bool-item label="视锥体裁剪" name="frustumCulled"/>
     <input-number-item label="渲染次序" name="renderOrder"/>

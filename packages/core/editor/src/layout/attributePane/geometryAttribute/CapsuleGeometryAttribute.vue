@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import {ElForm} from "element-plus";
-
-import {isCapsuleGeometry, isMesh} from "three-is";
 import {useBus} from "../../../hooks";
 import {InputItem, InputNumberItem, TextItem} from "../../../common-ui";
 import {useBindSubscribe} from "../../../hooks/useBindSubscribe.ts";
@@ -9,7 +7,6 @@ import {getGeometryValue, useGeometryAttributeProvide} from "../../../hooks/useG
 import BaseGeometryAttribute from "./BaseGeometryAttribute.vue";
 
 const bus = useBus();
-
 
 
 // ui -> three

@@ -30,7 +30,8 @@ const click = () => {
   fill: currentColor;
   overflow: hidden;
 }
+
 svg:focus {
-  outline: none!important;
+  outline: none !important;
 }
 </style>

@@ -1,8 +1,19 @@
-import * as THREE from 'three'
+import {
+    Color,
+    CubeTexture,
+    Int32Array,
+    Matrix3,
+    Matrix4,
+    Quaternion,
+    ShaderMaterial,
+    Texture,
+    UniformsUtils,
+    Vector2,
+    Vector3,
+    Vector4
+} from 'three'
 import {MeshBVHUniformStruct} from 'three-mesh-bvh'
-import {ShaderMaterial} from 'three'
-import {Color, CubeTexture, Int32Array, Matrix3, Matrix4, Quaternion, Texture, Vector2, Vector3, Vector4} from 'three'
-import {UniformsUtils} from 'three'
+
 export function shaderMaterial(
     uniforms: {
         [name: string]:

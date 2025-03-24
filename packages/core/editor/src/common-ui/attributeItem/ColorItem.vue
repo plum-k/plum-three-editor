@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {ElColorPicker, ElFormItem} from "element-plus";
+import {ElFormItem} from "element-plus";
 import {type IAttributeProps, useAttributeInject} from "../../hooks";
-import {ColorPickerPanel as TColorPickerPanel,ColorPicker as TColorPicker, ColorPickerPanelProps } from 'tdesign-vue-next';
+import {ColorPicker as TColorPicker} from 'tdesign-vue-next';
 import {defineModel} from "vue";
 // 外部直接传入的model
 const modelValue = defineModel<string>({
@@ -16,20 +16,20 @@ const props = withDefaults(defineProps<IAttributeProps>(), {
 })
 
 const {name, label} = props
-const {formContext, change, activeChange, focus,} = useAttributeInject(props,modelValue);
+const {formContext, change, activeChange, focus,} = useAttributeInject(props, modelValue);
 </script>
 
 <template>
   <el-form-item :label="label" size="small">
     <t-color-picker
         v-model="modelValue"
-        @change="change"
-        format="HEX"
-        borderless
-        size="small"
         :color-modes="['monochrome']"
+        borderless
+        format="HEX"
+        size="small"
+        @change="change"
     />
-<!--    <el-color-picker v-model="modelValue" @change="change" @focus="focus" @active-change="activeChange"/>-->
+    <!--    <el-color-picker v-model="modelValue" @change="change" @focus="focus" @active-change="activeChange"/>-->
   </el-form-item>
 </template>
 

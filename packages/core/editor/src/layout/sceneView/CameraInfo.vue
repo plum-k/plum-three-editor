@@ -4,6 +4,7 @@ import {useBus} from "../../hooks";
 import {reactive} from "vue";
 import {round} from "lodash-es";
 import {Vector3} from "three";
+
 const bus = useBus();
 
 bus.viewerInitSubject.subscribe((value) => {
@@ -15,7 +16,7 @@ bus.viewerInitSubject.subscribe((value) => {
   let position = new Vector3();
   let target = new Vector3();
 
-  const updateInfo = ()=>{
+  const updateInfo = () => {
     cameraControl.getPosition(position);
     cameraControl.getTarget(target);
 

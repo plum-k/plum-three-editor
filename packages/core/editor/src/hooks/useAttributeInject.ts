@@ -1,4 +1,4 @@
-import {inject, onMounted, ref,type ShallowRef, watch,defineModel} from "vue";
+import {inject, onMounted, ref, type ShallowRef, watch} from "vue";
 import {Subject} from "rxjs";
 import type {IObjectAttributeChange} from "./useAttributeProvide.ts";
 import {get, type PropertyPath} from "lodash-es";
@@ -28,7 +28,7 @@ export interface IAttributeProps {
  * @param props
  * @param modelValue
  */
-export const useAttributeInject = (props: IAttributeProps,modelValue: ShallowRef<any>) => {
+export const useAttributeInject = (props: IAttributeProps, modelValue: ShallowRef<any>) => {
     const objectAttributeChangeSubject = inject<Subject<IObjectAttributeChange>>("objectAttributeChangeSubject")!;
     const {name, isMiddle = false, getValue = (value) => value} = props;
     // 为 undefined 时，从getObject 中读取值

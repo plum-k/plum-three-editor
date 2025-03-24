@@ -1,7 +1,7 @@
-import * as  THREE from "three";
+import {BufferGeometry, Color, Group, InstancedMesh, Material, Mesh, SkinnedMesh, Vector2} from "three";
 import {toCreasedNormals} from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import {shaderMaterial, version} from "../tool";
-import {BufferGeometry, Color, Group, InstancedMesh, Material, Mesh, SkinnedMesh, Vector2} from "three";
+
 const material = /* @__PURE__ */ shaderMaterial(
     {
         screenspace: false,

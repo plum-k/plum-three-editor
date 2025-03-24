@@ -6,14 +6,13 @@ import {defineModel} from "vue";
 interface Props extends IAttributeProps {
   formProps?: Partial<InputProps>;
 }
+
 const modelValue = defineModel<string>({
   default: undefined
 })
-const props = withDefaults(defineProps<Props>(), {
-
-})
+const props = withDefaults(defineProps<Props>(), {})
 const {name, label} = props
-const {change,} = useAttributeInject(props,modelValue)
+const {change,} = useAttributeInject(props, modelValue)
 </script>
 
 <template>

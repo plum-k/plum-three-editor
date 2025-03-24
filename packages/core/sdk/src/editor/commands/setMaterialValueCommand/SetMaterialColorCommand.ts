@@ -1,9 +1,11 @@
 import {Command} from "../Command";
 
 import {Tool} from "../../../tool";
-import {invoke, isArray, PropertyPath} from "lodash-es";
+import {invoke, PropertyPath} from "lodash-es";
 import {Color, Object3D} from "three";
+
 const color = new Color();
+
 export class SetMaterialColorCommand extends Command<number> {
     type: string = 'SetMaterialColorCommand';
     materialSlot: number;
@@ -30,7 +32,7 @@ export class SetMaterialColorCommand extends Command<number> {
     setValue(isExecute: boolean) {
         const material = Tool.getObjectMaterial(this.object as Mesh, this.materialSlot);
         const value = isExecute ? this.newValue : this.oldValue;
-            invoke(material, [this.attributeName, "setHex"], value);
+        invoke(material, [this.attributeName, "setHex"], value);
         // this.editor.signals.materialChanged.dispatch(this.object, this.materialSlot);
     }
 

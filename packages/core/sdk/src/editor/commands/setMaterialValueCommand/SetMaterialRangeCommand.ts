@@ -1,7 +1,6 @@
 import {Command} from "../Command";
 
 
-
 export class SetMaterialRangeCommand extends Command<Array<number>> {
     type: string = 'SetMaterialRangeCommand';
     materialSlot: number;

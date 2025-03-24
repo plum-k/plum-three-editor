@@ -84,8 +84,8 @@ const edit = () => {
         </div>
         <div class="space-x-1">
           <el-tooltip
-              effect="dark"
               content="编辑"
+              effect="dark"
               placement="bottom"
           >
             <div class="inline-block" @click="edit">
@@ -93,8 +93,8 @@ const edit = () => {
             </div>
           </el-tooltip>
           <el-tooltip
-              effect="dark"
               content="预览"
+              effect="dark"
               placement="bottom"
           >
             <div class="inline-block">

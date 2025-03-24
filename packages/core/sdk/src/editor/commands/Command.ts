@@ -1,4 +1,3 @@
-
 import {PropertyPath, toPath} from "lodash-es";
 import {Editor} from "../Editor";
 

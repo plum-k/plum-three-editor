@@ -1,8 +1,6 @@
-
-import {Object3D, Sphere,Mesh,Material} from "three";
+import {Material, Mesh, Object3D, Sphere, Vector3} from "three";
 import {isDataTexture, isGroup, isMesh, isVector3} from "three-is";
 import {ESearchMode, ICondition, normalize, Search} from "./core";
-import {Vector3} from "three";
 
 export type Vector3Array = Array<Vector3>
 export type Num3Array = Array<[number, number, number]>
@@ -161,7 +159,7 @@ export class Tool {
      * 获取多个物体的包围盒
      * @param objects
      */
-    static   getBox3ByObject3ds(objects: Object3D[]) {
+    static getBox3ByObject3ds(objects: Object3D[]) {
         const box3 = new Box3();
         for (let i = 0; i < objects.length; i++) {
             const object = objects[i];
@@ -178,11 +176,12 @@ export class Tool {
         }
         return box3;
     }
+
     /**
      * 获取多个物体的包围球
      * @param objects
      */
-    static   getSphereByObject3ds(objects: Object3D[]) {
+    static getSphereByObject3ds(objects: Object3D[]) {
         const sphere = new Sphere();
         for (let i = 0; i < objects.length; i++) {
             const object = objects[i];
@@ -206,7 +205,7 @@ export class Tool {
      */
     static getSceneBox(scene: Scene) {
         const box3 = new Box3();
-       scene.traverse((mesh) => {
+        scene.traverse((mesh) => {
             if (isMesh(mesh)) {
                 mesh.geometry.computeBoundingBox();
                 if (mesh.geometry.boundingBox) {
@@ -216,13 +215,14 @@ export class Tool {
         });
         return box3;
     }
+
     /**
      * 获取场景的包围球
      * @param scene
      */
-    static  getSceneSphere(scene: Scene) {
+    static getSceneSphere(scene: Scene) {
         const sphere = new Sphere();
-       scene.traverse((mesh) => {
+        scene.traverse((mesh) => {
             if (isMesh(mesh)) {
                 mesh.geometry.computeBoundingSphere()
                 if (mesh.geometry.boundingSphere) {

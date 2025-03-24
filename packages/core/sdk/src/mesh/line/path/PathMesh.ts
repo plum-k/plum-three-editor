@@ -1,5 +1,5 @@
-import { Mesh, MeshBasicMaterial, MeshBasicMaterialParameters, Usage, Vector3 } from "three";
-import { PathGeometry, PathGeometryOptions, PathPointList } from "three.path";
+import {Mesh, MeshBasicMaterial, MeshBasicMaterialParameters, Usage, Vector3} from "three";
+import {PathGeometry, PathGeometryOptions, PathPointList} from "three.path";
 
 // 设置路径点列表选项接口
 export interface ISetPathPointListOptions {
@@ -31,7 +31,7 @@ export class PathMesh extends Mesh<PathGeometry> {
     // 构造函数
     constructor(_options: IPathMeshOptions) {
         super(); // 调用父类构造函数
-        const { pathPointListParams, pathGeometryParams, meshBasicMaterialParams } = _options;
+        const {pathPointListParams, pathGeometryParams, meshBasicMaterialParams} = _options;
 
         // 设置路径点列表
         this.setPathPointList(pathPointListParams);

@@ -1,9 +1,9 @@
 import {Component, IComponentOptions} from "../core/Component";
 
 import {isNil} from "lodash-es";
-import {IPick} from "../manager/EventManager";
+import {IPickInfo} from "../manager/EventManager";
 import {Subscription} from "rxjs";
-import {Vector3,Mesh,Group,BoxGeometry,MeshBasicMaterial,LineLoop,LineSegments,Float32BufferAttribute} from "three";
+import {BoxGeometry, Group, Mesh, MeshBasicMaterial, Vector3} from "three";
 
 export interface IDrawLine extends IComponentOptions {
 }
@@ -44,6 +44,7 @@ export class DrawLine<T extends abstract new (...args: any) => any> extends Comp
     init() {
         this.scene.add(this.pointGroup)
     }
+
     start() {
         this.initEvent();
     }
@@ -66,11 +67,11 @@ export class DrawLine<T extends abstract new (...args: any) => any> extends Comp
         // })
     }
 
-    onStopEvent(value: IPick) {
+    onStopEvent(value: IPickInfo) {
         this.stop();
     }
 
-    onAddPoint(value: IPick) {
+    onAddPoint(value: IPickInfo) {
         const {position, intersects} = value;
         this.points.push(position)
         switch (this.drawType) {
@@ -85,11 +86,11 @@ export class DrawLine<T extends abstract new (...args: any) => any> extends Comp
         }
     }
 
-    drawPoint(value: IPick) {
+    drawPoint(value: IPickInfo) {
 
     }
 
-    drawControlPoint(value: IPick) {
+    drawControlPoint(value: IPickInfo) {
         const {position, intersects} = value;
         if (this.DrawControlPointType) {
             const boxGeometry = new this.DrawControlPointType(1, 1, 1);
@@ -100,7 +101,7 @@ export class DrawLine<T extends abstract new (...args: any) => any> extends Comp
         }
     }
 
-    drawLine(value: IPick) {
+    drawLine(value: IPickInfo) {
         if (this.points.length > 1) {
             if (isNil(this.line)) {
                 if (this.DrawLineType) {

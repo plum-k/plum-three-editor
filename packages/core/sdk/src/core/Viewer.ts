@@ -22,11 +22,11 @@ import {
     RenderManager
 } from "../manager"; // 导入渲染管理类
 import {Editor} from "../editor"; // 导入编辑器类
-import {Pick} from "./Pick"; // 导入拾取类
+import {PickComponent} from "./PickComponent"; // 导入拾取类
 import {EnvironmentComponent} from "./environment"; // 导入环境类
 import {deepMergeRetain, DownloadTool, ESearchMode, ICondition, Search} from "../tool";
 import {CameraManager, DrawLine, MeasureTool} from "../control";
-import {CssRenderer} from "./CssRenderer";
+import {CssRendererComponent} from "./CssRendererComponent";
 import {OssApi} from "@plum-render/oss-api";
 import {Grid} from "../mesh";
 import {BehaviorSubject, Subject} from "rxjs";
@@ -58,12 +58,12 @@ export class Viewer {
     postProcessingComponent: PostProcessingComponent; // 后处理管理
     debug: DebugManager; // 调试管理
     loop: Loop; // 循环管理
-    cssRenderer!: CssRenderer; // CSS 渲染器
+    cssRendererComponent!: CssRendererComponent; // CSS 渲染器
     //-----------------
 
     cameraManager: CameraManager; // 相机控制
     sceneHelpers: Scene; // 场景辅助
-    pick: Pick; // 拾取
+    pick: PickComponent; // 拾取
     environmentManage: EnvironmentComponent; // 环境
     // @ts-ignore
     drawLine!: DrawLine; // 绘制直线
@@ -86,10 +86,14 @@ export class Viewer {
     // 场景保存进度
     sceneSaveProgressSubject = new Subject<ISceneSaveProgressEvent>();
     serializer: Package | undefined;
-    #enableGrid = false;
-
     isLoad = false;
-
+    prevActionsInUse = 0;
+    //------------------------- 添加网格 开始 -------------------
+    gridOptions: ISetGrid | undefined;
+    axesOptions: ISetAxes | undefined;
+    // 动画运动状态管理
+    actionMap = new Map<Object3D, AnimationAction[]>();
+    #enableGrid = false;
 
     constructor(container: string | HTMLDivElement, options: IViewerOptions = {}) {
         this.options = deepMergeRetain({
@@ -121,8 +125,8 @@ export class Viewer {
         this.postProcessingComponent = new PostProcessingComponent({viewer: this});
         this.helperManager = new HelperManager({viewer: this});
         this.assetManager = new AssetManager({viewer: this});
-        this.pick = new Pick({viewer: this});
-        this.cssRenderer = new CssRenderer({viewer: this});
+        this.pick = new PickComponent({viewer: this});
+        this.cssRendererComponent = new CssRendererComponent({viewer: this});
         this.environmentManage = new EnvironmentComponent({viewer: this});
         this.drawLine = new DrawLine({viewer: this});
         this.measureTool = new MeasureTool({viewer: this});
@@ -151,29 +155,43 @@ export class Viewer {
             this.animationMixerUpdate(value)
         })
     }
-    prevActionsInUse = 0;
-    animationMixerUpdate(value: IRenderSubjectValue) {
-        if (this.animationMixer) {
-            const actions = this.animationMixer.stats.actions;
-            if ( actions.inUse > 0 || this.prevActionsInUse > 0 ) {
-                this.prevActionsInUse = actions.inUse;
-                this.animationMixer.update(value.delta);
-                const selectObject =  this.editor.selector.selectObject;
-                // 骨骼运动时, 实时更新下包围盒
-                if (selectObject) {
-                    selectObject.updateWorldMatrix( false, true );
-                    this.editor.selector.selectionBox.box.setFromObject( selectObject, true );
-                }
-            }
-        }
-    }
-
-
-    //------------------------- 添加网格 开始 -------------------
-    gridOptions: ISetGrid | undefined;
 
     get isEnableGrid() {
         return this.grid !== undefined;
+    }
+
+    get isEnableAxes() {
+        return this.axesHelper !== undefined;
+    }
+
+    /**
+     * 创建 Viewer
+     * @param container 容器
+     * @param options 配置项
+     */
+    static async create(container: string | HTMLDivElement, options ?: IViewerOptions): Promise<Viewer> {
+        return new Promise<Viewer>((resolve) => {
+            const viewer = new Viewer(container, options);
+            viewer.initComponentSubject.subscribe(() => {
+                resolve(viewer);
+            });
+        });
+    }
+
+    animationMixerUpdate(value: IRenderSubjectValue) {
+        if (this.animationMixer) {
+            const actions = this.animationMixer.stats.actions;
+            if (actions.inUse > 0 || this.prevActionsInUse > 0) {
+                this.prevActionsInUse = actions.inUse;
+                this.animationMixer.update(value.delta);
+                const selectObject = this.editor.selector.selectObject;
+                // 骨骼运动时, 实时更新下包围盒
+                if (selectObject) {
+                    selectObject.updateWorldMatrix(false, true);
+                    this.editor.selector.selectionBox.box.setFromObject(selectObject, true);
+                }
+            }
+        }
     }
 
     setGrid(inOptions: ISetGrid) {
@@ -200,13 +218,6 @@ export class Viewer {
         }
         this.gridOptions = options;
     }
-
-
-    get isEnableAxes() {
-        return this.axesHelper !== undefined;
-    }
-
-    axesOptions: ISetAxes | undefined;
 
     setAxes(inOptions: ISetAxes) {
         const options = defaults(inOptions, {
@@ -240,20 +251,6 @@ export class Viewer {
             this.axesHelper.visible = visible;
         }
         this.axesOptions = options;
-    }
-
-    /**
-     * 创建 Viewer
-     * @param container 容器
-     * @param options 配置项
-     */
-    static async create(container: string | HTMLDivElement, options ?: IViewerOptions): Promise<Viewer> {
-        return new Promise<Viewer>((resolve) => {
-            const viewer = new Viewer(container, options);
-            viewer.initComponentSubject.subscribe(() => {
-                resolve(viewer);
-            });
-        });
     }
 
     /**
@@ -344,19 +341,19 @@ export class Viewer {
         return new Vector2(width, height); // 返回 Vector2 对象
     }
 
+    //--------------------- 截屏
+
     // 设置渲染器和控制器的大小
     setSize() {
         const {width, height} = this.getSize(); // 获取大小
         this.cameraManager.setSize(width, height); // 设置相机控制器大小
         this.renderManager.setSize(width, height); // 设置渲染器大小
-        this.cssRenderer.setSize(width, height); // 设置 CSS 渲染器大小
+        this.cssRendererComponent.setSize(width, height); // 设置 CSS 渲染器大小
         this.postProcessingComponent.setSize(width, height); // 设置后处理管理器大小
         this.renderManager.render(); // 重置后必须重新渲染. 不然会闪烁
         this.gizmoManager.update();
         this.gizmoManager.render();
     }
-
-    //--------------------- 截屏
 
     capture() {
         // 渲染一下, 不然会截取不到
@@ -396,6 +393,8 @@ export class Viewer {
         }
     }
 
+    //----------------------------------
+
     //-----------------
     /**
      * 同步场景
@@ -416,10 +415,6 @@ export class Viewer {
             this.scene = scene;
         }
     }
-
-    //----------------------------------
-    // 动画运动状态管理
-    actionMap = new Map<Object3D, AnimationAction[]>();
 
     /**
      * 获取动画运动状态

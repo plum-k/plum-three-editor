@@ -1,4 +1,3 @@
-
 import {Object3D} from "three";
 import {LineMaterial, LineMaterialParameters} from "three/examples/jsm/lines/LineMaterial.js";
 import {Line2 as THREELine2} from "three/examples/jsm/lines/Line2.js";

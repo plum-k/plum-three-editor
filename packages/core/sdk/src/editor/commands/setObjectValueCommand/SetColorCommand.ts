@@ -1,7 +1,7 @@
-
 import {invoke, isArray, PropertyPath} from "lodash-es";
 import {SetValueCommand} from "../SetValueCommand";
 import {Color, Object3D} from "three";
+
 const color = new Color();
 
 export class SetColorCommand extends SetValueCommand {
@@ -32,9 +32,11 @@ export class SetColorCommand extends SetValueCommand {
             invoke(this.object, [this.attributeName, "setHex"], value);
         }
     }
+
     update(cmd: SetColorCommand) {
         this.newValue = cmd.newValue;
     }
+
     execute() {
         this.setValue(true);
     }

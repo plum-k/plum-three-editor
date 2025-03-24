@@ -1,5 +1,5 @@
 export * from "./Component";
-export * from "./CssRenderer";
-export * from "./Pick";
+export * from "./CssRendererComponent";
+export * from "./PickComponent";
 export * from "./Viewer";
 export * from "./environment";

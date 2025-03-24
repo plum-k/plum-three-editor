@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ElEmpty} from "element-plus";
-import {onMounted, reactive, ref, watch} from "vue";
+import {reactive, ref, watch} from "vue";
 import {isNil} from "lodash-es";
 import {
   isBoxGeometry,
@@ -9,14 +9,11 @@ import {
   isCircleGeometry,
   isCylinderGeometry,
   isDodecahedronGeometry,
-  isExtrudeGeometry,
   isIcosahedronGeometry,
-  isLatheGeometry,
   isMesh,
   isOctahedronGeometry,
   isPlaneGeometry,
   isRingGeometry,
-  isShapeGeometry,
   isSphereGeometry,
   isTetrahedronGeometry
 } from "three-is";
@@ -104,7 +101,7 @@ const sync = () => {
 const {} = useBindSubscribe({
   fun: sync,
   isMounted: false,
-  isViewerInit:true,
+  isViewerInit: true,
   isBindCallFun: false,
 })
 </script>

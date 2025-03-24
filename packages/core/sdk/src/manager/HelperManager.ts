@@ -1,4 +1,3 @@
-import * as  THREE from "three";
 import {Component, IComponentOptions} from "../core/Component";
 
 export interface IHelperManagerOptions extends IComponentOptions {

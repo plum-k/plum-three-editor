@@ -1,5 +1,5 @@
 declare module 'three.path' {
-    import {BufferGeometry, Usage,Vector3} from "three";
+    import {BufferGeometry, Usage, Vector3} from "three";
 
     /**
      * PathPoint

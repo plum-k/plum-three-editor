@@ -1,5 +1,5 @@
 import {Component, IComponentOptions} from "../../core/Component";
-import {IPick} from "../../manager";
+import {IPickInfo} from "../../manager";
 
 export interface IMeasureOptions extends IComponentOptions {
 
@@ -11,14 +11,14 @@ export class Measure<T extends IMeasureOptions = IMeasureOptions> extends Compon
         super(options);
     }
 
-    onAddPointEvent(value: IPick) {
+    onAddPointEvent(value: IPickInfo) {
     }
 
-    onMoveEvent(value: IPick) {
+    onMoveEvent(value: IPickInfo) {
 
     }
 
-    onEndEvent(value: IPick) {
+    onEndEvent(value: IPickInfo) {
 
     }
 }

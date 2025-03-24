@@ -6,13 +6,13 @@ import {defineModel} from "vue";
 interface Props extends IAttributeProps {
 
 }
+
 const modelValue = defineModel<boolean>({
   default: undefined
 })
-const props = withDefaults(defineProps<Props>(), {
-})
+const props = withDefaults(defineProps<Props>(), {})
 const {name, label} = props
-const {change, } = useAttributeInject(props,modelValue)
+const {change,} = useAttributeInject(props, modelValue)
 </script>
 
 <template>

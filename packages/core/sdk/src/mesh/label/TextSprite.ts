@@ -1,5 +1,5 @@
+import {LinearFilter, Object3D, Sprite, SpriteMaterial, Texture} from "three";
 
-import {Object3D, Sprite, SpriteMaterial, Texture, LinearFilter} from "three";
 interface Color {
     r: number;
     g: number;

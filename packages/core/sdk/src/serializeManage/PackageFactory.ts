@@ -1,6 +1,5 @@
-import {ChunkSerialize, Package, PartPackage} from "./package";
+import {ChunkSerialize, Package, PartPackage, SourcePackage} from "./package";
 import {Viewer} from "../core";
-import {SourcePackage} from "./package";
 
 export const packageMap = new Map<string, typeof Package>();
 

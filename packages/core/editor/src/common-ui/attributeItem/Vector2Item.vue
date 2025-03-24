@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-import {ElFormItem, type InputNumberProps} from "element-plus";
-import {type IAttributeProps, useAttributeInject} from "../../hooks";
+import {ElFormItem} from "element-plus";
 import InputNumberItem from "./InputNumberItem.vue";
-import {defineModel} from "vue";
 
 interface Props {
   /**
@@ -28,13 +26,13 @@ const {name, label} = props
       <div>
         x:
       </div>
-      <input-number-item  :isRotation="isRotation" :name="[name,'x']" label=""/>
+      <input-number-item :isRotation="isRotation" :name="[name,'x']" label=""/>
     </div>
     <div class="flex  gap-1.5 mt-1">
       <div>
         y:
       </div>
-      <input-number-item  :isRotation="isRotation" :name="[name,'y']" label=""/>
+      <input-number-item :isRotation="isRotation" :name="[name,'y']" label=""/>
     </div>
   </el-form-item>
 </template>
