@@ -16,7 +16,6 @@ import {
     DebugManager,
     EventManager,
     HelperManager,
-    IRenderSubjectValue,
     Loop,
     PostProcessingComponent,
     RenderManager
@@ -41,6 +40,7 @@ import {
     ISetGrid,
     IViewerOptions
 } from "../interface";
+import {IRenderSubjectValue} from "../interface/EventManager/IRenderSubjectValue";
 
 export class Viewer {
     options: IViewerOptions; // 存储选项

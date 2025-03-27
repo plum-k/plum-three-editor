@@ -4,6 +4,7 @@ import {deepMergeRetain, Tool} from "../../../tool";
 import {
     Color,
     Float32BufferAttribute,
+    Line,
     LineBasicMaterial,
     LineDashedMaterial,
     LineDashedMaterialParameters,
@@ -52,14 +53,14 @@ export const LineDefaultsOptions: ILineOptions = {
 }
 
 // Line 类，继承自 Object3D
-export class Line extends Object3D {
+export class PLine extends Object3D {
     line!: Line | LineLoop | LineSegments; // 线条对象
     material!: LineDashedMaterial | LineBasicMaterial; // 材质对象
     options: Required<ILineOptions> = LineDefaultsOptions as Required<ILineOptions>; // 选项
     isPlumLine = true; // 是否为梅花线
     points: Array<Vector3> = []; // 控制点数组
 
-    // 构造函数
+
     constructor(_options: ILineOptions) {
         super(); // 调用父类构造函数
         this.options = deepMergeRetain(this.options, _options); // 合并默认选项和传入选项

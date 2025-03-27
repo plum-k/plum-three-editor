@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Vite App</title>
+    <style>
+        html, body, #app {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+</div>
+<script type="importmap">
+    {
+      "imports": {
+        "tweakpane": "./tweakpane.min.js",
+        "@plum-render/babylon-sdk": "./plum-render-babylon-sdk.js",
+        "@babylonjs/core": "./@babylonjs/core/index.js",
+        "@babylonjs/addons": "./@babylonjs/addons/index.js",
+        "@babylonjs/loaders": "./@babylonjs/loaders/index.js",
+        "@babylonjs/materials": "./@babylonjs/materials/index.js",
+        "@babylonjs/serializers": "./@babylonjs/serializers/index.js",
+        "@babylonjs/havok": "./@babylonjs/havok/HavokPhysics_es.js",
+        "@babylonjs/core/": "./@babylonjs/core/",
+        "@babylonjs/loaders/": "./@babylonjs/loaders/"
+      }
+    }
+</script>
+<script async type="module">
+    import {Viewer} from "@plum-render/babylon-sdk";
+
+    import {PathTubeMesh, Viewer} from "@plum-render/three-sdk";
+    import {Vector3} from "three"
+
+    const _viewer = new Viewer(document.getElementById('app'), {
+        isCreateDefaultLight: true,
+        isCreateDefaultEnvironment: true
+    })
+
+    const points = [new Vector3()];
+    let oldType = 2;
+    for (let i = 0; i < 500; i++) {
+        const old = points[points.length - 1];
+        let type = Math.floor(Math.random() * 100) % 3;
+        while (oldType == type) {
+            type = Math.floor(Math.random() * 100) % 3;
+        }
+        oldType = type;
+        const offset = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1);
+        points.push(new Vector3(
+            type === 0 ? (old.x + offset) : old.x,
+            type === 1 ? (old.y + offset) : old.y,
+            type === 2 ? (old.z + offset) : old.z
+        ));
+    }
+
+    const pathTubeMesh = new PathTubeMesh({
+        pathPointListParams: {
+            points: points
+        }
+    });
+
+    _viewer.scene.add(pathTubeMesh)
+
+</script>
+</body>
+</html>

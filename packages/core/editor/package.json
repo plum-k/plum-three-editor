@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "tdesign-vue-next": "^1.11.4",
+    "tdesign-vue-next": "^1.11.5",
     "@imengyu/vue3-context-menu": "^1.4.5",
     "@plum-render/three-sdk": "workspace:*",
     "@vueuse/core": "^13.0.0",
@@ -40,8 +40,8 @@
     "typescript": "^5.8.2",
     "vite": "^6.2.3",
     "vue-tsc": "^2.2.8",
-    "tailwindcss": "^4.0.15",
+    "tailwindcss": "^4.0.17",
     "@types/three": "^0.174.0",
-    "@tailwindcss/vite": "^4.0.15"
+    "@tailwindcss/vite": "^4.0.17"
   }
 }

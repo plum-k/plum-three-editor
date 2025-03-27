@@ -19,6 +19,7 @@ const {} = useBindSubscribe({
   fun: () => {
     toggle();
     animationsToList();
+    console.log("切换",bus.selectObject)
   },
   isMounted: true,
   isViewerInit: true,
@@ -33,6 +34,7 @@ const animationsList = ref<{ name: string, isRunning: boolean }[]>([])
 const animationsToList = () => {
   if (!bus.selectObject) return;
   const animations = bus.selectObject.animations;
+  animationsList.value = []
   const viewer = bus.viewer;
   for (let i = 0; i < animations.length; i++) {
     const animation = animations[i];

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Vite App</title>
+    <style>
+        html, body, #app {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+</div>
+<script type="importmap">
+    {
+      "imports": {
+        "tweakpane": "./tweakpane.min.js",
+        "@plum-render/babylon-sdk": "./plum-render-babylon-sdk.js",
+        "@babylonjs/core": "./@babylonjs/core/index.js",
+        "@babylonjs/addons": "./@babylonjs/addons/index.js",
+        "@babylonjs/loaders": "./@babylonjs/loaders/index.js",
+        "@babylonjs/materials": "./@babylonjs/materials/index.js",
+        "@babylonjs/serializers": "./@babylonjs/serializers/index.js",
+        "@babylonjs/havok": "./@babylonjs/havok/HavokPhysics_es.js",
+        "@babylonjs/core/": "./@babylonjs/core/",
+        "@babylonjs/loaders/": "./@babylonjs/loaders/"
+      }
+    }
+</script>
+<script async type="module">
+    import {Viewer} from "@plum-render/babylon-sdk";
+
+    import {PathTubeMesh, Viewer} from "@plum-render/three-sdk";
+    import {Vector3} from "three"
+
+    import {PathMesh, PathTubeMesh, Viewer} from "@plum-render/three-sdk";
+    import {Vector3} from "three"
+
+    const _viewer = new Viewer(document.getElementById('app'), {
+        isCreateDefaultLight: true,
+        isCreateDefaultEnvironment: true
+    })
+
+    const points = [
+        new Vector3(-5, 0, 5),
+        new Vector3(-5, 0, -5),
+        new Vector3(5, 0, -5),
+        new Vector3(5, 0, 5)
+    ];
+
+    const pathTubeMesh = new PathMesh({
+        pathPointListParams: {
+            points: points,
+            up: new Vector3(0, 1, 0),
+            close: true
+        }
+    });
+
+    _viewer.scene.add(pathTubeMesh)
+
+
+</script>
+</body>
+</html>

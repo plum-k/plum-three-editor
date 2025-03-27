@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./splitpanes.css";
 
 html, body, #app {
     padding: 0;

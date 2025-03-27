@@ -2,11 +2,12 @@ import {AnimationClip, Mesh, Object3D, Points, Scene} from "three";
 import {STLExporter, STLExporterOptions} from "three/examples/jsm/exporters/STLExporter.js";
 import {PLYExporter, PLYExporterOptions} from "three/examples/jsm/exporters/PLYExporter.js";
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter.js";
-import {isString} from "lodash-es";
+import {defaults, isArrayBuffer, isString} from "lodash-es";
 import {DownloadTool} from "./DownloadTool";
 import {GLTFExporter, GLTFExporterOptions} from "three/examples/jsm/exporters/GLTFExporter.js";
 import {DRACOExporter} from "three/examples/jsm/exporters/DRACOExporter.js";
 import {USDZExporter} from "three/examples/jsm/exporters/USDZExporter.js";
+import {DRACOExporterOptions} from "three/examples/jsm/exporters/DRACOExporter";
 
 export class ExporterTool {
     static instance: ExporterTool;
@@ -33,19 +34,13 @@ export class ExporterTool {
         return ExporterTool.instance;
     }
 
-    // 必须导出 场景
-
-    // todo
-    exportDRC(object: Mesh | Points, InOptions?: {
-        decodeSpeed: number;
-        encodeSpeed: number;
-        encoderMethod: number;
-        quantization: number[];
-        exportUvs: boolean;
-        exportNormals: boolean;
-        exportColor: boolean;
-    }) {
-        const options = {
+    /**
+     * 导出DRC模型
+     * @param object
+     * @param InOptions
+     */
+    exportDRC(object: Mesh | Points, InOptions?: DRACOExporterOptions) {
+        const options = defaults({
             decodeSpeed: 5,
             encodeSpeed: 5,
             encoderMethod: DRACOExporter.MESH_EDGEBREAKER_ENCODING,
@@ -53,13 +48,44 @@ export class ExporterTool {
             exportUvs: true,
             exportNormals: true,
             exportColor: object.geometry.hasAttribute('color')
-        };
-
+        }, InOptions)
         const result = this.dRACOExporter.parse(object, options);
         DownloadTool.saveArrayBuffer(result, 'model.drc');
     }
 
-    exportGLB(input: Object3D, options?: GLTFExporterOptions) {
+    /**
+     * 导出场景
+     * @param scene
+     * @param name
+     * @param options
+     */
+    exportSceneGLB(scene: Scene, name: string = "scene.glb", options?: GLTFExporterOptions) {
+        const animations = this.getAnimations(scene);
+
+        const optimizedAnimations = [];
+        for (const animation of animations) {
+            optimizedAnimations.push(animation.clone().optimize());
+        }
+        this.gLTFExporter.parseAsync(scene, {
+            binary: true, animations: optimizedAnimations,
+            ...options
+        }).then((result) => {
+            if (isArrayBuffer(result)) {
+                DownloadTool.saveArrayBuffer(result, name);
+            } else {
+                DownloadTool.saveString(JSON.stringify(result, null, 2), name);
+            }
+            console.log("result", result)
+        })
+    }
+
+    /**
+     * 导出glb模型
+     * @param input
+     * @param name
+     * @param options
+     */
+    exportGLB(input: Object3D, name: string = "scene.glb", options?: GLTFExporterOptions) {
         const animations = this.getAnimations(input);
 
         const optimizedAnimations = [];
@@ -72,32 +98,37 @@ export class ExporterTool {
             binary: true, animations: optimizedAnimations,
             ...options
         }).then((result) => {
-            DownloadTool.saveArrayBuffer(result, 'scene.glb');
+            DownloadTool.saveArrayBuffer(result, name);
         })
     }
 
 
-    exportOBJ(object: Object3D) {
+    /**
+     * 导出为OBJ
+     * @param object
+     * @param name
+     */
+    exportOBJ(object: Object3D, name: string = "model.obj") {
         DownloadTool.saveString(this.oBJExporter.parse(object), 'model.obj');
     }
 
-    exportPLY(object: Object3D, options?: PLYExporterOptions) {
+    exportPLY(object: Object3D, name: string = "model.ply", options?: PLYExporterOptions) {
         this.pLYExporter.parse(object, (result) => {
             DownloadTool.saveArrayBuffer(result, 'model.ply');
         }, options);
     }
 
-    exportSTL(scene: Object3D, options?: STLExporterOptions) {
+    exportSTL(scene: Object3D,name: string = "model.stl",  options?: STLExporterOptions) {
         let result = this.sTLExporter.parse(scene, options)
         if (isString(result)) {
-            DownloadTool.saveString(result, 'model.stl');
+            DownloadTool.saveString(result, name);
         } else {
-            DownloadTool.saveArrayBuffer(result, 'model.stl');
+            DownloadTool.saveArrayBuffer(result, name);
         }
     }
 
     exportUSDZ(scene: Scene) {
-        this.uSDZExporter.parse(scene).then((res) => {
+        this.uSDZExporter.parseAsync(scene).then((res) => {
             DownloadTool.saveArrayBuffer(res, 'model.usdz');
         })
     }

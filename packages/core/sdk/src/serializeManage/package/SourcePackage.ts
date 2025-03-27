@@ -11,7 +11,7 @@ export interface ISourcePackageOptions extends IPackageOptions {
 }
 
 /**
- * 对场景进行分包序列化, 可以分片加载
+ *
  */
 export class SourcePackage extends Package {
     static Type = "three";
@@ -69,8 +69,6 @@ export class SourcePackage extends Package {
             // 加载离线的包
             this.getPackByPath()
         }
-
-
     }
 
     /**
@@ -90,9 +88,10 @@ export class SourcePackage extends Package {
     // 获取 three 场景的json数据
     toJson() {
         const sceneJson = this.viewer.scene.toJSON();
-        return {
-            scene: sceneJson
-        }
+        // return {
+        //     scene: sceneJson
+        // }
+        return sceneJson;
     }
 
     uploadPack(blob: Blob) {

@@ -95,7 +95,7 @@ export class Loop extends Component {
             } else {
                 this.renderManager.render(timestamp)
             }
-            this.cssRenderer.render();
+            this.cssRendererComponent.render();
 
             this.eventManager.renderSubject.next({
                 timestamp, delta

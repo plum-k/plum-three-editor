@@ -2,7 +2,7 @@
 import {Button as TButton, Dropdown as TDropdown, type DropdownProps} from 'tdesign-vue-next';
 
 import {useBus} from "../../hooks";
-import {ChunkSerialize, ExporterTool} from "@plum-render/three-sdk";
+import {ChunkSerialize, ExporterTool, SourcePackage} from "@plum-render/three-sdk";
 import {isMesh} from "three-is";
 import {ApplicationApi} from "../../api";
 import {useRoute} from "vue-router";
@@ -10,7 +10,7 @@ import {useRoute} from "vue-router";
 const bus = useBus();
 
 enum FileFormat {
-  DRC = "DRC",
+  // DRC = "DRC",
   GLB = "GLB",
   GLTF = "GLTF",
   OBJ = "OBJ",
@@ -48,7 +48,7 @@ const options: DropdownProps['options'] = [
     content: '导出模型',
     value: '导出模型',
     children: [
-      {content: FileFormat.DRC, value: FileFormat.DRC},
+      // {content: FileFormat.DRC, value: FileFormat.DRC},
       {content: FileFormat.GLB, value: FileFormat.GLB},
       {content: FileFormat.GLTF, value: FileFormat.GLTF},
       {content: FileFormat.OBJ, value: FileFormat.OBJ},
@@ -77,6 +77,10 @@ const clickHandler: DropdownProps['onClick'] = (data) => {
       break;
     }
     case "原生": {
+      const viewer = bus.viewer;
+      if (!viewer) return
+      const sourcePackage = new SourcePackage({viewer});
+      sourcePackage.downJson();
       break;
     }
     case "压缩": {
@@ -85,17 +89,17 @@ const clickHandler: DropdownProps['onClick'] = (data) => {
     case "分包": {
       break;
     }
-    case FileFormat.DRC: {
-      const object = viewer?.editor.selector.selectObject
-      if (isMesh(object)) {
-        exporterTool.exportDRC(object)
-      }
-      break;
-    }
+    // case FileFormat.DRC: {
+    //   const object = viewer?.editor.selector.selectObject
+    //   if (isMesh(object)) {
+    //     exporterTool.exportDRC(object)
+    //   }
+    //   break;
+    // }
     case FileFormat.GLB: {
-      const object = viewer?.scene
+      const object = viewer?.scene;
       if (object) {
-        exporterTool.exportGLB(object, {
+        exporterTool.exportSceneGLB(object, "scene.glb",{
           binary: true,
         })
       }
@@ -104,7 +108,9 @@ const clickHandler: DropdownProps['onClick'] = (data) => {
     case FileFormat.GLTF: {
       const object = viewer?.scene
       if (object) {
-        exporterTool.exportGLB(object)
+        exporterTool.exportSceneGLB(object,"scene.gltf",{
+          binary: false,
+        })
       }
       break;
     }
@@ -118,14 +124,16 @@ const clickHandler: DropdownProps['onClick'] = (data) => {
     case FileFormat.PLY: {
       const object = viewer?.scene
       if (object) {
-        exporterTool.exportPLY(object)
+        exporterTool.exportPLY(object,"scene.ply",{
+
+        })
       }
       break;
     }
     case FileFormat.PLY_BINARY: {
       const object = viewer?.scene
       if (object) {
-        exporterTool.exportPLY(object, {
+        exporterTool.exportPLY(object, "scene-binary.ply",{
           binary: true,
         })
       }
@@ -134,14 +142,14 @@ const clickHandler: DropdownProps['onClick'] = (data) => {
     case FileFormat.STL: {
       const object = viewer?.scene
       if (object) {
-        exporterTool.exportSTL(object)
+        exporterTool.exportSTL(object,"model.stl")
       }
       break;
     }
     case FileFormat.STL_BINARY: {
       const object = viewer?.scene
       if (object) {
-        exporterTool.exportSTL(object, {
+        exporterTool.exportSTL(object, "model-binary.stl",{
           binary: true,
         })
       }

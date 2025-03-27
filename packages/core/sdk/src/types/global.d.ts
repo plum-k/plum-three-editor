@@ -11,5 +11,10 @@ declare module 'three' {
         }
     }
 }
+declare module 'three/examples/jsm/exporters/DRACOExporter.js' {
+    class DRACOExporter {
+        static MESH_EDGEBREAKER_ENCODING: number;
+    }
+}
 
 export {}

@@ -23,7 +23,6 @@ export class CssRendererComponent extends Component {
     // 用于处理渲染事件的订阅
     subscription: Subscription | undefined = undefined;
 
-    // 构造函数，初始化渲染器
     constructor(options: ICssRendererComponentOptions) {
         super(options);
         this.css2DRenderer = new CSS2DRenderer(); // 初始化 CSS2DRenderer

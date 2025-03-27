@@ -70,7 +70,7 @@ export class Component<T extends IComponentOptions = IComponentOptions> {
         return this.viewer.loop;
     }
 
-    get cssRenderer() {
-        return this.viewer.cssRenderer;
+    get cssRendererComponent() {
+        return this.viewer.cssRendererComponent;
     }
 }

@@ -1,5 +1,5 @@
 import {CatmullRomCurve3} from "three";
-import {ILineOptions, Line} from "./Line";
+import {ILineOptions, PLine} from "./PLine";
 
 // 定义曲线类型的枚举
 export enum CurveType {
@@ -25,11 +25,11 @@ export const CatmullRomLineDefaultsOptions: ICatmullRomLineOptions = {
 }
 
 // CatmullRomLine 类，继承自 Line 类
-export class CatmullRomLine extends Line {
+export class CatmullRomLine extends PLine {
     catmullRomCurve3: CatmullRomCurve3 = new CatmullRomCurve3(); // 创建 CatmullRomCurve3 实例
     declare options: Required<ICatmullRomLineOptions>; // 声明选项
 
-    // 构造函数
+
     constructor(_options: ICatmullRomLineOptions) {
         super({
             ...CatmullRomLineDefaultsOptions, // 合并默认选项和传入选项

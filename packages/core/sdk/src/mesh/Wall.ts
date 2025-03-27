@@ -32,7 +32,7 @@ export class Wall extends Object3D {
     material: MeshStandardMaterial; // 材质
     mesh: Mesh; // 网格对象
 
-    // 构造函数
+
     constructor(options: IWallOption) {
         super(); // 调用父类构造函数
         const {width, height, path, extrudeGeometryOptions} = options; // 解构选项

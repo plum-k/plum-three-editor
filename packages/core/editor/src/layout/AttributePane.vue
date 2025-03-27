@@ -13,7 +13,7 @@ const activeName = useProvideRef("tabActiveName", '属性');
 </script>
 
 <template>
-  <el-tabs v-model="activeName" :tab-position="'left'" class="h-full">
+  <el-tabs v-model="activeName" :tab-position="'left'" class="h-full w-full">
     <el-tab-pane label="属性" name="属性">
       <el-scrollbar class="h-full">
         <object-attribute tab-name="属性"/>

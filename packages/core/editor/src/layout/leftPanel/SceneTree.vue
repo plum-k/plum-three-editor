@@ -87,6 +87,7 @@ const handleNodeContextmenu = (evt: Event, data: TreeNodeData, node: TreeNode) =
       const visible = object.visible;
       const hasOutline = viewer?.postProcessingComponent.objectHasOutline(object);
       const hasSelectiveBloomEffectObject = viewer?.postProcessingComponent.hasSelectiveBloomEffectObject(object);
+
       ContextMenu.showContextMenu({
         x: (evt as MouseEvent).x,
         y: (evt as MouseEvent).y,

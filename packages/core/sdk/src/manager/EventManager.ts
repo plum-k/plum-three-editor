@@ -80,12 +80,9 @@ export class EventManager extends Component {
             const array = Tool.getMousePosition(event, this.container);
             if (event.button === 0) {
                 this.onLeftDownPosition.fromArray(array);
-                // 
             } else if (event.button === 2) {
                 this.onRightDownPosition.fromArray(array);
-                // 
             }
-            // 
         })
 
         //鼠标抬起事件
@@ -94,19 +91,16 @@ export class EventManager extends Component {
             const array = Tool.getMousePosition(event, this.container);
             if (event.button === 0) {
                 this.onLeftUpPosition.fromArray(array);
+                // 鼠标按下和抬起时, 移动距离为0 时, 为一次点击事件
                 if (this.onLeftDownPosition.distanceTo(this.onLeftUpPosition) === 0) {
                     this.leftClickSubject.next(event);
                 }
-                // 
             } else if (event.button === 2) {
                 this.onRightUpPosition.fromArray(array);
                 if (this.onRightDownPosition.distanceTo(this.onRightUpPosition) === 0) {
                     this.rightClickSubject.next(event);
                 }
-                // 
             }
-
-            // 
         })
 
         // 左键双击

@@ -13,10 +13,15 @@ const resize = () => {
     viewer.eventManager.resizeSubject.next(true);
   }
 }
+
+const ready = ()=>{
+  console.log("111")
+}
+
 </script>
 
 <template>
-  <splitpanes class="default-theme" style="height: calc(100% - 32px)" @resize="resize">
+  <splitpanes class="default-theme" style="height: calc(100% - 32px)" @resize="resize" @ready="ready">
     <pane size="20">
       <LeftPanel/>
     </pane>
