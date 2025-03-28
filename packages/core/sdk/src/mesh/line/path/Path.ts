@@ -1,6 +1,8 @@
 import {PathGeometry, PathPointList, PathTubeGeometry} from "three.path";
 
 import {Mesh, MeshBasicMaterial, Vector3} from "three";
+import {Viewer} from "../../../core";
+import {Subscription} from "rxjs";
 
 // 设置路径点列表选项接口
 export interface ISetPathPointListOptions {
@@ -41,5 +43,69 @@ export class Path extends Mesh {
 
     // 设置路径点
     geometryUpdate(options?: unknown) {
+    }
+
+    subscription: Subscription | undefined = undefined;
+
+    startTick(viewer: Viewer) {
+        this.subscription = viewer.eventManager.renderSubject.subscribe((event) => {
+            this.tick(event.delta);
+        });
+    }
+
+    stopTick() {
+        this.subscription?.unsubscribe();
+    }
+
+    progressAnimationSpeed = 0.01;
+
+    set progress(value: number) {
+
+    }
+
+    get progress() {
+        return 0
+    }
+
+    playProgressAnimation = false;
+
+    progressPLay() {
+        this.playProgressAnimation = true;
+    }
+
+    /**
+     * 更新几何体
+     */
+    tickGeometryUpdate(){}
+    progressAnimationTick() {
+        const distance = this.pathPointList.distance();
+        if (distance > 0) {
+            this.progress += this.progressAnimationSpeed / distance;
+            if (this.progress > 1) {
+                this.playProgressAnimation = false;
+                this.progress = 1;
+            }
+            this.tickGeometryUpdate();
+        } else {
+            this.playProgressAnimation = false;
+            this.progress = 1;
+        }
+    }
+    uvAnimationSpeed = 0.01;
+    playUvAnimation = false;
+    uvAnimationTick() {
+        const texture = this.material.map;
+        if (texture) {
+            texture.offset.x += this.uvAnimationSpeed;
+            texture.repeat.x = 1;
+        }
+    }
+    tick(deltaTime: number) {
+        if (this.playProgressAnimation) {
+            this.progressAnimationTick();
+        }
+        if (this.playUvAnimation) {
+            this.uvAnimationTick();
+        }
     }
 }

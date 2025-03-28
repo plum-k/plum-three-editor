@@ -1,6 +1,7 @@
 import {MeshBasicMaterial, MeshBasicMaterialParameters} from "three";
 import {PathTubeGeometry, PathTubeGeometryOptions} from "three.path";
 import {IPathOptions, Path} from "./Path";
+import {defaults} from "lodash-es";
 
 // 路径管道网格选项接口
 export interface IPathTubeMeshOptions extends IPathOptions {
@@ -11,6 +12,20 @@ export interface IPathTubeMeshOptions extends IPathOptions {
 
 // PathTubeMesh 类，继承自 Mesh
 export class PathTubeMesh extends Path {
+    pathTubeGeometryParams: Required<PathTubeGeometryOptions> = {
+        radius: 0.1,
+        radialSegments: 8,
+        progress: 1,
+        startRad: 0
+    }
+
+    set progress(value: number) {
+        this.pathTubeGeometryParams.progress = value;
+    }
+
+    get progress() {
+        return this.pathTubeGeometryParams.progress!;
+    }
 
     constructor(_options: IPathTubeMeshOptions) {
         super(_options); // 调用父类构造函数
@@ -20,6 +35,15 @@ export class PathTubeMesh extends Path {
             , meshBasicMaterialParams,
             generateUv2,
         } = _options; // 解构选项
+
+        if (pathTubeGeometryParams) {
+            this.pathTubeGeometryParams = defaults({
+                radius: 0.1,
+                radialSegments: 8,
+                progress: 1,
+                startRad: 0
+            }, pathTubeGeometryParams);
+        }
 
         // 设置路径点列表
         this.setPathPointList(pathPointListParams);
@@ -43,5 +67,9 @@ export class PathTubeMesh extends Path {
     // 设置路径点
     geometryUpdate(options?: PathTubeGeometryOptions) {
         this.geometry.update(this.pathPointList, options); // 更新几何体
+    }
+
+    tickGeometryUpdate() {
+        this.geometry.update(this.pathPointList, this.pathTubeGeometryParams);
     }
 }

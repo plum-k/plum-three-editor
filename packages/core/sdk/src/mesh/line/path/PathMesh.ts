@@ -1,24 +1,39 @@
 import {MeshBasicMaterial, MeshBasicMaterialParameters, Usage} from "three";
-import {PathGeometry, PathGeometryOptions} from "three.path";
+import {PathGeometry, PathGeometryOptions, PathTubeGeometryOptions} from "three.path";
 import {StaticDrawUsage} from "three/src/constants";
 import {IPathOptions, Path} from "./Path";
+import {defaults} from "lodash-es";
 
 // 路径网格选项接口
 export interface IPathMeshOptions extends IPathOptions {
     usage?: Usage; // 几何体使用方式
     generateUv2?: boolean; // 是否生成 UV2
-    pathGeometryParams?: PathGeometryOptions; // 路径几何体参数
+    pathGeometryOptions?: PathGeometryOptions; // 路径几何体参数
     meshBasicMaterialParams?: MeshBasicMaterialParameters; // 材质参数
 }
 // PathMesh 类，继承自 Mesh
 export class PathMesh extends Path {
+    pathGeometryOptions: Required<PathGeometryOptions> = {
+        width: 0.1,
+        progress: 1,
+        arrow: true,
+        side: 'both'
+    }
     constructor(_options: IPathMeshOptions) {
         super(_options); // 调用父类构造函数
         const {
-            pathPointListParams, pathGeometryParams, meshBasicMaterialParams,
+            pathPointListParams, pathGeometryOptions, meshBasicMaterialParams,
             usage,
             generateUv2
         } = _options;
+        if (pathGeometryOptions) {
+            this.pathGeometryOptions = defaults({
+                width: 0.1,
+                progress: 1,
+                arrow: true,
+                side: 'both'
+            }, pathGeometryOptions);
+        }
 
         // 设置路径点列表
         this.setPathPointList(pathPointListParams);
@@ -26,7 +41,7 @@ export class PathMesh extends Path {
         // 创建几何体
         this.geometry = new PathGeometry({
             pathPointList: this.pathPointList, // 指定路径点列表
-            options: pathGeometryParams, // 传入几何体选项
+            options: pathGeometryOptions, // 传入几何体选项
             usage: usage ?? StaticDrawUsage // 设置几何体使用方式
         }, generateUv2 ?? false); // 生成 UV2
 
@@ -39,7 +54,9 @@ export class PathMesh extends Path {
             ...meshBasicMaterialParams // 合并传入的材质参数
         });
     }
-
+    tickGeometryUpdate() {
+        this.geometry.update(this.pathPointList, this.pathGeometryOptions);
+    }
     // 设置路径点
     geometryUpdate(options?: PathGeometryOptions) {
         this.geometry.update(this.pathPointList, options); // 更新几何体
