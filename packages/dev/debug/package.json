@@ -20,12 +20,12 @@
     "build": "tsc && vite build"
   },
   "devDependencies": {
-    "three": "^0.174.0",
-    "postprocessing": "^6.37.1",
+    "three": "^0.175.0",
+    "postprocessing": "^6.37.2",
     "@plum-render/three-sdk": "workspace:*",
     "@tweakpane/core": "^2.0.5",
     "tweakpane": "^4.0.5",
-    "typescript": "^5.8.2",
-    "vite": "^6.2.3"
+    "typescript": "^5.8.3",
+    "vite": "^6.2.5"
   }
 }
