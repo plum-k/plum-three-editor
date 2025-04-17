@@ -1,8 +1,8 @@
 import {Color, DirectionalLight, EquirectangularReflectionMapping, Euler, Scene, Texture} from "three"
 import {presetsObj, PresetsType} from "./environmentAssets";
 import {isArray, isNil, set} from "lodash-es";
-import {Component, IComponentOptions} from "../Component";
-import {Asset} from "../../manager/asset/Asset";
+import {Component, IComponentOptions} from "../../component/Component";
+import {Asset} from "../../component/asset/Asset";
 import {deepMergeRetain} from "../../tool";
 import {isDirectionalLight} from "three-is";
 

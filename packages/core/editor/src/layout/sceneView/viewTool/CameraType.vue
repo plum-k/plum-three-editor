@@ -15,7 +15,7 @@ const cameraViewArray = [
 const change = (val: ECameraType) => {
   const viewer = bus.viewer;
   if (viewer) {
-    viewer.cameraManager.setCameraType(val);
+    viewer.cameraComponent.setCameraType(val);
   }
 }
 </script>

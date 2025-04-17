@@ -12,26 +12,26 @@ import {
     Vector2
 } from 'three'; // 导入深度合并工具
 import {
-    AssetManager,
-    DebugManager,
-    EventManager,
-    HelperManager,
-    Loop,
+    AssetComponent,
+    DebugComponent,
+    EventComponent,
+    HelperComponent,
+    LoopComponent,
     PostProcessingComponent,
-    RenderManager
-} from "../manager"; // 导入渲染管理类
+    RenderComponent
+} from "../component"; // 导入渲染管理类
 import {Editor} from "../editor"; // 导入编辑器类
-import {PickComponent} from "./PickComponent"; // 导入拾取类
+import {PickComponent} from "../component"; // 导入拾取类
 import {EnvironmentComponent} from "./environment"; // 导入环境类
 import {deepMergeRetain, DownloadTool, ESearchMode, ICondition, Search} from "../tool";
 import {CameraManager, DrawLine, MeasureTool} from "../control";
-import {CssRendererComponent} from "./CssRendererComponent";
+import {CssRendererComponent} from "../component";
 import {OssApi} from "@plum-render/oss-api";
 import {Grid} from "../mesh";
 import {BehaviorSubject, Subject} from "rxjs";
-import {getPackage, Package} from "../serializeManage";
+import {getPackage, Package} from "../serialize";
 import {PScene} from "./PScene";
-import {GizmoManager} from "../manager/GizmoManager";
+import {GizmoComponent} from "../component/GizmoComponent";
 import {
     ESceneLoadType,
     ISceneLoadProgressEvent,
@@ -40,7 +40,7 @@ import {
     ISetGrid,
     IViewerOptions
 } from "../interface";
-import {IRenderSubjectValue} from "../interface/EventManager/IRenderSubjectValue";
+import {IRenderSubjectValue} from "../interface/eventManager/IRenderSubjectValue";
 
 export class Viewer {
     options: IViewerOptions; // 存储选项
@@ -50,21 +50,21 @@ export class Viewer {
     scene: Scene; // 主场景
 
     // 各种管理类
-    eventManager: EventManager; // 事件管理
-    assetManager: AssetManager; // 资源管理
-    renderManager: RenderManager; // 渲染管理
-    helperManager: HelperManager; // 辅助管理
-    gizmoManager: GizmoManager;
+    eventComponent: EventComponent; // 事件管理
+    assetComponent: AssetComponent; // 资源管理
+    renderComponent: RenderComponent; // 渲染管理
+    helperComponent: HelperComponent; // 辅助管理
+    gizmoComponent: GizmoComponent;
     postProcessingComponent: PostProcessingComponent; // 后处理管理
-    debug: DebugManager; // 调试管理
-    loop: Loop; // 循环管理
+    debug: DebugComponent; // 调试管理
+    loop: LoopComponent; // 循环管理
     cssRendererComponent!: CssRendererComponent; // CSS 渲染器
     //-----------------
 
-    cameraManager: CameraManager; // 相机控制
+    cameraComponent: CameraManager; // 相机控制
     sceneHelpers: Scene; // 场景辅助
     pick: PickComponent; // 拾取
-    environmentManage: EnvironmentComponent; // 环境
+    environmentComponent: EnvironmentComponent; // 环境
     // @ts-ignore
     drawLine!: DrawLine; // 绘制直线
     measureTool: MeasureTool; // 测量工具
@@ -118,31 +118,31 @@ export class Viewer {
         this.sceneHelpers = new PScene();
         this.sceneHelpers.name = "sceneHelpers"; // 设置辅助场景名称
 
-        // 初始化各个管理类
-        this.eventManager = new EventManager({viewer: this});
-        this.renderManager = new RenderManager({viewer: this});
-        this.cameraManager = new CameraManager({viewer: this});
+        // 初始化各个组件
+        this.eventComponent = new EventComponent({viewer: this});
+        this.renderComponent = new RenderComponent({viewer: this});
+        this.cameraComponent = new CameraManager({viewer: this});
         this.postProcessingComponent = new PostProcessingComponent({viewer: this});
-        this.helperManager = new HelperManager({viewer: this});
-        this.assetManager = new AssetManager({viewer: this});
+        this.helperComponent = new HelperComponent({viewer: this});
+        this.assetComponent = new AssetComponent({viewer: this});
         this.pick = new PickComponent({viewer: this});
         this.cssRendererComponent = new CssRendererComponent({viewer: this});
-        this.environmentManage = new EnvironmentComponent({viewer: this});
+        this.environmentComponent = new EnvironmentComponent({viewer: this});
         this.drawLine = new DrawLine({viewer: this});
         this.measureTool = new MeasureTool({viewer: this});
-        this.gizmoManager = new GizmoManager({viewer: this});
+        this.gizmoComponent = new GizmoComponent({viewer: this});
         this.animationMixer = new AnimationMixer(this.scene);
 
         this.addCanvasToContainer(); // 将画布添加到容器
         this.setSize(); // 设置初始大小
 
         // 订阅窗口大小变化事件
-        this.eventManager.resizeSubject.subscribe(() => {
+        this.eventComponent.resizeSubject.subscribe(() => {
             this.setSize(); // 调整大小
         });
 
-        this.debug = new DebugManager({viewer: this}); // 初始化调试管理
-        this.loop = new Loop({viewer: this}); // 初始化循环管理
+        this.debug = new DebugComponent({viewer: this}); // 初始化调试管理
+        this.loop = new LoopComponent({viewer: this}); // 初始化循环管理
 
         this.editor = new Editor({viewer: this}); // 初始化编辑器
         this.editor.initComponent();
@@ -151,7 +151,7 @@ export class Viewer {
         this.initComponent().then();
 
         // 更新动画混合器
-        this.eventManager.renderSubject.subscribe(value => {
+        this.eventComponent.renderSubject.subscribe(value => {
             this.animationMixerUpdate(value)
         })
     }
@@ -209,7 +209,7 @@ export class Viewer {
             this.grid.name = "grid";
             this.sceneHelpers.add(this.grid);
             this.loop.addEffect(() => {
-                this.grid!.tick(this.cameraManager.camera)
+                this.grid!.tick(this.cameraComponent.camera)
             })
         } else {
             if (!this.grid) return;
@@ -284,32 +284,32 @@ export class Viewer {
             this.initComponentSubject.next(true);
         }
         if (this.options.isCubeGizmo) {
-            this.gizmoManager.initCubeGizmo();
+            this.gizmoComponent.initCubeGizmo();
         }
         if (this.options.isSphereGizmo) {
-            this.gizmoManager.initSphereGizmo();
+            this.gizmoComponent.initSphereGizmo();
         }
         // todo 监听时机不对 等待修改
         this.initSubject.subscribe((value) => {
             if (!value) return;
             if (this.options.isCreateDefaultLight) {
-                this.environmentManage.createDefaultLight();
+                this.environmentComponent.createDefaultLight();
             }
             if (this.options.isCreateDefaultEnvironment) {
-                this.environmentManage.createDefaultEnvironment();
+                this.environmentComponent.createDefaultEnvironment();
             }
             if (this.editor) {
                 this.editor.editorEventManager.sceneGraphChanged.next(true);
             }
-            this.eventManager.resizeSubject.next(true);
+            this.eventComponent.resizeSubject.next(true);
         })
         this.loadScene();
     }
 
     // 将画布添加到容器
     addCanvasToContainer() {
-        const defaultWebGLRenderer = this.renderManager.defaultWebGLRenderer; // 获取默认的 WebGL 渲染器
-        const domElement = defaultWebGLRenderer.domElement; // 获取 DOM 元素
+        const renderer = this.renderComponent.renderer; // 获取默认的 WebGL 渲染器
+        const domElement = renderer.domElement; // 获取 DOM 元素
         this.container.appendChild(domElement); // 将 DOM 元素添加到容器
     }
 
@@ -346,19 +346,19 @@ export class Viewer {
     // 设置渲染器和控制器的大小
     setSize() {
         const {width, height} = this.getSize(); // 获取大小
-        this.cameraManager.setSize(width, height); // 设置相机控制器大小
-        this.renderManager.setSize(width, height); // 设置渲染器大小
+        this.cameraComponent.setSize(width, height); // 设置相机控制器大小
+        this.renderComponent.setSize(width, height); // 设置渲染器大小
         this.cssRendererComponent.setSize(width, height); // 设置 CSS 渲染器大小
         this.postProcessingComponent.setSize(width, height); // 设置后处理管理器大小
-        this.renderManager.render(); // 重置后必须重新渲染. 不然会闪烁
-        this.gizmoManager.update();
-        this.gizmoManager.render();
+        this.renderComponent.render(); // 重置后必须重新渲染. 不然会闪烁
+        this.gizmoComponent.update();
+        this.gizmoComponent.render();
     }
 
     capture() {
         // 渲染一下, 不然会截取不到
-        this.renderManager.render();
-        return this.renderManager.defaultWebGLRenderer.domElement.toDataURL("image/png");
+        this.renderComponent.render();
+        return this.renderComponent.renderer.domElement.toDataURL("image/png");
     }
 
     captureDown(name: string) {
@@ -386,7 +386,7 @@ export class Viewer {
     //-------------------
     toJSON() {
         const sceneJson = this.scene.toJSON();
-        const cameraManager = this.cameraManager.toJSON();
+        const cameraManager = this.cameraComponent.toJSON();
         return {
             scene: sceneJson,
             cameraManager

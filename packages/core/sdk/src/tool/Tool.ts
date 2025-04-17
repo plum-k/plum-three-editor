@@ -1,4 +1,4 @@
-import {Material, Mesh, Object3D, Sphere, Vector3} from "three";
+import {Box3, Material, Mesh, Object3D, Scene, Sphere, Texture, Vector3} from "three";
 import {isDataTexture, isGroup, isMesh, isVector3} from "three-is";
 import {ESearchMode, ICondition, normalize, Search} from "./core";
 

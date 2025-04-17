@@ -1,7 +1,7 @@
 import {Subscription} from "rxjs";
 import {Measure} from "./Measure";
 import {DistanceMeasure, EDistanceMeasureTextModel, IBaseDistanceMeasureOptions} from "./DistanceMeasure";
-import {Component, IComponentOptions} from "../../core/Component";
+import {Component, IComponentOptions} from "../../component/Component";
 
 export enum MeasureMode {
     Distance,    // 距离测量

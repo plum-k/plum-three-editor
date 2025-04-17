@@ -20,7 +20,7 @@ const cameraViewArray = [
 const change = (val: ECameraViewType) => {
   const viewer = bus.viewer;
   if (viewer) {
-    viewer.cameraManager.setCameraViewType(val);
+    viewer.cameraComponent.setCameraViewType(val);
   }
 }
 </script>

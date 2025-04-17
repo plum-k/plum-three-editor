@@ -1,4 +1,4 @@
-import {Component, IComponentOptions} from "../core/Component";
+import {Component, IComponentOptions} from "../component/Component";
 import {TransformControls} from "three/examples/jsm/controls/TransformControls.js";
 import {Euler, Vector3} from "three";
 

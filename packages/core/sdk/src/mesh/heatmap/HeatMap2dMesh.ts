@@ -1,4 +1,4 @@
-import {Object3D} from "three";
+import {Box3, CanvasTexture, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Vector3} from "three";
 import Heatmap from "heatmap";
 import HeatmapInstance, {DataPoint, HeatmapConfig} from "heatmap";
 import {deepMergeRetain, Tool} from "../../tool";

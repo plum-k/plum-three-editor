@@ -1,6 +1,6 @@
 import {Object3D} from "three";
-import {CSS2DObject} from "three/examples/jsm/renderers/CSS2DRenderer";
-import {CSS3DObject, CSS3DSprite} from "three/examples/jsm/renderers/CSS3DRenderer";
+import {CSS2DObject} from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import {CSS3DObject, CSS3DSprite} from "three/examples/jsm/renderers/CSS3DRenderer.js";
 import {deepMergeRetain} from "../../tool";
 
 export enum HtmlMeshType {

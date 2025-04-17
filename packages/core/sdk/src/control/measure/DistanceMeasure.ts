@@ -1,11 +1,11 @@
 import {IMeasureOptions, Measure} from "./Measure";
 
-import {Vector3} from "three";
-import {IPickInfo} from "../../manager/EventManager";
+import {Color, Group, Mesh, MeshLambertMaterial, SphereGeometry, Vector3} from "three";
 import {Line2} from "../../mesh/line/line2/Line2";
 import {isNil, round} from "lodash-es";
 import {TextSprite} from "../../mesh/label/TextSprite";
 import {Tool} from "../../tool";
+import { IPickInfo } from "../../interface/pick/IPickInfo";
 
 export enum EDistanceMeasureTextModel {
     Segment, // 分段长度

@@ -1,8 +1,7 @@
 import CameraControls from "camera-controls";
 import {Viewer} from "../core/Viewer";
 import {deepMergeRetain, Tool} from "../tool";
-import {Serialize} from "../serializeManage";
-import {Asset} from "../manager/asset";
+import {Serialize} from "../serialize";
 import {
     Box3,
     MathUtils,
@@ -18,6 +17,7 @@ import {
     Vector3,
     Vector4,
 } from 'three';
+import {Asset} from "../component";
 
 const subsetOfTHREE = {
     Vector2: Vector2,
@@ -69,8 +69,6 @@ export class CameraManager {
     orthographicCamera: OrthographicCamera;
     perspectiveCameraControls: CameraControls;
     orthographicCameraControls: CameraControls;
-    width: number;
-    height: number;
 
     /**
      * 构造函数初始化cameraManager实例。
@@ -81,14 +79,11 @@ export class CameraManager {
         this.viewer = this.options.viewer
 
         // 从viewer获取默认WebGL渲染器和视图尺寸
-        let defaultWebGLRenderer = this.viewer.renderManager.defaultWebGLRenderer;
+        let renderer = this.viewer.renderComponent.renderer;
         let {width, height} = this.viewer.getSize();
 
-        this.width = width;
-        this.height = height;
-
         this.perspectiveCamera = new PerspectiveCamera(60, width / height, 0.01, 18000);
-        this.perspectiveCameraControls = new CameraControls(this.perspectiveCamera, defaultWebGLRenderer.domElement);
+        this.perspectiveCameraControls = new CameraControls(this.perspectiveCamera, renderer.domElement);
 
         this.orthographicCamera = new OrthographicCamera(
             width / -2,
@@ -99,7 +94,7 @@ export class CameraManager {
             18000
         );
 
-        this.orthographicCameraControls = new CameraControls(this.orthographicCamera, defaultWebGLRenderer.domElement);
+        this.orthographicCameraControls = new CameraControls(this.orthographicCamera, renderer.domElement);
 
         this.cameraControls.maxDistance = 99999;
         this.cameraControls.minDistance = -99999;
@@ -147,7 +142,7 @@ export class CameraManager {
             result: json.perspectiveCamera,
             extension: "object"
         })
-        const object = await this.viewer.assetManager.loadObject(asset) as PerspectiveCamera;
+        const object = await this.viewer.assetComponent.loadObject(asset) as PerspectiveCamera;
         this.perspectiveCameraControls.camera.copy(object);
         this.perspectiveCameraControls.fromJSON(JSON.stringify(json.perspectiveCameraControls), false);
     }
@@ -164,9 +159,7 @@ export class CameraManager {
      * @param height - 视图高度。
      * @param updateStyle - 是否更新DOM元素的样式（可选）。
      */
-    setSize(width: number, height: number, updateStyle?: boolean) {
-        this.width = width;
-        this.height = height;
+    setSize(width: number, height: number) {
         this.perspectiveCamera.aspect = width / height;
         this.perspectiveCamera.updateProjectionMatrix();
 

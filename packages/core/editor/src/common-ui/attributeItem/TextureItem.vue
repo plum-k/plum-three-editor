@@ -52,7 +52,7 @@ function loadFile(file: File) {
   const asset = new Asset({
     file: file,
   })
-  bus.viewer?.assetManager.loadAsset(asset).then(value => {
+  bus.viewer?.assetComponent.loadAsset(asset).then(value => {
     objectAttributeChangeSubject.next({
       name: name,
       value: value

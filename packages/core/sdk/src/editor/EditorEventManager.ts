@@ -1,7 +1,6 @@
 import {BehaviorSubject, merge, Subject} from 'rxjs';
-import {Component, IComponentOptions} from "../core/Component";
-
-import {Object3D} from 'three';
+import {Component, IComponentOptions} from "../component/Component";
+import {Intersection, Object3D, Object3DEventMap, Vector3} from 'three';
 import {PropertyPath} from "lodash-es";
 
 export interface IEditorEventManagerOptions extends IComponentOptions {

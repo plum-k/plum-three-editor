@@ -1,5 +1,5 @@
 import {isArray, isNil} from "lodash-es";
-import {Component, IComponentOptions} from "../core/Component";
+import {Component, IComponentOptions} from "../component/Component";
 import {Box3, Box3Helper, Object3D} from "three";
 import {isObject3D} from "three-is";
 

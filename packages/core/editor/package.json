@@ -12,14 +12,14 @@
   },
   "dependencies": {
     "tdesign-vue-next": "^1.11.5",
-    "@imengyu/vue3-context-menu": "^1.4.6",
+    "@imengyu/vue3-context-menu": "^1.4.8",
     "@plum-render/three-sdk": "workspace:*",
-    "@vueuse/core": "^13.0.0",
+    "@vueuse/core": "^13.1.0",
     "axios": "^1.8.4",
     "dayjs": "^1.11.13",
     "element-plus": "^2.9.7",
     "lodash-es": "^4.17.21",
-    "pinia": "^3.0.1",
+    "pinia": "^3.0.2",
     "rxjs": "^7.8.2",
     "splitpanes": "^4.0.3",
     "three": "^0.175.0",
@@ -30,7 +30,7 @@
     "vue3-toastify": "^0.2.8"
   },
   "devDependencies": {
-    "vite-plugin-static-copy": "^2.3.0",
+    "vite-plugin-static-copy": "^2.3.1",
     "@types/splitpanes": "^2.2.6",
     "@types/lodash-es": "^4.17.12",
     "unplugin-element-plus": "^0.9.1",
@@ -38,10 +38,10 @@
     "@types/ali-oss": "^6.16.11",
     "@vue/tsconfig": "^0.7.0",
     "typescript": "^5.8.3",
-    "vite": "^6.2.5",
+    "vite": "^6.3.1",
     "vue-tsc": "^2.2.8",
-    "tailwindcss": "^4.1.3",
+    "tailwindcss": "^4.1.4",
     "@types/three": "^0.175.0",
-    "@tailwindcss/vite": "^4.1.3"
+    "@tailwindcss/vite": "^4.1.4"
   }
 }

@@ -17,7 +17,7 @@ const capture = () => {
 
 const fit = () => {
   const viewer = bus.viewer;
-  viewer?.cameraManager.fitToSceneBySphere(true)
+  viewer?.cameraComponent.fitToSceneBySphere(true)
 }
 
 </script>

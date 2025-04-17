@@ -26,8 +26,8 @@ bus.viewerInitSubject.subscribe(() => {
 const threeToUi = () => {
   const viewer = bus.viewer;
   if (!viewer) return
-  const cameraControls = viewer.cameraManager.cameraControls;
-  const camera = viewer.cameraManager.cameraControls.camera as PerspectiveCamera;
+  const cameraControls = viewer.cameraComponent.cameraControls;
+  const camera = viewer.cameraComponent.cameraControls.camera as PerspectiveCamera;
 
   form.fov = camera.fov;
   form.near = camera.near;
@@ -46,16 +46,16 @@ const {objectAttributeChangeSubject} = useAttributeProvide({
   getObject: () => {
     const viewer = bus.viewer;
     if (!viewer) return
-    const cameraControls = viewer.cameraManager.cameraControls;
-    return viewer.cameraManager.cameraControls
+    const cameraControls = viewer.cameraComponent.cameraControls;
+    return viewer.cameraComponent.cameraControls
   }
 })
 
 provide("getObject", () => {
   const viewer = bus.viewer;
   if (!viewer) return
-  const cameraControls = viewer.cameraManager.cameraControls;
-  return viewer.cameraManager.cameraControls
+  const cameraControls = viewer.cameraComponent.cameraControls;
+  return viewer.cameraComponent.cameraControls
 })
 objectAttributeChangeSubject.subscribe((editValue) => {
 
@@ -63,8 +63,8 @@ objectAttributeChangeSubject.subscribe((editValue) => {
 
   const viewer = bus.viewer;
   if (!viewer) return
-  const cameraControls = viewer.cameraManager.cameraControls;
-  const camera = viewer.cameraManager.cameraControls.camera as PerspectiveCamera;
+  const cameraControls = viewer.cameraComponent.cameraControls;
+  const camera = viewer.cameraComponent.cameraControls.camera as PerspectiveCamera;
 
   const isCamera = ["fov", "near", "far"].includes(name as string)
   if (isCamera) {

@@ -1,5 +1,6 @@
-import Command from "./commands/Command";
-import Editor from "./Editor";
+import {Command} from "./commands";
+import {Editor} from "./Editor";
+
 
 export class History {
     editor: Editor;

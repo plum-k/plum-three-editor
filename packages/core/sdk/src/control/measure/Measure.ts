@@ -1,4 +1,4 @@
-import {Component, IComponentOptions} from "../../core/Component";
+import {Component, IComponentOptions} from "../../component/Component";
 import {IPickInfo} from "../../manager";
 
 export interface IMeasureOptions extends IComponentOptions {

@@ -11,7 +11,7 @@ bus.viewerInitSubject.subscribe((value) => {
 
   const viewer = bus.viewer;
   if (!viewer) return
-  const cameraControl = viewer.cameraManager.cameraControls;
+  const cameraControl = viewer.cameraComponent.cameraControls;
 
   let position = new Vector3();
   let target = new Vector3();

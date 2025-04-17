@@ -128,10 +128,10 @@ onMounted(() => {
       }
     }
   })
-  _viewer.assetManager.startSubject.subscribe((value) => {
+  _viewer.assetComponent.startSubject.subscribe((value) => {
     // setPercent(value.loaded / value.total)
   })
-  _viewer.assetManager.progressSubject.subscribe((value) => {
+  _viewer.assetComponent.progressSubject.subscribe((value) => {
     // todo
     // setPercent(value.loaded / value.total)
     //
@@ -175,7 +175,7 @@ const onDrop = (event: DragEvent) => {
   const files = event.dataTransfer.files;
   if (files.length > 0) {
     const viewer = bus.viewer;
-    viewer?.assetManager.dragHandler(event)
+    viewer?.assetComponent.dragHandler(event)
   } else {
     const data = event.dataTransfer.getData('data');
     if (data === "") return;

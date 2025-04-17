@@ -1,7 +1,7 @@
-import {Component, IComponentOptions} from "../core/Component";
+import {Component, IComponentOptions} from "../component/Component";
 
 import {isNil} from "lodash-es";
-import {IPickInfo} from "../manager/EventManager";
+import {IPickInfo} from "../manager/EventComponent";
 import {Subscription} from "rxjs";
 import {BoxGeometry, Group, Mesh, MeshBasicMaterial, Vector3} from "three";
 

@@ -10,7 +10,7 @@ const bus = useBus();
 const resize = () => {
   const viewer = bus.viewer;
   if (viewer) {
-    viewer.eventManager.resizeSubject.next(true);
+    viewer.eventComponent.resizeSubject.next(true);
   }
 }
 

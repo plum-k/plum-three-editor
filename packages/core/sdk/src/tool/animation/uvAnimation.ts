@@ -17,7 +17,7 @@ export function uvAnimation(option: IUvAnimation) {
         speed: 0.01
     }, option);
 
-    const subscription = viewer.eventManager.renderSubject.subscribe(function (event) {
+    const subscription = viewer.eventComponent.renderSubject.subscribe(function (event) {
         if (texture) {
             texture.offset.x += speed;
             texture.repeat.x = 1;

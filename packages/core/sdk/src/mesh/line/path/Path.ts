@@ -1,5 +1,4 @@
 import {PathGeometry, PathPointList, PathTubeGeometry} from "three.path";
-
 import {Mesh, MeshBasicMaterial, Vector3} from "three";
 import {Viewer} from "../../../core";
 import {Subscription} from "rxjs";
@@ -48,7 +47,7 @@ export class Path extends Mesh {
     subscription: Subscription | undefined = undefined;
 
     startTick(viewer: Viewer) {
-        this.subscription = viewer.eventManager.renderSubject.subscribe((event) => {
+        this.subscription = viewer.eventComponent.renderSubject.subscribe((event) => {
             this.tick(event.delta);
         });
     }
