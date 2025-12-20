@@ -1,4 +1,10 @@
-interface Window {
+import type {Viewer} from "../core";
+
+declare global {
+    interface Window {
+        test11?: () => void;
+        viewer?: Viewer;
+    }
 }
 
 declare module 'three' {
