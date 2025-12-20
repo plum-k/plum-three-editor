@@ -12,10 +12,17 @@ interface ImportMeta {
 }
 
 import type {Bus} from "./hooks";
+import type {Viewer} from "@plum-render/three-sdk";
 
 declare module 'vue' {
     interface ComponentCustomProperties {
         bus: Bus;
+    }
+}
+
+declare global {
+    interface Window {
+        viewer?: Viewer;
     }
 }
 
